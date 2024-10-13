@@ -1,6 +1,10 @@
 use std::{sync::Arc, time::Duration};
 
-use crate::error::Result;
+use crate::{
+    app_id,
+    crd::{KeycloakApiStatus, WithStatus},
+    error::Result,
+};
 use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{
@@ -53,6 +57,7 @@ where
     C: LifetimeController + Clone + Sync + Send + 'static,
     C::Resource: KubeResource<Scope = NamespaceResourceScope>
         + Clone
+        + WithStatus<KeycloakApiStatus>
         + Debug
         + 'static
         + Send
@@ -100,21 +105,16 @@ where
         let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
         let client = ctx.client.clone();
 
-        finalizer(
-            &api,
-            concat!(env!("CARGO_PKG_NAME"), "/finalizer"),
-            resource,
-            |event| async move {
-                match event {
-                    Event::Apply(resource) => {
-                        ctx.controller.apply(&client, resource).await
-                    }
-                    Event::Cleanup(resource) => {
-                        ctx.controller.cleanup(&client, resource).await
-                    }
+        finalizer(&api, app_id!("finalizer"), resource, |event| async move {
+            match event {
+                Event::Apply(resource) => {
+                    ctx.controller.apply(&client, resource).await
                 }
-            },
-        )
+                Event::Cleanup(resource) => {
+                    ctx.controller.cleanup(&client, resource).await
+                }
+            }
+        })
         .await
         .map_err(|e| match e {
             FinalizerError::ApplyFailed(e)
@@ -124,10 +124,10 @@ where
     }
 
     fn error_policy(
-        _resource: Arc<C::Resource>,
+        resource: Arc<C::Resource>,
         _error: &Error,
         _ctx: Arc<Self>,
     ) -> Action {
-        Action::requeue(Duration::from_secs(1))
+        Action::requeue(Duration::from_secs(5))
     }
 }

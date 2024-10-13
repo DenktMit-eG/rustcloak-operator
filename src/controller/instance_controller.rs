@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use crate::{
+    app_id,
     error::{Error, Result},
     util::ToToken,
 };
@@ -10,10 +11,10 @@ use keycloak::KeycloakAdminToken;
 use kube::{
     api::{ObjectMeta, Patch, PatchParams},
     core::ErrorResponse,
-    runtime::{controller::Action, watcher, Controller},
+    runtime::{controller::Action, Controller},
     Api, Resource, ResourceExt,
 };
-use log::{debug, info, warn};
+use log::{debug, info};
 
 use super::controller_runner::LifetimeController;
 use crate::crd::KeycloakInstance;
@@ -57,12 +58,8 @@ impl KeycloakInstanceController {
                 ),
                 ..Default::default()
             };
-        api.patch(
-            &name,
-            &PatchParams::apply(env!("CARGO_PKG_NAME")),
-            &Patch::Apply(secret),
-        )
-        .await?;
+        api.patch(&name, &PatchParams::apply(app_id!()), &Patch::Apply(secret))
+            .await?;
         Ok(())
     }
 

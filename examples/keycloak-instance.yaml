@@ -1,7 +1,7 @@
-apiVersion: rustcloak.eboland.de/v1
+apiVersion: rustcloak.k8s.eboland.de/v1
 kind: KeycloakInstance
 metadata:
-  name: example-keycloakinstance
+  name: keycloak-instance
 spec:
   base_url: http://127.0.0.1:8080
   credentials_from: keycloak-password

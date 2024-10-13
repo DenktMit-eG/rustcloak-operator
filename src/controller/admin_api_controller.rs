@@ -12,6 +12,9 @@ use kube::{
     runtime::{controller::Action, Controller},
     Api, ResourceExt,
 };
+use log::info;
+use reqwest::{Method, Response, StatusCode};
+use serde_json::Value;
 
 use super::controller_runner::LifetimeController;
 use crate::crd::KeycloakAdminApi;
@@ -43,6 +46,23 @@ impl KeycloakAdminApiController {
 
         Ok((instance.spec.base_url, token))
     }
+
+    async fn request(
+        &self,
+        method: Method,
+        url: &str,
+        token: &KeycloakAdminToken,
+        payload: &Value,
+    ) -> Result<Response> {
+        info!("Payload: {}", serde_json::to_string_pretty(payload)?);
+        let request = self
+            .http
+            .request(method, url)
+            .json(payload)
+            .bearer_auth(token.get(&url).await?);
+        println!("{:?}", request);
+        Ok(request.send().await?.error_for_status()?)
+    }
 }
 
 #[async_trait]
@@ -65,15 +85,22 @@ impl LifetimeController for KeycloakAdminApiController {
         let path = &resource.spec.path;
         let (url, token) = Self::get_creds(client.clone(), &resource).await?;
         let payload = resource.resolve(client).await?;
+        let url = format!("{url}/admin/{path}");
+        // First try to PUT, if we get a 404, try to POST
+        let response =
+            match self.request(Method::PUT, &url, &token, &payload).await {
+                Err(Error::ReqwestError(e)) => {
+                    if e.status() == Some(StatusCode::NOT_FOUND) {
+                        let url = url.rsplit_once('/').unwrap().0;
+                        self.request(Method::POST, &url, &token, &payload).await
+                    } else {
+                        Err(e)?
+                    }
+                }
+                r => r,
+            }?;
+        info!("Response: {:?}", response.text().await?);
         // TODO: handle errors
-        let _response = self
-            .http
-            .post(format!("{url}/{path}"))
-            .json(&payload)
-            .bearer_auth(token.get(&url).await?)
-            .send()
-            .await?;
-
         Ok(Action::await_change())
     }
 

@@ -1,11 +1,11 @@
-apiVersion: rustcloak.eboland.de/v1
+apiVersion: rustcloak.k8s.eboland.de/v1
 kind: KeycloakRealm
 metadata:
   name: example-keycloakrealm
 spec:
   api:
     keycloak_selector:
-      name: example-keycloakinstance
+      name: keycloak-instance
   definition:
     realm: "my-awesome-realm"
     enabled: true

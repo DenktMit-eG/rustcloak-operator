@@ -26,9 +26,7 @@ impl KeycloakAdminApi {
             resolved_vars.insert(r.name.clone(), value);
         }
 
-        let payload: serde_json::Value =
-            serde_yaml::from_str(&self.spec.payload)?;
-        Self::visit(&payload, &resolved_vars)
+        Self::visit(&self.spec.payload, &resolved_vars)
     }
 
     fn visit(value: &Value, vars: &HashMap<String, String>) -> Result<Value> {

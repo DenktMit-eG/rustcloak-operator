@@ -1,17 +1,17 @@
-use std::{collections::HashMap, sync::Arc};
+use std::sync::Arc;
 
 use crate::{
+    app_id,
     crd::{KeycloakAdminApi, KeycloakAdminApiSpec},
     error::{Error, Result},
 };
 use async_trait::async_trait;
+use keycloak::types::RealmRepresentation;
 use kube::{
     api::{ObjectMeta, Patch, PatchParams},
     runtime::{controller::Action, watcher, Controller},
     Api, Resource, ResourceExt,
 };
-use log::info;
-use serde_json::Value;
 
 use super::controller_runner::LifetimeController;
 use crate::crd::KeycloakRealm;
@@ -24,7 +24,7 @@ impl KeycloakRealmController {
         Self {}
     }
 
-    fn api_token_name(&self, resource: &KeycloakRealm) -> String {
+    fn realm_name(&self, resource: &KeycloakRealm) -> String {
         let name = resource.name_unchecked();
         format!("realm-{name}")
     }
@@ -53,12 +53,14 @@ impl LifetimeController for KeycloakRealmController {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let admin_api: Api<KeycloakAdminApi> =
             Api::namespaced(client.clone(), &ns);
-        let name = self.api_token_name(&resource);
+        let realm_name = &resource.spec.definition.realm;
+        let name = self.realm_name(&resource);
         let mut json = serde_json::to_value(&resource.spec.definition)?;
-        if let Some(extra_yaml) = &resource.spec.extra_yaml {
-            let extra_yaml: Value = serde_yaml::from_str(extra_yaml)?;
-            json_patch::merge(&mut json, &extra_yaml);
+        if let Some(extra) = &resource.spec.extra {
+            json_patch::merge(&mut json, &extra);
         }
+        let realm_representation: RealmRepresentation =
+            serde_json::from_value(json.clone())?;
         let owner_ref = resource.controller_owner_ref(&()).unwrap();
 
         let api_object = KeycloakAdminApi {
@@ -70,8 +72,8 @@ impl LifetimeController for KeycloakRealmController {
             },
             spec: KeycloakAdminApiSpec {
                 api: resource.spec.api.clone(),
-                path: "realms".to_string(),
-                payload: serde_json::to_string(&json)?,
+                path: format!("realms/{realm_name}"),
+                payload: serde_json::to_value(&realm_representation)?,
                 vars: None,
             },
             status: Default::default(),
@@ -80,7 +82,7 @@ impl LifetimeController for KeycloakRealmController {
         admin_api
             .patch(
                 &name,
-                &PatchParams::apply(env!("CARGO_PKG_NAME")),
+                &PatchParams::apply(app_id!()),
                 &Patch::Apply(api_object),
             )
             .await?;
@@ -90,8 +92,8 @@ impl LifetimeController for KeycloakRealmController {
 
     async fn cleanup(
         &self,
-        client: &kube::Client,
-        resource: Arc<Self::Resource>,
+        _client: &kube::Client,
+        _resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         Ok(Action::await_change())
     }

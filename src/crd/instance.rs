@@ -1,4 +1,5 @@
 use super::KeycloakApiStatus;
+use super::WithStatus;
 use kube_derive::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -6,7 +7,8 @@ use serde::{Deserialize, Serialize};
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
     kind = "KeycloakInstance",
-    group = "rustcloak.eboland.de",
+    shortname = "kci",
+    group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",
     namespaced
@@ -30,4 +32,10 @@ pub struct KeycloakInstanceSpec {
 )]
 pub struct KeycloakInstanceSelector {
     pub name: String,
+}
+
+impl WithStatus<KeycloakApiStatus> for KeycloakInstance {
+    fn status(&self) -> Option<&KeycloakApiStatus> {
+        self.status.as_ref()
+    }
 }
