@@ -54,7 +54,7 @@ pub struct ControllerRunner<C> {
 
 impl<C> ControllerRunner<C>
 where
-    C: LifetimeController + Clone + Sync + Send + 'static,
+    C: LifetimeController + Sync + Send + 'static,
     C::Resource: KubeResource<Scope = NamespaceResourceScope>
         + Clone
         + WithStatus<KeycloakApiStatus>
@@ -124,7 +124,7 @@ where
     }
 
     fn error_policy(
-        resource: Arc<C::Resource>,
+        _resource: Arc<C::Resource>,
         _error: &Error,
         _ctx: Arc<Self>,
     ) -> Action {

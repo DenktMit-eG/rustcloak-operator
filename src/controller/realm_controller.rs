@@ -16,7 +16,7 @@ use kube::{
 use super::controller_runner::LifetimeController;
 use crate::crd::KeycloakRealm;
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct KeycloakRealmController {}
 
 impl Default for KeycloakRealmController {

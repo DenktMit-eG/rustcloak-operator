@@ -1,9 +1,9 @@
 use anyhow::Result;
 use clap::Parser;
-use rustcloak_operator::controller::admin_api_controller::KeycloakAdminApiController;
-use rustcloak_operator::controller::controller_runner::ControllerRunner;
-use rustcloak_operator::controller::instance_controller::KeycloakInstanceController;
-use rustcloak_operator::controller::realm_controller::KeycloakRealmController;
+use rustcloak_operator::controller::ControllerRunner;
+use rustcloak_operator::controller::KeycloakAdminApiController;
+use rustcloak_operator::controller::KeycloakInstanceController;
+use rustcloak_operator::controller::KeycloakRealmController;
 use rustcloak_operator::opts::Opts;
 
 #[tokio::main]

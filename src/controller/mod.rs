@@ -1,4 +1,11 @@
-pub mod admin_api_controller;
-pub mod controller_runner;
-pub mod instance_controller;
-pub mod realm_controller;
+mod admin_api_controller;
+mod admin_session_controller;
+mod controller_runner;
+mod instance_controller;
+mod realm_controller;
+
+pub use admin_api_controller::*;
+pub use admin_session_controller::*;
+pub use controller_runner::*;
+pub use instance_controller::*;
+pub use realm_controller::*;

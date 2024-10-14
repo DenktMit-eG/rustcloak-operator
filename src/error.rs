@@ -39,6 +39,8 @@ pub enum Error {
     SerdeYamlError(#[from] serde_yaml::Error),
     #[error("Serde Json error: {0}")]
     SerdeJsonError(#[from] serde_json::Error),
+    #[error("No Uid")]
+    NoUid,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

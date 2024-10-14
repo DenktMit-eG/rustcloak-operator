@@ -9,11 +9,11 @@ kube = { version = "0.96.0", features = ["runtime", "derive"] }
 k8s-openapi = { version = "0.23.0", features = ["latest", "schemars"] }
 serde_json = "1.0.128"
 actix-web = "4.9.0"
-tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread", "time"] }
 anyhow = "1.0.89"
 clap = { version = "4.5.20", features = ["derive", "env"] }
 kube-derive = "0.96.0"
-schemars = "0.8.21"
+schemars = { version = "0.8.21", features = ["chrono"] }
 serde = "1.0.210"
 thiserror = "1.0.64"
 log = "0.4.22"
@@ -23,3 +23,4 @@ reqwest = "0.12.8"
 serde_yaml = "0.9.34"
 pretty_env_logger = "0.5.0"
 json-patch = "3.0.1"
+chrono = { version = "0.4.38", features = ["serde"] }

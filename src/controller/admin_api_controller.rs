@@ -3,7 +3,7 @@ use std::sync::Arc;
 use crate::{
     crd::KeycloakInstance,
     error::{Error, Result},
-    util::ToToken,
+    util::SecretUtils,
 };
 use async_trait::async_trait;
 use k8s_openapi::api::core::v1::Secret;
@@ -19,7 +19,7 @@ use serde_json::Value;
 use super::controller_runner::LifetimeController;
 use crate::crd::KeycloakAdminApi;
 
-#[derive(Clone, Debug, Default)]
+#[derive(Debug, Default)]
 pub struct KeycloakAdminApiController {
     http: reqwest::Client,
 }
@@ -42,7 +42,7 @@ impl KeycloakAdminApiController {
         let instance_name = &resource.spec.api.keycloak_selector.name;
         let instance = instance_api.get(instance_name).await?;
         let secret_name = format!("{}-api-token", instance_name);
-        let token = secret_api.get(&secret_name).await?.to_token()?;
+        let token = secret_api.get(&secret_name).await?.token()?;
 
         Ok((instance.spec.base_url, token))
     }

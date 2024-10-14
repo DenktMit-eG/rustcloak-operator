@@ -1,10 +1,13 @@
 mod admin_api;
+mod admin_session;
 mod instance;
 mod realm;
 
 pub use admin_api::*;
+pub use admin_session::*;
 pub use instance::*;
 pub use realm::*;
+
 use schemars::{
     gen::SchemaGenerator,
     schema::{InstanceType, ObjectValidation, Schema, SchemaObject},
