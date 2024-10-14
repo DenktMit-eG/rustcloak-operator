@@ -19,7 +19,7 @@ impl KeycloakAdminApi {
             let value = if let Some(value) = &r.value {
                 value.clone()
             } else if let Some(ref value_from) = r.value_from.clone() {
-                self.resolve_from(&client, &r.name, value_from).await?
+                self.resolve_from(client, &r.name, value_from).await?
             } else {
                 return Err(Error::NoValue(r.name.clone()));
             };

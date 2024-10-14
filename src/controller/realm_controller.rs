@@ -19,6 +19,12 @@ use crate::crd::KeycloakRealm;
 #[derive(Debug, Clone)]
 pub struct KeycloakRealmController {}
 
+impl Default for KeycloakRealmController {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl KeycloakRealmController {
     pub fn new() -> Self {
         Self {}
@@ -57,7 +63,7 @@ impl LifetimeController for KeycloakRealmController {
         let name = self.realm_name(&resource);
         let mut json = serde_json::to_value(&resource.spec.definition)?;
         if let Some(extra) = &resource.spec.extra {
-            json_patch::merge(&mut json, &extra);
+            json_patch::merge(&mut json, extra);
         }
         let realm_representation: RealmRepresentation =
             serde_json::from_value(json.clone())?;

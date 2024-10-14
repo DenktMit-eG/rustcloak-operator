@@ -19,7 +19,7 @@ use serde_json::Value;
 use super::controller_runner::LifetimeController;
 use crate::crd::KeycloakAdminApi;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct KeycloakAdminApiController {
     http: reqwest::Client,
 }
@@ -40,7 +40,7 @@ impl KeycloakAdminApiController {
             Api::<KeycloakInstance>::namespaced(client.clone(), &ns);
 
         let instance_name = &resource.spec.api.keycloak_selector.name;
-        let instance = instance_api.get(&instance_name).await?;
+        let instance = instance_api.get(instance_name).await?;
         let secret_name = format!("{}-api-token", instance_name);
         let token = secret_api.get(&secret_name).await?.to_token()?;
 
@@ -59,7 +59,7 @@ impl KeycloakAdminApiController {
             .http
             .request(method, url)
             .json(payload)
-            .bearer_auth(token.get(&url).await?);
+            .bearer_auth(token.get(url).await?);
         println!("{:?}", request);
         Ok(request.send().await?.error_for_status()?)
     }
@@ -92,7 +92,7 @@ impl LifetimeController for KeycloakAdminApiController {
                 Err(Error::ReqwestError(e)) => {
                     if e.status() == Some(StatusCode::NOT_FOUND) {
                         let url = url.rsplit_once('/').unwrap().0;
-                        self.request(Method::POST, &url, &token, &payload).await
+                        self.request(Method::POST, url, &token, &payload).await
                     } else {
                         Err(e)?
                     }

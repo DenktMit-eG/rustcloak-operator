@@ -22,6 +22,12 @@ use crate::crd::KeycloakInstance;
 #[derive(Debug, Clone)]
 pub struct KeycloakInstanceController {}
 
+impl Default for KeycloakInstanceController {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl KeycloakInstanceController {
     pub fn new() -> Self {
         Self {}
