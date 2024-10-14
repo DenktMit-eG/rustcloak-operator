@@ -16,20 +16,10 @@ use kube::{
 use super::controller_runner::LifetimeController;
 use crate::crd::KeycloakRealm;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct KeycloakRealmController {}
 
-impl Default for KeycloakRealmController {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl KeycloakRealmController {
-    pub fn new() -> Self {
-        Self {}
-    }
-
     fn realm_name(&self, resource: &KeycloakRealm) -> String {
         let name = resource.name_unchecked();
         format!("realm-{name}")

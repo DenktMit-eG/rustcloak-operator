@@ -19,20 +19,10 @@ use log::{debug, info};
 use super::controller_runner::LifetimeController;
 use crate::{crd::KeycloakInstance, util::SecretUtils};
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct KeycloakInstanceController {}
 
-impl Default for KeycloakInstanceController {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl KeycloakInstanceController {
-    pub fn new() -> Self {
-        Self {}
-    }
-
     fn api_token_name(&self, resource: &KeycloakInstance) -> String {
         let name = resource.name_unchecked();
         format!("{name}-api-token")
@@ -67,7 +57,7 @@ impl KeycloakInstanceController {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let name = self.api_token_name(resource);
         let owner_ref = resource.owner_ref(&());
-        let token = match api.get(&token_secret_name).await {
+        let token = match api.get(token_secret_name).await {
             Ok(secret) => {
                 if let Ok(token) = secret.token() {
                     info!("Secret {} found", token_secret_name);
@@ -76,7 +66,7 @@ impl KeycloakInstanceController {
                     info!(
                         "Secret {token_secret_name} found, but invalid, trying to login",
                     );
-                    self.keycloak_login(&api, &resource).await?
+                    self.keycloak_login(api, resource).await?
                 }
             }
             Err(kube::Error::Api(ErrorResponse { code: 404, .. })) => {
@@ -84,7 +74,7 @@ impl KeycloakInstanceController {
                     "Secret {} not found, trying to login",
                     token_secret_name
                 );
-                self.keycloak_login(&api, &resource).await?
+                self.keycloak_login(api, resource).await?
             }
             Err(x) => {
                 return Err(x.into());

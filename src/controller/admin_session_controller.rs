@@ -14,20 +14,13 @@ use tokio::sync::Mutex;
 
 use super::controller_runner::LifetimeController;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct KeycloakAdminSessionController {
     keepalive_jobs: Mutex<JobHandler<String>>,
     terminate_session_jobs: Mutex<JobHandler<String>>,
 }
 
 impl KeycloakAdminSessionController {
-    pub fn new() -> Self {
-        Self {
-            keepalive_jobs: Mutex::new(JobHandler::new()),
-            terminate_session_jobs: Mutex::new(JobHandler::new()),
-        }
-    }
-
     async fn keepalive(
         client: kube::Client,
         resource: Arc<KeycloakAdminSession>,

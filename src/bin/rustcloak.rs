@@ -15,11 +15,11 @@ async fn main() -> Result<()> {
 
     let client = kube::Client::try_default().await?;
     let api_controller =
-        ControllerRunner::new(KeycloakAdminApiController::new(), &client);
+        ControllerRunner::new(KeycloakAdminApiController::default(), &client);
     let instance_controller =
-        ControllerRunner::new(KeycloakInstanceController::new(), &client);
+        ControllerRunner::new(KeycloakInstanceController::default(), &client);
     let realm_controller =
-        ControllerRunner::new(KeycloakRealmController::new(), &client);
+        ControllerRunner::new(KeycloakRealmController::default(), &client);
     tokio::try_join!(
         api_controller.run(),
         instance_controller.run(),

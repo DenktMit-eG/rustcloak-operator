@@ -14,12 +14,6 @@ impl<ID> JobHandler<ID>
 where
     ID: Hash + Eq,
 {
-    pub fn new() -> Self {
-        Self {
-            jobs: HashMap::new(),
-        }
-    }
-
     pub fn schedule<F>(
         &mut self,
         id: &ID,

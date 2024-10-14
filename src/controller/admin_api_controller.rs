@@ -25,11 +25,6 @@ pub struct KeycloakAdminApiController {
 }
 
 impl KeycloakAdminApiController {
-    pub fn new() -> Self {
-        let http = reqwest::Client::new();
-        Self { http }
-    }
-
     async fn get_creds(
         client: kube::Client,
         resource: &KeycloakAdminApi,
