@@ -1,13 +1,13 @@
 use std::sync::Arc;
 
 use crate::{
+    api::{KeycloakAuthBuilder, KeycloakClient, OAuth2Token},
     app_id,
     crd::KeycloakAdminSession,
     error::{Error, Result},
 };
 use async_trait::async_trait;
 use k8s_openapi::api::core::v1::Secret;
-use keycloak::KeycloakAdminToken;
 use kube::{
     api::{Patch, PatchParams},
     core::ErrorResponse,
@@ -28,24 +28,19 @@ impl KeycloakInstanceController {
         format!("{name}-api-token")
     }
 
-    pub async fn keycloak_login(
+    pub async fn keycloak(
         &self,
         api: &Api<Secret>,
         resource: &KeycloakInstance,
-    ) -> Result<KeycloakAdminToken> {
+    ) -> Result<KeycloakClient> {
         let cred_secret_name = &resource.spec.credentials_from;
         let (user, password) =
             api.get(cred_secret_name).await?.credentials()?;
 
-        let http_client = reqwest::Client::new();
-        let token = KeycloakAdminToken::acquire(
-            &resource.spec.base_url,
-            &user,
-            &password,
-            &http_client,
-        )
-        .await?;
-        Ok(token)
+        let keycloak = KeycloakAuthBuilder::default()
+            .url(&resource.spec.base_url)
+            .build()?;
+        keycloak.login_with_credentials(&user, &password).await
     }
 
     pub async fn setup_token(
@@ -53,7 +48,7 @@ impl KeycloakInstanceController {
         api: &Api<Secret>,
         token_secret_name: &str,
         resource: &KeycloakInstance,
-    ) -> Result<KeycloakAdminToken> {
+    ) -> Result<OAuth2Token> {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let name = self.api_token_name(resource);
         let owner_ref = resource.owner_ref(&());
@@ -66,7 +61,7 @@ impl KeycloakInstanceController {
                     info!(
                         "Secret {token_secret_name} found, but invalid, trying to login",
                     );
-                    self.keycloak_login(api, resource).await?
+                    self.keycloak(api, resource).await?.token().clone()
                 }
             }
             Err(kube::Error::Api(ErrorResponse { code: 404, .. })) => {
@@ -74,7 +69,7 @@ impl KeycloakInstanceController {
                     "Secret {} not found, trying to login",
                     token_secret_name
                 );
-                self.keycloak_login(api, resource).await?
+                self.keycloak(api, resource).await?.token().clone()
             }
             Err(x) => {
                 return Err(x.into());

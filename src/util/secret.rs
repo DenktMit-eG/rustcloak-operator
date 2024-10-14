@@ -2,10 +2,12 @@ use k8s_openapi::{
     api::core::v1::Secret, apimachinery::pkg::apis::meta::v1::OwnerReference,
     ByteString,
 };
-use keycloak::KeycloakAdminToken;
 use kube::api::ObjectMeta;
 
-use crate::error::{Error, Result};
+use crate::{
+    api::OAuth2Token,
+    error::{Error, Result},
+};
 
 pub trait SecretUtils {
     fn credentials(&self) -> Result<(String, String)>;
@@ -13,9 +15,9 @@ pub trait SecretUtils {
         name: &str,
         namespace: &str,
         owner_ref: Option<OwnerReference>,
-        token: &KeycloakAdminToken,
+        token: &OAuth2Token,
     ) -> Self;
-    fn token(&self) -> Result<KeycloakAdminToken>;
+    fn token(&self) -> Result<OAuth2Token>;
 }
 
 impl SecretUtils for Secret {
@@ -36,7 +38,7 @@ impl SecretUtils for Secret {
         name: &str,
         namespace: &str,
         owner_ref: Option<OwnerReference>,
-        token: &KeycloakAdminToken,
+        token: &OAuth2Token,
     ) -> Self {
         let token = ByteString(serde_json::to_vec(token).unwrap());
         Secret {
@@ -51,12 +53,12 @@ impl SecretUtils for Secret {
         }
     }
 
-    fn token(&self) -> Result<KeycloakAdminToken> {
+    fn token(&self) -> Result<OAuth2Token> {
         Ok(self
             .data
             .as_ref()
             .and_then(|data| data.get("token"))
-            .map(|data| serde_json::from_slice::<KeycloakAdminToken>(&data.0))
+            .map(|data| serde_json::from_slice::<OAuth2Token>(&data.0))
             .ok_or(Error::NoToken)??)
     }
 }

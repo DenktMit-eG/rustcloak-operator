@@ -1,13 +1,13 @@
 use std::sync::Arc;
 
 use crate::{
+    api::{KeycloakAuthBuilder, KeycloakClient},
     crd::KeycloakInstance,
     error::{Error, Result},
     util::SecretUtils,
 };
 use async_trait::async_trait;
 use k8s_openapi::api::core::v1::Secret;
-use keycloak::{KeycloakAdminToken, KeycloakTokenSupplier};
 use kube::{
     runtime::{controller::Action, Controller},
     Api, ResourceExt,
@@ -25,10 +25,10 @@ pub struct KeycloakAdminApiController {
 }
 
 impl KeycloakAdminApiController {
-    async fn get_creds(
+    async fn keycloak_client(
         client: kube::Client,
         resource: &KeycloakAdminApi,
-    ) -> Result<(String, KeycloakAdminToken)> {
+    ) -> Result<KeycloakClient> {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let secret_api = Api::<Secret>::namespaced(client.clone(), &ns);
         let instance_api =
@@ -39,22 +39,28 @@ impl KeycloakAdminApiController {
         let secret_name = format!("{}-api-token", instance_name);
         let token = secret_api.get(&secret_name).await?.token()?;
 
-        Ok((instance.spec.base_url, token))
+        Ok(KeycloakAuthBuilder::default()
+            .url(&instance.spec.base_url)
+            //.client_id(&instance.spec.client_id)
+            //.client_secret(&instance.spec.client_secret)
+            .build()?
+            .into_client(token))
     }
 
     async fn request(
         &self,
+        client: &KeycloakClient,
         method: Method,
-        url: &str,
-        token: &KeycloakAdminToken,
+        path: &str,
         payload: &Value,
     ) -> Result<Response> {
         info!("Payload: {}", serde_json::to_string_pretty(payload)?);
-        let request = self
-            .http
-            .request(method, url)
-            .json(payload)
-            .bearer_auth(token.get(url).await?);
+        let request = client.request(method, path);
+        let request = if *payload == Value::Null {
+            request
+        } else {
+            request.json(payload)
+        };
         println!("{:?}", request);
         Ok(request.send().await?.error_for_status()?)
     }
@@ -78,16 +84,16 @@ impl LifetimeController for KeycloakAdminApiController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let path = &resource.spec.path;
-        let (url, token) = Self::get_creds(client.clone(), &resource).await?;
+        let keycloak = Self::keycloak_client(client.clone(), &resource).await?;
         let payload = resource.resolve(client).await?;
-        let url = format!("{url}/admin/{path}");
         // First try to PUT, if we get a 404, try to POST
         let response =
-            match self.request(Method::PUT, &url, &token, &payload).await {
+            match self.request(&keycloak, Method::PUT, path, &payload).await {
                 Err(Error::ReqwestError(e)) => {
                     if e.status() == Some(StatusCode::NOT_FOUND) {
-                        let url = url.rsplit_once('/').unwrap().0;
-                        self.request(Method::POST, url, &token, &payload).await
+                        let path = path.rsplit_once('/').unwrap().0;
+                        self.request(&keycloak, Method::POST, path, &payload)
+                            .await
                     } else {
                         Err(e)?
                     }
@@ -105,13 +111,10 @@ impl LifetimeController for KeycloakAdminApiController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let path = &resource.spec.path;
-        let (url, token) = Self::get_creds(client.clone(), &resource).await?;
+        let keycloak = Self::keycloak_client(client.clone(), &resource).await?;
         // TODO: handle errors
         let _response = self
-            .http
-            .delete(format!("{url}/{path}"))
-            .bearer_auth(token.get(&url).await?)
-            .send()
+            .request(&keycloak, Method::DELETE, path, &Value::Null)
             .await?;
 
         Ok(Action::await_change())

@@ -1,6 +1,13 @@
 use k8s_openapi::api::core::v1::{ConfigMapKeySelector, SecretKeySelector};
 use thiserror::Error;
 
+use crate::api::KeycloakAuthBuilderError;
+
+type OAuth2TokenError = oauth2::RequestTokenError<
+    oauth2::HttpClientError<reqwest::Error>,
+    oauth2::StandardErrorResponse<oauth2::basic::BasicErrorResponseType>,
+>;
+
 #[derive(Error, Debug)]
 pub enum Error {
     #[error("An error occurred")]
@@ -41,6 +48,12 @@ pub enum Error {
     SerdeJsonError(#[from] serde_json::Error),
     #[error("No Uid")]
     NoUid,
+    #[error("Oauth Parse error: {0}")]
+    OauthParseError(#[from] oauth2::url::ParseError),
+    #[error("Oauth Token Request error: {0}")]
+    OAuth2TokenError(#[from] OAuth2TokenError),
+    #[error("KeycloakAuthBuilderError: {0}")]
+    KeycloakAuthBuilderError(#[from] KeycloakAuthBuilderError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
