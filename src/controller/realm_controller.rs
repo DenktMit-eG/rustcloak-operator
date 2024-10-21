@@ -13,7 +13,7 @@ use kube::{
     Api, Resource, ResourceExt,
 };
 
-use super::controller_runner::LifetimeController;
+use super::controller_runner::LifecycleController;
 use crate::crd::KeycloakRealm;
 
 #[derive(Debug, Default)]
@@ -27,7 +27,7 @@ impl KeycloakRealmController {
 }
 
 #[async_trait]
-impl LifetimeController for KeycloakRealmController {
+impl LifecycleController for KeycloakRealmController {
     type Resource = KeycloakRealm;
 
     fn prepare(

@@ -1,2 +1,2 @@
 env:
-  RUST_LOG: rustcloak_operator=trace,warn
+  RUST_LOG: rustcloak_operator=info,warn

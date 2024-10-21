@@ -58,6 +58,8 @@ pub enum Error {
     KeycloakAuthBuilderError(#[from] KeycloakAuthBuilderError),
     #[error("Borrow error: {0}")]
     BorrowError(#[from] std::cell::BorrowError),
+    #[error("Send error: {0}")]
+    SendError(#[from] tokio::sync::mpsc::error::SendError<()>),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

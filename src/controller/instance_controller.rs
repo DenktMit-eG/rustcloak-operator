@@ -2,6 +2,7 @@ use std::{
     collections::HashMap,
     ops::{Deref, DerefMut},
     sync::Arc,
+    time::Duration,
 };
 
 use crate::{
@@ -19,19 +20,29 @@ use kube::{
     Api, ResourceExt,
 };
 use log::{debug, info, warn};
-use tokio::{sync::Mutex, task::JoinHandle};
+use tokio::{
+    sync::{Mutex, Notify},
+    task::JoinHandle,
+    time,
+};
 
-use super::controller_runner::LifetimeController;
+use super::controller_runner::LifecycleController;
 use crate::crd::KeycloakInstance;
 
 struct KeycloakSessionHandler {
     instance: Arc<KeycloakInstance>,
     client: kube::Client,
+    stopper: Arc<Notify>,
 }
 
 impl KeycloakSessionHandler {
     fn new(instance: Arc<KeycloakInstance>, client: kube::Client) -> Self {
-        Self { instance, client }
+        let stopper = Arc::new(Notify::new());
+        Self {
+            instance,
+            client,
+            stopper,
+        }
     }
 
     fn keycloak_builder(&self) -> K8sKeycloakBuilder {
@@ -90,28 +101,40 @@ impl KeycloakSessionHandler {
         Err(Error::NoSecret)
     }
 
-    async fn wait_for_expire(&self, keycloak: &KeycloakClient) -> Result<()> {
+    async fn wait(&self, duration: Duration) -> Result<bool> {
+        match time::timeout(duration, self.stopper.notified()).await {
+            // stopper received
+            Ok(_) => Ok(false),
+            // timeout
+            Err(_) => Ok(true),
+        }
+    }
+
+    async fn wait_for_expire(&self, keycloak: &KeycloakClient) -> Result<bool> {
         let Some(expires) = keycloak.token().expires else {
-            return Ok(());
+            return Ok(true);
         };
 
         let now = chrono::Utc::now();
-        if expires > now {
+        let timeout = if expires > now {
             let timeout = (expires - now) * 5 / 6;
-            let timeout = timeout.to_std().unwrap();
-            info!(
-                "Next token refresh at {expires} ({} seconds)",
-                timeout.as_secs()
-            );
-            tokio::time::sleep(timeout).await;
-        }
-        Ok(())
+            timeout.to_std().unwrap()
+        } else {
+            Duration::from_secs(0)
+        };
+        info!(
+            "Next token refresh at {expires} ({} seconds)",
+            timeout.as_secs()
+        );
+        self.wait(timeout).await
     }
 
-    async fn run_once(&self) -> Result<()> {
+    async fn run_once(&self) -> Result<bool> {
         let keycloak = self.keycloak_from_somewhere().await?;
 
-        self.wait_for_expire(&keycloak).await?;
+        if self.wait_for_expire(&keycloak).await? == false {
+            return Ok(false);
+        }
 
         match self.refresh(keycloak).await {
             Ok(_) => info!("Token refreshed"),
@@ -120,37 +143,48 @@ impl KeycloakSessionHandler {
                 self.keycloak_from_credentials().await?;
             }
         }
-        Ok(())
+        Ok(true)
     }
 
     async fn run(self) -> Result<()> {
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
 
-        info!(
+        debug!(
             "Starting refresh loop for keycloak instance {}/{}",
             ns,
             self.instance.name_unchecked()
         );
         loop {
-            match self.run_once().await {
-                Ok(_) => {}
+            let res = match self.run_once().await {
+                Ok(x) => x,
                 Err(e) => {
                     warn!("Error in keycloak session handler: {}, sleeping for 5 seconds", e);
-                    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+                    self.wait(Duration::from_secs(5)).await?
                 }
+            };
+
+            if !res {
+                debug!(
+                    "Stopping refresh loop for keycloak instance {}/{}",
+                    ns,
+                    self.instance.name_unchecked()
+                );
+                break;
             }
         }
+        Ok(())
     }
 }
 
-type JoinHandlesInner = HashMap<(String, String), JoinHandle<()>>;
+type JoinHandlesInner =
+    HashMap<(String, String), (JoinHandle<()>, Arc<Notify>)>;
 
 #[derive(Debug, Default)]
 struct JoinHandles(JoinHandlesInner);
 
 impl Drop for JoinHandles {
     fn drop(&mut self) {
-        for (_, handle) in self.0.drain() {
+        for (_, (handle, _)) in self.0.drain() {
             handle.abort();
         }
     }
@@ -182,7 +216,7 @@ pub struct KeycloakInstanceController {
 }
 
 #[async_trait]
-impl LifetimeController for KeycloakInstanceController {
+impl LifecycleController for KeycloakInstanceController {
     type Resource = KeycloakInstance;
 
     fn prepare(
@@ -208,6 +242,7 @@ impl LifetimeController for KeycloakInstanceController {
             KeycloakSessionHandler::new(resource.clone(), client.clone());
         let instance_api =
             Api::<KeycloakInstance>::namespaced(client.clone(), &ns);
+        let stopper = session_handler.stopper.clone();
 
         let handle = tokio::spawn(async move {
             if let Err(e) = session_handler.run().await {
@@ -222,13 +257,14 @@ impl LifetimeController for KeycloakInstanceController {
             }
         });
 
-        if let Some(old_handle) = self
+        if let Some((_, stopper)) = self
             .refresh_job_handles
             .lock()
             .await
-            .insert((name, ns), handle)
+            .insert((name.clone(), ns.clone()), (handle, stopper))
         {
-            old_handle.abort();
+            debug!("Sending stop notification to refresh task {}/{}", ns, name);
+            stopper.notify_one();
         }
         Ok(Action::await_change())
     }
@@ -240,10 +276,14 @@ impl LifetimeController for KeycloakInstanceController {
     ) -> Result<Action> {
         let name = resource.name_unchecked();
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        if let Some(handle) =
-            self.refresh_job_handles.lock().await.remove(&(name, ns))
+        if let Some((_, stopper)) = self
+            .refresh_job_handles
+            .lock()
+            .await
+            .remove(&(name.clone(), ns.clone()))
         {
-            handle.abort();
+            debug!("Sending stop notification to refresh task {}/{}", ns, name);
+            stopper.notify_one();
         }
         Ok(Action::await_change())
     }

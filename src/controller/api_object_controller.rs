@@ -11,11 +11,11 @@ use kube::{
     runtime::{controller::Action, Controller},
     Api, ResourceExt,
 };
-use log::{debug, info};
+use log::trace;
 use reqwest::{Method, Response, StatusCode};
 use serde_json::Value;
 
-use super::controller_runner::LifetimeController;
+use super::controller_runner::LifecycleController;
 use crate::crd::KeycloakApiObject;
 
 #[derive(Debug, Default)]
@@ -51,13 +51,13 @@ impl KeycloakApiObjectController {
         } else {
             request.json(payload)
         };
-        debug!("Request: {:?}", request);
+        trace!("Request: {:?}", request);
         Ok(request.send().await?.error_for_status()?)
     }
 }
 
 #[async_trait]
-impl LifetimeController for KeycloakApiObjectController {
+impl LifecycleController for KeycloakApiObjectController {
     type Resource = KeycloakApiObject;
 
     fn prepare(
@@ -77,20 +77,20 @@ impl LifetimeController for KeycloakApiObjectController {
         let keycloak = Self::keycloak(&client, &resource).await?;
         let payload = resource.resolve(client).await?;
         // First try to PUT, if we get a 404, try to POST
-        let response =
-            match self.request(&keycloak, Method::PUT, path, &payload).await {
-                Err(Error::ReqwestError(e)) => {
-                    if e.status() == Some(StatusCode::NOT_FOUND) {
-                        let path = path.rsplit_once('/').unwrap().0;
-                        self.request(&keycloak, Method::POST, path, &payload)
-                            .await
-                    } else {
-                        Err(e)?
-                    }
+        match self.request(&keycloak, Method::PUT, path, &payload).await {
+            Err(Error::ReqwestError(e)) => {
+                if e.status() == Some(StatusCode::NOT_FOUND) {
+                    let path = path.rsplit_once('/').unwrap().0;
+                    self.request(&keycloak, Method::POST, path, &payload)
+                        .await?;
+                } else {
+                    Err(e)?;
                 }
-                r => r,
-            }?;
-        info!("Response: {:?}", response.text().await?);
+            }
+            r => {
+                r?;
+            }
+        }
         // TODO: handle errors
         Ok(Action::await_change())
     }

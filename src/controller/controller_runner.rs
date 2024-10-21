@@ -25,7 +25,7 @@ use std::fmt::Debug;
 use std::hash::Hash;
 
 #[async_trait]
-pub trait LifetimeController {
+pub trait LifecycleController {
     type Resource: Clone + KubeResource + Debug + 'static;
 
     fn prepare(
@@ -34,7 +34,7 @@ pub trait LifetimeController {
         client: &kube::Client,
     ) -> Controller<Self::Resource>
     where
-        <Self::Resource as kube::Resource>::DynamicType: Eq + Hash;
+        <Self::Resource as kube::Resource>::DynamicType: Eq + Hash + From<()>;
 
     async fn apply(
         &self,
@@ -55,7 +55,7 @@ pub struct ControllerRunner<C> {
 
 impl<C> ControllerRunner<C>
 where
-    C: LifetimeController + Sync + Send + 'static,
+    C: LifecycleController + Sync + Send + 'static,
     C::Resource: KubeResource<Scope = NamespaceResourceScope>
         + Clone
         + WithStatus<KeycloakApiStatus>
@@ -67,7 +67,7 @@ where
         + DeserializeOwned
         + Debug,
     <C::Resource as KubeResource>::DynamicType:
-        Default + Eq + Hash + Clone + Debug + Unpin,
+        Default + Eq + Hash + Clone + Debug + Unpin + From<()>,
 {
     pub fn new(controller: C, client: &kube::Client) -> Self {
         let client = client.clone();
@@ -77,6 +77,8 @@ where
     pub async fn run(self) -> Result<()> {
         let api = Api::<C::Resource>::all(self.client.clone());
         let config = controller::Config::default().concurrency(2);
+        let dt = ().into();
+        let kind = C::Resource::kind(&dt);
 
         let controller = Controller::new(api, watcher::Config::default())
             .with_config(config)
@@ -84,9 +86,15 @@ where
         let controller = self.controller.prepare(controller, &self.client);
         controller
             .run(Self::reconcile, Self::error_policy, Arc::new(self))
-            .for_each(|res| async move {
+            .for_each(|res| async {
                 match res {
-                    Ok(o) => info!("reconciled {:?}", o),
+                    Ok((o, _)) => {
+                        info!(
+                            "reconciled {kind} {}/{}",
+                            o.namespace.unwrap(),
+                            o.name
+                        )
+                    }
                     Err(e) => error!("reconcile error: {:?}", e),
                 }
             })

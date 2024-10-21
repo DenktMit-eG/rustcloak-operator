@@ -42,8 +42,11 @@ impl SecretUtils for Secret {
         oauth_token: &OAuth2Token,
         instance: &KeycloakInstance,
     ) -> Self {
-        let token =
-            ByteString(serde_json::to_vec_pretty(&oauth_token.token).unwrap());
+        let token = ByteString(
+            serde_yaml::to_string(&oauth_token.token)
+                .unwrap()
+                .into_bytes(),
+        );
         let expires = oauth_token
             .expires
             .map(|x| ByteString(x.to_rfc3339().into_bytes()));
@@ -74,7 +77,7 @@ impl SecretUtils for Secret {
             self.data.as_ref().map_or((None, None), |data| {
                 (data.get(token_key), data.get(expires_key))
             });
-        let token = serde_json::from_slice(&token.ok_or(Error::NoToken)?.0)?;
+        let token = serde_yaml::from_slice(&token.ok_or(Error::NoToken)?.0)?;
         let expires = expires
             .and_then(|e| String::from_utf8(e.0.clone()).ok())
             .and_then(|e| chrono::DateTime::parse_from_rfc3339(&e).ok())
