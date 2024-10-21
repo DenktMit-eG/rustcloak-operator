@@ -17,7 +17,7 @@ use serde_json::Value;
 )]
 #[kube(
     kind = "KeycloakApiObject",
-    shortname = "kcaa",
+    shortname = "kcao",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     namespaced,

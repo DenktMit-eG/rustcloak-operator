@@ -1,13 +1,12 @@
 use std::sync::Arc;
 
 use crate::{
-    api::{KeycloakAuthBuilder, KeycloakClient},
+    api::KeycloakClient,
     crd::KeycloakInstance,
     error::{Error, Result},
-    util::SecretUtils,
+    util::K8sKeycloakBuilder,
 };
 use async_trait::async_trait;
-use k8s_openapi::api::core::v1::Secret;
 use kube::{
     runtime::{controller::Action, Controller},
     Api, ResourceExt,
@@ -20,32 +19,23 @@ use super::controller_runner::LifetimeController;
 use crate::crd::KeycloakApiObject;
 
 #[derive(Debug, Default)]
-pub struct KeycloakApiController {}
+pub struct KeycloakApiObjectController {}
 
-impl KeycloakApiController {
-    async fn keycloak_client(
-        client: kube::Client,
+impl KeycloakApiObjectController {
+    async fn keycloak(
+        client: &kube::Client,
         resource: &KeycloakApiObject,
     ) -> Result<KeycloakClient> {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let secret_api = Api::<Secret>::namespaced(client.clone(), &ns);
         let instance_api =
             Api::<KeycloakInstance>::namespaced(client.clone(), &ns);
 
         let instance_name = &resource.spec.api.keycloak_selector.name;
         let instance = instance_api.get(instance_name).await?;
-        // TODO: the secret name can be customized
-        let token = secret_api
-            .get(&instance.token_secret_name())
-            .await?
-            .token(&instance)?;
 
-        Ok(KeycloakAuthBuilder::default()
-            .url(&instance.spec.base_url)
-            //.client_id(&instance.spec.client_id)
-            //.client_secret(&instance.spec.client_secret)
-            .build()?
-            .into_client(token))
+        K8sKeycloakBuilder::new(&instance, &client)
+            .with_token()
+            .await
     }
 
     async fn request(
@@ -67,7 +57,7 @@ impl KeycloakApiController {
 }
 
 #[async_trait]
-impl LifetimeController for KeycloakApiController {
+impl LifetimeController for KeycloakApiObjectController {
     type Resource = KeycloakApiObject;
 
     fn prepare(
@@ -84,7 +74,7 @@ impl LifetimeController for KeycloakApiController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let path = &resource.spec.path;
-        let keycloak = Self::keycloak_client(client.clone(), &resource).await?;
+        let keycloak = Self::keycloak(&client, &resource).await?;
         let payload = resource.resolve(client).await?;
         // First try to PUT, if we get a 404, try to POST
         let response =
@@ -111,7 +101,7 @@ impl LifetimeController for KeycloakApiController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let path = &resource.spec.path;
-        let keycloak = Self::keycloak_client(client.clone(), &resource).await?;
+        let keycloak = Self::keycloak(&client, &resource).await?;
         // TODO: handle errors
         let _response = self
             .request(&keycloak, Method::DELETE, path, &Value::Null)

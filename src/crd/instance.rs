@@ -19,6 +19,12 @@ pub struct KeycloakInstanceTokenReference {
     pub expires_key: Option<String>,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+pub struct KeycloakInstanceClient {
+    pub id: String,
+    pub secret: Option<String>,
+}
+
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
     kind = "KeycloakInstance",
@@ -30,8 +36,10 @@ pub struct KeycloakInstanceTokenReference {
 )]
 pub struct KeycloakInstanceSpec {
     pub base_url: String,
+    pub realm: Option<String>,
     pub credentials: KeycloakInstanceCredentialReference,
     pub token: Option<KeycloakInstanceTokenReference>,
+    pub client: Option<KeycloakInstanceClient>,
 }
 
 #[derive(

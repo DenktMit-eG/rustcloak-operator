@@ -5,11 +5,11 @@ use std::{
 };
 
 use crate::{
-    api::{KeycloakAuth, KeycloakAuthBuilder, KeycloakClient, OAuth2Token},
+    api::{KeycloakClient, OAuth2Token},
     app_id,
     crd::KeycloakApiStatus,
     error::{Error, Result},
-    util::SecretUtils,
+    util::{K8sKeycloakBuilder, SecretUtils},
 };
 use async_trait::async_trait;
 use k8s_openapi::api::core::v1::Secret;
@@ -34,10 +34,8 @@ impl KeycloakSessionHandler {
         Self { instance, client }
     }
 
-    fn keycloak_auth(&self) -> Result<KeycloakAuth> {
-        Ok(KeycloakAuthBuilder::default()
-            .url(&self.instance.spec.base_url)
-            .build()?)
+    fn keycloak_builder(&self) -> K8sKeycloakBuilder {
+        K8sKeycloakBuilder::new(&self.instance, &self.client)
     }
 
     async fn update_token_secret(&self, token: &OAuth2Token) -> Result<()> {
@@ -56,44 +54,17 @@ impl KeycloakSessionHandler {
     }
 
     async fn keycloak_from_credentials(&self) -> Result<KeycloakClient> {
-        let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
-        let secret_api = Api::<Secret>::namespaced(self.client.clone(), &ns);
-        let credential_secret_name =
-            self.instance.credential_secret_name().to_string();
-        debug!( "Using keycloak with credential secret {ns}/{credential_secret_name}");
-
-        let (user, password) = secret_api
-            .get(&credential_secret_name)
-            .await?
-            .credentials(&self.instance.spec.credentials)?;
-
-        let keycloak = self
-            .keycloak_auth()?
-            .login_with_credentials(&user, &password)
-            .await?;
+        let keycloak = self.keycloak_builder().with_credentials().await?;
 
         self.update_token_secret(keycloak.token()).await?;
 
         Ok(keycloak)
     }
 
-    async fn keycloak_from_token(&self) -> Result<KeycloakClient> {
-        let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
-        let secret_api = Api::<Secret>::namespaced(self.client.clone(), &ns);
-        let token_secret_name = self.instance.token_secret_name().to_string();
-        debug!("Using keycloak with token secret {ns}/{token_secret_name}");
-
-        let token = secret_api
-            .get(&token_secret_name)
-            .await?
-            .token(&self.instance)?;
-
-        Ok(self.keycloak_auth()?.into_client(token))
-    }
-
     async fn refresh(&self, keycloak: KeycloakClient) -> Result<()> {
         let mut keycloak = keycloak;
         keycloak.refresh().await?;
+
         self.update_token_secret(keycloak.token()).await?;
 
         Ok(())
@@ -101,7 +72,7 @@ impl KeycloakSessionHandler {
 
     async fn keycloak_from_somewhere(&self) -> Result<KeycloakClient> {
         debug!("Trying to get keycloak client, trying token first.");
-        match self.keycloak_from_token().await {
+        match self.keycloak_builder().with_token().await {
             Ok(keycloak) => {
                 return Ok(keycloak);
             }

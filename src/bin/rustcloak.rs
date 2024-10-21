@@ -2,7 +2,7 @@ use anyhow::Result;
 use clap::Parser;
 use futures::FutureExt;
 use rustcloak_operator::controller::ControllerRunner;
-use rustcloak_operator::controller::KeycloakApiController;
+use rustcloak_operator::controller::KeycloakApiObjectController;
 use rustcloak_operator::controller::KeycloakInstanceController;
 use rustcloak_operator::controller::KeycloakRealmController;
 use rustcloak_operator::opts::ControllerOpt;
@@ -18,9 +18,12 @@ async fn main() -> Result<()> {
     let mut controllers = vec![];
     if opts.controllers.contains(&ControllerOpt::AdminApi) {
         controllers.push(
-            ControllerRunner::new(KeycloakApiController::default(), &client)
-                .run()
-                .boxed(),
+            ControllerRunner::new(
+                KeycloakApiObjectController::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
         );
     }
     if opts.controllers.contains(&ControllerOpt::Instance) {

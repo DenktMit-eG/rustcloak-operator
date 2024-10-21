@@ -2,21 +2,27 @@ use crate::error::Result;
 use derive_builder::Builder;
 use log::info;
 use oauth2::basic::BasicClient;
-use oauth2::TokenResponse;
 use oauth2::{
     basic::BasicTokenType, AuthUrl, ClientId, EmptyExtraTokenFields,
     ResourceOwnerPassword, ResourceOwnerUsername, StandardTokenResponse,
     TokenUrl,
 };
+use oauth2::{ClientSecret, TokenResponse};
 
 // Because of the stupidly overdesigned oauth2 library, we use this generator macro
 // to not have to write idiotic amounts of Generic types.
 macro_rules! basic_client {
-    ($keycloak_login:expr) => {
-        BasicClient::new($keycloak_login.client_id.clone())
-            .set_auth_uri($keycloak_login.auth_url.clone())
-            .set_token_uri($keycloak_login.token_url.clone())
-    };
+    ($auth:expr) => {{
+        let builder = BasicClient::new($auth.client_id.clone())
+            .set_auth_uri($auth.auth_url.clone())
+            .set_token_uri($auth.token_url.clone());
+        let builder = if let Some(secret) = &$auth.client_secret {
+            builder.set_client_secret(secret.clone())
+        } else {
+            builder
+        };
+        builder
+    }};
 }
 
 #[derive(Debug, Clone)]
@@ -54,6 +60,8 @@ pub struct KeycloakAuth {
     token_url: TokenUrl,
     #[builder(setter(into), default = "self.default_client_id()")]
     client_id: ClientId,
+    #[builder(setter(into, strip_option), default)]
+    client_secret: Option<ClientSecret>,
     #[builder(setter(into), default)]
     http_client: reqwest::Client,
 }
