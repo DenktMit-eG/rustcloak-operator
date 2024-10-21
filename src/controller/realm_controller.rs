@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::{
     app_id,
-    crd::{KeycloakAdminApi, KeycloakAdminApiSpec},
+    crd::{KeycloakApiObject, KeycloakApiObjectSpec},
     error::{Error, Result},
 };
 use async_trait::async_trait;
@@ -36,7 +36,7 @@ impl LifetimeController for KeycloakRealmController {
         client: &kube::Client,
     ) -> Controller<Self::Resource> {
         controller.owns(
-            Api::<KeycloakAdminApi>::all(client.clone()),
+            Api::<KeycloakApiObject>::all(client.clone()),
             watcher::Config::default(),
         )
     }
@@ -47,7 +47,7 @@ impl LifetimeController for KeycloakRealmController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let admin_api: Api<KeycloakAdminApi> =
+        let admin_api: Api<KeycloakApiObject> =
             Api::namespaced(client.clone(), &ns);
         let realm_name = &resource.spec.definition.realm;
         let name = self.realm_name(&resource);
@@ -59,16 +59,16 @@ impl LifetimeController for KeycloakRealmController {
             serde_json::from_value(json.clone())?;
         let owner_ref = resource.controller_owner_ref(&()).unwrap();
 
-        let api_object = KeycloakAdminApi {
+        let api_object = KeycloakApiObject {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
                 namespace: Some(ns.clone()),
                 owner_references: Some(vec![owner_ref]),
                 ..Default::default()
             },
-            spec: KeycloakAdminApiSpec {
+            spec: KeycloakApiObjectSpec {
                 api: resource.spec.api.clone(),
-                path: format!("realms/{realm_name}"),
+                path: format!("admin/realms/{realm_name}"),
                 payload: serde_json::to_value(&realm_representation)?,
                 vars: None,
             },

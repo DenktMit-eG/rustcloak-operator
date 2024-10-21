@@ -28,6 +28,8 @@ pub enum Error {
     NoVar(String),
     #[error("No password")]
     NoPassword,
+    #[error("No Secret")]
+    NoSecret,
     #[error("No token")]
     NoToken,
     #[error("No key {} in Secret {}", r.key, r.name)]
@@ -54,6 +56,8 @@ pub enum Error {
     OAuth2TokenError(#[from] OAuth2TokenError),
     #[error("KeycloakAuthBuilderError: {0}")]
     KeycloakAuthBuilderError(#[from] KeycloakAuthBuilderError),
+    #[error("Borrow error: {0}")]
+    BorrowError(#[from] std::cell::BorrowError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

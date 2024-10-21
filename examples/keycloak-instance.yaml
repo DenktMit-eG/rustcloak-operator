@@ -4,4 +4,5 @@ metadata:
   name: keycloak-instance
 spec:
   base_url: http://127.0.0.1:8080
-  credentials_from: keycloak-password
+  credentials:
+    secret_name: keycloak-password

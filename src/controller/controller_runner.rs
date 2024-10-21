@@ -1,4 +1,4 @@
-use std::{sync::Arc, time::Duration};
+use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use crate::{
     app_id,
@@ -8,6 +8,7 @@ use crate::{
 use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{
+    api::{Patch, PatchParams},
     runtime::{
         controller::{self, Action},
         watcher, Controller,
@@ -105,29 +106,60 @@ where
         let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
         let client = ctx.client.clone();
 
-        finalizer(&api, app_id!("finalizer"), resource, |event| async move {
-            match event {
-                Event::Apply(resource) => {
-                    ctx.controller.apply(&client, resource).await
+        match finalizer(
+            &api,
+            app_id!("finalizer"),
+            resource.clone(),
+            |event| async {
+                match event {
+                    Event::Apply(resource) => {
+                        ctx.controller.apply(&client, resource).await
+                    }
+                    Event::Cleanup(resource) => {
+                        ctx.controller.cleanup(&client, resource).await
+                    }
                 }
-                Event::Cleanup(resource) => {
-                    ctx.controller.cleanup(&client, resource).await
-                }
-            }
-        })
+            },
+        )
         .await
-        .map_err(|e| match e {
-            FinalizerError::ApplyFailed(e)
-            | FinalizerError::CleanupFailed(e) => e,
-            e => Error::Other(Box::new(e)),
-        })
+        {
+            Ok(action) => Ok(action),
+            Err(FinalizerError::ApplyFailed(e))
+            | Err(FinalizerError::CleanupFailed(e)) => {
+                Self::handle_error(ctx.clone(), &resource, &e).await?;
+                Err(e)
+            }
+            Err(e) => Err(Error::Other(Box::new(e))),
+        }
     }
 
+    async fn handle_error(
+        ctx: Arc<Self>,
+        resource: &C::Resource,
+        e: &Error,
+    ) -> Result<()> {
+        let ns = resource
+            .meta()
+            .namespace
+            .as_deref()
+            .ok_or(Error::NoNamespace)?;
+        let name = resource.meta().name.clone().unwrap();
+        let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
+        let patch: HashMap<String, KeycloakApiStatus> =
+            [("status".to_string(), e.into())].into();
+
+        api.patch_status(&name, &PatchParams::default(), &Patch::Merge(patch))
+            .await?;
+
+        Ok(())
+    }
     fn error_policy(
         _resource: Arc<C::Resource>,
         _error: &Error,
         _ctx: Arc<Self>,
     ) -> Action {
+        //let api = Api::<C::Resource>::all(_ctx.client.clone());
+
         Action::requeue(Duration::from_secs(5))
     }
 }

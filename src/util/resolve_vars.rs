@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::{
-    crd::KeycloakAdminApi,
+    crd::KeycloakApiObject,
     error::{Error, Result},
 };
 use k8s_openapi::api::core::v1::{
@@ -11,7 +11,7 @@ use kube::ResourceExt;
 use kube::{Api, Client};
 use serde_json::Value;
 
-impl KeycloakAdminApi {
+impl KeycloakApiObject {
     pub async fn resolve(&self, client: &Client) -> Result<Value> {
         let mut resolved_vars = HashMap::new();
 

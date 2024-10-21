@@ -1,10 +1,8 @@
-mod admin_api;
-mod admin_session;
+mod api_object;
 mod instance;
 mod realm;
 
-pub use admin_api::*;
-pub use admin_session::*;
+pub use api_object::*;
 pub use instance::*;
 pub use realm::*;
 
@@ -28,14 +26,26 @@ pub struct KeycloakApiStatus {
     message: String,
 }
 
-impl From<Error> for KeycloakApiStatus {
-    fn from(err: Error) -> Self {
+impl From<&Error> for KeycloakApiStatus {
+    fn from(err: &Error) -> Self {
         KeycloakApiStatus {
             ready: false,
             status: "error".to_string(),
             code: 0,
             message: err.to_string(),
         }
+    }
+}
+
+impl KeycloakApiStatus {
+    pub fn from_error(e: Error) -> Value {
+        [(
+            "status".to_string(),
+            serde_json::to_value(KeycloakApiStatus::from(&e)).unwrap(),
+        )]
+        .into_iter()
+        .collect::<serde_json::Map<_, _>>()
+        .into()
     }
 }
 

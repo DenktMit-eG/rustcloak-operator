@@ -12,22 +12,20 @@ use kube::{
     runtime::{controller::Action, Controller},
     Api, ResourceExt,
 };
-use log::info;
+use log::{debug, info};
 use reqwest::{Method, Response, StatusCode};
 use serde_json::Value;
 
 use super::controller_runner::LifetimeController;
-use crate::crd::KeycloakAdminApi;
+use crate::crd::KeycloakApiObject;
 
 #[derive(Debug, Default)]
-pub struct KeycloakAdminApiController {
-    http: reqwest::Client,
-}
+pub struct KeycloakApiController {}
 
-impl KeycloakAdminApiController {
+impl KeycloakApiController {
     async fn keycloak_client(
         client: kube::Client,
-        resource: &KeycloakAdminApi,
+        resource: &KeycloakApiObject,
     ) -> Result<KeycloakClient> {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let secret_api = Api::<Secret>::namespaced(client.clone(), &ns);
@@ -36,8 +34,11 @@ impl KeycloakAdminApiController {
 
         let instance_name = &resource.spec.api.keycloak_selector.name;
         let instance = instance_api.get(instance_name).await?;
-        let secret_name = format!("{}-api-token", instance_name);
-        let token = secret_api.get(&secret_name).await?.token()?;
+        // TODO: the secret name can be customized
+        let token = secret_api
+            .get(&instance.token_secret_name())
+            .await?
+            .token(&instance)?;
 
         Ok(KeycloakAuthBuilder::default()
             .url(&instance.spec.base_url)
@@ -54,21 +55,20 @@ impl KeycloakAdminApiController {
         path: &str,
         payload: &Value,
     ) -> Result<Response> {
-        info!("Payload: {}", serde_json::to_string_pretty(payload)?);
         let request = client.request(method, path);
-        let request = if *payload == Value::Null {
+        let request = if payload == &Value::Null {
             request
         } else {
             request.json(payload)
         };
-        println!("{:?}", request);
+        debug!("Request: {:?}", request);
         Ok(request.send().await?.error_for_status()?)
     }
 }
 
 #[async_trait]
-impl LifetimeController for KeycloakAdminApiController {
-    type Resource = KeycloakAdminApi;
+impl LifetimeController for KeycloakApiController {
+    type Resource = KeycloakApiObject;
 
     fn prepare(
         &self,

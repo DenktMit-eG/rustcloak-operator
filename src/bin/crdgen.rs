@@ -3,7 +3,7 @@ use rustcloak_operator::crd::*;
 
 fn main() {
     let crds = [
-        KeycloakAdminApi::crd(),
+        KeycloakApiObject::crd(),
         KeycloakInstance::crd(),
         KeycloakRealm::crd(),
     ];

@@ -1,10 +1,17 @@
-use clap::Parser;
+use clap::{Parser, ValueEnum};
+use serde::Serialize;
+
+#[derive(ValueEnum, Clone, Debug, Serialize, PartialEq)]
+pub enum ControllerOpt {
+    AdminApi,
+    Instance,
+    Realm,
+}
 
 /// Keyclaok Operator
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
 pub struct Opts {
-    /// Enables CRD handling for the keycloak-realms operator
-    #[clap(short, long, env)]
-    deprecated: bool,
+    #[clap(short, long, value_delimiter = ',', num_args = 1.., default_value = "admin-api,instance,realm")]
+    pub controllers: Vec<ControllerOpt>,
 }

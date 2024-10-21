@@ -16,7 +16,7 @@ use serde_json::Value;
     CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema, Default,
 )]
 #[kube(
-    kind = "KeycloakAdminApi",
+    kind = "KeycloakApiObject",
     shortname = "kcaa",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
@@ -24,8 +24,8 @@ use serde_json::Value;
     status = "KeycloakApiStatus"
 )]
 /// defines an API request to the Keycloak Admin API.
-pub struct KeycloakAdminApiSpec {
-    pub api: KeycloakAdminApiOptions,
+pub struct KeycloakApiObjectSpec {
+    pub api: KeycloakApiObjectOptions,
     pub path: String,
     #[schemars(schema_with = "schema_payload")]
     pub payload: Value,
@@ -46,12 +46,12 @@ fn schema_payload(_generator: &mut SchemaGenerator) -> Schema {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
-pub struct KeycloakAdminApiOptions {
+pub struct KeycloakApiObjectOptions {
     pub keycloak_selector: KeycloakInstanceSelector,
     pub must_create: Option<bool>,
 }
 
-impl WithStatus<KeycloakApiStatus> for KeycloakAdminApi {
+impl WithStatus<KeycloakApiStatus> for KeycloakApiObject {
     fn status(&self) -> Option<&KeycloakApiStatus> {
         self.status.as_ref()
     }

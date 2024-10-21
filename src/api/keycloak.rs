@@ -1,5 +1,6 @@
 use crate::error::Result;
 use derive_builder::Builder;
+use log::info;
 use oauth2::basic::BasicClient;
 use oauth2::TokenResponse;
 use oauth2::{
@@ -18,12 +19,30 @@ macro_rules! basic_client {
     };
 }
 
-// Tell me that the authors never used their own library without telling me that the authors never
-// used their own library.
-pub type OAuth2Token =
-    StandardTokenResponse<EmptyExtraTokenFields, BasicTokenType>;
+#[derive(Debug, Clone)]
+pub struct OAuth2Token {
+    pub token: StandardTokenResponse<EmptyExtraTokenFields, BasicTokenType>,
+    pub expires: Option<chrono::DateTime<chrono::Utc>>,
+}
 
-#[derive(Debug, Builder)]
+impl OAuth2Token {
+    fn create(
+        token: StandardTokenResponse<EmptyExtraTokenFields, BasicTokenType>,
+    ) -> Self {
+        let expires = token.expires_in().map(|e| chrono::Utc::now() + e);
+        OAuth2Token { token, expires }
+    }
+
+    pub fn access_token(&self) -> &oauth2::AccessToken {
+        self.token.access_token()
+    }
+
+    pub fn refresh_token(&self) -> Option<&oauth2::RefreshToken> {
+        self.token.refresh_token()
+    }
+}
+
+#[derive(Debug, Builder, Clone)]
 pub struct KeycloakAuth {
     #[builder(setter(into))]
     url: String,
@@ -48,7 +67,7 @@ impl KeycloakAuthBuilder {
         let url = self.url.as_ref().unwrap();
         let realm = self.realm.clone().unwrap_or_else(|| self.default_realm());
         AuthUrl::new(format!(
-            "{url}/auth/realms/{realm}/protocol/openid-connect/auth"
+            "{url}/realms/{realm}/protocol/openid-connect/auth"
         ))
         .unwrap()
     }
@@ -57,7 +76,7 @@ impl KeycloakAuthBuilder {
         let url = self.url.as_ref().unwrap();
         let realm = self.realm.clone().unwrap_or_else(|| self.default_realm());
         TokenUrl::new(format!(
-            "{url}/auth/realms/{realm}/protocol/openid-connect/token"
+            "{url}/realms/{realm}/protocol/openid-connect/token"
         ))
         .unwrap()
     }
@@ -77,18 +96,22 @@ impl KeycloakAuth {
 
     pub async fn login_with_credentials(
         self,
-        user: &str,
+        user_name: &str,
         password: &str,
     ) -> Result<KeycloakClient> {
-        let user = ResourceOwnerUsername::new(user.to_string());
+        info!("Logging in with user {}", user_name);
+
+        let user = ResourceOwnerUsername::new(user_name.to_string());
         let password = ResourceOwnerPassword::new(password.to_string());
+
         let oauth_client = basic_client!(&self);
         let token = oauth_client
             .exchange_password(&user, &password)
             .request_async(&self.http_client)
             .await?;
+        info!("Successfully logged in with user {}", user_name);
 
-        Ok(KeycloakClient::new(self, token))
+        Ok(KeycloakClient::new(self, OAuth2Token::create(token)))
     }
 
     pub fn into_client(self, token: OAuth2Token) -> KeycloakClient {
@@ -96,6 +119,7 @@ impl KeycloakAuth {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct KeycloakClient {
     auth: KeycloakAuth,
     token: OAuth2Token,
@@ -117,19 +141,23 @@ impl KeycloakClient {
             .bearer_auth(self.token.access_token().secret())
     }
 
-    pub async fn refresh(&mut self) -> Result<()> {
+    pub async fn refresh(&mut self) -> Result<&OAuth2Token> {
         let oauth_client = basic_client!(&self.auth);
         let token = oauth_client
             .exchange_refresh_token(self.token.refresh_token().unwrap())
             .request_async(&self.auth.http_client)
             .await?;
 
-        self.token = token;
-        Ok(())
+        self.token = OAuth2Token::create(token);
+        Ok(&self.token)
     }
 
     pub fn token(&self) -> &OAuth2Token {
         &self.token
+    }
+
+    pub fn realm(&self) -> &str {
+        &self.auth.realm
     }
 
     pub async fn logout(self) -> Result<()> {

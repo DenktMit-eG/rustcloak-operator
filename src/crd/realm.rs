@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use super::{KeycloakAdminApiOptions, KeycloakApiStatus, WithStatus};
+use super::{KeycloakApiObjectOptions, KeycloakApiStatus, WithStatus};
 use kube_derive::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -16,7 +16,7 @@ use serde_json::Value;
     namespaced
 )]
 pub struct KeycloakRealmSpec {
-    pub api: KeycloakAdminApiOptions,
+    pub api: KeycloakApiObjectOptions,
     pub definition: KeycloakRealmDefinition,
     #[schemars(schema_with = "super::schema_extra", default)]
     pub extra: Option<Value>,
