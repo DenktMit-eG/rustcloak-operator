@@ -54,7 +54,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
             .await?
             .credentials(&self.instance.spec.credentials)?;
 
-        Ok(self.auth.login_with_credentials(&user, &password).await?)
+        self.auth.login_with_credentials(&user, &password).await
     }
 
     pub async fn with_token(self) -> Result<KeycloakClient> {
@@ -66,7 +66,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
         let token = secret_api
             .get(&token_secret_name)
             .await?
-            .token(&self.instance)?;
+            .token(self.instance)?;
 
         Ok(self.auth.into_client(token))
     }

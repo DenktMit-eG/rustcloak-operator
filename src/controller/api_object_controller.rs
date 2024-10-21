@@ -33,7 +33,7 @@ impl KeycloakApiObjectController {
         let instance_name = &resource.spec.api.keycloak_selector.name;
         let instance = instance_api.get(instance_name).await?;
 
-        K8sKeycloakBuilder::new(&instance, &client)
+        K8sKeycloakBuilder::new(&instance, client)
             .with_token()
             .await
     }
@@ -74,7 +74,7 @@ impl LifecycleController for KeycloakApiObjectController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let path = &resource.spec.path;
-        let keycloak = Self::keycloak(&client, &resource).await?;
+        let keycloak = Self::keycloak(client, &resource).await?;
         let payload = resource.resolve(client).await?;
         // First try to PUT, if we get a 404, try to POST
         match self.request(&keycloak, Method::PUT, path, &payload).await {
@@ -101,7 +101,7 @@ impl LifecycleController for KeycloakApiObjectController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let path = &resource.spec.path;
-        let keycloak = Self::keycloak(&client, &resource).await?;
+        let keycloak = Self::keycloak(client, &resource).await?;
         // TODO: handle errors
         let _response = self
             .request(&keycloak, Method::DELETE, path, &Value::Null)

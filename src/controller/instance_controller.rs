@@ -132,7 +132,7 @@ impl KeycloakSessionHandler {
     async fn run_once(&self) -> Result<bool> {
         let keycloak = self.keycloak_from_somewhere().await?;
 
-        if self.wait_for_expire(&keycloak).await? == false {
+        if !(self.wait_for_expire(&keycloak).await?) {
             return Ok(false);
         }
 
