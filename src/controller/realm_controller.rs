@@ -68,8 +68,8 @@ impl LifecycleController for KeycloakRealmController {
             },
             spec: KeycloakApiObjectSpec {
                 api: resource.spec.api.clone(),
-                path: format!("admin/realms/{realm_name}"),
-                payload: serde_json::to_value(&realm_representation)?,
+                path: format!("admin/realms/{realm_name}").into(),
+                payload: serde_json::to_value(&realm_representation)?.into(),
                 vars: None,
             },
             status: Default::default(),

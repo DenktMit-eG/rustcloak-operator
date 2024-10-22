@@ -1,8 +1,10 @@
 mod api_object;
+mod container_types;
 mod instance;
 mod realm;
 
 pub use api_object::*;
+pub use container_types::*;
 pub use instance::*;
 pub use realm::*;
 
