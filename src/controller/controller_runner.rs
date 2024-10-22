@@ -13,7 +13,7 @@ use kube::{
         controller::{self, Action},
         watcher, Controller,
     },
-    Api, Resource as KubeResource,
+    Api, Resource as KubeResource, ResourceExt,
 };
 use log::{error, info};
 use serde::{de::DeserializeOwned, Serialize};
@@ -111,8 +111,13 @@ where
             .namespace
             .as_deref()
             .ok_or(Error::NoNamespace)?;
+        let name = resource.name_unchecked();
         let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
         let client = ctx.client.clone();
+        let dt = ().into();
+        let kind = C::Resource::kind(&dt);
+
+        info!("start reconciling {kind} {}/{}", ns, name);
 
         match finalizer(
             &api,
