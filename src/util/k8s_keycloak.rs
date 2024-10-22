@@ -255,7 +255,7 @@ impl K8sKeycloakRefreshManager {
                         .patch_status(
                             &name,
                             &PatchParams::apply(app_id!()),
-                            &Patch::Merge(KeycloakApiStatus::from_error(e)),
+                            &KeycloakApiStatus::from(e).to_patch(),
                         )
                         .await;
                 }

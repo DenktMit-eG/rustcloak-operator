@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::Arc, time::Duration};
+use std::{sync::Arc, time::Duration};
 
 use crate::{
     app_id,
@@ -8,7 +8,7 @@ use crate::{
 use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{
-    api::{Patch, PatchParams},
+    api::PatchParams,
     runtime::{
         controller::{self, Action},
         watcher, Controller,
@@ -158,10 +158,9 @@ where
             .ok_or(Error::NoNamespace)?;
         let name = resource.meta().name.clone().unwrap();
         let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
-        let patch: HashMap<String, KeycloakApiStatus> =
-            [("status".to_string(), e.into())].into();
+        let patch = KeycloakApiStatus::from(e).to_patch();
 
-        api.patch_status(&name, &PatchParams::default(), &Patch::Merge(patch))
+        api.patch_status(&name, &PatchParams::default(), &patch)
             .await?;
 
         Ok(())

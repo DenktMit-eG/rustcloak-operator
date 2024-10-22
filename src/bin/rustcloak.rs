@@ -4,7 +4,8 @@ use futures::FutureExt;
 use rustcloak_operator::controller::ControllerRunner;
 use rustcloak_operator::controller::KeycloakApiObjectController;
 use rustcloak_operator::controller::KeycloakInstanceController;
-use rustcloak_operator::controller::KeycloakRealmController;
+use rustcloak_operator::controller::MorphController;
+use rustcloak_operator::crd::KeycloakRealm;
 use rustcloak_operator::opts::ControllerOpt;
 use rustcloak_operator::opts::Opts;
 
@@ -38,9 +39,12 @@ async fn main() -> Result<()> {
     }
     if opts.controllers.contains(&ControllerOpt::Realm) {
         controllers.push(
-            ControllerRunner::new(KeycloakRealmController::default(), &client)
-                .run()
-                .boxed(),
+            ControllerRunner::new(
+                MorphController::<KeycloakRealm>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
         );
     }
 

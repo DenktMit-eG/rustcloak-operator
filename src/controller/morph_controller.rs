@@ -1,34 +1,47 @@
 use std::sync::Arc;
 
+use super::controller_runner::LifecycleController;
 use crate::{
     app_id,
     crd::{KeycloakApiObject, KeycloakApiObjectSpec},
     error::{Error, Result},
+    morph::ToApiObject,
 };
 use async_trait::async_trait;
-use keycloak::types::RealmRepresentation;
 use kube::{
     api::{ObjectMeta, Patch, PatchParams},
     runtime::{controller::Action, watcher, Controller},
     Api, Resource, ResourceExt,
 };
+use serde::de::DeserializeOwned;
+use serde_json::Value;
 
-use super::controller_runner::LifecycleController;
-use crate::crd::KeycloakRealm;
+#[derive(Debug)]
+pub struct MorphController<T: ToApiObject> {
+    phantom: std::marker::PhantomData<T>,
+}
 
-#[derive(Debug, Default)]
-pub struct KeycloakRealmController {}
-
-impl KeycloakRealmController {
-    fn realm_name(&self, resource: &KeycloakRealm) -> String {
-        let name = resource.name_unchecked();
-        format!("realm-{name}")
+impl<T: ToApiObject> Default for MorphController<T> {
+    fn default() -> Self {
+        Self {
+            phantom: std::marker::PhantomData,
+        }
     }
 }
 
 #[async_trait]
-impl LifecycleController for KeycloakRealmController {
-    type Resource = KeycloakRealm;
+impl<R> LifecycleController for MorphController<R>
+where
+    R: ToApiObject
+        + Resource<DynamicType = ()>
+        + Send
+        + Sync
+        + 'static
+        + Clone
+        + std::fmt::Debug
+        + DeserializeOwned,
+{
+    type Resource = R;
 
     fn prepare(
         &self,
@@ -49,15 +62,23 @@ impl LifecycleController for KeycloakRealmController {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let admin_api: Api<KeycloakApiObject> =
             Api::namespaced(client.clone(), &ns);
-        let realm_name = &resource.spec.definition.realm;
-        let name = self.realm_name(&resource);
-        let mut json = serde_json::to_value(&resource.spec.definition)?;
-        if let Some(extra) = &resource.spec.extra {
-            json_patch::merge(&mut json, extra);
-        }
-        let realm_representation: RealmRepresentation =
-            serde_json::from_value(json.clone())?;
-        let owner_ref = resource.controller_owner_ref(&()).unwrap();
+        let name = format!("{}{}", R::PREFIX, resource.name_unchecked());
+        let owner_ref = resource.owner_ref(&()).unwrap();
+
+        let mut payload = resource.payload()?;
+        let immutable_payload = Value::Object(
+            R::IMMUTABLE_FIELDS
+                .iter()
+                .filter_map(|f| {
+                    let v = payload.as_object_mut().unwrap().remove(*f);
+                    v.map(|v| (f.to_string(), v))
+                })
+                .collect::<serde_json::Map<_, _>>(),
+        )
+        .into();
+        let payload = payload.into();
+
+        let path = resource.create_path(client.clone()).await?.into();
 
         let api_object = KeycloakApiObject {
             metadata: ObjectMeta {
@@ -67,9 +88,10 @@ impl LifecycleController for KeycloakRealmController {
                 ..Default::default()
             },
             spec: KeycloakApiObjectSpec {
-                api: resource.spec.api.clone(),
-                path: format!("admin/realms/{realm_name}").into(),
-                payload: serde_json::to_value(&realm_representation)?.into(),
+                path,
+                api: resource.api().clone(),
+                immutable_payload,
+                payload,
                 vars: None,
             },
             status: Default::default(),

@@ -54,3 +54,19 @@ fn json_object(_generator: &mut SchemaGenerator) -> Schema {
         ..Default::default()
     })
 }
+
+container_type!(ImmutableJsonObject, Value, "immutable_json_object");
+fn immutable_json_object(generator: &mut SchemaGenerator) -> Schema {
+    let mut schema = json_object(generator);
+    let Schema::Object(ref mut obj) = schema else {
+        panic!("Expected an object schema");
+    };
+    obj.extensions.insert(
+        "x-kubernetes-validations".to_owned(),
+        json!([{
+            "rule": "self == oldSelf",
+            "message": "Value is immutable"
+        }]),
+    );
+    schema
+}

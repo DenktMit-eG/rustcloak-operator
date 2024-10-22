@@ -4,7 +4,6 @@ use super::{KeycloakApiObjectOptions, KeycloakApiStatus, WithStatus};
 use kube_derive::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
@@ -18,8 +17,6 @@ use serde_json::Value;
 pub struct KeycloakRealmSpec {
     pub api: KeycloakApiObjectOptions,
     pub definition: KeycloakRealmDefinition,
-    #[schemars(schema_with = "super::schema_extra", default)]
-    pub extra: Option<Value>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]

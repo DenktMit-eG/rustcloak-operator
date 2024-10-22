@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{ops::Deref, sync::Arc};
 
 use crate::{
     api::KeycloakClient,
@@ -7,6 +7,7 @@ use crate::{
     util::K8sKeycloakBuilder,
 };
 use async_trait::async_trait;
+use k8s_openapi::DeepMerge;
 use kube::{
     runtime::{controller::Action, Controller},
     Api, ResourceExt,
@@ -75,7 +76,9 @@ impl LifecycleController for KeycloakApiObjectController {
     ) -> Result<Action> {
         let path = &resource.spec.path;
         let keycloak = Self::keycloak(client, &resource).await?;
-        let payload = resource.resolve(client).await?;
+        let mut payload = resource.resolve(client).await?;
+        let immutable_payload = resource.spec.immutable_payload.deref();
+        payload.merge_from(immutable_payload.clone());
         // First try to PUT, if we get a 404, try to POST
         match self.request(&keycloak, Method::PUT, path, &payload).await {
             Err(Error::ReqwestError(e)) => {
