@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use k8s_openapi::{api::core::v1::Secret, ByteString};
 use kube::api::ObjectMeta;
-use kube::ResourceExt;
+use kube::{Resource, ResourceExt};
 
 use crate::crd::KeycloakInstanceCredentialReference;
 use crate::{
@@ -53,7 +53,7 @@ impl SecretUtils for Secret {
         let name = instance.token_secret_name();
         let (token_key, expires_key) = instance.token_secret_keys();
         let namespace = instance.namespace().unwrap();
-        //let owner_ref = instance.owner_ref(&()).unwrap();
+        let owner_ref = instance.owner_ref(&()).unwrap();
         let mut data: BTreeMap<String, ByteString> =
             [(token_key.to_string(), token)].into();
         if let Some(expires) = expires {
@@ -63,7 +63,7 @@ impl SecretUtils for Secret {
             metadata: ObjectMeta {
                 name: Some(name),
                 namespace: Some(namespace),
-                //owner_references: Some(vec![owner_ref]),
+                owner_references: Some(vec![owner_ref]),
                 ..Default::default()
             },
             data: Some(data),

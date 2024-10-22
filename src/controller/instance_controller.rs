@@ -16,7 +16,7 @@ use async_trait::async_trait;
 use k8s_openapi::api::core::v1::Secret;
 use kube::{
     api::{Patch, PatchParams},
-    runtime::{controller::Action, Controller},
+    runtime::{controller::Action, watcher, Controller},
     Api, ResourceExt,
 };
 use log::{debug, info, warn};
@@ -130,12 +130,15 @@ impl KeycloakSessionHandler {
     }
 
     async fn run_once(&self) -> Result<bool> {
+        // TODO: we construct the keycloak client twice here, once for waiting
+        // for the token to expire and once for refreshing it.
         let keycloak = self.keycloak_from_somewhere().await?;
 
         if !(self.wait_for_expire(&keycloak).await?) {
             return Ok(false);
         }
 
+        let keycloak = self.keycloak_from_somewhere().await?;
         match self.refresh(keycloak).await {
             Ok(_) => info!("Token refreshed"),
             Err(e) => {
