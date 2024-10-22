@@ -225,13 +225,12 @@ impl LifecycleController for KeycloakInstanceController {
     fn prepare(
         &self,
         controller: Controller<Self::Resource>,
-        _client: &kube::Client,
+        client: &kube::Client,
     ) -> Controller<Self::Resource> {
-        controller
-        /*controller.owns(
+        controller.owns(
             Api::<Secret>::all(client.clone()),
             watcher::Config::default(),
-        )*/
+        )
     }
 
     async fn apply(
