@@ -72,6 +72,8 @@ pub enum Error {
     NoTokenSecret(String, String),
     #[error("No Realm in namespace {0} with name {1} found")]
     NoRealm(String, String),
+    #[error("IO Error: {0}")]
+    IoError(#[from] std::io::Error),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

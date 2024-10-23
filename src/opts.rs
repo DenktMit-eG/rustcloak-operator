@@ -1,12 +1,19 @@
+use std::net::SocketAddr;
+
 use clap::{Parser, ValueEnum};
 use serde::Serialize;
 
 #[derive(ValueEnum, Clone, Debug, Serialize, PartialEq)]
 pub enum ControllerOpt {
-    AdminApi,
+    /// handles API requests between the operator and Keycloak
+    Api,
+    /// handles the oauth session between the operator and Keycloak instances
     Instance,
+    /// handles realm creation updates and deletion
     Realm,
+    /// handles client creation updates and deletion
     Client,
+    /// handles user creation updates and deletion
     User,
 }
 
@@ -14,6 +21,11 @@ pub enum ControllerOpt {
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
 pub struct Opts {
-    #[clap(short, long, value_delimiter = ',', num_args = 1.., default_value = "admin-api,instance,realm,client,user")]
+    #[clap(short, long, value_delimiter = ',', num_args = 1.., default_value = "api,instance,realm,client,user")]
+    /// Enables the specified controllers. defined as comma seperated list.
     pub controllers: Vec<ControllerOpt>,
+    #[clap(short, long)]
+    /// if specified, the operator will report metrics and health checks on the specified address.
+    /// e.g. --metrics-addr 0.0.0.0:8080
+    pub metrics_addr: Option<SocketAddr>,
 }

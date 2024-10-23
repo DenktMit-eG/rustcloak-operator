@@ -162,21 +162,15 @@ impl K8sKeycloakRefreshJob {
     pub async fn keycloak_from_somewhere(&self) -> Result<KeycloakClient> {
         debug!("Trying to get keycloak client, trying token first.");
         match self.keycloak_with_token().await {
-            Ok(keycloak) => {
-                return Ok(keycloak);
+            Err(e) => {
+                debug!("{}", e);
+                debug!(
+                    "Trying to get keycloak client, trying credentials next."
+                );
+                self.keycloak_with_credentials().await
             }
-            Err(e) => debug!("{}", e),
+            ok => ok,
         }
-
-        debug!("Trying to get keycloak client, trying credentials next.");
-        match self.keycloak_with_credentials().await {
-            Ok(keycloak) => {
-                return Ok(keycloak);
-            }
-            Err(e) => debug!("{}", e),
-        }
-
-        Err(Error::NoSecret)
     }
 
     pub async fn wait(&self, duration: Duration) -> Result<bool> {

@@ -77,6 +77,8 @@ where
         let dt = ().into();
         let kind = C::Resource::kind(&dt);
 
+        info!("starting controller for {kind}");
+
         let controller = Controller::new(api, watcher::Config::default())
             .with_config(config)
             .shutdown_on_signal();
@@ -86,10 +88,20 @@ where
             .for_each(|res| async {
                 match res {
                     Ok((o, _)) => {
-                        let ns = o.namespace.unwrap();
-                        info!("reconciled {kind} {ns}/{}", o.name)
+                        info!(
+                            "reconciled {kind} {ns}/{name}",
+                            ns = o.namespace.unwrap(),
+                            name = o.name
+                        )
                     }
-                    Err(e) => error!("reconcile error: {:?}", e),
+                    Err(controller::Error::ReconcilerFailed(e, o)) => {
+                        error!(
+                            "{kind} {ns}/{name}: {e}",
+                            ns = o.namespace.unwrap(),
+                            name = o.name
+                        )
+                    }
+                    Err(e) => error!("{e}"),
                 }
             })
             .await;
