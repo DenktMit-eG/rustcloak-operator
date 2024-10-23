@@ -9,6 +9,7 @@ pub trait SchemaUtil {
     fn additional_properties(&mut self) -> &mut Self;
     fn non_null(&mut self) -> &mut Self;
     fn immutable(&mut self) -> &mut Self;
+    fn immutable_prop(&mut self, name: &str) -> &mut Self;
 }
 
 impl SchemaUtil for Schema {
@@ -69,6 +70,19 @@ impl SchemaUtil for Schema {
                 "message": "Value is immutable"
             }]),
         );
+        self
+    }
+
+    fn immutable_prop(&mut self, name: &str) -> &mut Self {
+        self.prop(name).immutable();
+        self.object().extensions.insert(
+            "x-kubernetes-validations".to_owned(),
+            json!([{
+                "rule": format!("has(self.{0}) == has(oldSelf.{0})", name),
+                "message": "Value is immutable"
+            }]),
+        );
+
         self
     }
 }

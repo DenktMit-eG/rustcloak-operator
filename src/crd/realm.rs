@@ -1,5 +1,5 @@
 use super::{ImmutableString, KeycloakApiObjectOptions, KeycloakApiStatus};
-use crate::util::SchemaUtil;
+use crate::{morph::ToApiObject, util::SchemaUtil};
 use keycloak::types::RealmRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
@@ -25,6 +25,7 @@ pub struct KeycloakRealmSpec {
 
 fn realm_representation(generator: &mut SchemaGenerator) -> Schema {
     let mut schema = generator.clone().subschema_for::<RealmRepresentation>();
+    schema.immutable_prop(KeycloakRealm::PRIMARY_KEY);
     // Remove fields that trigger $ref in the schema which is not supported by
     // kubernetes
     schema

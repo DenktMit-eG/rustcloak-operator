@@ -1,5 +1,5 @@
 use super::{KeycloakApiObjectOptions, KeycloakApiStatus};
-use crate::util::SchemaUtil;
+use crate::{morph::ToApiObject, util::SchemaUtil};
 use keycloak::types::ClientRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
@@ -26,6 +26,8 @@ pub struct KeycloakClientSpec {
 // sed 's/\$ref.*//; s/^\* spec\.validation\.openAPIV3Schema\.properties\[spec\]\.properties\[definition\]/schema/; s/\.properties\[\([^]]*\)\]/.prop("\1")/g; s/\.items\./.items()./g; s/\.prop("\([^"]*\)")\.items()\.$/.remove("\1");/'
 fn client_representation(generator: &mut SchemaGenerator) -> Schema {
     let mut schema = generator.clone().subschema_for::<ClientRepresentation>();
+
+    schema.immutable_prop(KeycloakClient::PRIMARY_KEY);
 
     schema
         .prop("authorizationSettings")
