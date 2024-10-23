@@ -79,7 +79,7 @@ where
         .into();
         let payload = payload.into();
 
-        let endpoint = resource.create_endpoint(client.clone()).await?.into();
+        let endpoint = resource.create_endpoint(client.clone()).await?;
 
         let api_object = KeycloakApiObject {
             metadata: ObjectMeta {

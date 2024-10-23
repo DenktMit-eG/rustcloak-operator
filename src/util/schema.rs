@@ -29,8 +29,6 @@ impl SchemaUtil for Schema {
             .unwrap()
             .properties
             .remove(name)
-            .is_some()
-            .then(|| ())
             .expect(name);
         self
     }
