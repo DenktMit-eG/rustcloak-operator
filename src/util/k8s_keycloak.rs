@@ -12,7 +12,7 @@ use kube::{
     core::object::HasStatus,
     Api, ResourceExt,
 };
-use log::{debug, info, warn};
+use log::{debug, warn};
 use oauth2::{ClientId, ClientSecret};
 use std::{collections::HashMap, sync::Arc, time::Duration};
 use tokio::{
@@ -195,10 +195,10 @@ impl K8sKeycloakRefreshJob {
             debug!("Token already expired, refreshing now.");
             Duration::from_secs(0)
         } else {
-            info!("Token is expired, but instance is not ready, waiting 5 seconds");
+            debug!("Token is expired, but instance is not ready, waiting 5 seconds");
             Duration::from_secs(5)
         };
-        info!(
+        debug!(
             "Next token refresh at {expires} ({} seconds)",
             timeout.as_secs()
         );
@@ -212,7 +212,7 @@ impl K8sKeycloakRefreshJob {
 
         let mut keycloak = self.keycloak_builder().with_token().await?;
         match self.refresh(&mut keycloak).await {
-            Ok(_) => info!("Token refreshed"),
+            Ok(_) => debug!("Token refreshed"),
             Err(e) => {
                 warn!("Error refreshing token: {}, trying to login", e);
                 self.keycloak_with_credentials().await?;
@@ -262,7 +262,7 @@ impl K8sKeycloakRefreshManager {
         let keycloak = session_handler.keycloak_from_somewhere().await?;
 
         if let Some(expires) = keycloak.token().expires {
-            info!("Scheduling token refresh for {}/{}", ns, name);
+            debug!("Scheduling token refresh for {}/{}", ns, name);
             let stopper = session_handler.stopper();
             let handle = tokio::spawn(async move {
                 if let Err(e) = session_handler.run_expire(expires).await {

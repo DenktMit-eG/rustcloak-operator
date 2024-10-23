@@ -12,7 +12,7 @@ use kube::{
     },
     Api, Resource as KubeResource, ResourceExt,
 };
-use log::{error, info};
+use log::{debug, error, info};
 use serde::{de::DeserializeOwned, Serialize};
 
 use crate::error::*;
@@ -123,7 +123,7 @@ where
         let dt = ().into();
         let kind = C::Resource::kind(&dt);
 
-        info!("start reconciling {kind} {}/{}", ns, name);
+        debug!("start reconciling {kind} {}/{}", ns, name);
 
         match finalizer(
             &api,

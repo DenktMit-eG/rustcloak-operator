@@ -76,17 +76,18 @@ async fn main() -> Result<()> {
     }
 
     if let Some(sock_addr) = opts.metrics_addr {
-        let server = HttpServer::new(move || {
-            App::new()
-                .wrap(middleware::Logger::default().exclude("/healthz"))
-                .service(health)
-        })
-        .bind(sock_addr)?
-        .shutdown_timeout(5)
-        .run()
-        .then(|_| future::ready(Ok(())));
-
-        controllers.push(server.boxed());
+        controllers.push(
+            HttpServer::new(move || {
+                App::new()
+                    .wrap(middleware::Logger::default().exclude("/healthz"))
+                    .service(health)
+            })
+            .bind(sock_addr)?
+            .shutdown_timeout(5)
+            .run()
+            .then(|_| future::ready(Ok(())))
+            .boxed(),
+        );
     }
 
     futures::future::try_join_all(controllers).await?;

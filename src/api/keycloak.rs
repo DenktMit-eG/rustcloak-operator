@@ -1,6 +1,6 @@
 use crate::error::Result;
 use derive_builder::Builder;
-use log::info;
+use log::debug;
 use oauth2::basic::BasicClient;
 use oauth2::{
     basic::BasicTokenType, AuthUrl, ClientId, EmptyExtraTokenFields,
@@ -124,7 +124,7 @@ impl KeycloakAuth {
         user_name: &str,
         password: &str,
     ) -> Result<KeycloakClient> {
-        info!("Logging in with user {}", user_name);
+        debug!("Logging in with user {}", user_name);
 
         let user = ResourceOwnerUsername::new(user_name.to_string());
         let password = ResourceOwnerPassword::new(password.to_string());
@@ -134,7 +134,7 @@ impl KeycloakAuth {
             .exchange_password(&user, &password)
             .request_async(&self.http_client)
             .await?;
-        info!("Successfully logged in with user {}", user_name);
+        debug!("Successfully logged in with user {}", user_name);
 
         Ok(KeycloakClient::new(self, OAuth2Token::create(token)))
     }
