@@ -1,0 +1,20 @@
+name: Build Rust
+description: "Builds a rust project and uploads the result as an artifact"
+inputs:
+  target:
+    description: "the build target"
+    required: true
+  use-cross:
+    description: "use cross"
+    required: true
+
+runs:
+  using: composite
+  steps:
+  - uses: withlazers/rust-build-action@main
+    with:
+      target: ${{ inputs.target }}
+      use-cross: ${{ inputs.use-cross }}
+      binaries: rustclao-operator
+      archive-prefix: rustcloak-operator-${{ github.ref_name }}
+      extra-files: README.md

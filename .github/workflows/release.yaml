@@ -1,0 +1,65 @@
+name: Release
+on:
+  push:
+    tags:
+    - 'v[0-9]*.[0-9]*.[0-9]*'
+
+jobs:
+  prepare:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # Check Versions
+    - name: Check If Versions Match
+      run: |
+        cargo_version=$(cargo pkgid | cut -d'#' -f 2)
+
+        set -x
+        test "${cargo_version}"   = "${GITHUB_REF_NAME#v}"
+
+  build:
+    needs: prepare
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        target:
+        - aarch64-unknown-linux-musl
+        - i686-unknown-linux-musl
+        - x86_64-unknown-linux-musl
+        - armv7-unknown-linux-musleabihf
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/actions/rust-build
+      name: Build
+      with:
+        target: ${{ matrix.target }}
+        use-cross: true
+
+  container:
+    needs:
+    - build
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: withlazers/container-action@main
+      with:
+        repository: rustclaok
+        username: gottox
+        password: ${{ secrets.DOCKER_TOKEN }}
+
+  release:
+    needs:
+    - container
+    - build
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: withlazers/release-action@main
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        ssh_key: ${{ secrets.HELMCHART_SSH_DEPLOY_KEY }}
+        artifacts: "*"
+        helm_chart: true
