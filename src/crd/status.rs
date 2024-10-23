@@ -44,9 +44,9 @@ impl From<&Error> for KeycloakApiStatus {
     }
 }
 
-impl Into<Patch<Value>> for KeycloakApiStatus {
-    fn into(self) -> Patch<Value> {
-        let status = serde_json::to_value(self).unwrap();
+impl From<KeycloakApiStatus> for Patch<Value> {
+    fn from(val: KeycloakApiStatus) -> Self {
+        let status = serde_json::to_value(val).unwrap();
         Patch::Merge(json!({
             "status": status,
         }))
