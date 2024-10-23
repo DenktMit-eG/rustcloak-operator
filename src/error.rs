@@ -60,6 +60,10 @@ pub enum Error {
     BorrowError(#[from] std::cell::BorrowError),
     #[error("Send error: {0}")]
     SendError(#[from] tokio::sync::mpsc::error::SendError<()>),
+    #[error("Missing Fields: {0}")]
+    MissingFields(String),
+    #[error("Missing Primary Key")]
+    NoPrimaryKey,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

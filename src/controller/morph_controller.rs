@@ -67,18 +67,19 @@ where
 
         let mut payload = resource.payload()?;
         let immutable_payload = Value::Object(
-            R::IMMUTABLE_FIELDS
+            R::PRIMARY_KEYS
                 .iter()
-                .filter_map(|f| {
+                .map(|f| {
                     let v = payload.as_object_mut().unwrap().remove(*f);
                     v.map(|v| (f.to_string(), v))
+                        .ok_or(Error::MissingFields(f.to_string()))
                 })
-                .collect::<serde_json::Map<_, _>>(),
+                .collect::<Result<serde_json::Map<_, _>>>()?,
         )
         .into();
         let payload = payload.into();
 
-        let path = resource.create_path(client.clone()).await?.into();
+        let endpoint = resource.create_endpoint(client.clone()).await?.into();
 
         let api_object = KeycloakApiObject {
             metadata: ObjectMeta {
@@ -88,8 +89,8 @@ where
                 ..Default::default()
             },
             spec: KeycloakApiObjectSpec {
-                path,
-                api: resource.api().clone(),
+                endpoint,
+                options: resource.options().cloned(),
                 immutable_payload,
                 payload,
                 vars: None,

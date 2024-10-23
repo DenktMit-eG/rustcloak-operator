@@ -5,7 +5,9 @@ use rustcloak_operator::controller::ControllerRunner;
 use rustcloak_operator::controller::KeycloakApiObjectController;
 use rustcloak_operator::controller::KeycloakInstanceController;
 use rustcloak_operator::controller::MorphController;
+use rustcloak_operator::crd::KeycloakClient;
 use rustcloak_operator::crd::KeycloakRealm;
+use rustcloak_operator::crd::KeycloakUser;
 use rustcloak_operator::opts::ControllerOpt;
 use rustcloak_operator::opts::Opts;
 
@@ -41,6 +43,26 @@ async fn main() -> Result<()> {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakRealm>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::Client) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakClient>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::User) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakUser>::default(),
                 &client,
             )
             .run()

@@ -6,6 +6,7 @@ use crate::{
     error::{Error, Result},
     util::K8sKeycloakBuilder,
 };
+use async_stream::stream;
 use async_trait::async_trait;
 use k8s_openapi::DeepMerge;
 use kube::{
@@ -15,12 +16,22 @@ use kube::{
 use log::trace;
 use reqwest::{Method, Response, StatusCode};
 use serde_json::Value;
+use tokio::sync::Notify;
 
 use super::controller_runner::LifecycleController;
 use crate::crd::KeycloakApiObject;
 
-#[derive(Debug, Default)]
-pub struct KeycloakApiObjectController {}
+#[derive(Debug)]
+pub struct KeycloakApiObjectController {
+    reconcile_notify: Arc<Notify>,
+}
+
+impl Default for KeycloakApiObjectController {
+    fn default() -> Self {
+        let reconcile_notify = Arc::new(Notify::new());
+        Self { reconcile_notify }
+    }
+}
 
 impl KeycloakApiObjectController {
     async fn keycloak(
@@ -31,8 +42,8 @@ impl KeycloakApiObjectController {
         let instance_api =
             Api::<KeycloakInstance>::namespaced(client.clone(), &ns);
 
-        let instance_name = &resource.spec.api.keycloak_selector.name;
-        let instance = instance_api.get(instance_name).await?;
+        let instance_ref = &resource.spec.endpoint.instance_ref;
+        let instance = instance_api.get(instance_ref).await?;
 
         K8sKeycloakBuilder::new(&instance, client)
             .with_token()
@@ -66,7 +77,13 @@ impl LifecycleController for KeycloakApiObjectController {
         controller: Controller<Self::Resource>,
         _client: &kube::Client,
     ) -> Controller<Self::Resource> {
-        controller
+        let notify = self.reconcile_notify.clone();
+        controller.reconcile_all_on(stream! {
+            loop {
+                notify.notified().await;
+                yield;
+            }
+        })
     }
 
     async fn apply(
@@ -74,7 +91,7 @@ impl LifecycleController for KeycloakApiObjectController {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
-        let path = &resource.spec.path;
+        let path = &resource.spec.endpoint.path;
         let keycloak = Self::keycloak(client, &resource).await?;
         let mut payload = resource.resolve(client).await?;
         let immutable_payload = resource.spec.immutable_payload.deref();
@@ -94,7 +111,6 @@ impl LifecycleController for KeycloakApiObjectController {
                 r?;
             }
         }
-        // TODO: handle errors
         Ok(Action::await_change())
     }
 
@@ -103,12 +119,14 @@ impl LifecycleController for KeycloakApiObjectController {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
-        let path = &resource.spec.path;
+        let path = &resource.spec.endpoint.path;
         let keycloak = Self::keycloak(client, &resource).await?;
         // TODO: handle errors
         let _response = self
             .request(&keycloak, Method::DELETE, path, &Value::Null)
             .await?;
+
+        self.reconcile_notify.notify_one();
 
         Ok(Action::await_change())
     }

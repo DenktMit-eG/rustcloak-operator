@@ -1176,6 +1176,7 @@ dependencies = [
  "async-trait",
  "percent-encoding",
  "reqwest",
+ "schemars",
  "serde",
  "serde_json",
  "serde_with",
@@ -1845,6 +1846,7 @@ name = "rustcloak-operator"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-stream",
  "async-trait",
  "chrono",
  "clap",

@@ -1,5 +1,4 @@
-use super::KeycloakApiStatus;
-use super::WithStatus;
+use super::{KeycloakApiStatus, WithStatus};
 use kube::ResourceExt;
 use kube_derive::CustomResource;
 use schemars::JsonSchema;
@@ -40,21 +39,6 @@ pub struct KeycloakInstanceSpec {
     pub credentials: KeycloakInstanceCredentialReference,
     pub token: Option<KeycloakInstanceTokenReference>,
     pub client: Option<KeycloakInstanceClient>,
-}
-
-#[derive(
-    Clone,
-    Debug,
-    Deserialize,
-    Serialize,
-    JsonSchema,
-    Hash,
-    Eq,
-    PartialEq,
-    Default,
-)]
-pub struct KeycloakInstanceSelector {
-    pub name: String,
 }
 
 impl WithStatus<KeycloakApiStatus> for KeycloakInstance {
