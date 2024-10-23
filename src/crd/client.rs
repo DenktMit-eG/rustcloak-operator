@@ -17,7 +17,7 @@ use serde::{Deserialize, Serialize};
 pub struct KeycloakClientSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
-    pub realm_name: String,
+    pub realm_ref: String,
     #[schemars(schema_with = "client_representation")]
     pub definition: ClientRepresentation,
 }
@@ -25,8 +25,6 @@ pub struct KeycloakClientSpec {
 // sed 's/\$ref.*//; s/^\* spec\.validation\.openAPIV3Schema\.properties\[spec\]\.properties\[definition\]/schema/; s/\.properties\[\([^]]*\)\]/.prop("\1")/g; s/\.items\./.items()./g; s/\.prop("\([^"]*\)")\.items()\.$/.remove("\1");/'
 fn client_representation(generator: &mut SchemaGenerator) -> Schema {
     let mut schema = generator.clone().subschema_for::<ClientRepresentation>();
-
-    schema.prop("id").immutable();
 
     schema
         .prop("authorizationSettings")

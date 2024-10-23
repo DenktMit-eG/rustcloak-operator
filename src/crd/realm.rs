@@ -26,8 +26,6 @@ pub struct KeycloakRealmSpec {
 
 fn realm_representation(generator: &mut SchemaGenerator) -> Schema {
     let mut schema = generator.clone().subschema_for::<RealmRepresentation>();
-    // Make the realm field required
-    schema.prop("realm").non_null().immutable();
     // Remove fields that trigger $ref in the schema which is not supported by
     // kubernetes
     schema

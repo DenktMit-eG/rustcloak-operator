@@ -14,7 +14,7 @@ use kube::{
     Api, Resource, ResourceExt,
 };
 use serde::de::DeserializeOwned;
-use serde_json::Value;
+use serde_json::json;
 
 #[derive(Debug)]
 pub struct MorphController<T: ToApiObject> {
@@ -66,16 +66,16 @@ where
         let owner_ref = resource.owner_ref(&()).unwrap();
 
         let mut payload = resource.payload()?;
-        let immutable_payload = Value::Object(
-            R::PRIMARY_KEYS
-                .iter()
-                .map(|f| {
-                    let v = payload.as_object_mut().unwrap().remove(*f);
-                    v.map(|v| (f.to_string(), v))
-                        .ok_or(Error::MissingFields(f.to_string()))
-                })
-                .collect::<Result<serde_json::Map<_, _>>>()?,
-        )
+        let primary_key = payload
+            .as_object_mut()
+            .unwrap()
+            .remove(R::PRIMARY_KEY)
+            .unwrap_or_else(|| {
+                format!("{ns}_{}", resource.name_unchecked()).into()
+            });
+        let immutable_payload = json!({
+            R::PRIMARY_KEY: primary_key,
+        })
         .into();
         let payload = payload.into();
 

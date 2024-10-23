@@ -1,4 +1,4 @@
-use super::traits::ToApiObject;
+use super::{traits::ToApiObject, WithPrimaryKey};
 use crate::{
     crd::{
         KeycloakApiEndpoint, KeycloakApiObjectOptions, KeycloakRealm,
@@ -14,27 +14,21 @@ use serde_json::Value;
 impl ToApiObject for KeycloakUser {
     const PREFIX: &'static str = "user-";
 
-    const PRIMARY_KEYS: &'static [&'static str] = &["id"];
+    const PRIMARY_KEY: &'static str = "id";
 
     async fn create_endpoint(
         &self,
         client: kube::Client,
     ) -> Result<KeycloakApiEndpoint> {
         let ns = self.namespace().ok_or(Error::NoNamespace)?;
-        let realm_name = &self.spec.realm_name;
+        let realm_name = &self.spec.realm_ref;
         let realm_api = Api::<KeycloakRealm>::namespaced(client.clone(), &ns);
-        let id = self
-            .spec
-            .definition
-            .id
-            .as_ref()
-            .ok_or(Error::NoPrimaryKey)?;
         let realm_endpoint = realm_api
             .get(realm_name)
             .await?
             .create_endpoint(client)
             .await?;
-        realm_endpoint + &format!("/users/{id}")
+        realm_endpoint + &format!("/users/{}", self.primary_key()?)
     }
 
     fn options(&self) -> Option<&KeycloakApiObjectOptions> {

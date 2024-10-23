@@ -1,4 +1,4 @@
-use super::traits::ToApiObject;
+use super::{traits::ToApiObject, WithPrimaryKey};
 use crate::{
     crd::{KeycloakApiEndpoint, KeycloakApiObjectOptions, KeycloakRealm},
     error::Result,
@@ -10,18 +10,14 @@ use serde_json::Value;
 impl ToApiObject for KeycloakRealm {
     const PREFIX: &'static str = "realm-";
 
-    const PRIMARY_KEYS: &'static [&'static str] = &["realm"];
+    const PRIMARY_KEY: &'static str = "realm";
 
     async fn create_endpoint(
         &self,
         _client: kube::Client,
     ) -> Result<KeycloakApiEndpoint> {
         //Ok(format!("admin/realms/{}", self.spec.definition.realm.as_ref().unwrap()));
-        let path = format!(
-            "admin/realms/{}",
-            self.spec.definition.realm.as_ref().unwrap()
-        )
-        .into();
+        let path = format!("admin/realms/{}", self.primary_key()?).into();
         let instance_ref = self.spec.instance_ref.clone();
         Ok(KeycloakApiEndpoint { instance_ref, path })
     }
