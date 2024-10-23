@@ -1,8 +1,6 @@
 use super::{
     ImmutableJsonObject, ImmutableString, JsonObject, KeycloakApiStatus,
-    WithStatus,
 };
-use crate::error::Result;
 use k8s_openapi::api::core::v1::EnvVar;
 use kube_derive::CustomResource;
 use schemars::JsonSchema;
@@ -12,12 +10,31 @@ use std::ops::Add;
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
     kind = "KeycloakApiObject",
-    shortname = "kcao",
+    shortname = "kcapi",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     namespaced,
-    status = "KeycloakApiStatus"
+    status = "KeycloakApiStatus",
+    printcolumn = r#"{
+            "name":"Instance",
+            "type":"string",
+            "description":"",
+            "jsonPath":".spec.endpoint.instanceRef"
+        }"#,
+    printcolumn = r#"{
+            "name":"Ready",
+            "type":"boolean",
+            "description":"",
+            "jsonPath":".status.ready"
+        }"#,
+    printcolumn = r#"{
+            "name":"Status",
+            "type":"string",
+            "description":"",
+            "jsonPath":".status.status"
+        }"#
 )]
+#[serde(rename_all = "camelCase")]
 /// defines an API request to the Keycloak Admin API.
 pub struct KeycloakApiObjectSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -30,6 +47,7 @@ pub struct KeycloakApiObjectSpec {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakApiEndpoint {
     pub instance_ref: ImmutableString,
     pub path: ImmutableString,
@@ -43,27 +61,21 @@ impl KeycloakApiEndpoint {
     }
 }
 
-impl Add<&str> for KeycloakApiEndpoint {
-    type Output = Result<KeycloakApiEndpoint>;
+impl<T> Add<T> for KeycloakApiEndpoint
+where
+    T: AsRef<str>,
+{
+    type Output = KeycloakApiEndpoint;
 
-    fn add(self, rhs: &str) -> Self::Output {
-        let path = self.path.to_string() + rhs;
-        let path = path.into();
-        Ok(KeycloakApiEndpoint {
-            path,
-            instance_ref: self.instance_ref,
-        })
+    fn add(self, rhs: T) -> Self::Output {
+        let path = self.path.to_string() + rhs.as_ref();
+        KeycloakApiEndpoint::new(&self.instance_ref, &path)
     }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakApiObjectOptions {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub must_create: Option<bool>,
-}
-
-impl WithStatus<KeycloakApiStatus> for KeycloakApiObject {
-    fn status(&self) -> Option<&KeycloakApiStatus> {
-        self.status.as_ref()
-    }
 }

@@ -1,4 +1,4 @@
-use super::{KeycloakApiObjectOptions, KeycloakApiStatus, WithStatus};
+use super::{KeycloakApiObjectOptions, KeycloakApiStatus};
 use keycloak::types::UserRepresentation;
 use kube_derive::CustomResource;
 use schemars::JsonSchema;
@@ -13,15 +13,10 @@ use serde::{Deserialize, Serialize};
     status = "KeycloakApiStatus",
     namespaced
 )]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakUserSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub realm_ref: String,
     pub definition: UserRepresentation,
-}
-
-impl WithStatus<KeycloakApiStatus> for KeycloakUser {
-    fn status(&self) -> Option<&KeycloakApiStatus> {
-        self.status.as_ref()
-    }
 }

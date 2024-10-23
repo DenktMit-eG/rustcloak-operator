@@ -1,4 +1,4 @@
-use super::{KeycloakApiObjectOptions, KeycloakApiStatus, WithStatus};
+use super::{KeycloakApiObjectOptions, KeycloakApiStatus};
 use crate::util::SchemaUtil;
 use keycloak::types::ClientRepresentation;
 use kube_derive::CustomResource;
@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
     status = "KeycloakApiStatus",
     namespaced
 )]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakClientSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
@@ -142,10 +143,4 @@ fn client_representation(generator: &mut SchemaGenerator) -> Schema {
         .additional_properties();
 
     schema
-}
-
-impl WithStatus<KeycloakApiStatus> for KeycloakClient {
-    fn status(&self) -> Option<&KeycloakApiStatus> {
-        self.status.as_ref()
-    }
 }

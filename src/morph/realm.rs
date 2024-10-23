@@ -16,10 +16,9 @@ impl ToApiObject for KeycloakRealm {
         &self,
         _client: kube::Client,
     ) -> Result<KeycloakApiEndpoint> {
-        //Ok(format!("admin/realms/{}", self.spec.definition.realm.as_ref().unwrap()));
-        let path = format!("admin/realms/{}", self.primary_key()?).into();
-        let instance_ref = self.spec.instance_ref.clone();
-        Ok(KeycloakApiEndpoint { instance_ref, path })
+        let path = format!("admin/realms/{}", self.primary_key()?);
+        let instance_ref = &self.spec.instance_ref;
+        Ok(KeycloakApiEndpoint::new(instance_ref, &path))
     }
 
     fn options(&self) -> Option<&KeycloakApiObjectOptions> {

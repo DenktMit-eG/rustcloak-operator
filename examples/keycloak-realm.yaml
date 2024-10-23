@@ -3,7 +3,7 @@ kind: KeycloakRealm
 metadata:
   name: example-keycloakrealm
 spec:
-  instance_ref: keycloak-instance
+  instanceRef: keycloak-instance
   definition:
     realm: my-awesome-realm
     enabled: true

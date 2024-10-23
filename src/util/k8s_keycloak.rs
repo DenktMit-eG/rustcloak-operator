@@ -5,9 +5,11 @@ use crate::{
     error::{Error, Result},
 };
 use chrono::{DateTime, Utc};
+use http::Method;
 use k8s_openapi::api::core::v1::Secret;
 use kube::{
     api::{Patch, PatchParams},
+    core::object::HasStatus,
     Api, ResourceExt,
 };
 use log::{debug, info, warn};
@@ -60,8 +62,9 @@ impl<'a> K8sKeycloakBuilder<'a> {
         debug!( "Using keycloak with credential secret {ns}/{credential_secret_name}");
 
         let (user, password) = secret_api
-            .get(&credential_secret_name)
+            .get_opt(&credential_secret_name)
             .await?
+            .ok_or(Error::NoCredentialSecret(ns, credential_secret_name))?
             .credentials(&self.instance.spec.credentials)?;
 
         self.auth.login_with_credentials(&user, &password).await
@@ -74,8 +77,9 @@ impl<'a> K8sKeycloakBuilder<'a> {
         debug!("Using keycloak with token secret {ns}/{token_secret_name}");
 
         let token = secret_api
-            .get(&token_secret_name)
+            .get_opt(&token_secret_name)
             .await?
+            .ok_or(Error::NoTokenSecret(ns, token_secret_name))?
             .token(self.instance)?;
 
         Ok(self.auth.into_client(token))
@@ -121,7 +125,7 @@ impl K8sKeycloakRefreshJob {
         Ok(())
     }
 
-    pub async fn keycloak_from_credentials(&self) -> Result<KeycloakClient> {
+    pub async fn keycloak_with_credentials(&self) -> Result<KeycloakClient> {
         let keycloak = self.keycloak_builder().with_credentials().await?;
 
         self.update_token_secret(keycloak.token()).await?;
@@ -129,8 +133,7 @@ impl K8sKeycloakRefreshJob {
         Ok(keycloak)
     }
 
-    pub async fn refresh(&self, keycloak: KeycloakClient) -> Result<()> {
-        let mut keycloak = keycloak;
+    pub async fn refresh(&self, keycloak: &mut KeycloakClient) -> Result<()> {
         keycloak.refresh().await?;
 
         self.update_token_secret(keycloak.token()).await?;
@@ -138,9 +141,27 @@ impl K8sKeycloakRefreshJob {
         Ok(())
     }
 
+    pub async fn keycloak_with_token(&self) -> Result<KeycloakClient> {
+        let mut keycloak = self.keycloak_builder().with_token().await?;
+        let now = chrono::Utc::now();
+
+        if keycloak.token().expires.map_or(false, |e| now > e) {
+            self.refresh(&mut keycloak).await?;
+        } else {
+            // ping keycloak to make sure it's available
+            keycloak
+                .request(Method::GET, "")
+                .send()
+                .await?
+                .error_for_status()?;
+        }
+
+        Ok(keycloak)
+    }
+
     pub async fn keycloak_from_somewhere(&self) -> Result<KeycloakClient> {
         debug!("Trying to get keycloak client, trying token first.");
-        match self.keycloak_builder().with_token().await {
+        match self.keycloak_with_token().await {
             Ok(keycloak) => {
                 return Ok(keycloak);
             }
@@ -148,7 +169,7 @@ impl K8sKeycloakRefreshJob {
         }
 
         debug!("Trying to get keycloak client, trying credentials next.");
-        match self.keycloak_from_credentials().await {
+        match self.keycloak_with_credentials().await {
             Ok(keycloak) => {
                 return Ok(keycloak);
             }
@@ -176,8 +197,12 @@ impl K8sKeycloakRefreshJob {
         let timeout = if expires > now {
             let timeout = (expires - now) * 5 / 6;
             timeout.to_std().unwrap()
-        } else {
+        } else if self.instance.status().map_or(true, |s| s.ready) {
+            debug!("Token already expired, refreshing now.");
             Duration::from_secs(0)
+        } else {
+            info!("Token is expired, but instance is not ready, waiting 5 seconds");
+            Duration::from_secs(5)
         };
         info!(
             "Next token refresh at {expires} ({} seconds)",
@@ -191,12 +216,12 @@ impl K8sKeycloakRefreshJob {
             return Ok(());
         }
 
-        let keycloak = self.keycloak_builder().with_token().await?;
-        match self.refresh(keycloak).await {
+        let mut keycloak = self.keycloak_builder().with_token().await?;
+        match self.refresh(&mut keycloak).await {
             Ok(_) => info!("Token refreshed"),
             Err(e) => {
                 warn!("Error refreshing token: {}, trying to login", e);
-                self.keycloak_from_credentials().await?;
+                self.keycloak_with_credentials().await?;
             }
         }
         Ok(())
@@ -240,24 +265,24 @@ impl K8sKeycloakRefreshManager {
         self.cancel_refresh_locked(&mut jobs, &session_handler)
             .await?;
 
-        if let Some(expires) = session_handler
-            .keycloak_from_somewhere()
-            .await?
-            .token()
-            .expires
-        {
+        let keycloak = session_handler.keycloak_from_somewhere().await?;
+
+        if let Some(expires) = keycloak.token().expires {
             info!("Scheduling token refresh for {}/{}", ns, name);
             let stopper = session_handler.stopper();
             let handle = tokio::spawn(async move {
                 if let Err(e) = session_handler.run_expire(expires).await {
                     log::error!("Error in keycloak session handler: {}", e);
-                    let _ = instance_api
+                    if let Err(e) = instance_api
                         .patch_status(
                             &name,
                             &PatchParams::apply(app_id!()),
-                            &KeycloakApiStatus::from(e).to_patch(),
+                            &KeycloakApiStatus::from(e).into(),
                         )
-                        .await;
+                        .await
+                    {
+                        log::error!("Error updating status: {}", e);
+                    }
                 }
             });
             jobs.0.insert(key, (handle, stopper));

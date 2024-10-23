@@ -3,7 +3,7 @@ kind: KeycloakClient
 metadata:
   name: example-keycloakrealm
 spec:
-  realm_ref: example-keycloakrealm
+  realmRef: example-keycloakrealm
   definition:
     clientId: example-client
     name: An example client

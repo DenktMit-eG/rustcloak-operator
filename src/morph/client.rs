@@ -24,11 +24,12 @@ impl ToApiObject for KeycloakClient {
         let realm_name = &self.spec.realm_ref;
         let realm_api = Api::<KeycloakRealm>::namespaced(client.clone(), &ns);
         let realm_endpoint = realm_api
-            .get(realm_name)
+            .get_opt(realm_name)
             .await?
+            .ok_or(Error::NoRealm(ns, realm_name.clone()))?
             .create_endpoint(client)
             .await?;
-        realm_endpoint + &format!("/clients/{}", self.primary_key()?)
+        Ok(realm_endpoint + "/clients/" + self.primary_key()?)
     }
 
     fn options(&self) -> Option<&KeycloakApiObjectOptions> {

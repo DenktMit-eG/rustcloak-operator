@@ -1,14 +1,11 @@
 use std::{sync::Arc, time::Duration};
 
-use crate::{
-    app_id,
-    crd::{KeycloakApiStatus, WithStatus},
-    error::Result,
-};
+use crate::{app_id, crd::KeycloakApiStatus, error::Result};
 use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{
     api::PatchParams,
+    core::object::HasStatus,
     runtime::{
         controller::{self, Action},
         watcher, Controller,
@@ -58,7 +55,7 @@ where
     C: LifecycleController + Sync + Send + 'static,
     C::Resource: KubeResource<Scope = NamespaceResourceScope>
         + Clone
-        + WithStatus<KeycloakApiStatus>
+        + HasStatus<Status = KeycloakApiStatus>
         + Debug
         + 'static
         + Send
@@ -89,11 +86,8 @@ where
             .for_each(|res| async {
                 match res {
                     Ok((o, _)) => {
-                        info!(
-                            "reconciled {kind} {}/{}",
-                            o.namespace.unwrap(),
-                            o.name
-                        )
+                        let ns = o.namespace.unwrap();
+                        info!("reconciled {kind} {ns}/{}", o.name)
                     }
                     Err(e) => error!("reconcile error: {:?}", e),
                 }
@@ -156,11 +150,11 @@ where
             .namespace
             .as_deref()
             .ok_or(Error::NoNamespace)?;
-        let name = resource.meta().name.clone().unwrap();
+        let name = resource.name_unchecked();
         let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
-        let patch = KeycloakApiStatus::from(e).to_patch();
+        let patch = KeycloakApiStatus::from(e).into();
 
-        api.patch_status(&name, &PatchParams::default(), &patch)
+        api.patch_status(&name, &PatchParams::apply(app_id!()), &patch)
             .await?;
 
         Ok(())
@@ -170,8 +164,6 @@ where
         _error: &Error,
         _ctx: Arc<Self>,
     ) -> Action {
-        //let api = Api::<C::Resource>::all(_ctx.client.clone());
-
         Action::requeue(Duration::from_secs(5))
     }
 }

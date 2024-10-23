@@ -1,14 +1,17 @@
 use std::sync::Arc;
 
 use crate::{
-    error::Result,
+    app_id,
+    crd::KeycloakApiStatus,
+    error::{Error, Result},
     util::{K8sKeycloakRefreshJob, K8sKeycloakRefreshManager},
 };
 use async_trait::async_trait;
 use k8s_openapi::api::core::v1::Secret;
 use kube::{
+    api::PatchParams,
     runtime::{controller::Action, watcher, Controller},
-    Api,
+    Api, ResourceExt,
 };
 
 use super::controller_runner::LifecycleController;
@@ -39,10 +42,19 @@ impl LifecycleController for KeycloakInstanceController {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
+        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
+        let api = Api::<Self::Resource>::namespaced(client.clone(), &ns);
         let session_handler =
             K8sKeycloakRefreshJob::new(resource.clone(), client.clone());
 
         self.manager.schedule_refresh(session_handler).await?;
+
+        api.patch_status(
+            &resource.name_unchecked(),
+            &PatchParams::apply(app_id!()),
+            &KeycloakApiStatus::ok("Authenticated").into(),
+        )
+        .await?;
 
         Ok(Action::await_change())
     }

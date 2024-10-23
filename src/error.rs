@@ -64,6 +64,14 @@ pub enum Error {
     MissingFields(String),
     #[error("Missing Primary Key")]
     NoPrimaryKey,
+    #[error("No Instance in namespace {0} with name {1} found")]
+    NoInstance(String, String),
+    #[error("No Credential Secret in namespace {0} with name {1} found")]
+    NoCredentialSecret(String, String),
+    #[error("No Token Secret in namespace {0} with name {1} found")]
+    NoTokenSecret(String, String),
+    #[error("No Realm in namespace {0} with name {1} found")]
+    NoRealm(String, String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

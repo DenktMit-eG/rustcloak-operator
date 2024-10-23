@@ -3,6 +3,6 @@ kind: KeycloakInstance
 metadata:
   name: keycloak-instance
 spec:
-  base_url: http://127.0.0.1:8080
+  baseUrl: http://127.0.0.1:8080
   credentials:
-    secret_name: keycloak-password
+    secretName: keycloak-password

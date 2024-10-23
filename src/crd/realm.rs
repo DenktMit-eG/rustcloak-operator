@@ -1,6 +1,4 @@
-use super::{
-    ImmutableString, KeycloakApiObjectOptions, KeycloakApiStatus, WithStatus,
-};
+use super::{ImmutableString, KeycloakApiObjectOptions, KeycloakApiStatus};
 use crate::util::SchemaUtil;
 use keycloak::types::RealmRepresentation;
 use kube_derive::CustomResource;
@@ -16,6 +14,7 @@ use serde::{Deserialize, Serialize};
     status = "KeycloakApiStatus",
     namespaced
 )]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakRealmSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
@@ -35,10 +34,4 @@ fn realm_representation(generator: &mut SchemaGenerator) -> Schema {
         .remove("components")
         .remove("oauthClients")
         .to_owned()
-}
-
-impl WithStatus<KeycloakApiStatus> for KeycloakRealm {
-    fn status(&self) -> Option<&KeycloakApiStatus> {
-        self.status.as_ref()
-    }
 }

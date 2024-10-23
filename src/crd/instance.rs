@@ -1,10 +1,11 @@
-use super::{KeycloakApiStatus, WithStatus};
+use super::KeycloakApiStatus;
 use kube::ResourceExt;
 use kube_derive::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakInstanceCredentialReference {
     pub secret_name: String,
     pub user_key: Option<String>,
@@ -12,6 +13,7 @@ pub struct KeycloakInstanceCredentialReference {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakInstanceTokenReference {
     pub secret_name: Option<String>,
     pub token_key: Option<String>,
@@ -19,6 +21,7 @@ pub struct KeycloakInstanceTokenReference {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakInstanceClient {
     pub id: String,
     pub secret: Option<String>,
@@ -31,20 +34,33 @@ pub struct KeycloakInstanceClient {
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",
-    namespaced
+    namespaced,
+    printcolumn = r#"{
+            "name":"Base URL",
+            "type":"string",
+            "description":"",
+            "jsonPath":".spec.baseUrl"
+        }"#,
+    printcolumn = r#"{
+            "name":"Ready",
+            "type":"boolean",
+            "description":"",
+            "jsonPath":".status.ready"
+        }"#,
+    printcolumn = r#"{
+            "name":"Status",
+            "type":"string",
+            "description":"",
+            "jsonPath":".status.status"
+        }"#
 )]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakInstanceSpec {
     pub base_url: String,
     pub realm: Option<String>,
     pub credentials: KeycloakInstanceCredentialReference,
     pub token: Option<KeycloakInstanceTokenReference>,
     pub client: Option<KeycloakInstanceClient>,
-}
-
-impl WithStatus<KeycloakApiStatus> for KeycloakInstance {
-    fn status(&self) -> Option<&KeycloakApiStatus> {
-        self.status.as_ref()
-    }
 }
 
 impl KeycloakInstance {
