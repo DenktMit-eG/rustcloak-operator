@@ -3,9 +3,9 @@ use std::sync::Arc;
 use super::controller_runner::LifecycleController;
 use crate::{
     app_id,
-    crd::{KeycloakApiObject, KeycloakApiObjectSpec},
+    crd::{HasEndpoint, KeycloakApiObject, KeycloakApiObjectSpec},
+    endpoint::Resolver,
     error::{Error, Result},
-    morph::ToApiObject,
 };
 use async_trait::async_trait;
 use kube::{
@@ -13,15 +13,16 @@ use kube::{
     runtime::{controller::Action, watcher, Controller},
     Api, Resource, ResourceExt,
 };
+use log::debug;
 use serde::{de::DeserializeOwned, Serialize};
 use serde_json::json;
 
 #[derive(Debug)]
-pub struct MorphController<T: ToApiObject> {
+pub struct MorphController<T: Resolver> {
     phantom: std::marker::PhantomData<T>,
 }
 
-impl<T: ToApiObject> Default for MorphController<T> {
+impl<T: Resolver> Default for MorphController<T> {
     fn default() -> Self {
         Self {
             phantom: std::marker::PhantomData,
@@ -32,7 +33,8 @@ impl<T: ToApiObject> Default for MorphController<T> {
 #[async_trait]
 impl<R> LifecycleController for MorphController<R>
 where
-    R: ToApiObject
+    R: Resolver
+        + HasEndpoint
         + Resource<DynamicType = ()>
         + Send
         + Sync
@@ -63,7 +65,7 @@ where
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let admin_api: Api<KeycloakApiObject> =
             Api::namespaced(client.clone(), &ns);
-        let name = format!("{}{}", R::PREFIX, resource.name_unchecked());
+        let name = format!("{}-{}", R::prefix(), resource.name_unchecked());
         let owner_ref = resource.owner_ref(&()).unwrap();
 
         let primary_key = R::primary_key();
@@ -73,14 +75,15 @@ where
             .as_mut()
             .unwrap()
             .remove(primary_key);
-        let primary_key_value = resource.primary_key_value_r()?;
+        let primary_key_value = resource.primary_key_value().unwrap();
         let immutable_payload = json!({
             primary_key: primary_key_value,
         })
         .into();
         let payload = payload.into();
 
-        let endpoint = resource.create_endpoint(client.clone()).await?;
+        let endpoint = resource.resolve(client.clone()).await?;
+        debug!("Resolved endpoint: {:?}", endpoint);
 
         let api_object = KeycloakApiObject {
             metadata: ObjectMeta {

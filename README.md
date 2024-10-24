@@ -13,32 +13,35 @@ curl -L https://www.keycloak.org/docs-api/latest/rest-api/openapi.yaml -o keyclo
 yq '.paths | to_entries | (.[] |= [.value.put.requestBody.content."application/json".schema.$ref, .key]) | filter(.0 and .1 == "*}") | group_by(.0) | .[] | ["* [ ] `" + (.0.0 | sub(".*/","")) + "`", "  * [ ] `" + .[].1 + "`"] | join("\n") + "\n"' keycloak_openapi.yaml
 ```
 
-* [ ] `AuthenticationFlowRepresentation`
-  * [ ] `/admin/realms/{realm}/authentication/flows/{id}`
+* [x] `AuthenticationFlowRepresentation`
+  * [x] `/admin/realms/{realm}/authentication/flows/{id}`
 
-* [ ] `AuthenticatorConfigRepresentation`
-  * [ ] `/admin/realms/{realm}/authentication/config/{id}`
+* [x] `AuthenticatorConfigRepresentation`
+  * [x] `/admin/realms/{realm}/authentication/config/{id}`
 
 * [x] `ClientRepresentation`
   * [x] `/admin/realms/{realm}/clients/{client-uuid}`
 
-* [ ] `ClientScopeRepresentation`
-  * [ ] `/admin/realms/{realm}/client-scopes/{client-scope-id}`
-  * [ ] `/admin/realms/{realm}/client-templates/{client-scope-id}`
+* [x] `ClientScopeRepresentation`
+  * [x] `/admin/realms/{realm}/client-scopes/{client-scope-id}`
+  * [x] `/admin/realms/{realm}/client-templates/{client-scope-id}`
 
-* [ ] `ComponentRepresentation`
-  * [ ] `/admin/realms/{realm}/components/{id}`
+* [x] `ComponentRepresentation`
+  * [x] `/admin/realms/{realm}/components/{id}`
 
-* [ ] `GroupRepresentation`
-  * [ ] `/admin/realms/{realm}/groups/{group-id}`
+* [x] `GroupRepresentation`
+  * [x] `/admin/realms/{realm}/groups/{group-id}`
 
-* [ ] `IdentityProviderMapperRepresentation`
+* [x] `IdentityProviderMapperRepresentation`
   * [ ] `/admin/realms/{realm}/identity-provider/instances/{alias}/mappers/{id}`
 
-* [ ] `IdentityProviderRepresentation`
-  * [ ] `/admin/realms/{realm}/identity-provider/instances/{alias}`
+* [x] `IdentityProviderRepresentation`
+  * [x] `/admin/realms/{realm}/identity-provider/instances/{alias}`
 
-* [ ] `ProtocolMapperRepresentation`
+* [x] `OrganizationRepresentation`
+  * [x] `/admin/realms/{realm}/organizations/{id}`
+
+* [x] `ProtocolMapperRepresentation`
   * [ ] `/admin/realms/{realm}/client-scopes/{client-scope-id}/protocol-mappers/models/{id}`
   * [ ] `/admin/realms/{realm}/client-templates/{client-scope-id}/protocol-mappers/models/{id}`
   * [ ] `/admin/realms/{realm}/clients/{client-uuid}/protocol-mappers/models/{id}`
@@ -46,18 +49,18 @@ yq '.paths | to_entries | (.[] |= [.value.put.requestBody.content."application/j
 * [x] `RealmRepresentation`
   * [x] `/admin/realms/{realm}`
 
-* [ ] `RequiredActionProviderRepresentation`
+* [x] `RequiredActionProviderRepresentation`
   * [ ] `/admin/realms/{realm}/authentication/required-actions/{alias}`
 
-* [ ] `ResourceRepresentation`
+* [x] `ResourceRepresentation`
   * [ ] `/admin/realms/{realm}/clients/{client-uuid}/authz/resource-server/resource/{resource-id}`
 
-* [ ] `RoleRepresentation`
+* [x] `RoleRepresentation`
   * [ ] `/admin/realms/{realm}/clients/{client-uuid}/roles/{role-name}`
   * [x] (Won't do) `/admin/realms/{realm}/roles-by-id/{role-id}`
   * [ ] `/admin/realms/{realm}/roles/{role-name}`
 
-* [ ] `ScopeRepresentation`
+* [x] `ScopeRepresentation`
   * [ ] `/admin/realms/{realm}/clients/{client-uuid}/authz/resource-server/scope/{scope-id}`
 
 * [x] `UserRepresentation`

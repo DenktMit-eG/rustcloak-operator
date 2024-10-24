@@ -1,6 +1,6 @@
-use super::{
-    keycloak_endpoint_impl, HasKeycloakEndpoint, ImmutableString,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+use crate::crd::{
+    endpoint_impl, HasEndpoint, ImmutableString, KeycloakApiObjectOptions,
+    KeycloakApiStatus,
 };
 use keycloak::types::RealmRepresentation;
 use kube_derive::CustomResource;
@@ -25,7 +25,7 @@ pub struct KeycloakRealmSpec {
     pub definition: RealmRepresentation,
 }
 
-keycloak_endpoint_impl!(KeycloakRealmSpec, RealmRepresentation, realm, |s| {
+endpoint_impl!(KeycloakRealmSpec, RealmRepresentation, realm, realm, |s| {
     s.remove("groups")
         .remove("applications")
         .remove("clients")

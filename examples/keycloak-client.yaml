@@ -1,7 +1,7 @@
 apiVersion: rustcloak.k8s.eboland.de/v1
 kind: KeycloakClient
 metadata:
-  name: example-keycloakrealm
+  name: example-keycloakclient
 spec:
   realmRef: example-keycloakrealm
   definition:

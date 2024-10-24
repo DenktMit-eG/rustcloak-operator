@@ -8,7 +8,7 @@ use rustcloak_operator::controller::{
     ControllerRunner, KeycloakApiObjectController, KeycloakInstanceController,
     MorphController,
 };
-use rustcloak_operator::crd::{KeycloakClient, KeycloakRealm, KeycloakUser};
+use rustcloak_operator::crd::*;
 use rustcloak_operator::opts::{ControllerOpt, Opts};
 
 #[get("/healthz")]
@@ -68,6 +68,148 @@ async fn main() -> Result<()> {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakUser>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts
+        .controllers
+        .contains(&ControllerOpt::AuthenticationFlow)
+    {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakAuthenticationFlow>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts
+        .controllers
+        .contains(&ControllerOpt::AuthenticatorConfig)
+    {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakAuthenticatorConfig>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::ClientScope) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakClientScope>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::Component) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakComponent>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::Group) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakGroup>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::IdentityProvider) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakIdentityProvider>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts
+        .controllers
+        .contains(&ControllerOpt::IdentityProviderMapper)
+    {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakIdentityProviderMapper>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::Organization) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakOrganization>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::ProtocolMapper) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakProtocolMapper>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts
+        .controllers
+        .contains(&ControllerOpt::RequiredActionProvider)
+    {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakRequiredActionProvider>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    //if opts.controllers.contains(&ControllerOpt::Resource) {
+    //    controllers.push(
+    //        ControllerRunner::new(
+    //            MorphController::<KeycloakResource>::default(),
+    //            &client,
+    //        )
+    //        .run()
+    //        .boxed(),
+    //    );
+    //}
+    //if opts.controllers.contains(&ControllerOpt::Role) {
+    //    controllers.push(
+    //        ControllerRunner::new(
+    //            MorphController::<KeycloakRole>::default(),
+    //            &client,
+    //        )
+    //        .run()
+    //        .boxed(),
+    //    );
+    //}
+    if opts.controllers.contains(&ControllerOpt::Scope) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakScope>::default(),
                 &client,
             )
             .run()

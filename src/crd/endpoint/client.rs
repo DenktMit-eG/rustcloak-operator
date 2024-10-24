@@ -1,11 +1,13 @@
-use super::{
-    keycloak_endpoint_impl, HasKeycloakEndpoint, KeycloakApiObjectOptions,
+use crate::crd::{
+    child_of, endpoint_impl, HasEndpoint, KeycloakApiObjectOptions,
     KeycloakApiStatus,
 };
 use keycloak::types::ClientRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
+
+use super::KeycloakRealm;
 
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
@@ -25,7 +27,7 @@ pub struct KeycloakClientSpec {
     pub definition: ClientRepresentation,
 }
 
-keycloak_endpoint_impl!(KeycloakClientSpec, ClientRepresentation, id, |s| {
+endpoint_impl!(KeycloakClientSpec, ClientRepresentation, id, client, |s| {
     s.prop("authorizationSettings")
         .prop("policies")
         .array_item()
@@ -129,3 +131,5 @@ keycloak_endpoint_impl!(KeycloakClientSpec, ClientRepresentation, id, |s| {
         .remove("scopesUma")
         .additional_properties();
 });
+
+child_of!(KeycloakClient, KeycloakRealm, realm_ref, "clients");

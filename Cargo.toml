@@ -12,7 +12,7 @@ tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread", "time"] }
 anyhow = "1.0.89"
 clap = { version = "4.5.20", features = ["derive", "env", "help", "std"], default-features = false }
 kube-derive = "0.96.0"
-schemars = { version = "0.8.21", features = ["chrono"] }
+schemars = { version = "0.8.21", features = ["chrono", "either"] }
 serde = "1.0.210"
 thiserror = "1.0.64"
 log = "0.4.22"
@@ -28,3 +28,4 @@ derive_builder = "0.20.2"
 http = "1.1.0"
 async-stream = "0.3.6"
 actix-web = "4.9.0"
+either = { version = "1.13.0", features = ["serde"] }

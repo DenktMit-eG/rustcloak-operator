@@ -1,4 +1,4 @@
-use crate::crd::{HasKeycloakEndpoint, KeycloakApiEndpoint};
+use crate::crd::{HasEndpoint, KeycloakApiEndpoint};
 use crate::error::{Error, Result};
 use async_trait::async_trait;
 use kube::Resource;
@@ -7,7 +7,7 @@ use kube::ResourceExt;
 #[async_trait]
 pub trait ToApiObject
 where
-    Self: Resource + HasKeycloakEndpoint + Sized,
+    Self: Resource + HasEndpoint + Sized,
 {
     const PREFIX: &'static str;
     async fn create_endpoint(

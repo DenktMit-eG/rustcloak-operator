@@ -15,13 +15,26 @@ pub enum ControllerOpt {
     Client,
     /// handles user creation updates and deletion
     User,
+    AuthenticationFlow,
+    AuthenticatorConfig,
+    ClientScope,
+    Component,
+    Group,
+    IdentityProvider,
+    IdentityProviderMapper,
+    Organization,
+    ProtocolMapper,
+    RequiredActionProvider,
+    Resource,
+    Role,
+    Scope,
 }
 
 /// Keyclaok Operator
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
 pub struct Opts {
-    #[clap(short, long, value_delimiter = ',', num_args = 1.., default_value = "api,instance,realm,client,user")]
+    #[clap(short, long, value_delimiter = ',', num_args = 1.., default_value = "api,instance,realm,client,user,authentication-flow,authenticator-config,client-scope,component,group,identity-provider,identity-provider-mapper,organization,protocol-mapper,required-action-provider,resource,role,scope")]
     /// Enables the specified controllers. defined as comma seperated list.
     pub controllers: Vec<ControllerOpt>,
     #[clap(short, long)]
