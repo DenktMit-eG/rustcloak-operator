@@ -1,5 +1,7 @@
-use super::{KeycloakApiObjectOptions, KeycloakApiStatus};
-use crate::{morph::ToApiObject, util::SchemaUtil};
+use super::{
+    keycloak_endpoint_impl, HasKeycloakEndpoint, KeycloakApiObjectOptions,
+    KeycloakApiStatus,
+};
 use keycloak::types::ClientRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
@@ -19,130 +21,111 @@ pub struct KeycloakClientSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub realm_ref: String,
-    #[schemars(schema_with = "client_representation")]
+    #[schemars(schema_with = "KeycloakClientSpec::schema")]
     pub definition: ClientRepresentation,
 }
 
-// sed 's/\$ref.*//; s/^\* spec\.validation\.openAPIV3Schema\.properties\[spec\]\.properties\[definition\]/schema/; s/\.properties\[\([^]]*\)\]/.prop("\1")/g; s/\.items\./.items()./g; s/\.prop("\([^"]*\)")\.items()\.$/.remove("\1");/'
-fn client_representation(generator: &mut SchemaGenerator) -> Schema {
-    let mut schema = generator.clone().subschema_for::<ClientRepresentation>();
-
-    schema.immutable_prop(KeycloakClient::PRIMARY_KEY);
-
-    schema
-        .prop("authorizationSettings")
+keycloak_endpoint_impl!(KeycloakClientSpec, ClientRepresentation, id, |s| {
+    s.prop("authorizationSettings")
         .prop("policies")
-        .items()
+        .array_item()
         .prop("resourcesData")
-        .items()
+        .array_item()
         .prop("scopes")
-        .items()
+        .array_item()
         .remove("policies")
         .remove("resources")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("policies")
-        .items()
+        .array_item()
         .prop("resourcesData")
-        .items()
+        .array_item()
         .prop("scopesUma")
-        .items()
+        .array_item()
         .remove("policies")
         .remove("resources")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("policies")
-        .items()
+        .array_item()
         .prop("scopesData")
-        .items()
+        .array_item()
         .prop("resources")
-        .items()
+        .array_item()
         .remove("scopes")
         .remove("scopesUma")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("policies")
-        .items()
+        .array_item()
         .prop("scopesData")
-        .items()
+        .array_item()
         .remove("policies")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("resources")
-        .items()
+        .array_item()
         .prop("scopes")
-        .items()
+        .array_item()
         .prop("policies")
-        .items()
+        .array_item()
         .remove("resourcesData")
         .remove("scopesData")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("resources")
-        .items()
+        .array_item()
         .prop("scopes")
-        .items()
+        .array_item()
         .remove("resources")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("resources")
-        .items()
+        .array_item()
         .prop("scopesUma")
-        .items()
+        .array_item()
         .prop("policies")
-        .items()
+        .array_item()
         .remove("resourcesData")
         .remove("scopesData")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("resources")
-        .items()
+        .array_item()
         .prop("scopesUma")
-        .items()
+        .array_item()
         .remove("resources")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("scopes")
-        .items()
+        .array_item()
         .prop("policies")
-        .items()
+        .array_item()
         .prop("resourcesData")
-        .items()
+        .array_item()
         .remove("scopes")
         .remove("scopesUma")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("scopes")
-        .items()
+        .array_item()
         .prop("policies")
-        .items()
+        .array_item()
         .remove("scopesData")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("scopes")
-        .items()
+        .array_item()
         .prop("resources")
-        .items()
+        .array_item()
         .remove("scopes")
         .additional_properties();
-    schema
-        .prop("authorizationSettings")
+    s.prop("authorizationSettings")
         .prop("scopes")
-        .items()
+        .array_item()
         .prop("resources")
-        .items()
+        .array_item()
         .remove("scopesUma")
         .additional_properties();
-
-    schema
-}
+});

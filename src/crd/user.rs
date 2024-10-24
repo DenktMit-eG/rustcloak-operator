@@ -1,6 +1,7 @@
-use crate::{morph::ToApiObject, util::SchemaUtil};
-
-use super::{KeycloakApiObjectOptions, KeycloakApiStatus};
+use super::{
+    keycloak_endpoint_impl, HasKeycloakEndpoint, KeycloakApiObjectOptions,
+    KeycloakApiStatus,
+};
 use keycloak::types::UserRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
@@ -20,11 +21,8 @@ pub struct KeycloakUserSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub realm_ref: String,
-    #[schemars(schema_with = "user_representation")]
+    #[schemars(schema_with = "KeycloakUser::schema")]
     pub definition: UserRepresentation,
 }
 
-fn user_representation(generator: &mut SchemaGenerator) -> Schema {
-    let mut schema = generator.clone().subschema_for::<UserRepresentation>();
-    schema.immutable_prop(KeycloakUser::PRIMARY_KEY).to_owned()
-}
+keycloak_endpoint_impl!(KeycloakUserSpec, UserRepresentation, id, |_| {});

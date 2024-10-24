@@ -1,5 +1,7 @@
-use super::{ImmutableString, KeycloakApiObjectOptions, KeycloakApiStatus};
-use crate::{morph::ToApiObject, util::SchemaUtil};
+use super::{
+    keycloak_endpoint_impl, HasKeycloakEndpoint, ImmutableString,
+    KeycloakApiObjectOptions, KeycloakApiStatus,
+};
 use keycloak::types::RealmRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
@@ -19,20 +21,14 @@ pub struct KeycloakRealmSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub instance_ref: ImmutableString,
-    #[schemars(schema_with = "realm_representation")]
+    #[schemars(schema_with = "KeycloakRealmSpec::schema")]
     pub definition: RealmRepresentation,
 }
 
-fn realm_representation(generator: &mut SchemaGenerator) -> Schema {
-    let mut schema = generator.clone().subschema_for::<RealmRepresentation>();
-    schema.immutable_prop(KeycloakRealm::PRIMARY_KEY);
-    // Remove fields that trigger $ref in the schema which is not supported by
-    // kubernetes
-    schema
-        .remove("groups")
+keycloak_endpoint_impl!(KeycloakRealmSpec, RealmRepresentation, realm, |s| {
+    s.remove("groups")
         .remove("applications")
         .remove("clients")
         .remove("components")
-        .remove("oauthClients")
-        .to_owned()
-}
+        .remove("oauthClients");
+});

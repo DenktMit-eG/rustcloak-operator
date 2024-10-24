@@ -13,7 +13,7 @@ use kube::{
     runtime::{controller::Action, watcher, Controller},
     Api, Resource, ResourceExt,
 };
-use serde::de::DeserializeOwned;
+use serde::{de::DeserializeOwned, Serialize};
 use serde_json::json;
 
 #[derive(Debug)]
@@ -39,6 +39,7 @@ where
         + 'static
         + Clone
         + std::fmt::Debug
+        + Serialize
         + DeserializeOwned,
 {
     type Resource = R;
@@ -65,16 +66,16 @@ where
         let name = format!("{}{}", R::PREFIX, resource.name_unchecked());
         let owner_ref = resource.owner_ref(&()).unwrap();
 
-        let mut payload = resource.payload()?;
-        let primary_key = payload
+        let primary_key = R::primary_key();
+        let mut payload = serde_json::to_value(resource.definition())?;
+        payload
             .as_object_mut()
+            .as_mut()
             .unwrap()
-            .remove(R::PRIMARY_KEY)
-            .unwrap_or_else(|| {
-                format!("{ns}_{}", resource.name_unchecked()).into()
-            });
+            .remove(primary_key);
+        let primary_key_value = resource.primary_key_value_r()?;
         let immutable_payload = json!({
-            R::PRIMARY_KEY: primary_key,
+            primary_key: primary_key_value,
         })
         .into();
         let payload = payload.into();

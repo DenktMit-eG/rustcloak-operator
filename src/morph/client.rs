@@ -1,20 +1,14 @@
-use super::{traits::ToApiObject, WithPrimaryKey};
+use super::traits::ToApiObject;
 use crate::{
-    crd::{
-        KeycloakApiEndpoint, KeycloakApiObjectOptions, KeycloakClient,
-        KeycloakRealm,
-    },
+    crd::{KeycloakApiEndpoint, KeycloakClient, KeycloakRealm},
     error::{Error, Result},
 };
 use async_trait::async_trait;
 use kube::{Api, ResourceExt};
-use serde_json::Value;
 
 #[async_trait]
 impl ToApiObject for KeycloakClient {
     const PREFIX: &'static str = "client-";
-
-    const PRIMARY_KEY: &'static str = "id";
 
     async fn create_endpoint(
         &self,
@@ -29,14 +23,6 @@ impl ToApiObject for KeycloakClient {
             .ok_or(Error::NoRealm(ns, realm_name.clone()))?
             .create_endpoint(client)
             .await?;
-        Ok(realm_endpoint + "/clients/" + self.primary_key()?)
-    }
-
-    fn options(&self) -> Option<&KeycloakApiObjectOptions> {
-        self.spec.options.as_ref()
-    }
-
-    fn payload(&self) -> Result<Value> {
-        Ok(serde_json::to_value(&self.spec.definition)?)
+        Ok(realm_endpoint + "/clients/" + self.primary_key_value_r()?)
     }
 }
