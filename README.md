@@ -26,57 +26,58 @@ do similiar things, maybe it's a good idea to have a single controller for both
 With a bit of shell magic, I extracted all the endpoints of keycloak:
 
 ```
-yq '.paths | to_entries | .[] | select(.value.put.requestBody.content."application/json" and .key == "*}") | {.key: .value.put.requestBody.content."application/json".schema.$ref}' keycloak_openapi.yaml | sort -k 2 | yq . | uniq -f 1 --group
+curl -L https://www.keycloak.org/docs-api/latest/rest-api/openapi.yaml -o keycloak_openapi.yaml
+yq '.paths | to_entries | (.[] |= [.value.put.requestBody.content."application/json".schema.$ref, .key]) | filter(.0 and .1 == "*}") | group_by(.0) | .[] | ["* [ ] `" + (.0.0 | sub(".*/","")) + "`", "  * [ ] `" + .[].1 + "`"] | join("\n") + "\n"' keycloak_openapi.yaml
 ```
 
-* [ ] `#/components/schemas/AuthenticationFlowRepresentation`
+* [ ] `AuthenticationFlowRepresentation`
   * [ ] `/admin/realms/{realm}/authentication/flows/{id}`
 
-* [ ] `#/components/schemas/AuthenticatorConfigRepresentation`
+* [ ] `AuthenticatorConfigRepresentation`
   * [ ] `/admin/realms/{realm}/authentication/config/{id}`
 
-* [x] `#/components/schemas/ClientRepresentation`
+* [x] `ClientRepresentation`
   * [x] `/admin/realms/{realm}/clients/{client-uuid}`
 
-* [ ] `#/components/schemas/ClientScopeRepresentation`
+* [ ] `ClientScopeRepresentation`
   * [ ] `/admin/realms/{realm}/client-scopes/{client-scope-id}`
   * [ ] `/admin/realms/{realm}/client-templates/{client-scope-id}`
 
-* [ ] `#/components/schemas/ComponentRepresentation`
+* [ ] `ComponentRepresentation`
   * [ ] `/admin/realms/{realm}/components/{id}`
 
-* [ ] `#/components/schemas/GroupRepresentation`
+* [ ] `GroupRepresentation`
   * [ ] `/admin/realms/{realm}/groups/{group-id}`
 
-* [ ] `#/components/schemas/IdentityProviderMapperRepresentation`
+* [ ] `IdentityProviderMapperRepresentation`
   * [ ] `/admin/realms/{realm}/identity-provider/instances/{alias}/mappers/{id}`
 
-* [ ] `#/components/schemas/IdentityProviderRepresentation`
+* [ ] `IdentityProviderRepresentation`
   * [ ] `/admin/realms/{realm}/identity-provider/instances/{alias}`
 
-* [ ] `#/components/schemas/ProtocolMapperRepresentation`
+* [ ] `ProtocolMapperRepresentation`
   * [ ] `/admin/realms/{realm}/client-scopes/{client-scope-id}/protocol-mappers/models/{id}`
   * [ ] `/admin/realms/{realm}/client-templates/{client-scope-id}/protocol-mappers/models/{id}`
   * [ ] `/admin/realms/{realm}/clients/{client-uuid}/protocol-mappers/models/{id}`
 
-* [x] `#/components/schemas/RealmRepresentation`
+* [x] `RealmRepresentation`
   * [x] `/admin/realms/{realm}`
 
-* [ ] `#/components/schemas/RequiredActionProviderRepresentation`
+* [ ] `RequiredActionProviderRepresentation`
   * [ ] `/admin/realms/{realm}/authentication/required-actions/{alias}`
 
-* [ ] `#/components/schemas/ResourceRepresentation`
+* [ ] `ResourceRepresentation`
   * [ ] `/admin/realms/{realm}/clients/{client-uuid}/authz/resource-server/resource/{resource-id}`
 
-* [ ] `#/components/schemas/RoleRepresentation`
+* [ ] `RoleRepresentation`
   * [ ] `/admin/realms/{realm}/clients/{client-uuid}/roles/{role-name}`
-  * [x] `/admin/realms/{realm}/roles-by-id/{role-id}`: Won't implement this one, as it's not needed
+  * [x] (Won't do) `/admin/realms/{realm}/roles-by-id/{role-id}`
   * [ ] `/admin/realms/{realm}/roles/{role-name}`
 
-* [ ] `#/components/schemas/ScopeRepresentation`
+* [ ] `ScopeRepresentation`
   * [ ] `/admin/realms/{realm}/clients/{client-uuid}/authz/resource-server/scope/{scope-id}`
 
-* [x] `#/components/schemas/UserRepresentation`
+* [x] `UserRepresentation`
   * [x] `/admin/realms/{realm}/users/{user-id}`
 
 It seems that we have 14 different CRDs to implement.
