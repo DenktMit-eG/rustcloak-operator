@@ -27,7 +27,7 @@ pub struct KeycloakUserSpec {
     pub definition: UserRepresentation,
 }
 
-endpoint_impl!(KeycloakUserSpec, UserRepresentation, id, user, |_| {});
+endpoint_impl!(KeycloakUser, UserRepresentation, id, user, |_| {});
 
 child_of!(
     KeycloakUser,

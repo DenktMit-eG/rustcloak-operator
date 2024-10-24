@@ -23,11 +23,11 @@ pub struct KeycloakScopeSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub client_ref: String,
-    #[schemars(schema_with = "KeycloakScopeSpec::schema")]
+    #[schemars(schema_with = "KeycloakScope::schema")]
     pub definition: ScopeRepresentation,
 }
 
-endpoint_impl!(KeycloakScopeSpec, ScopeRepresentation, id, scope, |s| {
+endpoint_impl!(KeycloakScope, ScopeRepresentation, id, scope, |s| {
     s.prop("resources")
         .array_item()
         .remove("scopesUma")

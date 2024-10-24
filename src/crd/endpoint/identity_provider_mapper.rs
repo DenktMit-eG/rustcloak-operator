@@ -23,12 +23,12 @@ pub struct KeycloakIdentityProviderMapperSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub identity_provider_ref: String,
-    #[schemars(schema_with = "KeycloakIdentityProviderMapperSpec::schema")]
+    #[schemars(schema_with = "KeycloakIdentityProviderMapper::schema")]
     pub definition: IdentityProviderMapperRepresentation,
 }
 
 endpoint_impl!(
-    KeycloakIdentityProviderMapperSpec,
+    KeycloakIdentityProviderMapper,
     IdentityProviderMapperRepresentation,
     id,
     ipm,

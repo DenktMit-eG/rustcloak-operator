@@ -20,12 +20,12 @@ pub struct KeycloakResourceSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub realm_ref: String,
-    #[schemars(schema_with = "KeycloakResourceSpec::schema")]
+    #[schemars(schema_with = "KeycloakResource::schema")]
     pub definition: ResourceRepresentation,
 }
 
 endpoint_impl!(
-    KeycloakResourceSpec,
+    KeycloakResource,
     ResourceRepresentation,
     id,
     resource,

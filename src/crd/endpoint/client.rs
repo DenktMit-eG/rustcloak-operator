@@ -23,11 +23,11 @@ pub struct KeycloakClientSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub realm_ref: String,
-    #[schemars(schema_with = "KeycloakClientSpec::schema")]
+    #[schemars(schema_with = "KeycloakClient::schema")]
     pub definition: ClientRepresentation,
 }
 
-endpoint_impl!(KeycloakClientSpec, ClientRepresentation, id, client, |s| {
+endpoint_impl!(KeycloakClient, ClientRepresentation, id, client, |s| {
     s.prop("authorizationSettings")
         .prop("policies")
         .array_item()

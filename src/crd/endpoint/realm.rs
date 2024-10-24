@@ -21,11 +21,11 @@ pub struct KeycloakRealmSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub instance_ref: ImmutableString,
-    #[schemars(schema_with = "KeycloakRealmSpec::schema")]
+    #[schemars(schema_with = "KeycloakRealm::schema")]
     pub definition: RealmRepresentation,
 }
 
-endpoint_impl!(KeycloakRealmSpec, RealmRepresentation, realm, realm, |s| {
+endpoint_impl!(KeycloakRealm, RealmRepresentation, realm, realm, |s| {
     s.remove("groups")
         .remove("applications")
         .remove("clients")

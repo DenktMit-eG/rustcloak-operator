@@ -26,7 +26,7 @@ where
 impl Resolver for KeycloakRealm {
     async fn resolve(&self, _: kube::Client) -> Result<KeycloakApiEndpoint> {
         let instance_ref = &self.spec.instance_ref;
-        let primary_key = self.primary_key_value().unwrap();
+        let primary_key = self.primary_key_value();
         Ok(KeycloakApiEndpoint::new(instance_ref, "admin/realms/")
             + primary_key)
     }
@@ -58,7 +58,7 @@ where
             .get(parent_ref.as_ref())
             .await?;
         let path = self.sub_path();
-        let primary_key = self.primary_key_value().unwrap();
+        let primary_key = self.primary_key_value();
         Ok(parent.resolve(client.clone()).await?
             + "/"
             + path

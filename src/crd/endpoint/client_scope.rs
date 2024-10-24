@@ -25,12 +25,12 @@ pub struct KeycloakClientScopeSpec {
     pub realm_ref: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_template: Option<bool>,
-    #[schemars(schema_with = "KeycloakClientScopeSpec::schema")]
+    #[schemars(schema_with = "KeycloakClientScope::schema")]
     pub definition: ClientScopeRepresentation,
 }
 
 endpoint_impl!(
-    KeycloakClientScopeSpec,
+    KeycloakClientScope,
     ClientScopeRepresentation,
     id,
     cs,

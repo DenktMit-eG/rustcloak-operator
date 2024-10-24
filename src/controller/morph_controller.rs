@@ -75,7 +75,7 @@ where
             .as_mut()
             .unwrap()
             .remove(primary_key);
-        let primary_key_value = resource.primary_key_value().unwrap();
+        let primary_key_value = resource.primary_key_value();
         let immutable_payload = json!({
             primary_key: primary_key_value,
         })

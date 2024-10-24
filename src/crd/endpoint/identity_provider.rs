@@ -21,12 +21,12 @@ pub struct KeycloakIdentityProviderSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub realm_ref: String,
-    #[schemars(schema_with = "KeycloakIdentityProviderSpec::schema")]
+    #[schemars(schema_with = "KeycloakIdentityProvider::schema")]
     pub definition: IdentityProviderRepresentation,
 }
 
 endpoint_impl!(
-    KeycloakIdentityProviderSpec,
+    KeycloakIdentityProvider,
     IdentityProviderRepresentation,
     alias,
     idp,

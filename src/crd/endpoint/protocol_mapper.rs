@@ -38,12 +38,12 @@ pub struct KeycloakProtocolMapperSpec {
     pub options: Option<KeycloakApiObjectOptions>,
     #[serde(flatten)]
     pub parent_ref: Either<ClientRef, ClientScopeRef>,
-    #[schemars(schema_with = "KeycloakProtocolMapperSpec::schema")]
+    #[schemars(schema_with = "KeycloakProtocolMapper::schema")]
     pub definition: ProtocolMapperRepresentation,
 }
 
 endpoint_impl!(
-    KeycloakProtocolMapperSpec,
+    KeycloakProtocolMapper,
     ProtocolMapperRepresentation,
     id,
     pm,
