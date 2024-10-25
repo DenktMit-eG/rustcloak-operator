@@ -1,7 +1,7 @@
-use kube::CustomResourceExt;
+use kube::{CustomResourceExt, ResourceExt};
 use rustcloak_operator::crd::*;
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let crds = [
         KeycloakInstance::crd(),
         KeycloakApiObject::crd(),
@@ -22,7 +22,16 @@ fn main() {
         KeycloakScope::crd(),
         KeycloakUser::crd(),
     ];
+
+    let dir = std::env::args().nth(1);
     for crd in crds.iter() {
-        println!("---\n{}", serde_yaml::to_string(crd).unwrap());
+        let str = serde_yaml::to_string(crd)?;
+        if let Some(ref dir) = dir {
+            let path = format!("{}/{}.yaml", dir, crd.name_unchecked());
+            std::fs::write(path, str)?;
+        } else {
+            println!("---\n{}", str);
+        }
     }
+    Ok(())
 }
