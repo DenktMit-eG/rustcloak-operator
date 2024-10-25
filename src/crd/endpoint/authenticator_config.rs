@@ -1,7 +1,8 @@
 use crate::{
     child_of,
     crd::{
-        endpoint_impl, HasEndpoint, KeycloakApiObjectOptions, KeycloakApiStatus,
+        endpoint_impl, schema_patch, HasEndpoint, KeycloakApiObjectOptions,
+        KeycloakApiStatus,
     },
 };
 use keycloak::types::AuthenticatorConfigRepresentation;
@@ -25,7 +26,7 @@ pub struct KeycloakAuthenticatorConfigSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub realm_ref: String,
-    #[schemars(schema_with = "KeycloakAuthenticatorConfig::schema")]
+    #[schemars(schema_with = "schema")]
     pub definition: AuthenticatorConfigRepresentation,
 }
 
@@ -33,8 +34,7 @@ endpoint_impl!(
     KeycloakAuthenticatorConfig,
     AuthenticatorConfigRepresentation,
     id,
-    authconfig,
-    |_| {}
+    authconfig
 );
 
 child_of!(
@@ -43,3 +43,5 @@ child_of!(
     realm_ref,
     "authentication/config"
 );
+
+schema_patch!(KeycloakAuthenticatorConfig);

@@ -42,8 +42,8 @@ pub struct KeycloakApiObjectSpec {
     pub endpoint: KeycloakApiEndpoint,
     pub immutable_payload: ImmutableJsonObject,
     pub payload: JsonObject,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub vars: Option<Vec<EnvVar>>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub vars: Vec<EnvVar>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]

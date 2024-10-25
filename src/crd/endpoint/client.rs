@@ -1,6 +1,6 @@
 use crate::crd::{
-    child_of, endpoint_impl, HasEndpoint, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ClientRepresentation;
 use kube_derive::CustomResource;
@@ -23,11 +23,15 @@ pub struct KeycloakClientSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub realm_ref: String,
-    #[schemars(schema_with = "KeycloakClient::schema")]
+    #[schemars(schema_with = "schema")]
     pub definition: ClientRepresentation,
 }
 
-endpoint_impl!(KeycloakClient, ClientRepresentation, id, client, |s| {
+endpoint_impl!(KeycloakClient, ClientRepresentation, id, client);
+
+child_of!(KeycloakClient, KeycloakRealm, realm_ref, "clients");
+
+schema_patch!(KeycloakClient: |s| {
     s.prop("authorizationSettings")
         .prop("policies")
         .array_item()
@@ -131,5 +135,3 @@ endpoint_impl!(KeycloakClient, ClientRepresentation, id, client, |s| {
         .remove("scopesUma")
         .additional_properties();
 });
-
-child_of!(KeycloakClient, KeycloakRealm, realm_ref, "clients");

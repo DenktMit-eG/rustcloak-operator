@@ -1,6 +1,6 @@
 use crate::crd::{
-    child_of, endpoint_impl, HasEndpoint, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ComponentRepresentation;
 use kube_derive::CustomResource;
@@ -23,16 +23,12 @@ pub struct KeycloakComponentSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub realm_ref: String,
-    #[schemars(schema_with = "KeycloakComponent::schema")]
+    #[schemars(schema_with = "schema")]
     pub definition: ComponentRepresentation,
 }
 
-endpoint_impl!(
-    KeycloakComponent,
-    ComponentRepresentation,
-    id,
-    component,
-    |_| {}
-);
+endpoint_impl!(KeycloakComponent, ComponentRepresentation, id, component);
 
 child_of!(KeycloakComponent, KeycloakRealm, realm_ref, "components");
+
+schema_patch!(KeycloakComponent);

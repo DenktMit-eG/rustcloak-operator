@@ -1,21 +1,26 @@
-use crate::crd::{HasEndpoint, KeycloakApiEndpoint};
-use crate::error::{Error, Result};
-use async_trait::async_trait;
+use crate::error::Result;
+use k8s_openapi::api::core::v1::EnvVar;
 use kube::Resource;
-use kube::ResourceExt;
+use serde::Serialize;
+use serde_json::Value;
 
-#[async_trait]
-pub trait ToApiObject
+use crate::crd::HasEndpoint;
+
+pub trait Morph {
+    fn payload(&self) -> Result<Value>;
+    fn variables(&self) -> Result<Vec<EnvVar>>;
+}
+
+impl<T> Morph for T
 where
-    Self: Resource + HasEndpoint + Sized,
+    T: Resource + HasEndpoint,
+    T::Definition: Serialize,
 {
-    const PREFIX: &'static str;
-    async fn create_endpoint(
-        &self,
-        _client: kube::Client,
-    ) -> Result<KeycloakApiEndpoint>;
+    fn payload(&self) -> Result<Value> {
+        Ok(serde_json::to_value(self.definition())?)
+    }
 
-    fn primary_key_value_r(&self) -> Result<String> {
-        Ok(self.primary_key_value())
+    fn variables(&self) -> Result<Vec<EnvVar>> {
+        Ok(vec![])
     }
 }

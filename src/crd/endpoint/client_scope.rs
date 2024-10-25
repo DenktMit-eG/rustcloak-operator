@@ -1,6 +1,6 @@
 use crate::crd::{
-    endpoint_impl, ChildOf, HasEndpoint, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    endpoint_impl, schema_patch, ChildOf, HasEndpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ClientScopeRepresentation;
 use kube_derive::CustomResource;
@@ -25,17 +25,11 @@ pub struct KeycloakClientScopeSpec {
     pub realm_ref: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_template: Option<bool>,
-    #[schemars(schema_with = "KeycloakClientScope::schema")]
+    #[schemars(schema_with = "schema")]
     pub definition: ClientScopeRepresentation,
 }
 
-endpoint_impl!(
-    KeycloakClientScope,
-    ClientScopeRepresentation,
-    id,
-    cs,
-    |_| {}
-);
+endpoint_impl!(KeycloakClientScope, ClientScopeRepresentation, id, cs);
 
 impl ChildOf for KeycloakClientScope {
     type ParentRefType = String;
@@ -52,3 +46,5 @@ impl ChildOf for KeycloakClientScope {
         self.spec.realm_ref.clone()
     }
 }
+
+schema_patch!(KeycloakClientScope);

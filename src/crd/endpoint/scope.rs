@@ -1,6 +1,6 @@
 use crate::crd::{
-    child_of, endpoint_impl, HasEndpoint, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ScopeRepresentation;
 use kube_derive::CustomResource;
@@ -23,11 +23,13 @@ pub struct KeycloakScopeSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub client_ref: String,
-    #[schemars(schema_with = "KeycloakScope::schema")]
+    #[schemars(schema_with = "schema")]
     pub definition: ScopeRepresentation,
 }
 
-endpoint_impl!(KeycloakScope, ScopeRepresentation, id, scope, |s| {
+endpoint_impl!(KeycloakScope, ScopeRepresentation, id, scope);
+
+schema_patch!(KeycloakScope: |s| {
     s.prop("resources")
         .array_item()
         .remove("scopesUma")

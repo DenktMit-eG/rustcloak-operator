@@ -15,7 +15,7 @@ impl KeycloakApiObject {
     pub async fn resolve(&self, client: &Client) -> Result<Value> {
         let mut resolved_vars = HashMap::new();
 
-        for r in self.spec.vars.iter().flatten() {
+        for r in self.spec.vars.iter() {
             let value = if let Some(value) = &r.value {
                 value.clone()
             } else if let Some(ref value_from) = r.value_from.clone() {

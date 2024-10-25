@@ -6,6 +6,7 @@ use crate::{
     crd::{HasEndpoint, KeycloakApiObject, KeycloakApiObjectSpec},
     endpoint::Resolver,
     error::{Error, Result},
+    morph::Morph,
 };
 use async_trait::async_trait;
 use kube::{
@@ -34,6 +35,7 @@ impl<T: Resolver> Default for MorphController<T> {
 impl<R> LifecycleController for MorphController<R>
 where
     R: Resolver
+        + Morph
         + HasEndpoint
         + Resource<DynamicType = ()>
         + Send
@@ -69,7 +71,8 @@ where
         let owner_ref = resource.owner_ref(&()).unwrap();
 
         let primary_key = R::primary_key();
-        let mut payload = serde_json::to_value(resource.definition())?;
+        let mut payload = resource.payload()?;
+        let vars = resource.variables()?;
         payload
             .as_object_mut()
             .as_mut()
@@ -97,7 +100,7 @@ where
                 options: resource.options().cloned(),
                 immutable_payload,
                 payload,
-                vars: None,
+                vars,
             },
             status: Default::default(),
         };

@@ -1,7 +1,7 @@
 use super::{KeycloakClient, KeycloakClientScope};
 use crate::crd::{
-    endpoint_impl, ChildOf, HasEndpoint, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    endpoint_impl, schema_patch, ChildOf, HasEndpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use either::Either;
 use keycloak::types::ProtocolMapperRepresentation;
@@ -38,17 +38,11 @@ pub struct KeycloakProtocolMapperSpec {
     pub options: Option<KeycloakApiObjectOptions>,
     #[serde(flatten)]
     pub parent_ref: Either<ClientRef, ClientScopeRef>,
-    #[schemars(schema_with = "KeycloakProtocolMapper::schema")]
+    #[schemars(schema_with = "schema")]
     pub definition: ProtocolMapperRepresentation,
 }
 
-endpoint_impl!(
-    KeycloakProtocolMapper,
-    ProtocolMapperRepresentation,
-    id,
-    pm,
-    |_| {}
-);
+endpoint_impl!(KeycloakProtocolMapper, ProtocolMapperRepresentation, id, pm);
 
 impl ChildOf for KeycloakProtocolMapper {
     type Parent = Either<KeycloakClient, KeycloakClientScope>;
@@ -64,3 +58,5 @@ impl ChildOf for KeycloakProtocolMapper {
             .map_either(|x| x.client_ref, |x| x.client_scope_ref)
     }
 }
+
+schema_patch!(KeycloakProtocolMapper);

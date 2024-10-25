@@ -1,6 +1,6 @@
 use crate::crd::{
-    child_of, endpoint_impl, HasEndpoint, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::UserRepresentation;
 use kube_derive::CustomResource;
@@ -23,11 +23,11 @@ pub struct KeycloakUserSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub realm_ref: String,
-    #[schemars(schema_with = "KeycloakUser::schema")]
+    #[schemars(schema_with = "schema")]
     pub definition: UserRepresentation,
 }
 
-endpoint_impl!(KeycloakUser, UserRepresentation, id, user, |_| {});
+endpoint_impl!(KeycloakUser, UserRepresentation, id, user);
 
 child_of!(
     KeycloakUser,
@@ -35,3 +35,5 @@ child_of!(
     realm_ref,
     "authz/resource-server/scope"
 );
+
+schema_patch!(KeycloakUser);

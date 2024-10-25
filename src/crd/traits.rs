@@ -1,6 +1,6 @@
 use super::KeycloakApiObjectOptions;
 use kube::{Resource, ResourceExt};
-use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
+use schemars::JsonSchema;
 use serde::Serialize;
 
 pub trait HasEndpoint
@@ -19,8 +19,6 @@ where
             .map_or_else(|| self.uid().unwrap(), |v| v.to_string())
     }
 
-    fn schema(generator: &mut SchemaGenerator) -> Schema;
-
     fn options(&self) -> Option<&KeycloakApiObjectOptions>;
 
     fn prefix() -> &'static str;
@@ -29,7 +27,7 @@ where
 // sed 's/\$ref.*//; s/^\* spec\.validation\.openAPIV3Schema\.properties\[spec\]\.properties\[definition\]/s/; s/\.properties\[\([^]]*\)\]/.prop("\1")/g; s/\.items\./.array_item()./g; s/\.prop("\([^"]*\)")\.array_items()\.$/.remove("\1");/'
 #[macro_export]
 macro_rules! endpoint_impl {
-    ($name:ty, $def:ty, $primary_key:ident, $prefix:ident, $schema:expr) => {
+    ($name:ty, $def:ty, $primary_key:ident, $prefix:ident) => {
         impl $crate::crd::HasEndpoint for $name {
             type Definition = $def;
             fn definition(&self) -> &Self::Definition {
@@ -48,20 +46,6 @@ macro_rules! endpoint_impl {
 
             fn primary_key_value_opt(&self) -> Option<&str> {
                 self.definition().$primary_key.as_deref()
-            }
-
-            fn schema(generator: &mut SchemaGenerator) -> Schema {
-                use crate::util::SchemaUtil;
-                //eprintln!("Generating schema for {}", serde_yaml::to_string(&generator.clone().subschema_for::<Self::Definition>()).unwrap());
-                let mut s = generator
-                    .clone()
-                    .subschema_for::<Self::Definition>()
-                    .immutable_prop(Self::primary_key())
-                    .to_owned();
-
-                let func: fn(&mut Schema) -> () = $schema;
-                func(&mut s);
-                s
             }
 
             fn prefix() -> &'static str {
