@@ -1,0 +1,7 @@
+image:
+  repository: localhost/rustcloak
+  tag: latest
+  pullPolicy: IfNotPresent
+
+application:
+  logLevel: debug

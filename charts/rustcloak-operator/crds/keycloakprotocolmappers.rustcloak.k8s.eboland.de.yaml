@@ -1,0 +1,101 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: keycloakprotocolmappers.rustcloak.k8s.eboland.de
+spec:
+  group: rustcloak.k8s.eboland.de
+  names:
+    categories: []
+    kind: KeycloakProtocolMapper
+    plural: keycloakprotocolmappers
+    shortNames:
+    - kcpm
+    singular: keycloakprotocolmapper
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns: []
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Auto-generated derived type for KeycloakProtocolMapperSpec via `CustomResource`
+        properties:
+          spec:
+            anyOf:
+            - required:
+              - clientRef
+            - required:
+              - clientScopeRef
+            properties:
+              clientRef:
+                description: This indicates that the ProtocolMapper is a child of a KeycloakClient. Mutually exclusive with `clientScopeRef`
+                type: string
+              clientScopeRef:
+                description: This indicates that the ProtocolMapper is a child of a KeycloakClientScope. Mutually exclusive with `clientRef`
+                type: string
+              definition:
+                properties:
+                  config:
+                    additionalProperties:
+                      type: string
+                    nullable: true
+                    type: object
+                  consentRequired:
+                    nullable: true
+                    type: boolean
+                  consentText:
+                    nullable: true
+                    type: string
+                  id:
+                    nullable: true
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  name:
+                    nullable: true
+                    type: string
+                  protocol:
+                    nullable: true
+                    type: string
+                  protocolMapper:
+                    nullable: true
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: has(self.id) == has(oldSelf.id)
+              options:
+                nullable: true
+                properties:
+                  mustCreate:
+                    nullable: true
+                    type: boolean
+                type: object
+            required:
+            - definition
+            type: object
+          status:
+            nullable: true
+            properties:
+              code:
+                format: uint32
+                minimum: 0.0
+                type: integer
+              message:
+                type: string
+              ready:
+                type: boolean
+              status:
+                type: string
+            required:
+            - code
+            - ready
+            type: object
+        required:
+        - spec
+        title: KeycloakProtocolMapper
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

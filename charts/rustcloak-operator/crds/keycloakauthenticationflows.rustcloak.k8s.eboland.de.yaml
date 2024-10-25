@@ -1,0 +1,119 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: keycloakauthenticationflows.rustcloak.k8s.eboland.de
+spec:
+  group: rustcloak.k8s.eboland.de
+  names:
+    categories: []
+    kind: KeycloakAuthenticationFlow
+    plural: keycloakauthenticationflows
+    shortNames:
+    - kcaf
+    singular: keycloakauthenticationflow
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns: []
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Auto-generated derived type for KeycloakAuthenticationFlowSpec via `CustomResource`
+        properties:
+          spec:
+            properties:
+              definition:
+                properties:
+                  alias:
+                    nullable: true
+                    type: string
+                  authenticationExecutions:
+                    items:
+                      properties:
+                        authenticator:
+                          nullable: true
+                          type: string
+                        authenticatorConfig:
+                          nullable: true
+                          type: string
+                        authenticatorFlow:
+                          nullable: true
+                          type: boolean
+                        autheticatorFlow:
+                          nullable: true
+                          type: boolean
+                        flowAlias:
+                          nullable: true
+                          type: string
+                        priority:
+                          format: int32
+                          nullable: true
+                          type: integer
+                        requirement:
+                          nullable: true
+                          type: string
+                        userSetupAllowed:
+                          nullable: true
+                          type: boolean
+                      type: object
+                    nullable: true
+                    type: array
+                  builtIn:
+                    nullable: true
+                    type: boolean
+                  description:
+                    nullable: true
+                    type: string
+                  id:
+                    nullable: true
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  providerId:
+                    nullable: true
+                    type: string
+                  topLevel:
+                    nullable: true
+                    type: boolean
+                type: object
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: has(self.id) == has(oldSelf.id)
+              options:
+                nullable: true
+                properties:
+                  mustCreate:
+                    nullable: true
+                    type: boolean
+                type: object
+              realmRef:
+                type: string
+            required:
+            - definition
+            - realmRef
+            type: object
+          status:
+            nullable: true
+            properties:
+              code:
+                format: uint32
+                minimum: 0.0
+                type: integer
+              message:
+                type: string
+              ready:
+                type: boolean
+              status:
+                type: string
+            required:
+            - code
+            - ready
+            type: object
+        required:
+        - spec
+        title: KeycloakAuthenticationFlow
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

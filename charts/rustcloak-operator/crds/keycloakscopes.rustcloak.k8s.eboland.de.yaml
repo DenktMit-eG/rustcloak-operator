@@ -1,0 +1,237 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: keycloakscopes.rustcloak.k8s.eboland.de
+spec:
+  group: rustcloak.k8s.eboland.de
+  names:
+    categories: []
+    kind: KeycloakScope
+    plural: keycloakscopes
+    shortNames:
+    - kcs
+    singular: keycloakscope
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns: []
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Auto-generated derived type for KeycloakScopeSpec via `CustomResource`
+        properties:
+          spec:
+            properties:
+              clientRef:
+                type: string
+              definition:
+                properties:
+                  displayName:
+                    nullable: true
+                    type: string
+                  iconUri:
+                    nullable: true
+                    type: string
+                  id:
+                    nullable: true
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  name:
+                    nullable: true
+                    type: string
+                  policies:
+                    items:
+                      properties:
+                        config:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        decisionStrategy:
+                          enum:
+                          - AFFIRMATIVE
+                          - UNANIMOUS
+                          - CONSENSUS
+                          nullable: true
+                          type: string
+                        description:
+                          nullable: true
+                          type: string
+                        id:
+                          nullable: true
+                          type: string
+                        logic:
+                          enum:
+                          - POSITIVE
+                          - NEGATIVE
+                          nullable: true
+                          type: string
+                        name:
+                          nullable: true
+                          type: string
+                        owner:
+                          nullable: true
+                          type: string
+                        policies:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        resources:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        resourcesData:
+                          items:
+                            properties:
+                              _id:
+                                nullable: true
+                                type: string
+                              attributes:
+                                additionalProperties:
+                                  items:
+                                    type: string
+                                  type: array
+                                nullable: true
+                                type: object
+                              displayName:
+                                nullable: true
+                                type: string
+                              icon_uri:
+                                nullable: true
+                                type: string
+                              name:
+                                nullable: true
+                                type: string
+                              owner:
+                                nullable: true
+                                properties:
+                                  id:
+                                    nullable: true
+                                    type: string
+                                  name:
+                                    nullable: true
+                                    type: string
+                                type: object
+                              ownerManagedAccess:
+                                nullable: true
+                                type: boolean
+                              type:
+                                nullable: true
+                                type: string
+                              uri:
+                                nullable: true
+                                type: string
+                              uris:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                          nullable: true
+                          type: array
+                        scopes:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        type:
+                          nullable: true
+                          type: string
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                    nullable: true
+                    type: array
+                  resources:
+                    items:
+                      properties:
+                        _id:
+                          nullable: true
+                          type: string
+                        attributes:
+                          additionalProperties:
+                            items:
+                              type: string
+                            type: array
+                          nullable: true
+                          type: object
+                        displayName:
+                          nullable: true
+                          type: string
+                        icon_uri:
+                          nullable: true
+                          type: string
+                        name:
+                          nullable: true
+                          type: string
+                        owner:
+                          nullable: true
+                          properties:
+                            id:
+                              nullable: true
+                              type: string
+                            name:
+                              nullable: true
+                              type: string
+                          type: object
+                        ownerManagedAccess:
+                          nullable: true
+                          type: boolean
+                        type:
+                          nullable: true
+                          type: string
+                        uri:
+                          nullable: true
+                          type: string
+                        uris:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                    nullable: true
+                    type: array
+                type: object
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: has(self.id) == has(oldSelf.id)
+              options:
+                nullable: true
+                properties:
+                  mustCreate:
+                    nullable: true
+                    type: boolean
+                type: object
+            required:
+            - clientRef
+            - definition
+            type: object
+          status:
+            nullable: true
+            properties:
+              code:
+                format: uint32
+                minimum: 0.0
+                type: integer
+              message:
+                type: string
+              ready:
+                type: boolean
+              status:
+                type: string
+            required:
+            - code
+            - ready
+            type: object
+        required:
+        - spec
+        title: KeycloakScope
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -1,0 +1,123 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: keycloakidentityproviders.rustcloak.k8s.eboland.de
+spec:
+  group: rustcloak.k8s.eboland.de
+  names:
+    categories: []
+    kind: KeycloakIdentityProvider
+    plural: keycloakidentityproviders
+    shortNames:
+    - kcip
+    singular: keycloakidentityprovider
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns: []
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Auto-generated derived type for KeycloakIdentityProviderSpec via `CustomResource`
+        properties:
+          spec:
+            properties:
+              definition:
+                properties:
+                  addReadTokenRoleOnCreate:
+                    nullable: true
+                    type: boolean
+                  alias:
+                    nullable: true
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  authenticateByDefault:
+                    nullable: true
+                    type: boolean
+                  config:
+                    additionalProperties:
+                      type: string
+                    nullable: true
+                    type: object
+                  displayName:
+                    nullable: true
+                    type: string
+                  enabled:
+                    nullable: true
+                    type: boolean
+                  firstBrokerLoginFlowAlias:
+                    nullable: true
+                    type: string
+                  hideOnLogin:
+                    nullable: true
+                    type: boolean
+                  internalId:
+                    nullable: true
+                    type: string
+                  linkOnly:
+                    nullable: true
+                    type: boolean
+                  organizationId:
+                    nullable: true
+                    type: string
+                  postBrokerLoginFlowAlias:
+                    nullable: true
+                    type: string
+                  providerId:
+                    nullable: true
+                    type: string
+                  storeToken:
+                    nullable: true
+                    type: boolean
+                  trustEmail:
+                    nullable: true
+                    type: boolean
+                  updateProfileFirstLogin:
+                    nullable: true
+                    type: boolean
+                  updateProfileFirstLoginMode:
+                    nullable: true
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: has(self.alias) == has(oldSelf.alias)
+              options:
+                nullable: true
+                properties:
+                  mustCreate:
+                    nullable: true
+                    type: boolean
+                type: object
+              realmRef:
+                type: string
+            required:
+            - definition
+            - realmRef
+            type: object
+          status:
+            nullable: true
+            properties:
+              code:
+                format: uint32
+                minimum: 0.0
+                type: integer
+              message:
+                type: string
+              ready:
+                type: boolean
+              status:
+                type: string
+            required:
+            - code
+            - ready
+            type: object
+        required:
+        - spec
+        title: KeycloakIdentityProvider
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -1,0 +1,106 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: keycloakinstances.rustcloak.k8s.eboland.de
+spec:
+  group: rustcloak.k8s.eboland.de
+  names:
+    categories: []
+    kind: KeycloakInstance
+    plural: keycloakinstances
+    shortNames:
+    - kci
+    singular: keycloakinstance
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: ''
+      jsonPath: .spec.baseUrl
+      name: Base URL
+      type: string
+    - description: ''
+      jsonPath: .status.ready
+      name: Ready
+      type: boolean
+    - description: ''
+      jsonPath: .status.status
+      name: Status
+      type: string
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Auto-generated derived type for KeycloakInstanceSpec via `CustomResource`
+        properties:
+          spec:
+            properties:
+              baseUrl:
+                type: string
+              client:
+                nullable: true
+                properties:
+                  id:
+                    type: string
+                  secret:
+                    nullable: true
+                    type: string
+                required:
+                - id
+                type: object
+              credentials:
+                properties:
+                  passwordKey:
+                    nullable: true
+                    type: string
+                  secretName:
+                    type: string
+                  userKey:
+                    nullable: true
+                    type: string
+                required:
+                - secretName
+                type: object
+              realm:
+                nullable: true
+                type: string
+              token:
+                nullable: true
+                properties:
+                  expiresKey:
+                    nullable: true
+                    type: string
+                  secretName:
+                    nullable: true
+                    type: string
+                  tokenKey:
+                    nullable: true
+                    type: string
+                type: object
+            required:
+            - baseUrl
+            - credentials
+            type: object
+          status:
+            nullable: true
+            properties:
+              code:
+                format: uint32
+                minimum: 0.0
+                type: integer
+              message:
+                type: string
+              ready:
+                type: boolean
+              status:
+                type: string
+            required:
+            - code
+            - ready
+            type: object
+        required:
+        - spec
+        title: KeycloakInstance
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

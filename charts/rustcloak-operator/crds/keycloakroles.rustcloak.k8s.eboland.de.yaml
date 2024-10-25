@@ -1,0 +1,121 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: keycloakroles.rustcloak.k8s.eboland.de
+spec:
+  group: rustcloak.k8s.eboland.de
+  names:
+    categories: []
+    kind: KeycloakRole
+    plural: keycloakroles
+    shortNames:
+    - kcr
+    singular: keycloakrole
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns: []
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Auto-generated derived type for KeycloakRoleSpec via `CustomResource`
+        properties:
+          spec:
+            properties:
+              definition:
+                properties:
+                  attributes:
+                    additionalProperties:
+                      items:
+                        type: string
+                      type: array
+                    nullable: true
+                    type: object
+                  clientRole:
+                    nullable: true
+                    type: boolean
+                  composite:
+                    nullable: true
+                    type: boolean
+                  composites:
+                    nullable: true
+                    properties:
+                      application:
+                        additionalProperties:
+                          items:
+                            type: string
+                          type: array
+                        nullable: true
+                        type: object
+                      client:
+                        additionalProperties:
+                          items:
+                            type: string
+                          type: array
+                        nullable: true
+                        type: object
+                      realm:
+                        items:
+                          type: string
+                        nullable: true
+                        type: array
+                    type: object
+                  containerId:
+                    nullable: true
+                    type: string
+                  description:
+                    nullable: true
+                    type: string
+                  id:
+                    nullable: true
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  name:
+                    nullable: true
+                    type: string
+                  scopeParamRequired:
+                    nullable: true
+                    type: boolean
+                type: object
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: has(self.id) == has(oldSelf.id)
+              options:
+                nullable: true
+                properties:
+                  mustCreate:
+                    nullable: true
+                    type: boolean
+                type: object
+              realmRef:
+                type: string
+            required:
+            - definition
+            - realmRef
+            type: object
+          status:
+            nullable: true
+            properties:
+              code:
+                format: uint32
+                minimum: 0.0
+                type: integer
+              message:
+                type: string
+              ready:
+                type: boolean
+              status:
+                type: string
+            required:
+            - code
+            - ready
+            type: object
+        required:
+        - spec
+        title: KeycloakRole
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -1,0 +1,856 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: keycloakclients.rustcloak.k8s.eboland.de
+spec:
+  group: rustcloak.k8s.eboland.de
+  names:
+    categories: []
+    kind: KeycloakClient
+    plural: keycloakclients
+    shortNames:
+    - kcc
+    singular: keycloakclient
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns: []
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Auto-generated derived type for KeycloakClientSpec via `CustomResource`
+        properties:
+          spec:
+            properties:
+              definition:
+                properties:
+                  access:
+                    additionalProperties:
+                      type: boolean
+                    nullable: true
+                    type: object
+                  adminUrl:
+                    nullable: true
+                    type: string
+                  alwaysDisplayInConsole:
+                    nullable: true
+                    type: boolean
+                  attributes:
+                    additionalProperties:
+                      type: string
+                    nullable: true
+                    type: object
+                  authenticationFlowBindingOverrides:
+                    additionalProperties:
+                      type: string
+                    nullable: true
+                    type: object
+                  authorizationServicesEnabled:
+                    nullable: true
+                    type: boolean
+                  authorizationSettings:
+                    nullable: true
+                    properties:
+                      allowRemoteResourceManagement:
+                        nullable: true
+                        type: boolean
+                      clientId:
+                        nullable: true
+                        type: string
+                      decisionStrategy:
+                        enum:
+                        - AFFIRMATIVE
+                        - UNANIMOUS
+                        - CONSENSUS
+                        nullable: true
+                        type: string
+                      id:
+                        nullable: true
+                        type: string
+                      name:
+                        nullable: true
+                        type: string
+                      policies:
+                        items:
+                          properties:
+                            config:
+                              additionalProperties:
+                                type: string
+                              nullable: true
+                              type: object
+                            decisionStrategy:
+                              enum:
+                              - AFFIRMATIVE
+                              - UNANIMOUS
+                              - CONSENSUS
+                              nullable: true
+                              type: string
+                            description:
+                              nullable: true
+                              type: string
+                            id:
+                              nullable: true
+                              type: string
+                            logic:
+                              enum:
+                              - POSITIVE
+                              - NEGATIVE
+                              nullable: true
+                              type: string
+                            name:
+                              nullable: true
+                              type: string
+                            owner:
+                              nullable: true
+                              type: string
+                            policies:
+                              items:
+                                type: string
+                              nullable: true
+                              type: array
+                            resources:
+                              items:
+                                type: string
+                              nullable: true
+                              type: array
+                            resourcesData:
+                              items:
+                                properties:
+                                  _id:
+                                    nullable: true
+                                    type: string
+                                  attributes:
+                                    additionalProperties:
+                                      items:
+                                        type: string
+                                      type: array
+                                    nullable: true
+                                    type: object
+                                  displayName:
+                                    nullable: true
+                                    type: string
+                                  icon_uri:
+                                    nullable: true
+                                    type: string
+                                  name:
+                                    nullable: true
+                                    type: string
+                                  owner:
+                                    nullable: true
+                                    properties:
+                                      id:
+                                        nullable: true
+                                        type: string
+                                      name:
+                                        nullable: true
+                                        type: string
+                                    type: object
+                                  ownerManagedAccess:
+                                    nullable: true
+                                    type: boolean
+                                  scopes:
+                                    items:
+                                      properties:
+                                        displayName:
+                                          nullable: true
+                                          type: string
+                                        iconUri:
+                                          nullable: true
+                                          type: string
+                                        id:
+                                          nullable: true
+                                          type: string
+                                        name:
+                                          nullable: true
+                                          type: string
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                    nullable: true
+                                    type: array
+                                  scopesUma:
+                                    items:
+                                      properties:
+                                        displayName:
+                                          nullable: true
+                                          type: string
+                                        iconUri:
+                                          nullable: true
+                                          type: string
+                                        id:
+                                          nullable: true
+                                          type: string
+                                        name:
+                                          nullable: true
+                                          type: string
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                    nullable: true
+                                    type: array
+                                  type:
+                                    nullable: true
+                                    type: string
+                                  uri:
+                                    nullable: true
+                                    type: string
+                                  uris:
+                                    items:
+                                      type: string
+                                    nullable: true
+                                    type: array
+                                type: object
+                              nullable: true
+                              type: array
+                            scopes:
+                              items:
+                                type: string
+                              nullable: true
+                              type: array
+                            scopesData:
+                              items:
+                                properties:
+                                  displayName:
+                                    nullable: true
+                                    type: string
+                                  iconUri:
+                                    nullable: true
+                                    type: string
+                                  id:
+                                    nullable: true
+                                    type: string
+                                  name:
+                                    nullable: true
+                                    type: string
+                                  resources:
+                                    items:
+                                      properties:
+                                        _id:
+                                          nullable: true
+                                          type: string
+                                        attributes:
+                                          additionalProperties:
+                                            items:
+                                              type: string
+                                            type: array
+                                          nullable: true
+                                          type: object
+                                        displayName:
+                                          nullable: true
+                                          type: string
+                                        icon_uri:
+                                          nullable: true
+                                          type: string
+                                        name:
+                                          nullable: true
+                                          type: string
+                                        owner:
+                                          nullable: true
+                                          properties:
+                                            id:
+                                              nullable: true
+                                              type: string
+                                            name:
+                                              nullable: true
+                                              type: string
+                                          type: object
+                                        ownerManagedAccess:
+                                          nullable: true
+                                          type: boolean
+                                        type:
+                                          nullable: true
+                                          type: string
+                                        uri:
+                                          nullable: true
+                                          type: string
+                                        uris:
+                                          items:
+                                            type: string
+                                          nullable: true
+                                          type: array
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                    nullable: true
+                                    type: array
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                              nullable: true
+                              type: array
+                            type:
+                              nullable: true
+                              type: string
+                          type: object
+                        nullable: true
+                        type: array
+                      policyEnforcementMode:
+                        enum:
+                        - ENFORCING
+                        - PERMISSIVE
+                        - DISABLED
+                        nullable: true
+                        type: string
+                      resources:
+                        items:
+                          properties:
+                            _id:
+                              nullable: true
+                              type: string
+                            attributes:
+                              additionalProperties:
+                                items:
+                                  type: string
+                                type: array
+                              nullable: true
+                              type: object
+                            displayName:
+                              nullable: true
+                              type: string
+                            icon_uri:
+                              nullable: true
+                              type: string
+                            name:
+                              nullable: true
+                              type: string
+                            owner:
+                              nullable: true
+                              properties:
+                                id:
+                                  nullable: true
+                                  type: string
+                                name:
+                                  nullable: true
+                                  type: string
+                              type: object
+                            ownerManagedAccess:
+                              nullable: true
+                              type: boolean
+                            scopes:
+                              items:
+                                properties:
+                                  displayName:
+                                    nullable: true
+                                    type: string
+                                  iconUri:
+                                    nullable: true
+                                    type: string
+                                  id:
+                                    nullable: true
+                                    type: string
+                                  name:
+                                    nullable: true
+                                    type: string
+                                  policies:
+                                    items:
+                                      properties:
+                                        config:
+                                          additionalProperties:
+                                            type: string
+                                          nullable: true
+                                          type: object
+                                        decisionStrategy:
+                                          enum:
+                                          - AFFIRMATIVE
+                                          - UNANIMOUS
+                                          - CONSENSUS
+                                          nullable: true
+                                          type: string
+                                        description:
+                                          nullable: true
+                                          type: string
+                                        id:
+                                          nullable: true
+                                          type: string
+                                        logic:
+                                          enum:
+                                          - POSITIVE
+                                          - NEGATIVE
+                                          nullable: true
+                                          type: string
+                                        name:
+                                          nullable: true
+                                          type: string
+                                        owner:
+                                          nullable: true
+                                          type: string
+                                        policies:
+                                          items:
+                                            type: string
+                                          nullable: true
+                                          type: array
+                                        resources:
+                                          items:
+                                            type: string
+                                          nullable: true
+                                          type: array
+                                        scopes:
+                                          items:
+                                            type: string
+                                          nullable: true
+                                          type: array
+                                        type:
+                                          nullable: true
+                                          type: string
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                    nullable: true
+                                    type: array
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                              nullable: true
+                              type: array
+                            scopesUma:
+                              items:
+                                properties:
+                                  displayName:
+                                    nullable: true
+                                    type: string
+                                  iconUri:
+                                    nullable: true
+                                    type: string
+                                  id:
+                                    nullable: true
+                                    type: string
+                                  name:
+                                    nullable: true
+                                    type: string
+                                  policies:
+                                    items:
+                                      properties:
+                                        config:
+                                          additionalProperties:
+                                            type: string
+                                          nullable: true
+                                          type: object
+                                        decisionStrategy:
+                                          enum:
+                                          - AFFIRMATIVE
+                                          - UNANIMOUS
+                                          - CONSENSUS
+                                          nullable: true
+                                          type: string
+                                        description:
+                                          nullable: true
+                                          type: string
+                                        id:
+                                          nullable: true
+                                          type: string
+                                        logic:
+                                          enum:
+                                          - POSITIVE
+                                          - NEGATIVE
+                                          nullable: true
+                                          type: string
+                                        name:
+                                          nullable: true
+                                          type: string
+                                        owner:
+                                          nullable: true
+                                          type: string
+                                        policies:
+                                          items:
+                                            type: string
+                                          nullable: true
+                                          type: array
+                                        resources:
+                                          items:
+                                            type: string
+                                          nullable: true
+                                          type: array
+                                        scopes:
+                                          items:
+                                            type: string
+                                          nullable: true
+                                          type: array
+                                        type:
+                                          nullable: true
+                                          type: string
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                    nullable: true
+                                    type: array
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                              nullable: true
+                              type: array
+                            type:
+                              nullable: true
+                              type: string
+                            uri:
+                              nullable: true
+                              type: string
+                            uris:
+                              items:
+                                type: string
+                              nullable: true
+                              type: array
+                          type: object
+                        nullable: true
+                        type: array
+                      scopes:
+                        items:
+                          properties:
+                            displayName:
+                              nullable: true
+                              type: string
+                            iconUri:
+                              nullable: true
+                              type: string
+                            id:
+                              nullable: true
+                              type: string
+                            name:
+                              nullable: true
+                              type: string
+                            policies:
+                              items:
+                                properties:
+                                  config:
+                                    additionalProperties:
+                                      type: string
+                                    nullable: true
+                                    type: object
+                                  decisionStrategy:
+                                    enum:
+                                    - AFFIRMATIVE
+                                    - UNANIMOUS
+                                    - CONSENSUS
+                                    nullable: true
+                                    type: string
+                                  description:
+                                    nullable: true
+                                    type: string
+                                  id:
+                                    nullable: true
+                                    type: string
+                                  logic:
+                                    enum:
+                                    - POSITIVE
+                                    - NEGATIVE
+                                    nullable: true
+                                    type: string
+                                  name:
+                                    nullable: true
+                                    type: string
+                                  owner:
+                                    nullable: true
+                                    type: string
+                                  policies:
+                                    items:
+                                      type: string
+                                    nullable: true
+                                    type: array
+                                  resources:
+                                    items:
+                                      type: string
+                                    nullable: true
+                                    type: array
+                                  resourcesData:
+                                    items:
+                                      properties:
+                                        _id:
+                                          nullable: true
+                                          type: string
+                                        attributes:
+                                          additionalProperties:
+                                            items:
+                                              type: string
+                                            type: array
+                                          nullable: true
+                                          type: object
+                                        displayName:
+                                          nullable: true
+                                          type: string
+                                        icon_uri:
+                                          nullable: true
+                                          type: string
+                                        name:
+                                          nullable: true
+                                          type: string
+                                        owner:
+                                          nullable: true
+                                          properties:
+                                            id:
+                                              nullable: true
+                                              type: string
+                                            name:
+                                              nullable: true
+                                              type: string
+                                          type: object
+                                        ownerManagedAccess:
+                                          nullable: true
+                                          type: boolean
+                                        type:
+                                          nullable: true
+                                          type: string
+                                        uri:
+                                          nullable: true
+                                          type: string
+                                        uris:
+                                          items:
+                                            type: string
+                                          nullable: true
+                                          type: array
+                                      type: object
+                                      x-kubernetes-preserve-unknown-fields: true
+                                    nullable: true
+                                    type: array
+                                  scopes:
+                                    items:
+                                      type: string
+                                    nullable: true
+                                    type: array
+                                  type:
+                                    nullable: true
+                                    type: string
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                              nullable: true
+                              type: array
+                            resources:
+                              items:
+                                properties:
+                                  _id:
+                                    nullable: true
+                                    type: string
+                                  attributes:
+                                    additionalProperties:
+                                      items:
+                                        type: string
+                                      type: array
+                                    nullable: true
+                                    type: object
+                                  displayName:
+                                    nullable: true
+                                    type: string
+                                  icon_uri:
+                                    nullable: true
+                                    type: string
+                                  name:
+                                    nullable: true
+                                    type: string
+                                  owner:
+                                    nullable: true
+                                    properties:
+                                      id:
+                                        nullable: true
+                                        type: string
+                                      name:
+                                        nullable: true
+                                        type: string
+                                    type: object
+                                  ownerManagedAccess:
+                                    nullable: true
+                                    type: boolean
+                                  type:
+                                    nullable: true
+                                    type: string
+                                  uri:
+                                    nullable: true
+                                    type: string
+                                  uris:
+                                    items:
+                                      type: string
+                                    nullable: true
+                                    type: array
+                                type: object
+                                x-kubernetes-preserve-unknown-fields: true
+                              nullable: true
+                              type: array
+                          type: object
+                        nullable: true
+                        type: array
+                    type: object
+                  baseUrl:
+                    nullable: true
+                    type: string
+                  bearerOnly:
+                    nullable: true
+                    type: boolean
+                  clientAuthenticatorType:
+                    nullable: true
+                    type: string
+                  clientId:
+                    nullable: true
+                    type: string
+                  clientTemplate:
+                    nullable: true
+                    type: string
+                  consentRequired:
+                    nullable: true
+                    type: boolean
+                  defaultClientScopes:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  defaultRoles:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  description:
+                    nullable: true
+                    type: string
+                  directAccessGrantsEnabled:
+                    nullable: true
+                    type: boolean
+                  directGrantsOnly:
+                    nullable: true
+                    type: boolean
+                  enabled:
+                    nullable: true
+                    type: boolean
+                  frontchannelLogout:
+                    nullable: true
+                    type: boolean
+                  fullScopeAllowed:
+                    nullable: true
+                    type: boolean
+                  id:
+                    nullable: true
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  implicitFlowEnabled:
+                    nullable: true
+                    type: boolean
+                  name:
+                    nullable: true
+                    type: string
+                  nodeReRegistrationTimeout:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  notBefore:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  optionalClientScopes:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  origin:
+                    nullable: true
+                    type: string
+                  protocol:
+                    nullable: true
+                    type: string
+                  protocolMappers:
+                    items:
+                      properties:
+                        config:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        consentRequired:
+                          nullable: true
+                          type: boolean
+                        consentText:
+                          nullable: true
+                          type: string
+                        id:
+                          nullable: true
+                          type: string
+                        name:
+                          nullable: true
+                          type: string
+                        protocol:
+                          nullable: true
+                          type: string
+                        protocolMapper:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  publicClient:
+                    nullable: true
+                    type: boolean
+                  redirectUris:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  registeredNodes:
+                    additionalProperties:
+                      format: int32
+                      type: integer
+                    nullable: true
+                    type: object
+                  registrationAccessToken:
+                    nullable: true
+                    type: string
+                  rootUrl:
+                    nullable: true
+                    type: string
+                  secret:
+                    nullable: true
+                    type: string
+                  serviceAccountsEnabled:
+                    nullable: true
+                    type: boolean
+                  standardFlowEnabled:
+                    nullable: true
+                    type: boolean
+                  surrogateAuthRequired:
+                    nullable: true
+                    type: boolean
+                  type:
+                    nullable: true
+                    type: string
+                  useTemplateConfig:
+                    nullable: true
+                    type: boolean
+                  useTemplateMappers:
+                    nullable: true
+                    type: boolean
+                  useTemplateScope:
+                    nullable: true
+                    type: boolean
+                  webOrigins:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                type: object
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: has(self.id) == has(oldSelf.id)
+              options:
+                nullable: true
+                properties:
+                  mustCreate:
+                    nullable: true
+                    type: boolean
+                type: object
+              realmRef:
+                type: string
+            required:
+            - definition
+            - realmRef
+            type: object
+          status:
+            nullable: true
+            properties:
+              code:
+                format: uint32
+                minimum: 0.0
+                type: integer
+              message:
+                type: string
+              ready:
+                type: boolean
+              status:
+                type: string
+            required:
+            - code
+            - ready
+            type: object
+        required:
+        - spec
+        title: KeycloakClient
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
