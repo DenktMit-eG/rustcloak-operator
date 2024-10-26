@@ -2,26 +2,80 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "secret-sync-operator.serviceAccountName" . }}
+  name: {{ include "rustcloak-operator.serviceAccountName" . }}
   labels:
-    {{- include "secret-sync-operator.labels" . | nindent 4 }}
+    {{- include "rustcloak-operator.labels" . | nindent 4 }}
   {{- with .Values.serviceAccount.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 rules:
 - apiGroups:
+  - rustcloak.k8s.eboland.de
+  resources:
+    - keycloakapiobjects/status
+    - keycloakauthenticationflows/status
+    - keycloakauthenticatorconfigs/status
+    - keycloakclients/status
+    - keycloakclientscopes/status
+    - keycloakcomponents/status
+    - keycloakgroups/status
+    - keycloakidentityprovidermappers/status
+    - keycloakidentityproviders/status
+    - keycloakinstances/status
+    - keycloakorganizations/status
+    - keycloakprotocolmappers/status
+    - keycloakrealms/status
+    - keycloakrequiredactionproviders/status
+    - keycloakroles/status
+    - keycloakscopes/status
+    - keycloakusers/status
+  verbs:
+    - patch
+- apiGroups:
+  - rustcloak.k8s.eboland.de
+  resources:
+    - keycloakapiobjects
+    - keycloakauthenticationflows
+    - keycloakauthenticatorconfigs
+    - keycloakclients
+    - keycloakclientscopes
+    - keycloakcomponents
+    - keycloakgroups
+    - keycloakidentityprovidermappers
+    - keycloakidentityproviders
+    - keycloakinstances
+    - keycloakorganizations
+    - keycloakprotocolmappers
+    - keycloakrealms
+    - keycloakrequiredactionproviders
+    - keycloakroles
+    - keycloakscopes
+    - keycloakusers
+  verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - secrets
+  verbs:
+    - get
+    - list
+    - watch
+- apiGroups:
   - ""
   resources:
   - secrets
   verbs:
-  - "*"
-- apiGroups:
-  - ""
-  resources:
-  - namespaces
-  verbs:
-  - get
-  - list
-  - watch
+    - create
+    - update
+    - patch
+    - delete
 {{- end }}

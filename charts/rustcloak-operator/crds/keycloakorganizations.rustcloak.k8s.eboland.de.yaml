@@ -9,7 +9,7 @@ spec:
     kind: KeycloakOrganization
     plural: keycloakorganizations
     shortNames:
-    - kcc
+    - kcorg
     singular: keycloakorganization
   scope: Namespaced
   versions:

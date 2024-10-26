@@ -1,5 +1,8 @@
 replicaCount: 1
 
+application:
+  logLevel: "info"
+
 image:
   repository: withlazers/rustcloak-operator
   pullPolicy: IfNotPresent
@@ -30,10 +33,10 @@ securityContext:
 
 resources:
   limits:
-    cpu: 100m
+    #cpu: 100m
     memory: 128Mi
   requests:
-    cpu: 50m
+    #cpu: 50m
     memory: 128Mi
 
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
@@ -45,6 +48,9 @@ readinessProbe:
   httpGet:
     path: /healthz
     port: http
+
+service:
+  port: 8080
 
 nodeSelector: {}
 

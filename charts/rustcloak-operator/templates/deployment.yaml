@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "rustcloak-operator.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "rustcloak-operator.selectorLabels" . | nindent 6 }}
@@ -36,6 +34,12 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - --metrics-addr
+            - 0.0.0.0:8080
+          env:
+            - name: RUST_LOG
+              value: {{ .Values.application.logLevel }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
