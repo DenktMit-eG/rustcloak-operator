@@ -54,7 +54,7 @@ impl OAuth2Token {
 /// authenticated client by either providing an [`OAuth2Token`] or providing a username and
 /// password.
 #[derive(Debug, Builder, Clone)]
-pub struct KeycloakAuth {
+pub struct KeycloakApiAuth {
     #[builder(setter(into))]
     url: String,
     #[builder(setter(into), default = "self.default_realm()")]
@@ -73,7 +73,7 @@ pub struct KeycloakAuth {
     http_client: reqwest::Client,
 }
 
-impl KeycloakAuthBuilder {
+impl KeycloakApiAuthBuilder {
     fn default_realm(&self) -> String {
         "master".to_string()
     }
@@ -107,11 +107,11 @@ impl KeycloakAuthBuilder {
     }
 }
 
-impl KeycloakAuth {
+impl KeycloakApiAuth {
     /// Creates a new KeycloakAuth struct with the given URL. If you need more customization, you
     /// can use the [`KeycloakAuthBuilder`] struct.
     pub fn new(url: &str) -> Self {
-        KeycloakAuthBuilder::default()
+        KeycloakApiAuthBuilder::default()
             .url(url.to_string())
             .build()
             .unwrap()
@@ -123,7 +123,7 @@ impl KeycloakAuth {
         self,
         user_name: &str,
         password: &str,
-    ) -> Result<KeycloakClient> {
+    ) -> Result<KeycloakApiClient> {
         debug!("Logging in with user {}", user_name);
 
         let user = ResourceOwnerUsername::new(user_name.to_string());
@@ -136,27 +136,27 @@ impl KeycloakAuth {
             .await?;
         debug!("Successfully logged in with user {}", user_name);
 
-        Ok(KeycloakClient::new(self, OAuth2Token::create(token)))
+        Ok(KeycloakApiClient::new(self, OAuth2Token::create(token)))
     }
 
     /// Creates a new [`KeycloakClient`] using a given [`OAuth2Token`]. There is no checking done
     /// to verify that this token is valid.
-    pub fn into_client(self, token: OAuth2Token) -> KeycloakClient {
-        KeycloakClient::new(self, token)
+    pub fn into_client(self, token: OAuth2Token) -> KeycloakApiClient {
+        KeycloakApiClient::new(self, token)
     }
 }
 
 /// This struct provides the functionality to interact with a Keycloak server. For the creation of
 /// this client, see [`KeycloakAuth`].
 #[derive(Debug, Clone)]
-pub struct KeycloakClient {
-    auth: KeycloakAuth,
+pub struct KeycloakApiClient {
+    auth: KeycloakApiAuth,
     token: OAuth2Token,
 }
 
-impl KeycloakClient {
-    fn new(auth: KeycloakAuth, token: OAuth2Token) -> Self {
-        KeycloakClient { auth, token }
+impl KeycloakApiClient {
+    fn new(auth: KeycloakApiAuth, token: OAuth2Token) -> Self {
+        KeycloakApiClient { auth, token }
     }
 
     fn request_url(

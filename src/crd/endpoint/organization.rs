@@ -12,7 +12,7 @@ use super::KeycloakRealm;
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
     kind = "KeycloakOrganization",
-    shortname = "kcc",
+    shortname = "kcorg",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

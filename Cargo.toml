@@ -29,3 +29,9 @@ http = "1.1.0"
 async-stream = "0.3.6"
 actix-web = "4.9.0"
 either = { version = "1.13.0", features = ["serde"] }
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+panic = "abort"

@@ -1,7 +1,8 @@
-use std::{ops::Deref, sync::Arc};
-
+use super::controller_runner::LifecycleController;
+use crate::crd::KeycloakApiObject;
+use crate::util::RefWatcher;
 use crate::{
-    api::KeycloakClient,
+    api::KeycloakApiClient,
     app_id,
     crd::{KeycloakApiStatus, KeycloakInstance},
     error::{Error, Result},
@@ -9,7 +10,11 @@ use crate::{
 };
 use async_stream::stream;
 use async_trait::async_trait;
-use k8s_openapi::DeepMerge;
+use k8s_openapi::{
+    api::core::v1::{ConfigMap, Secret},
+    DeepMerge,
+};
+use kube::runtime::watcher;
 use kube::{
     api::PatchParams,
     runtime::{controller::Action, Controller},
@@ -18,30 +23,23 @@ use kube::{
 use log::trace;
 use reqwest::{Method, Response};
 use serde_json::Value;
+use std::{ops::Deref, sync::Arc};
 use tokio::sync::Notify;
-
-use super::controller_runner::LifecycleController;
-use crate::crd::KeycloakApiObject;
 
 /// This controller is responsible for applying the desired keycloak state in kubernetes to a
 /// keycloak instance.
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct KeycloakApiObjectController {
     reconcile_notify: Arc<Notify>,
-}
-
-impl Default for KeycloakApiObjectController {
-    fn default() -> Self {
-        let reconcile_notify = Arc::new(Notify::new());
-        Self { reconcile_notify }
-    }
+    secret_refs: Arc<RefWatcher<KeycloakApiObject, Secret>>,
+    config_map_refs: Arc<RefWatcher<KeycloakApiObject, ConfigMap>>,
 }
 
 impl KeycloakApiObjectController {
     async fn keycloak(
         client: &kube::Client,
         resource: &KeycloakApiObject,
-    ) -> Result<KeycloakClient> {
+    ) -> Result<KeycloakApiClient> {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let instance_api =
             Api::<KeycloakInstance>::namespaced(client.clone(), &ns);
@@ -59,7 +57,7 @@ impl KeycloakApiObjectController {
 
     async fn request(
         &self,
-        client: &KeycloakClient,
+        client: &KeycloakApiClient,
         method: Method,
         path: &str,
         payload: &Value,
@@ -88,15 +86,28 @@ impl LifecycleController for KeycloakApiObjectController {
     fn prepare(
         &self,
         controller: Controller<Self::Resource>,
-        _client: &kube::Client,
+        client: &kube::Client,
     ) -> Controller<Self::Resource> {
         let notify = self.reconcile_notify.clone();
-        controller.reconcile_all_on(stream! {
-            loop {
-                notify.notified().await;
-                yield;
-            }
-        })
+        let secret_refs = self.secret_refs.clone();
+        let config_map_refs = self.config_map_refs.clone();
+        let secret_api = Api::<Secret>::all(client.clone());
+        let config_map_api = Api::<ConfigMap>::all(client.clone());
+        controller
+            .reconcile_all_on(stream! {
+                loop {
+                    notify.notified().await;
+                    yield;
+                }
+            })
+            .watches(secret_api, watcher::Config::default(), move |secret| {
+                secret_refs.watch(&secret)
+            })
+            .watches(
+                config_map_api,
+                watcher::Config::default(),
+                move |config_map| config_map_refs.watch(&config_map),
+            )
     }
 
     async fn apply(
@@ -130,6 +141,19 @@ impl LifecycleController for KeycloakApiObjectController {
         )
         .await?;
 
+        let ref_iter = resource
+            .spec
+            .vars
+            .iter()
+            .filter_map(|v| v.value_from.as_ref());
+        let secret_refs = ref_iter
+            .clone()
+            .filter_map(|v| v.secret_key_ref.as_ref().map(|r| &r.name));
+        self.secret_refs.add(&resource, secret_refs);
+        let config_map_refs = ref_iter
+            .filter_map(|v| v.config_map_key_ref.as_ref().map(|r| &r.name));
+        self.config_map_refs.add(&resource, config_map_refs);
+
         Ok(Action::await_change())
     }
 
@@ -142,6 +166,9 @@ impl LifecycleController for KeycloakApiObjectController {
         let keycloak = Self::keycloak(client, &resource).await?;
         self.request(&keycloak, Method::DELETE, path, &Value::Null)
             .await?;
+
+        self.secret_refs.remove(&resource);
+        self.config_map_refs.remove(&resource);
 
         // If we delete a resource, we let the controller reconcile all objects, so that
         // the resources that depend on the deleted resource are starting to fail.

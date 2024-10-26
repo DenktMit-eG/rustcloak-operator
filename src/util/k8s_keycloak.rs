@@ -1,5 +1,7 @@
 use crate::{
-    api::{KeycloakAuth, KeycloakAuthBuilder, KeycloakClient, OAuth2Token},
+    api::{
+        KeycloakApiAuth, KeycloakApiAuthBuilder, KeycloakApiClient, OAuth2Token,
+    },
     app_id,
     crd::{KeycloakApiStatus, KeycloakInstance},
     error::{Error, Result},
@@ -10,11 +12,12 @@ use k8s_openapi::api::core::v1::Secret;
 use kube::{
     api::{Patch, PatchParams},
     core::object::HasStatus,
+    runtime::reflector::ObjectRef,
     Api, ResourceExt,
 };
 use log::{debug, warn};
 use oauth2::{ClientId, ClientSecret};
-use std::{collections::HashMap, sync::Arc, time::Duration};
+use std::{collections::HashMap, ops::Deref, sync::Arc, time::Duration};
 use tokio::{
     sync::{Mutex, MutexGuard, Notify},
     task::JoinHandle,
@@ -24,7 +27,7 @@ use tokio::{
 use super::SecretUtils;
 
 pub struct K8sKeycloakBuilder<'a> {
-    auth: KeycloakAuth,
+    auth: KeycloakApiAuth,
     instance: &'a KeycloakInstance,
     client: &'a kube::Client,
 }
@@ -34,7 +37,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
         instance: &'a KeycloakInstance,
         client: &'a kube::Client,
     ) -> Self {
-        let mut builder = KeycloakAuthBuilder::default();
+        let mut builder = KeycloakApiAuthBuilder::default();
         builder.url(instance.spec.base_url.clone());
         if let Some(realm) = &instance.spec.realm {
             builder.realm(realm.clone());
@@ -54,7 +57,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
         }
     }
 
-    pub async fn with_credentials(self) -> Result<KeycloakClient> {
+    pub async fn with_credentials(self) -> Result<KeycloakApiClient> {
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
         let secret_api = Api::<Secret>::namespaced(self.client.clone(), &ns);
         let credential_secret_name =
@@ -70,7 +73,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
         self.auth.login_with_credentials(&user, &password).await
     }
 
-    pub async fn with_token(self) -> Result<KeycloakClient> {
+    pub async fn with_token(self) -> Result<KeycloakApiClient> {
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
         let secret_api = Api::<Secret>::namespaced(self.client.clone(), &ns);
         let token_secret_name = self.instance.token_secret_name().to_string();
@@ -86,7 +89,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
     }
 }
 
-pub struct K8sKeycloakRefreshJob {
+struct K8sKeycloakRefreshJob {
     instance: Arc<KeycloakInstance>,
     client: kube::Client,
     stopper: Arc<Notify>,
@@ -125,7 +128,7 @@ impl K8sKeycloakRefreshJob {
         Ok(())
     }
 
-    pub async fn keycloak_with_credentials(&self) -> Result<KeycloakClient> {
+    pub async fn keycloak_with_credentials(&self) -> Result<KeycloakApiClient> {
         let keycloak = self.keycloak_builder().with_credentials().await?;
 
         self.update_token_secret(keycloak.token()).await?;
@@ -133,7 +136,10 @@ impl K8sKeycloakRefreshJob {
         Ok(keycloak)
     }
 
-    pub async fn refresh(&self, keycloak: &mut KeycloakClient) -> Result<()> {
+    pub async fn refresh(
+        &self,
+        keycloak: &mut KeycloakApiClient,
+    ) -> Result<()> {
         keycloak.refresh().await?;
 
         self.update_token_secret(keycloak.token()).await?;
@@ -141,7 +147,7 @@ impl K8sKeycloakRefreshJob {
         Ok(())
     }
 
-    pub async fn keycloak_with_token(&self) -> Result<KeycloakClient> {
+    pub async fn keycloak_with_token(&self) -> Result<KeycloakApiClient> {
         let mut keycloak = self.keycloak_builder().with_token().await?;
         let now = chrono::Utc::now();
 
@@ -150,16 +156,18 @@ impl K8sKeycloakRefreshJob {
         } else {
             // ping keycloak to make sure it's available
             keycloak
-                .request(Method::GET, "")
+                .request(Method::GET, "admin/realms")
                 .send()
                 .await?
-                .error_for_status()?;
+                .error_for_status()?
+                .json::<serde_json::Value>()
+                .await?;
         }
 
         Ok(keycloak)
     }
 
-    pub async fn keycloak_from_somewhere(&self) -> Result<KeycloakClient> {
+    pub async fn keycloak_from_somewhere(&self) -> Result<KeycloakApiClient> {
         debug!("Trying to get keycloak client, trying token first.");
         match self.keycloak_with_token().await {
             Err(e) => {
@@ -223,7 +231,7 @@ impl K8sKeycloakRefreshJob {
 }
 
 type RefreshStoreInner =
-    HashMap<(String, String), (JoinHandle<()>, Arc<Notify>)>;
+    HashMap<ObjectRef<KeycloakInstance>, (JoinHandle<()>, Arc<Notify>)>;
 
 #[derive(Default, Debug)]
 struct RefreshStore(RefreshStoreInner);
@@ -244,8 +252,14 @@ impl Drop for RefreshStore {
 impl K8sKeycloakRefreshManager {
     pub async fn schedule_refresh(
         &self,
-        session_handler: K8sKeycloakRefreshJob,
+        resource: &Arc<KeycloakInstance>,
+        client: kube::Client,
     ) -> Result<()> {
+        let resource = resource.clone();
+        let mut jobs = self.jobs.lock().await;
+        self.cancel_refresh_locked(&mut jobs, &resource).await?;
+
+        let session_handler = K8sKeycloakRefreshJob::new(resource, client);
         let instance = &session_handler.instance;
         let ns = instance.namespace().ok_or(Error::NoNamespace)?;
         let name = instance.name_unchecked();
@@ -253,11 +267,7 @@ impl K8sKeycloakRefreshManager {
             session_handler.client.clone(),
             &ns,
         );
-        let key = (ns.to_string(), name.to_string());
-
-        let mut jobs = self.jobs.lock().await;
-        self.cancel_refresh_locked(&mut jobs, &session_handler)
-            .await?;
+        let key = ObjectRef::from(instance.deref());
 
         let keycloak = session_handler.keycloak_from_somewhere().await?;
 
@@ -288,11 +298,9 @@ impl K8sKeycloakRefreshManager {
     async fn cancel_refresh_locked(
         &self,
         jobs: &mut MutexGuard<'_, RefreshStore>,
-        keycloak: &K8sKeycloakRefreshJob,
+        instance: &KeycloakInstance,
     ) -> Result<()> {
-        let name = keycloak.instance.name_unchecked();
-        let ns = keycloak.instance.namespace().ok_or(Error::NoNamespace)?;
-        let key = (ns.to_string(), name.to_string());
+        let key = ObjectRef::from(instance);
 
         if let Some((handle, stopper)) = jobs.0.remove(&key) {
             stopper.notify_one();
@@ -303,9 +311,9 @@ impl K8sKeycloakRefreshManager {
 
     pub async fn cancel_refresh(
         &self,
-        keycloak: K8sKeycloakRefreshJob,
+        instance: &KeycloakInstance,
     ) -> Result<()> {
         let mut jobs = self.jobs.lock().await;
-        self.cancel_refresh_locked(&mut jobs, &keycloak).await
+        self.cancel_refresh_locked(&mut jobs, instance).await
     }
 }

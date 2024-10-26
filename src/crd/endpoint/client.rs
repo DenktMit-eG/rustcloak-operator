@@ -9,6 +9,14 @@ use serde::{Deserialize, Serialize};
 
 use super::KeycloakRealm;
 
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct KeycloakClientSecretReference {
+    pub secret_name: Option<String>,
+    pub client_id_key: Option<String>,
+    pub client_secret_key: Option<String>,
+}
+
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
     kind = "KeycloakClient",
@@ -25,6 +33,7 @@ pub struct KeycloakClientSpec {
     pub realm_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: ClientRepresentation,
+    pub client_secret: Option<KeycloakClientSecretReference>,
 }
 
 endpoint_impl!(KeycloakClient, ClientRepresentation, id, client);

@@ -1,7 +1,7 @@
 use k8s_openapi::api::core::v1::{ConfigMapKeySelector, SecretKeySelector};
 use thiserror::Error;
 
-use crate::api::KeycloakAuthBuilderError;
+use crate::api::KeycloakApiAuthBuilderError;
 
 type OAuth2TokenError = oauth2::RequestTokenError<
     oauth2::HttpClientError<reqwest::Error>,
@@ -54,8 +54,8 @@ pub enum Error {
     OauthParseError(#[from] oauth2::url::ParseError),
     #[error("Oauth Token Request error: {0}")]
     OAuth2TokenError(#[from] OAuth2TokenError),
-    #[error("KeycloakAuthBuilderError: {0}")]
-    KeycloakAuthBuilderError(#[from] KeycloakAuthBuilderError),
+    #[error("KeycloakApiAuthBuilderError: {0}")]
+    KeycloakAuthBuilderError(#[from] KeycloakApiAuthBuilderError),
     #[error("Borrow error: {0}")]
     BorrowError(#[from] std::cell::BorrowError),
     #[error("Send error: {0}")]
@@ -74,6 +74,12 @@ pub enum Error {
     NoRealm(String, String),
     #[error("IO Error: {0}")]
     IoError(#[from] std::io::Error),
+    #[error("Unknown Secret Type: {0}")]
+    UnknownSecretType(String),
+    #[error("No Client Id")]
+    NoClientId,
+    #[error("No Client Secret")]
+    NoClientSecret,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
