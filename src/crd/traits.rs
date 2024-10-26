@@ -56,10 +56,14 @@ macro_rules! endpoint_impl {
 }
 
 pub trait ChildOf {
-    type Parent;
+    type ParentType;
     type ParentRefType;
     fn sub_path(&self) -> &'static str;
     fn parent_ref(&self) -> Self::ParentRefType;
+}
+
+pub trait HasParentType {
+    type Parent;
 }
 
 #[macro_export]
@@ -67,7 +71,7 @@ macro_rules! child_of {
     ($name:ty, $parent:ty, $ref:ident, $sub_path:expr) => {
         use kube::core::object::HasSpec;
         impl $crate::crd::ChildOf for $name {
-            type Parent = $parent;
+            type ParentType = $parent;
             type ParentRefType = String;
             fn sub_path(&self) -> &'static str {
                 $sub_path
@@ -76,6 +80,9 @@ macro_rules! child_of {
             fn parent_ref(&self) -> Self::ParentRefType {
                 self.spec().$ref.to_string()
             }
+        }
+        impl $crate::crd::HasParentType for $name {
+            type Parent = $parent;
         }
     };
 }

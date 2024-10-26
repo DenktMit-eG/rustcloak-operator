@@ -33,7 +33,7 @@ endpoint_impl!(KeycloakClientScope, ClientScopeRepresentation, id, cs);
 
 impl ChildOf for KeycloakClientScope {
     type ParentRefType = String;
-    type Parent = KeycloakRealm;
+    type ParentType = KeycloakRealm;
     fn sub_path(&self) -> &'static str {
         if self.spec.is_template.unwrap_or(false) {
             "client-scopes"

@@ -2,10 +2,8 @@ use std::{sync::Arc, time::Duration};
 
 use crate::{
     app_id,
-    crd::{
-        HasEndpoint, KeycloakApiStatus, KeycloakClient, KeycloakInstance,
-        KeycloakRealm,
-    },
+    crd::{KeycloakApiStatus, KeycloakClient, KeycloakInstance},
+    endpoint::{Hierarchy, HierarchyQuery},
     error::Result,
     util::K8sKeycloakBuilder,
 };
@@ -89,21 +87,17 @@ impl KeycloakClientSecretController {
         resource: Arc<KeycloakClient>,
         ctx: Arc<Self>,
     ) -> Result<Action> {
+        let client = &ctx.client;
+        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let secret_ref =
             resource.spec.client_secret.clone().unwrap_or_default();
 
-        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-
-        let client = &ctx.client;
+        let hierarchy =
+            Hierarchy::<KeycloakClient>::query(&resource, client.clone())
+                .await?;
         let secret_api: Api<Secret> = Api::namespaced(client.clone(), &ns);
-        let realm_api: Api<KeycloakRealm> =
-            Api::namespaced(client.clone(), &ns);
         let instance_api: Api<KeycloakInstance> =
             Api::namespaced(client.clone(), &ns);
-
-        let realm = realm_api.get(&resource.spec.realm_ref).await?;
-        let instance = instance_api.get(&realm.spec.instance_ref).await?;
-
         let client_id_key = secret_ref
             .client_id_key
             .clone()
@@ -112,12 +106,9 @@ impl KeycloakClientSecretController {
             .client_secret_key
             .clone()
             .unwrap_or("client_secret".to_string());
+        let instance = instance_api.get(hierarchy.instance_ref()).await?;
 
-        let path = format!(
-            "admin/realms/{}/clients/{}/client-secret",
-            realm.primary_key_value(),
-            resource.primary_key_value()
-        );
+        let path = format!("{}/client-secret", hierarchy.path());
 
         let keycloak = K8sKeycloakBuilder::new(&instance, client)
             .with_token()

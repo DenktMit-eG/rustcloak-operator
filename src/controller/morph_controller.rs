@@ -3,12 +3,16 @@ use std::sync::Arc;
 use super::controller_runner::LifecycleController;
 use crate::{
     app_id,
-    crd::{HasEndpoint, KeycloakApiObject, KeycloakApiObjectSpec},
-    endpoint::Resolver,
+    crd::{
+        ChildOf, HasEndpoint, HasParentType, KeycloakApiEndpoint,
+        KeycloakApiObject, KeycloakApiObjectSpec,
+    },
+    endpoint::{HasHierarchy, Hierarchy, HierarchyQuery},
     error::{Error, Result},
     morph::Morph,
 };
 use async_trait::async_trait;
+use k8s_openapi::NamespaceResourceScope;
 use kube::{
     api::{ObjectMeta, Patch, PatchParams},
     runtime::{controller::Action, watcher, Controller},
@@ -19,11 +23,11 @@ use serde::{de::DeserializeOwned, Serialize};
 use serde_json::json;
 
 #[derive(Debug)]
-pub struct MorphController<T: Resolver> {
+pub struct MorphController<T: HasParentType> {
     phantom: std::marker::PhantomData<T>,
 }
 
-impl<T: Resolver> Default for MorphController<T> {
+impl<T: HasParentType> Default for MorphController<T> {
     fn default() -> Self {
         Self {
             phantom: std::marker::PhantomData,
@@ -34,10 +38,13 @@ impl<T: Resolver> Default for MorphController<T> {
 #[async_trait]
 impl<R> LifecycleController for MorphController<R>
 where
-    R: Resolver
+    R: HasParentType
         + Morph
+        + HasHierarchy
         + HasEndpoint
-        + Resource<DynamicType = ()>
+        + HasParentType
+        + ChildOf
+        + Resource<DynamicType = (), Scope = NamespaceResourceScope>
         + Send
         + Sync
         + 'static
@@ -45,6 +52,15 @@ where
         + std::fmt::Debug
         + Serialize
         + DeserializeOwned,
+    R::Parent: Resource<DynamicType = (), Scope = NamespaceResourceScope>
+        + Clone
+        + std::fmt::Debug
+        + DeserializeOwned
+        + Send
+        + Sync
+        + 'static,
+    R::HierarchyParent: HierarchyQuery<Object = R::Parent> + Sync + Send,
+    R::ParentRefType: AsRef<str> + Sync + Send,
 {
     type Resource = R;
 
@@ -85,7 +101,14 @@ where
         .into();
         let payload = payload.into();
 
-        let endpoint = resource.resolve(client.clone()).await?;
+        let hierarchy =
+            Hierarchy::<Self::Resource>::query(&resource, client.clone())
+                .await?;
+        let endpoint = KeycloakApiEndpoint {
+            instance_ref: hierarchy.instance_ref().to_string().into(),
+            path: hierarchy.path().into(),
+        };
+        //let endpoint = resource.resolve(client.clone()).await?;
         debug!("Resolved endpoint: {:?}", endpoint);
 
         let api_object = KeycloakApiObject {

@@ -45,7 +45,7 @@ pub struct KeycloakProtocolMapperSpec {
 endpoint_impl!(KeycloakProtocolMapper, ProtocolMapperRepresentation, id, pm);
 
 impl ChildOf for KeycloakProtocolMapper {
-    type Parent = Either<KeycloakClient, KeycloakClientScope>;
+    type ParentType = Either<KeycloakClient, KeycloakClientScope>;
     type ParentRefType = Either<String, String>;
     fn sub_path(&self) -> &'static str {
         "protocol-mappers/models"

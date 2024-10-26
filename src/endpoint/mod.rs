@@ -1,7 +1,8 @@
 use crate::{
     crd::{
-        ChildOf, HasEndpoint, KeycloakApiEndpoint, KeycloakClient,
-        KeycloakClientScope, KeycloakProtocolMapper, KeycloakRealm,
+        ChildOf, HasEndpoint, HasParentType, KeycloakApiEndpoint,
+        KeycloakClient, KeycloakClientScope, KeycloakProtocolMapper,
+        KeycloakRealm,
     },
     error::{Error, Result},
 };
@@ -10,6 +11,119 @@ use either::Either;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{Api, Resource, ResourceExt};
 use serde::{de::DeserializeOwned, Serialize};
+use std::sync::Arc;
+
+pub trait HasHierarchy {
+    type HierarchyParent;
+}
+
+impl HasHierarchy for KeycloakRealm {
+    type HierarchyParent = ();
+}
+
+impl<P: HasHierarchy + Resource, T: HasParentType<Parent = P>> HasHierarchy
+    for T
+{
+    type HierarchyParent = Hierarchy<P>;
+}
+
+pub struct Hierarchy<O>
+where
+    O: HasHierarchy + Resource,
+{
+    pub object: Arc<O>,
+    pub parent: O::HierarchyParent,
+}
+
+#[async_trait]
+pub trait HierarchyQuery
+where
+    Self: Sized + Send + Sync,
+{
+    type Object;
+    fn path(&self) -> String;
+
+    fn instance_ref(&self) -> &str;
+
+    async fn query(
+        object: &Arc<Self::Object>,
+        client: kube::Client,
+    ) -> Result<Self>;
+}
+
+#[async_trait]
+impl HierarchyQuery for Hierarchy<KeycloakRealm> {
+    type Object = KeycloakRealm;
+
+    fn instance_ref(&self) -> &str {
+        &self.object.spec.instance_ref
+    }
+
+    fn path(&self) -> String {
+        format!("admin/realms/{}", self.object.primary_key_value())
+    }
+
+    async fn query(
+        object: &Arc<Self::Object>,
+        _client: kube::Client,
+    ) -> Result<Self> {
+        Ok(Self {
+            object: object.clone(),
+            parent: (),
+        })
+    }
+}
+
+#[async_trait]
+impl<O> HierarchyQuery for Hierarchy<O>
+where
+    O: Resource<DynamicType = (), Scope = NamespaceResourceScope>
+        + HasHierarchy
+        + HasParentType
+        + ChildOf
+        + Clone
+        + HasEndpoint
+        + std::fmt::Debug
+        + DeserializeOwned
+        + Send
+        + Sync,
+    O::ParentRefType: AsRef<str> + Send + Sync,
+    O::HierarchyParent: HierarchyQuery<Object = O::Parent> + Send + Sync,
+    O::Parent: Resource<DynamicType = (), Scope = NamespaceResourceScope>
+        + Clone
+        + std::fmt::Debug
+        + DeserializeOwned
+        + Send
+        + Sync,
+{
+    type Object = O;
+
+    fn path(&self) -> String {
+        format!(
+            "{}/{}/{}",
+            self.parent.path(),
+            self.object.sub_path(),
+            self.object.primary_key_value()
+        )
+    }
+
+    fn instance_ref(&self) -> &str {
+        self.parent.instance_ref()
+    }
+
+    async fn query(object: &Arc<O>, client: kube::Client) -> Result<Self> {
+        let client = client.clone();
+        let object = object.clone();
+        let ns = object.namespace().ok_or(Error::NoNamespace)?;
+        let parent_ref = object.parent_ref();
+        let parent = Api::<O::Parent>::namespaced(client.clone(), &ns)
+            .get(parent_ref.as_ref())
+            .await?;
+        let parent = Arc::new(parent);
+        let parent = O::HierarchyParent::query(&parent, client).await?;
+        Ok(Self { object, parent })
+    }
+}
 
 #[async_trait]
 pub trait Resolver
@@ -44,7 +158,7 @@ where
         + Serialize,
     T: Resource<DynamicType = (), Scope = NamespaceResourceScope>
         + HasEndpoint
-        + ChildOf<Parent = P, ParentRefType = String>
+        + ChildOf<ParentType = P, ParentRefType = String>
         + Send,
     Self: Send + Sync,
 {
