@@ -4,7 +4,7 @@ use super::controller_runner::LifecycleController;
 use crate::{
     app_id,
     crd::{
-        ChildOf, HasEndpoint, HasParentType, KeycloakApiEndpoint,
+        ChildOf, HasApiObject, HasParentType, KeycloakApiEndpoint,
         KeycloakApiObject, KeycloakApiObjectSpec,
     },
     endpoint::{HasHierarchy, Hierarchy, HierarchyQuery},
@@ -41,7 +41,7 @@ where
     R: HasParentType
         + Morph
         + HasHierarchy
-        + HasEndpoint
+        + HasApiObject
         + HasParentType
         + ChildOf
         + Resource<DynamicType = (), Scope = NamespaceResourceScope>

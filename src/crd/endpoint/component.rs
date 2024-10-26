@@ -1,5 +1,5 @@
 use crate::crd::{
-    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    api_object_impl, child_of, schema_patch, HasApiObject,
     KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ComponentRepresentation;
@@ -27,8 +27,10 @@ pub struct KeycloakComponentSpec {
     pub definition: ComponentRepresentation,
 }
 
-endpoint_impl!(KeycloakComponent, ComponentRepresentation, id, component);
+api_object_impl!(KeycloakComponent, ComponentRepresentation, id, component);
 
 child_of!(KeycloakComponent, KeycloakRealm, realm_ref, "components");
+
+crate::crd::route_impl!(KeycloakRealm / "components" / id: KeycloakComponent .. realm_ref: String);
 
 schema_patch!(KeycloakComponent);

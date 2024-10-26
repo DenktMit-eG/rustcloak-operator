@@ -1,5 +1,5 @@
 use crate::crd::{
-    endpoint_impl, schema_patch, ChildOf, HasEndpoint,
+    api_object_impl, schema_patch, ChildOf, HasApiObject,
     KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ClientScopeRepresentation;
@@ -29,7 +29,7 @@ pub struct KeycloakClientScopeSpec {
     pub definition: ClientScopeRepresentation,
 }
 
-endpoint_impl!(KeycloakClientScope, ClientScopeRepresentation, id, cs);
+api_object_impl!(KeycloakClientScope, ClientScopeRepresentation, id, cs);
 
 impl ChildOf for KeycloakClientScope {
     type ParentRefType = String;
@@ -46,5 +46,13 @@ impl ChildOf for KeycloakClientScope {
         self.spec.realm_ref.clone()
     }
 }
+
+crate::crd::route_impl!(<KeycloakRealm> / |x| {
+    if x.spec.is_template.unwrap_or(false) {
+        "client-scopes"
+    } else {
+        "client-templates"
+    }
+} / id: KeycloakClientScope .. realm_ref: String);
 
 schema_patch!(KeycloakClientScope);

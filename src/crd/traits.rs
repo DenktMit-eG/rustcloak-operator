@@ -3,7 +3,7 @@ use kube::{Resource, ResourceExt};
 use schemars::JsonSchema;
 use serde::Serialize;
 
-pub trait HasEndpoint
+pub trait HasApiObject
 where
     Self: Resource + Sized,
     Self::Definition: JsonSchema + Serialize,
@@ -26,9 +26,9 @@ where
 
 // sed 's/\$ref.*//; s/^\* spec\.validation\.openAPIV3Schema\.properties\[spec\]\.properties\[definition\]/s/; s/\.properties\[\([^]]*\)\]/.prop("\1")/g; s/\.items\./.array_item()./g; s/\.prop("\([^"]*\)")\.array_items()\.$/.remove("\1");/'
 #[macro_export]
-macro_rules! endpoint_impl {
+macro_rules! api_object_impl {
     ($name:ty, $def:ty, $primary_key:ident, $prefix:ident) => {
-        impl $crate::crd::HasEndpoint for $name {
+        impl $crate::crd::HasApiObject for $name {
             type Definition = $def;
             fn definition(&self) -> &Self::Definition {
                 &self.spec.definition
@@ -87,5 +87,51 @@ macro_rules! child_of {
     };
 }
 
+pub trait HasRoute {
+    type ParentType;
+    type ParentRefType;
+    fn id_ident() -> &'static str;
+    fn route(&self) -> &'static str;
+    fn id(&self) -> Option<&String>;
+    fn route_parent_ref(&self) -> &Self::ParentRefType;
+}
+
+#[macro_export]
+macro_rules! route_impl {
+
+    (<$parent_ty:ty> / |$self_p:ident| $route:block / $id:ident: $self_ty:ident .. $ref:ident: $ref_ty:ty) => {
+        impl $crate::crd::HasRoute for $self_ty {
+            type ParentType = $parent_ty;
+            type ParentRefType = $ref_ty;
+
+            fn id_ident() -> &'static str {
+                stringify!($id)
+            }
+
+            fn id(&self) -> Option<&String> {
+                use kube::core::object::HasSpec;
+                self.spec().definition.$id.as_ref()
+            }
+
+            fn route(&self) -> &'static str {
+                let $self_p = self;
+                $route
+            }
+
+            fn route_parent_ref(&self) -> &Self::ParentRefType {
+                use kube::core::object::HasSpec;
+                &self.spec().$ref
+            }
+        }
+    };
+    (<$parent_ty:ty> / $route:literal / $id:ident: $self_ty:ident .. $ref:ident: $ref_ty:ty) => {
+        $crate::route_impl!(<$parent_ty> / |_x| { $route } / $id: $self_ty .. $ref: $ref_ty);
+    };
+    ($parent_ty:ident / $route:literal / $id:ident: $self_ty:ident .. $ref:ident: $ref_ty:ty) => {
+        $crate::route_impl!(<$parent_ty> / |_x| { $route } / $id: $self_ty .. $ref: $ref_ty);
+    };
+}
+
+pub use api_object_impl;
 pub use child_of;
-pub use endpoint_impl;
+pub use route_impl;

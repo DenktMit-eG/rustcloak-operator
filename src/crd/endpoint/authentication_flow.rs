@@ -1,5 +1,5 @@
 use crate::crd::{
-    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    api_object_impl, child_of, route_impl, schema_patch, HasApiObject,
     KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::AuthenticationFlowRepresentation;
@@ -27,7 +27,7 @@ pub struct KeycloakAuthenticationFlowSpec {
     pub definition: AuthenticationFlowRepresentation,
 }
 
-endpoint_impl!(
+api_object_impl!(
     KeycloakAuthenticationFlow,
     AuthenticationFlowRepresentation,
     id,
@@ -40,5 +40,7 @@ child_of!(
     realm_ref,
     "authentication/flows"
 );
+
+route_impl!(KeycloakRealm / "authentication/flows" / id: KeycloakAuthenticationFlow .. realm_ref: String);
 
 schema_patch!(KeycloakAuthenticationFlow);

@@ -1,11 +1,13 @@
 use crate::crd::{
-    endpoint_impl, schema_patch, HasEndpoint, KeycloakApiObjectOptions,
+    api_object_impl, schema_patch, HasApiObject, KeycloakApiObjectOptions,
     KeycloakApiStatus,
 };
 use keycloak::types::ResourceRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
+
+use super::KeycloakRealm;
 
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
@@ -25,6 +27,8 @@ pub struct KeycloakResourceSpec {
     pub definition: ResourceRepresentation,
 }
 
-endpoint_impl!(KeycloakResource, ResourceRepresentation, id, resource);
+crate::crd::route_impl!(KeycloakRealm / "authz/resource-server/resource" / id: KeycloakResource .. realm_ref: String);
+
+api_object_impl!(KeycloakResource, ResourceRepresentation, id, resource);
 
 schema_patch!(KeycloakResource);

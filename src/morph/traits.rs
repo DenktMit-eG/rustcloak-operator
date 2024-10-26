@@ -4,7 +4,7 @@ use kube::Resource;
 use serde::Serialize;
 use serde_json::Value;
 
-use crate::crd::HasEndpoint;
+use crate::crd::HasApiObject;
 
 pub trait Morph {
     fn payload(&self) -> Result<Value>;
@@ -13,7 +13,7 @@ pub trait Morph {
 
 impl<T> Morph for T
 where
-    T: Resource + HasEndpoint,
+    T: Resource + HasApiObject,
     T::Definition: Serialize,
 {
     fn payload(&self) -> Result<Value> {

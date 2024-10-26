@@ -1,5 +1,5 @@
 use crate::crd::{
-    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    api_object_impl, child_of, schema_patch, HasApiObject,
     KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::OrganizationRepresentation;
@@ -27,7 +27,7 @@ pub struct KeycloakOrganizationSpec {
     pub definition: OrganizationRepresentation,
 }
 
-endpoint_impl!(KeycloakOrganization, OrganizationRepresentation, id, org);
+api_object_impl!(KeycloakOrganization, OrganizationRepresentation, id, org);
 
 child_of!(
     KeycloakOrganization,
@@ -35,5 +35,7 @@ child_of!(
     realm_ref,
     "organizations"
 );
+
+crate::crd::route_impl!(KeycloakRealm / "organizations" / id: KeycloakOrganization .. realm_ref: String);
 
 schema_patch!(KeycloakOrganization);

@@ -1,6 +1,6 @@
 use crate::crd::{
-    schema_patch, HasEndpoint, ImmutableString, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    schema_patch, HasApiObject, ImmutableString, KeycloakApiObjectOptions,
+    KeycloakApiStatus, KeycloakInstance,
 };
 use keycloak::types::RealmRepresentation;
 use kube::ResourceExt;
@@ -27,7 +27,7 @@ pub struct KeycloakRealmSpec {
     pub definition: RealmRepresentation,
 }
 
-impl HasEndpoint for KeycloakRealm {
+impl HasApiObject for KeycloakRealm {
     type Definition = RealmRepresentation;
     fn definition(&self) -> &Self::Definition {
         &self.spec.definition
@@ -51,6 +51,8 @@ impl HasEndpoint for KeycloakRealm {
         "realm"
     }
 }
+
+crate::crd::route_impl!(KeycloakInstance / "admin/realms" / realm: KeycloakRealm .. instance_ref: String);
 
 schema_patch!(KeycloakRealm: |s| {
     s.remove("groups")

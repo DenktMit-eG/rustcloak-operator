@@ -1,5 +1,5 @@
 use crate::crd::{
-    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    api_object_impl, child_of, schema_patch, HasApiObject,
     KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::GroupRepresentation;
@@ -27,9 +27,11 @@ pub struct KeycloakGroupSpec {
     pub definition: GroupRepresentation,
 }
 
-endpoint_impl!(KeycloakGroup, GroupRepresentation, id, group);
+api_object_impl!(KeycloakGroup, GroupRepresentation, id, group);
 
 child_of!(KeycloakGroup, KeycloakRealm, realm_ref, "group");
+
+crate::crd::route_impl!(KeycloakRealm / "groups" / id: KeycloakGroup .. realm_ref: String);
 
 schema_patch!(KeycloakGroup: |s| {
     s.remove("subGroups");

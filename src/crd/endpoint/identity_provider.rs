@@ -1,5 +1,5 @@
 use crate::crd::{
-    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    api_object_impl, child_of, schema_patch, HasApiObject,
     KeycloakApiObjectOptions, KeycloakApiStatus, KeycloakRealm,
 };
 use keycloak::types::IdentityProviderRepresentation;
@@ -25,7 +25,7 @@ pub struct KeycloakIdentityProviderSpec {
     pub definition: IdentityProviderRepresentation,
 }
 
-endpoint_impl!(
+api_object_impl!(
     KeycloakIdentityProvider,
     IdentityProviderRepresentation,
     alias,
@@ -33,5 +33,7 @@ endpoint_impl!(
 );
 
 child_of!(KeycloakIdentityProvider, KeycloakRealm, realm_ref, "group");
+
+crate::crd::route_impl!(KeycloakRealm / "identity-provider/instances" / alias: KeycloakIdentityProvider .. realm_ref: String);
 
 schema_patch!(KeycloakIdentityProvider);

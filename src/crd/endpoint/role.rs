@@ -1,11 +1,14 @@
 use crate::crd::{
-    endpoint_impl, schema_patch, HasEndpoint, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    api_object_impl, schema_patch, ClientRef, HasApiObject,
+    KeycloakApiObjectOptions, KeycloakApiStatus, RealmRef,
 };
+use either::Either;
 use keycloak::types::RoleRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
+
+use super::{KeycloakClient, KeycloakRealm};
 
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
@@ -20,11 +23,14 @@ use serde::{Deserialize, Serialize};
 pub struct KeycloakRoleSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
-    pub realm_ref: String,
+    #[serde(flatten)]
+    pub parent_ref: Either<RealmRef, ClientRef>,
     #[schemars(schema_with = "schema")]
     pub definition: RoleRepresentation,
 }
 
-endpoint_impl!(KeycloakRole, RoleRepresentation, id, role);
+crate::crd::route_impl!(<Either<KeycloakRealm, KeycloakClient>> / "roles" / id: KeycloakRole .. parent_ref: Either<RealmRef, ClientRef>);
+
+api_object_impl!(KeycloakRole, RoleRepresentation, id, role);
 
 schema_patch!(KeycloakRole);

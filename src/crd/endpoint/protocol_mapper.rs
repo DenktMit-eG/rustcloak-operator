@@ -1,7 +1,7 @@
 use super::{KeycloakClient, KeycloakClientScope};
 use crate::crd::{
-    endpoint_impl, schema_patch, ChildOf, HasEndpoint,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, ChildOf, ClientRef, ClientScopeRef,
+    HasApiObject, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use either::Either;
 use keycloak::types::ProtocolMapperRepresentation;
@@ -9,20 +9,6 @@ use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "camelCase")]
-pub struct ClientRef {
-    /// This indicates that the ProtocolMapper is a child of a KeycloakClient. Mutually exclusive
-    /// with `clientScopeRef`
-    pub client_ref: String,
-}
-#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "camelCase")]
-pub struct ClientScopeRef {
-    /// This indicates that the ProtocolMapper is a child of a KeycloakClientScope. Mutually
-    /// exclusive with `clientRef`
-    pub client_scope_ref: String,
-}
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
     kind = "KeycloakProtocolMapper",
@@ -42,7 +28,7 @@ pub struct KeycloakProtocolMapperSpec {
     pub definition: ProtocolMapperRepresentation,
 }
 
-endpoint_impl!(KeycloakProtocolMapper, ProtocolMapperRepresentation, id, pm);
+api_object_impl!(KeycloakProtocolMapper, ProtocolMapperRepresentation, id, pm);
 
 impl ChildOf for KeycloakProtocolMapper {
     type ParentType = Either<KeycloakClient, KeycloakClientScope>;
@@ -58,5 +44,7 @@ impl ChildOf for KeycloakProtocolMapper {
             .map_either(|x| x.client_ref, |x| x.client_scope_ref)
     }
 }
+
+crate::crd::route_impl!(<Either<KeycloakClient, KeycloakClientScope>> / "protocol-mappers/models" / id: KeycloakProtocolMapper .. parent_ref: Either<ClientRef, ClientScopeRef>);
 
 schema_patch!(KeycloakProtocolMapper);

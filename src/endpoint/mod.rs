@@ -1,6 +1,6 @@
 use crate::{
     crd::{
-        ChildOf, HasEndpoint, HasParentType, KeycloakApiEndpoint,
+        ChildOf, HasApiObject, HasParentType, KeycloakApiEndpoint,
         KeycloakClient, KeycloakClientScope, KeycloakProtocolMapper,
         KeycloakRealm,
     },
@@ -82,7 +82,7 @@ where
         + HasParentType
         + ChildOf
         + Clone
-        + HasEndpoint
+        + HasApiObject
         + std::fmt::Debug
         + DeserializeOwned
         + Send
@@ -157,7 +157,7 @@ where
         + Send
         + Serialize,
     T: Resource<DynamicType = (), Scope = NamespaceResourceScope>
-        + HasEndpoint
+        + HasApiObject
         + ChildOf<ParentType = P, ParentRefType = String>
         + Send,
     Self: Send + Sync,

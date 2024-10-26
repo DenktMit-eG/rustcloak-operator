@@ -1,5 +1,5 @@
 use crate::crd::{
-    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    api_object_impl, child_of, schema_patch, HasApiObject,
     KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ClientRepresentation;
@@ -36,9 +36,11 @@ pub struct KeycloakClientSpec {
     pub client_secret: Option<KeycloakClientSecretReference>,
 }
 
-endpoint_impl!(KeycloakClient, ClientRepresentation, id, client);
+api_object_impl!(KeycloakClient, ClientRepresentation, id, client);
 
 child_of!(KeycloakClient, KeycloakRealm, realm_ref, "clients");
+
+crate::crd::route_impl!(KeycloakRealm / "authentication/flows" / id: KeycloakClient .. realm_ref: String);
 
 schema_patch!(KeycloakClient: |s| {
     s.prop("authorizationSettings")

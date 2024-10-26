@@ -1,5 +1,5 @@
 use crate::crd::{
-    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    api_object_impl, child_of, schema_patch, HasApiObject,
     KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::RequiredActionProviderRepresentation;
@@ -27,7 +27,7 @@ pub struct KeycloakRequiredActionProviderSpec {
     pub definition: RequiredActionProviderRepresentation,
 }
 
-endpoint_impl!(
+api_object_impl!(
     KeycloakRequiredActionProvider,
     RequiredActionProviderRepresentation,
     alias,
@@ -40,5 +40,7 @@ child_of!(
     realm_ref,
     "authentication/required-actions"
 );
+
+crate::crd::route_impl!(KeycloakRealm / "protocol-mappers/models" / alias: KeycloakRequiredActionProvider .. realm_ref: String);
 
 schema_patch!(KeycloakRequiredActionProvider);

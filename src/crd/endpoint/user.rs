@@ -1,5 +1,5 @@
 use crate::crd::{
-    child_of, endpoint_impl, schema_patch, HasEndpoint,
+    api_object_impl, child_of, schema_patch, HasApiObject,
     KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::UserRepresentation;
@@ -27,7 +27,9 @@ pub struct KeycloakUserSpec {
     pub definition: UserRepresentation,
 }
 
-endpoint_impl!(KeycloakUser, UserRepresentation, id, user);
+api_object_impl!(KeycloakUser, UserRepresentation, id, user);
+
+crate::crd::route_impl!(KeycloakRealm / "users" / id: KeycloakUser .. realm_ref: String);
 
 child_of!(
     KeycloakUser,

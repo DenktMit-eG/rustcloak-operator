@@ -1,7 +1,7 @@
 use crate::{
     child_of,
     crd::{
-        endpoint_impl, schema_patch, HasEndpoint, KeycloakApiObjectOptions,
+        api_object_impl, schema_patch, HasApiObject, KeycloakApiObjectOptions,
         KeycloakApiStatus,
     },
 };
@@ -30,7 +30,7 @@ pub struct KeycloakAuthenticatorConfigSpec {
     pub definition: AuthenticatorConfigRepresentation,
 }
 
-endpoint_impl!(
+api_object_impl!(
     KeycloakAuthenticatorConfig,
     AuthenticatorConfigRepresentation,
     id,
@@ -43,5 +43,7 @@ child_of!(
     realm_ref,
     "authentication/config"
 );
+
+crate::crd::route_impl!(KeycloakRealm / "authentication/flows" / id: KeycloakAuthenticatorConfig .. realm_ref: String);
 
 schema_patch!(KeycloakAuthenticatorConfig);
