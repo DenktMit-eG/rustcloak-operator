@@ -1,6 +1,6 @@
 use crate::{
     crd::{
-        schema_patch, HasApiObject, HasInstanceRef, HasRoute, ImmutableString,
+        schema_patch, HasApiObject, HasRoute, ImmutableString,
         KeycloakApiObjectOptions, KeycloakApiStatus,
     },
     endpoint::hierarchy::Root,
@@ -74,12 +74,6 @@ impl HasRoute for KeycloakRealm {
         "admin/realms"
     }
     fn route_parent_ref(&self) -> &Self::ParentRefType {
-        &self.spec().instance_ref
-    }
-}
-
-impl HasInstanceRef for KeycloakRealm {
-    fn instance_ref(&self) -> &str {
         &self.spec().instance_ref
     }
 }

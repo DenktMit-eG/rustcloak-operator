@@ -1,4 +1,4 @@
-use crate::crd::{HasInstanceRef, HasRoute};
+use crate::crd::HasRoute;
 use crate::error::Result;
 use async_trait::async_trait;
 use either::Either;
@@ -27,7 +27,7 @@ pub trait Retrieve {
 #[async_trait]
 impl<C> Retrieve for Retriever<Root, C>
 where
-    C: Send + Sync + HasInstanceRef,
+    C: Send + Sync + HasRoute<ParentRefType = String>,
 {
     type Object = Root;
     type Child = C;
@@ -37,7 +37,7 @@ where
         _ns: &str,
         child: &Self::Child,
     ) -> Result<Self::Object> {
-        Ok(child.instance_ref().to_string())
+        Ok(child.route_parent_ref().clone())
     }
 }
 

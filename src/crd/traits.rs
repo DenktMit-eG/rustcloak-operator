@@ -55,10 +55,6 @@ macro_rules! api_object_impl {
     };
 }
 
-pub trait HasInstanceRef {
-    fn instance_ref(&self) -> &str;
-}
-
 pub trait ChildOf {
     type ParentType;
     type ParentRefType;
