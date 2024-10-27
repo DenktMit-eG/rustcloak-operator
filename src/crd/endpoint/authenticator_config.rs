@@ -44,6 +44,6 @@ child_of!(
     "authentication/config"
 );
 
-crate::crd::route_impl!(KeycloakRealm / "authentication/flows" / id: KeycloakAuthenticatorConfig .. realm_ref: String);
+crate::crd::route_impl!(KeycloakRealm / "authentication/config" / id: KeycloakAuthenticatorConfig .. realm_ref: String);
 
 schema_patch!(KeycloakAuthenticatorConfig);

@@ -55,6 +55,10 @@ macro_rules! api_object_impl {
     };
 }
 
+pub trait HasInstanceRef {
+    fn instance_ref(&self) -> &str;
+}
+
 pub trait ChildOf {
     type ParentType;
     type ParentRefType;
@@ -87,12 +91,18 @@ macro_rules! child_of {
     };
 }
 
-pub trait HasRoute {
+pub trait HasRoute: Resource + Sized {
     type ParentType;
     type ParentRefType;
     fn id_ident() -> &'static str;
     fn route(&self) -> &'static str;
-    fn id(&self) -> Option<&String>;
+    fn id_option(&self) -> Option<&String>;
+
+    fn id(&self) -> String {
+        self.id_option()
+            .map_or_else(|| self.uid().unwrap(), |v| v.to_string())
+    }
+
     fn route_parent_ref(&self) -> &Self::ParentRefType;
 }
 
@@ -108,7 +118,7 @@ macro_rules! route_impl {
                 stringify!($id)
             }
 
-            fn id(&self) -> Option<&String> {
+            fn id_option(&self) -> Option<&String> {
                 use kube::core::object::HasSpec;
                 self.spec().definition.$id.as_ref()
             }

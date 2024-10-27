@@ -40,7 +40,7 @@ api_object_impl!(KeycloakClient, ClientRepresentation, id, client);
 
 child_of!(KeycloakClient, KeycloakRealm, realm_ref, "clients");
 
-crate::crd::route_impl!(KeycloakRealm / "authentication/flows" / id: KeycloakClient .. realm_ref: String);
+crate::crd::route_impl!(KeycloakRealm / "clients" / id: KeycloakClient .. realm_ref: String);
 
 schema_patch!(KeycloakClient: |s| {
     s.prop("authorizationSettings")

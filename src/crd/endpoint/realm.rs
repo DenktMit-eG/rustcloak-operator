@@ -1,9 +1,12 @@
-use crate::crd::{
-    schema_patch, HasApiObject, ImmutableString, KeycloakApiObjectOptions,
-    KeycloakApiStatus, KeycloakInstance,
+use crate::{
+    crd::{
+        schema_patch, HasApiObject, HasInstanceRef, HasRoute, ImmutableString,
+        KeycloakApiObjectOptions, KeycloakApiStatus,
+    },
+    endpoint::hierarchy::Root,
 };
 use keycloak::types::RealmRepresentation;
-use kube::ResourceExt;
+use kube::{core::object::HasSpec, ResourceExt};
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
@@ -52,7 +55,34 @@ impl HasApiObject for KeycloakRealm {
     }
 }
 
-crate::crd::route_impl!(KeycloakInstance / "admin/realms" / realm: KeycloakRealm .. instance_ref: String);
+impl HasRoute for KeycloakRealm {
+    type ParentType = Root;
+    type ParentRefType = String;
+    fn id_ident() -> &'static str {
+        "realm"
+    }
+    fn id_option(&self) -> Option<&String> {
+        self.spec().definition.realm.as_ref()
+    }
+    fn id(&self) -> String {
+        let name = self.name_unchecked();
+        let namespace = self.namespace().unwrap();
+        self.primary_key_value_opt()
+            .map_or_else(|| format!("{namespace}_{name}",), str::to_string)
+    }
+    fn route(&self) -> &'static str {
+        "admin/realms"
+    }
+    fn route_parent_ref(&self) -> &Self::ParentRefType {
+        &self.spec().instance_ref
+    }
+}
+
+impl HasInstanceRef for KeycloakRealm {
+    fn instance_ref(&self) -> &str {
+        &self.spec().instance_ref
+    }
+}
 
 schema_patch!(KeycloakRealm: |s| {
     s.remove("groups")

@@ -2,8 +2,8 @@ use std::{sync::Arc, time::Duration};
 
 use crate::{
     app_id,
-    crd::{KeycloakApiStatus, KeycloakClient, KeycloakInstance},
-    endpoint::{Hierarchy, HierarchyQuery},
+    crd::{KeycloakApiStatus, KeycloakClient},
+    endpoint::hierarchy::Hierarchy,
     error::Result,
     util::K8sKeycloakBuilder,
 };
@@ -92,12 +92,12 @@ impl KeycloakClientSecretController {
         let secret_ref =
             resource.spec.client_secret.clone().unwrap_or_default();
 
-        let hierarchy =
-            Hierarchy::<KeycloakClient>::query(&resource, client.clone())
-                .await?;
+        let hierarchy = Hierarchy::<KeycloakClient>::query(
+            resource.clone(),
+            client.clone(),
+        )
+        .await?;
         let secret_api: Api<Secret> = Api::namespaced(client.clone(), &ns);
-        let instance_api: Api<KeycloakInstance> =
-            Api::namespaced(client.clone(), &ns);
         let client_id_key = secret_ref
             .client_id_key
             .clone()
@@ -106,10 +106,11 @@ impl KeycloakClientSecretController {
             .client_secret_key
             .clone()
             .unwrap_or("client_secret".to_string());
-        let instance = instance_api.get(hierarchy.instance_ref()).await?;
 
         let path = format!("{}/client-secret", hierarchy.path());
+        println!("path: {}", path);
 
+        let instance = hierarchy.instance(client.clone()).await?;
         let keycloak = K8sKeycloakBuilder::new(&instance, client)
             .with_token()
             .await?;

@@ -8,7 +8,7 @@ use crate::util::SchemaUtil;
 macro_rules! container_type {
     ($outer:ident, $inner:ty, $schema_fn:tt) => {
         #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
-        pub struct $outer(#[schemars(schema_with = $schema_fn)] $inner);
+        pub struct $outer(#[schemars(schema_with = $schema_fn)] pub $inner);
         impl Deref for $outer {
             type Target = $inner;
             fn deref(&self) -> &Self::Target {
