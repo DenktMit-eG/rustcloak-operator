@@ -4,15 +4,14 @@ use super::controller_runner::LifecycleController;
 use crate::{
     app_id,
     crd::{
-        ChildOf, HasApiObject, HasParentType, KeycloakApiEndpoint,
-        KeycloakApiObject, KeycloakApiObjectSpec,
+        HasApiObject, HasRoute, KeycloakApiEndpoint, KeycloakApiObject,
+        KeycloakApiObjectSpec,
     },
-    endpoint::{HasHierarchy, Hierarchy, HierarchyQuery},
+    endpoint::hierarchy::{HasHierContainer, Hierarchy, Traversable},
     error::{Error, Result},
     morph::Morph,
 };
 use async_trait::async_trait;
-use k8s_openapi::NamespaceResourceScope;
 use kube::{
     api::{ObjectMeta, Patch, PatchParams},
     runtime::{controller::Action, watcher, Controller},
@@ -23,11 +22,11 @@ use serde::{de::DeserializeOwned, Serialize};
 use serde_json::json;
 
 #[derive(Debug)]
-pub struct MorphController<T: HasParentType> {
+pub struct MorphController<T> {
     phantom: std::marker::PhantomData<T>,
 }
 
-impl<T: HasParentType> Default for MorphController<T> {
+impl<T> Default for MorphController<T> {
     fn default() -> Self {
         Self {
             phantom: std::marker::PhantomData,
@@ -38,29 +37,19 @@ impl<T: HasParentType> Default for MorphController<T> {
 #[async_trait]
 impl<R> LifecycleController for MorphController<R>
 where
-    R: HasParentType
-        + Morph
-        + HasHierarchy
-        + HasApiObject
-        + HasParentType
-        + ChildOf
-        + Resource<DynamicType = (), Scope = NamespaceResourceScope>
-        + Send
+    R: Send
         + Sync
-        + 'static
-        + Clone
-        + std::fmt::Debug
         + Serialize
-        + DeserializeOwned,
-    R::Parent: Resource<DynamicType = (), Scope = NamespaceResourceScope>
-        + Clone
-        + std::fmt::Debug
         + DeserializeOwned
-        + Send
-        + Sync
+        + std::fmt::Debug
+        + Resource<DynamicType = ()>
+        + HasApiObject
+        + HasRoute
+        + Clone
         + 'static,
-    R::HierarchyParent: HierarchyQuery<Object = R::Parent> + Sync + Send,
-    R::ParentRefType: AsRef<str> + Sync + Send,
+    R: HasRoute + Sync + Send + HasHierContainer,
+    R::ParentType: HasHierContainer + Send + Sync,
+    Hierarchy<R>: Traversable<Object = R> + Send + Sync,
 {
     type Resource = R;
 
@@ -86,7 +75,7 @@ where
         let name = format!("{}-{}", R::prefix(), resource.name_unchecked());
         let owner_ref = resource.owner_ref(&()).unwrap();
 
-        let primary_key = R::primary_key();
+        let primary_key = R::id_ident();
         let mut payload = resource.payload()?;
         let vars = resource.variables()?;
         payload
@@ -94,21 +83,21 @@ where
             .as_mut()
             .unwrap()
             .remove(primary_key);
-        let primary_key_value = resource.primary_key_value();
+        let primary_key_value = resource.id();
         let immutable_payload = json!({
             primary_key: primary_key_value,
         })
         .into();
         let payload = payload.into();
 
-        let hierarchy =
-            Hierarchy::<Self::Resource>::query(&resource, client.clone())
-                .await?;
-        let endpoint = KeycloakApiEndpoint {
-            instance_ref: hierarchy.instance_ref().to_string().into(),
-            path: hierarchy.path().into(),
-        };
-        //let endpoint = resource.resolve(client.clone()).await?;
+        let hierarchy = Hierarchy::<Self::Resource>::query(
+            resource.clone(),
+            client.clone(),
+        )
+        .await?;
+        let instance_ref = hierarchy.instance_ref().to_string().into();
+        let path = hierarchy.path().into();
+        let endpoint = KeycloakApiEndpoint { instance_ref, path };
         debug!("Resolved endpoint: {:?}", endpoint);
 
         let api_object = KeycloakApiObject {

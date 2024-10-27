@@ -22,11 +22,14 @@ macro_rules! schema_patch {
     ($name:ty: $schema:expr) => {
         fn schema(generator: &mut SchemaGenerator) -> Schema {
             use $crate::util::SchemaUtil;
-            let mut s = generator
-                .clone()
-                .subschema_for::<<$name as $crate::crd::traits::HasApiObject>::Definition>()
-                .immutable_prop(<$name>::primary_key())
-                .to_owned();
+            let mut s = {
+                use $crate::crd::traits::HasRoute;
+                generator
+                    .clone()
+                    .subschema_for::<<$name as $crate::crd::traits::HasApiObject>::Definition>()
+                    .immutable_prop(<$name>::id_ident())
+                    .to_owned()
+            };
 
             let func: fn(&mut Schema) -> () = $schema;
             func(&mut s);

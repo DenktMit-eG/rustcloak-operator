@@ -37,7 +37,7 @@ where
         _ns: &str,
         child: &Self::Child,
     ) -> Result<Self::Object> {
-        Ok(child.route_parent_ref().clone())
+        Ok(child.parent_ref().clone())
     }
 }
 
@@ -62,7 +62,7 @@ where
         child: &Self::Child,
     ) -> Result<Self::Object> {
         let api = Api::<O>::namespaced(client, ns);
-        let obj_ref = child.route_parent_ref();
+        let obj_ref = child.parent_ref();
         Ok(api.get(obj_ref.as_ref()).await?)
     }
 }
@@ -95,7 +95,7 @@ where
         ns: &str,
         child: &Self::Child,
     ) -> Result<Self::Object> {
-        let eith = child.route_parent_ref();
+        let eith = child.parent_ref();
         let key = AsRef::<str>::as_ref(eith);
         match eith {
             Either::Left(_) => {

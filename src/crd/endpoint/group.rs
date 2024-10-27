@@ -1,6 +1,5 @@
 use crate::crd::{
-    api_object_impl, child_of, schema_patch, HasApiObject,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::GroupRepresentation;
 use kube_derive::CustomResource;
@@ -27,9 +26,7 @@ pub struct KeycloakGroupSpec {
     pub definition: GroupRepresentation,
 }
 
-api_object_impl!(KeycloakGroup, GroupRepresentation, id, group);
-
-child_of!(KeycloakGroup, KeycloakRealm, realm_ref, "group");
+api_object_impl!(KeycloakGroup, GroupRepresentation, "group");
 
 crate::crd::route_impl!(KeycloakRealm / "groups" / id: KeycloakGroup .. realm_ref: String);
 

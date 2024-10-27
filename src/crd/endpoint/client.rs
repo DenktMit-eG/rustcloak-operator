@@ -1,6 +1,5 @@
 use crate::crd::{
-    api_object_impl, child_of, schema_patch, HasApiObject,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ClientRepresentation;
 use kube_derive::CustomResource;
@@ -36,9 +35,7 @@ pub struct KeycloakClientSpec {
     pub client_secret: Option<KeycloakClientSecretReference>,
 }
 
-api_object_impl!(KeycloakClient, ClientRepresentation, id, client);
-
-child_of!(KeycloakClient, KeycloakRealm, realm_ref, "clients");
+api_object_impl!(KeycloakClient, ClientRepresentation, "client");
 
 crate::crd::route_impl!(KeycloakRealm / "clients" / id: KeycloakClient .. realm_ref: String);
 

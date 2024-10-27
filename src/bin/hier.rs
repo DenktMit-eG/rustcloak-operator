@@ -1,32 +1,42 @@
 use std::sync::Arc;
 
-use keycloak::types::RealmRepresentation;
-use kube::api::ObjectMeta;
+use kube::Api;
 use rustcloak_operator::{
-    crd::{KeycloakRealm, KeycloakRealmSpec},
-    endpoint::hierarchy::Hierarchy,
+    crd::{HasRoute, KeycloakClient, KeycloakProtocolMapper, KeycloakRealm},
+    endpoint::hierarchy::{HasHierContainer, Hierarchy, Traversable},
 };
+
+pub async fn with_trait<T>(t: T) -> Result<(), Box<dyn std::error::Error>>
+where
+    T: HasRoute + Sync + Send + HasHierContainer,
+    Hierarchy<T>: Traversable<Object = T>,
+    T::ParentType: HasHierContainer,
+{
+    let t = Arc::new(t);
+    Hierarchy::query(t, kube::Client::try_default().await.unwrap())
+        .await?
+        .path();
+    Ok(())
+}
 
 #[tokio::main]
 async fn main() {
-    let kc = KeycloakRealm {
-        metadata: ObjectMeta {
-            name: Some("myrealm".to_string()),
-            namespace: Some("default".to_string()),
-            ..Default::default()
-        },
-        spec: KeycloakRealmSpec {
-            options: None,
-            instance_ref: "asd".to_string().into(),
-            definition: RealmRepresentation {
-                ..Default::default()
-            },
-        },
-        status: None,
-    };
+    println!(
+        "{}",
+        std::any::type_name::<<KeycloakRealm as HasRoute>::ParentType>()
+    );
+    println!(
+        "{}",
+        std::any::type_name::<<KeycloakProtocolMapper as HasRoute>::ParentType>(
+        )
+    );
+    let client = kube::Client::try_default().await.unwrap();
+    let api = Api::<KeycloakClient>::namespaced(client, "default");
+    let obj = api.get("client-example-keycloakclient").await.unwrap();
+    //let obj = Arc::new(obj);
 
-    Hierarchy::query(Arc::new(kc), kube::Client::try_default().await.unwrap())
-        .await
-        .unwrap()
-        .path();
+    //Hierarchy::query(obj, kube::Client::try_default().await.unwrap())
+    //    .await.unwrap()
+    //    .path();
+    with_trait(obj).await.unwrap();
 }

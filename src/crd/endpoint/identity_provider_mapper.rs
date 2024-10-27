@@ -1,6 +1,5 @@
 use crate::crd::{
-    api_object_impl, child_of, schema_patch, HasApiObject,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::IdentityProviderMapperRepresentation;
 use kube_derive::CustomResource;
@@ -30,15 +29,7 @@ pub struct KeycloakIdentityProviderMapperSpec {
 api_object_impl!(
     KeycloakIdentityProviderMapper,
     IdentityProviderMapperRepresentation,
-    id,
-    ipm
-);
-
-child_of!(
-    KeycloakIdentityProviderMapper,
-    KeycloakIdentityProvider,
-    identity_provider_ref,
-    "mappers"
+    "ipm"
 );
 
 crate::crd::route_impl!(KeycloakIdentityProvider / "identity-provider/instances" / id: KeycloakIdentityProviderMapper .. identity_provider_ref: String);

@@ -1,6 +1,5 @@
 use crate::crd::{
-    api_object_impl, child_of, schema_patch, HasApiObject,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::OrganizationRepresentation;
 use kube_derive::CustomResource;
@@ -27,14 +26,7 @@ pub struct KeycloakOrganizationSpec {
     pub definition: OrganizationRepresentation,
 }
 
-api_object_impl!(KeycloakOrganization, OrganizationRepresentation, id, org);
-
-child_of!(
-    KeycloakOrganization,
-    KeycloakRealm,
-    realm_ref,
-    "organizations"
-);
+api_object_impl!(KeycloakOrganization, OrganizationRepresentation, "org");
 
 crate::crd::route_impl!(KeycloakRealm / "organizations" / id: KeycloakOrganization .. realm_ref: String);
 

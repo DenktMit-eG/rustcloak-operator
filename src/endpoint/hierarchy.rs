@@ -3,43 +3,41 @@ use crate::{
     error::{Error, Result},
 };
 use async_trait::async_trait;
-use k8s_openapi::NamespaceResourceScope;
 use kube::{Resource, ResourceExt};
-use serde::de::DeserializeOwned;
 use std::sync::Arc;
 
 use super::retriever::{Retrieve, Retriever};
 
 pub type Root = String;
 
-pub trait HasHierarchy {}
-impl<T> HasHierarchy for T
-where
-    T: HasRoute,
-    T::ParentType: Resource<DynamicType = (), Scope = NamespaceResourceScope>
-        + Clone
-        + HasHierContainer
-        + Retrieve
-        + std::fmt::Debug
-        + DeserializeOwned
-        + Send
-        + Sync
-        + 'static,
-{
-}
-
 pub trait HasHierContainer {
     type HierContainer;
+}
+
+#[async_trait]
+pub trait Traversable
+where
+    Self: Sized,
+{
+    type Object;
+    async fn inner_query(
+        object: Arc<Self::Object>,
+        client: kube::Client,
+    ) -> Result<Self>;
+
+    fn inner_path(&self) -> String;
+
+    fn inner_instance_ref(&self) -> &str;
 }
 
 impl HasHierContainer for Root {
     type HierContainer = Root;
 }
 
-impl<T> HasHierContainer for T
+impl<T, P> HasHierContainer for T
 where
-    T: HasRoute,
-    T::ParentType: HasHierContainer,
+    T: HasRoute<ParentType = P>,
+    P: HasHierContainer,
 {
     type HierContainer = Hierarchy<T>;
 }
@@ -58,7 +56,6 @@ where
     Self: Traversable<Object = O>,
     O: HasRoute,
     O::ParentType: HasHierContainer,
-    <O::ParentType as HasHierContainer>::HierContainer: Traversable,
 {
     pub async fn query(
         object: Arc<<Self as Traversable>::Object>,
@@ -81,22 +78,6 @@ where
 
         Ok(api.get(self.instance_ref()).await?)
     }
-}
-
-#[async_trait]
-pub trait Traversable
-where
-    Self: Sized,
-{
-    type Object;
-    async fn inner_query(
-        object: Arc<Self::Object>,
-        client: kube::Client,
-    ) -> Result<Self>;
-
-    fn inner_path(&self) -> String;
-
-    fn inner_instance_ref(&self) -> &str;
 }
 
 #[async_trait]
@@ -129,7 +110,7 @@ where
         format!(
             "{}/{}/{}",
             self.parent.inner_path(),
-            self.object.route(),
+            self.object.mount_point(),
             self.object.id()
         )
     }

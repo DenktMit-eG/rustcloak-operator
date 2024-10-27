@@ -46,14 +46,14 @@ async fn main() -> Result<()> {
         );
     }
     if opts.controllers.contains(&ControllerOpt::Realm) {
-        //controllers.push(
-        //    ControllerRunner::new(
-        //        MorphController::<KeycloakRealm>::default(),
-        //        &client,
-        //    )
-        //    .run()
-        //    .boxed(),
-        //);
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakRealm>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
     }
     if opts.controllers.contains(&ControllerOpt::Client) {
         controllers.push(
@@ -102,14 +102,14 @@ async fn main() -> Result<()> {
         );
     }
     if opts.controllers.contains(&ControllerOpt::ClientScope) {
-        //controllers.push(
-        //    ControllerRunner::new(
-        //        MorphController::<KeycloakClientScope>::default(),
-        //        &client,
-        //    )
-        //    .run()
-        //    .boxed(),
-        //);
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakClientScope>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
     }
     if opts.controllers.contains(&ControllerOpt::Component) {
         controllers.push(

@@ -1,7 +1,8 @@
 use crate::{
+    api_object_impl,
     crd::{
-        schema_patch, HasApiObject, HasRoute, ImmutableString,
-        KeycloakApiObjectOptions, KeycloakApiStatus,
+        schema_patch, HasRoute, ImmutableString, KeycloakApiObjectOptions,
+        KeycloakApiStatus,
     },
     endpoint::hierarchy::Root,
 };
@@ -30,30 +31,7 @@ pub struct KeycloakRealmSpec {
     pub definition: RealmRepresentation,
 }
 
-impl HasApiObject for KeycloakRealm {
-    type Definition = RealmRepresentation;
-    fn definition(&self) -> &Self::Definition {
-        &self.spec.definition
-    }
-    fn options(&self) -> Option<&KeycloakApiObjectOptions> {
-        self.spec.options.as_ref()
-    }
-    fn primary_key() -> &'static str {
-        "realm"
-    }
-    fn primary_key_value_opt(&self) -> Option<&str> {
-        self.definition().realm.as_deref()
-    }
-    fn primary_key_value(&self) -> String {
-        let name = self.name_unchecked();
-        let namespace = self.namespace().unwrap();
-        self.primary_key_value_opt()
-            .map_or_else(|| format!("{namespace}_{name}",), str::to_string)
-    }
-    fn prefix() -> &'static str {
-        "realm"
-    }
-}
+api_object_impl!(KeycloakRealm, RealmRepresentation, "realm");
 
 impl HasRoute for KeycloakRealm {
     type ParentType = Root;
@@ -61,19 +39,19 @@ impl HasRoute for KeycloakRealm {
     fn id_ident() -> &'static str {
         "realm"
     }
-    fn id_option(&self) -> Option<&String> {
-        self.spec().definition.realm.as_ref()
+    fn id_option(&self) -> Option<&str> {
+        self.spec().definition.realm.as_deref()
     }
     fn id(&self) -> String {
         let name = self.name_unchecked();
         let namespace = self.namespace().unwrap();
-        self.primary_key_value_opt()
-            .map_or_else(|| format!("{namespace}_{name}",), str::to_string)
+        self.id_option()
+            .map_or(format!("{namespace}_{name}",), str::to_string)
     }
-    fn route(&self) -> &'static str {
+    fn mount_point(&self) -> &'static str {
         "admin/realms"
     }
-    fn route_parent_ref(&self) -> &Self::ParentRefType {
+    fn parent_ref(&self) -> &Self::ParentRefType {
         &self.spec().instance_ref
     }
 }

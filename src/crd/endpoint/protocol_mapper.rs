@@ -1,13 +1,15 @@
-use super::{KeycloakClient, KeycloakClientScope};
 use crate::crd::{
-    api_object_impl, schema_patch, ChildOf, ClientRef, ClientScopeRef,
-    HasApiObject, KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, ClientRef, ClientScopeRef,
+    KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use either::Either;
 use keycloak::types::ProtocolMapperRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
+
+type Parents = Either<ClientRef, ClientScopeRef>;
+type ParentRef = Either<ClientRef, ClientScopeRef>;
 
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
@@ -23,28 +25,14 @@ pub struct KeycloakProtocolMapperSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     #[serde(flatten)]
-    pub parent_ref: Either<ClientRef, ClientScopeRef>,
+    pub parent_ref: ParentRef,
     #[schemars(schema_with = "schema")]
     pub definition: ProtocolMapperRepresentation,
 }
 
-api_object_impl!(KeycloakProtocolMapper, ProtocolMapperRepresentation, id, pm);
+api_object_impl!(KeycloakProtocolMapper, ProtocolMapperRepresentation, "pm");
 
-impl ChildOf for KeycloakProtocolMapper {
-    type ParentType = Either<KeycloakClient, KeycloakClientScope>;
-    type ParentRefType = Either<String, String>;
-    fn sub_path(&self) -> &'static str {
-        "protocol-mappers/models"
-    }
-
-    fn parent_ref(&self) -> Self::ParentRefType {
-        self.spec
-            .parent_ref
-            .clone()
-            .map_either(|x| x.client_ref, |x| x.client_scope_ref)
-    }
-}
-
-crate::crd::route_impl!(<Either<KeycloakClient, KeycloakClientScope>> / "protocol-mappers/models" / id: KeycloakProtocolMapper .. parent_ref: Either<ClientRef, ClientScopeRef>);
+crate::crd::route_impl!(Parents / "protocol-mappers/models"
+    / id: KeycloakProtocolMapper .. parent_ref: ParentRef);
 
 schema_patch!(KeycloakProtocolMapper);

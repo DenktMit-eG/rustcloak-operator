@@ -1,6 +1,5 @@
 use crate::crd::{
-    api_object_impl, child_of, schema_patch, HasApiObject,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ComponentRepresentation;
 use kube_derive::CustomResource;
@@ -27,9 +26,7 @@ pub struct KeycloakComponentSpec {
     pub definition: ComponentRepresentation,
 }
 
-api_object_impl!(KeycloakComponent, ComponentRepresentation, id, component);
-
-child_of!(KeycloakComponent, KeycloakRealm, realm_ref, "components");
+api_object_impl!(KeycloakComponent, ComponentRepresentation, "component");
 
 crate::crd::route_impl!(KeycloakRealm / "components" / id: KeycloakComponent .. realm_ref: String);
 

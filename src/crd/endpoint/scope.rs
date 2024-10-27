@@ -1,6 +1,5 @@
 use crate::crd::{
-    api_object_impl, child_of, schema_patch, HasApiObject,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ScopeRepresentation;
 use kube_derive::CustomResource;
@@ -27,16 +26,9 @@ pub struct KeycloakScopeSpec {
     pub definition: ScopeRepresentation,
 }
 
-api_object_impl!(KeycloakScope, ScopeRepresentation, id, scope);
+api_object_impl!(KeycloakScope, ScopeRepresentation, "scope");
 
 crate::crd::route_impl!(KeycloakClient / "authz/resource-server/scope" / id: KeycloakScope .. client_ref: String);
-
-child_of!(
-    KeycloakScope,
-    KeycloakClient,
-    client_ref,
-    "authz/resource-server/scope"
-);
 
 schema_patch!(KeycloakScope: |s| {
     s.prop("resources")

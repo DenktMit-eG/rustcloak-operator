@@ -1,6 +1,5 @@
 use crate::crd::{
-    api_object_impl, schema_patch, HasApiObject, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::ResourceRepresentation;
 use kube_derive::CustomResource;
@@ -29,6 +28,6 @@ pub struct KeycloakResourceSpec {
 
 crate::crd::route_impl!(KeycloakRealm / "authz/resource-server/resource" / id: KeycloakResource .. realm_ref: String);
 
-api_object_impl!(KeycloakResource, ResourceRepresentation, id, resource);
+api_object_impl!(KeycloakResource, ResourceRepresentation, "resource");
 
 schema_patch!(KeycloakResource);

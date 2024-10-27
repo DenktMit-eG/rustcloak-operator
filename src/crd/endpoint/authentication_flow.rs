@@ -1,6 +1,6 @@
 use crate::crd::{
-    api_object_impl, child_of, route_impl, schema_patch, HasApiObject,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, route_impl, schema_patch, KeycloakApiObjectOptions,
+    KeycloakApiStatus,
 };
 use keycloak::types::AuthenticationFlowRepresentation;
 use kube_derive::CustomResource;
@@ -30,15 +30,7 @@ pub struct KeycloakAuthenticationFlowSpec {
 api_object_impl!(
     KeycloakAuthenticationFlow,
     AuthenticationFlowRepresentation,
-    id,
-    realm
-);
-
-child_of!(
-    KeycloakAuthenticationFlow,
-    KeycloakRealm,
-    realm_ref,
-    "authentication/flows"
+    "realm"
 );
 
 route_impl!(KeycloakRealm / "authentication/flows" / id: KeycloakAuthenticationFlow .. realm_ref: String);

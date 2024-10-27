@@ -1,6 +1,5 @@
 use crate::crd::{
-    api_object_impl, child_of, schema_patch, HasApiObject,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::RequiredActionProviderRepresentation;
 use kube_derive::CustomResource;
@@ -30,15 +29,7 @@ pub struct KeycloakRequiredActionProviderSpec {
 api_object_impl!(
     KeycloakRequiredActionProvider,
     RequiredActionProviderRepresentation,
-    alias,
-    rap
-);
-
-child_of!(
-    KeycloakRequiredActionProvider,
-    KeycloakRealm,
-    realm_ref,
-    "authentication/required-actions"
+    "rap"
 );
 
 crate::crd::route_impl!(KeycloakRealm / "protocol-mappers/models" / alias: KeycloakRequiredActionProvider .. realm_ref: String);

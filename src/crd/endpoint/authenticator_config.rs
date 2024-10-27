@@ -1,9 +1,5 @@
-use crate::{
-    child_of,
-    crd::{
-        api_object_impl, schema_patch, HasApiObject, KeycloakApiObjectOptions,
-        KeycloakApiStatus,
-    },
+use crate::crd::{
+    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::AuthenticatorConfigRepresentation;
 use kube_derive::CustomResource;
@@ -33,15 +29,7 @@ pub struct KeycloakAuthenticatorConfigSpec {
 api_object_impl!(
     KeycloakAuthenticatorConfig,
     AuthenticatorConfigRepresentation,
-    id,
-    authconfig
-);
-
-child_of!(
-    KeycloakAuthenticatorConfig,
-    KeycloakRealm,
-    realm_ref,
-    "authentication/config"
+    "authconfig"
 );
 
 crate::crd::route_impl!(KeycloakRealm / "authentication/config" / id: KeycloakAuthenticatorConfig .. realm_ref: String);
