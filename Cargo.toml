@@ -29,6 +29,8 @@ http = "1.1.0"
 async-stream = "0.3.6"
 actix-web = "4.9.0"
 either = { version = "1.13.0", features = ["serde"] }
+up_impl = { path = "../up_impl" }
+#up_impl = { git = "https://github.com/Gottox/up_impl.git" }
 
 [profile.release]
 strip = true

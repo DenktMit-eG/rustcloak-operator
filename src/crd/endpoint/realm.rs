@@ -2,15 +2,15 @@ use crate::{
     api_object_impl,
     crd::{
         schema_patch, HasRoute, ImmutableString, KeycloakApiObjectOptions,
-        KeycloakApiStatus,
+        KeycloakApiStatus, KeycloakInstance,
     },
-    endpoint::hierarchy::Root,
 };
 use keycloak::types::RealmRepresentation;
 use kube::{core::object::HasSpec, ResourceExt};
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
+use up_impl::Root;
 
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
@@ -33,8 +33,17 @@ pub struct KeycloakRealmSpec {
 
 api_object_impl!(KeycloakRealm, RealmRepresentation, "realm");
 
+impl up_impl::HasUp for KeycloakRealm {
+    type Up = Root<KeycloakInstance>;
+    type UpKey = String;
+    fn key(&self) -> String {
+        use kube::core::object::HasSpec;
+        self.spec().instance_ref.clone().into()
+    }
+}
+
 impl HasRoute for KeycloakRealm {
-    type ParentType = Root;
+    type ParentType = String;
     type ParentRefType = String;
     fn id_ident() -> &'static str {
         "realm"

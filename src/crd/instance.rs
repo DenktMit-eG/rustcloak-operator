@@ -1,8 +1,11 @@
+use crate::endpoint::query::Query;
+
 use super::KeycloakApiStatus;
 use kube::ResourceExt;
 use kube_derive::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use up_impl::HasQuery;
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
@@ -100,4 +103,8 @@ impl KeycloakInstanceCredentialReference {
         let password_key = self.password_key.as_ref().map_or("password", |x| x);
         (user_key, password_key)
     }
+}
+
+impl HasQuery for KeycloakInstance {
+    type Query = Query<Self>;
 }

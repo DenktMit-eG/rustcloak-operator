@@ -36,6 +36,10 @@ macro_rules! api_object_impl {
                 $prefix
             }
         }
+
+        impl up_impl::HasQuery for $name {
+            type Query = $crate::endpoint::query::Query<$name>;
+        }
     };
 }
 
@@ -56,8 +60,7 @@ pub trait HasRoute: Resource + Sized {
 
 #[macro_export]
 macro_rules! route_impl {
-
-    ($parent_ty:ident / |$self_p:ident| $route:block / $id:ident: $self_ty:ident .. $ref:ident: $ref_ty:ty) => {
+    (<$parent_ty:ty> / |$self_p:ident| $route:block / $id:ident: $self_ty:ident .. $ref:ident: $ref_ty:ty) => {
         impl $crate::crd::HasRoute for $self_ty {
             type ParentType = $parent_ty;
             type ParentRefType = $ref_ty;
@@ -81,9 +84,22 @@ macro_rules! route_impl {
                 &self.spec().$ref
             }
         }
+
+        impl up_impl::HasUp for $self_ty {
+            type Up = $parent_ty;
+            type UpKey = $ref_ty;
+
+            fn key(&self) -> $ref_ty {
+                use kube::core::object::HasSpec;
+                self.spec().$ref.clone().into()
+            }
+        }
+    };
+    (<$parent_ty:ty> / $route:literal / $id:ident: $self_ty:ident .. $ref:ident: $ref_ty:ty) => {
+        $crate::route_impl!(<$parent_ty> / |_x| { $route } / $id: $self_ty .. $ref: $ref_ty);
     };
     ($parent_ty:ident / $route:literal / $id:ident: $self_ty:ident .. $ref:ident: $ref_ty:ty) => {
-        $crate::route_impl!($parent_ty / |_x| { $route } / $id: $self_ty .. $ref: $ref_ty);
+        $crate::route_impl!(<$parent_ty> / |_x| { $route } / $id: $self_ty .. $ref: $ref_ty);
     };
 }
 

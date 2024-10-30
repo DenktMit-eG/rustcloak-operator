@@ -20,6 +20,11 @@ macro_rules! container_type {
                 $outer(t)
             }
         }
+        impl From<$outer> for $inner {
+            fn from(t: $outer) -> Self {
+                t.0
+            }
+        }
     };
 }
 

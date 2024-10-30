@@ -31,7 +31,7 @@ pub struct KeycloakClientScopeSpec {
 
 api_object_impl!(KeycloakClientScope, ClientScopeRepresentation, "scope-spec");
 
-crate::crd::route_impl!(KeycloakRealm / |x| {
+crate::crd::route_impl!(<KeycloakRealm> / |x| {
     if x.spec.is_template.unwrap_or(false) {
         "client-scopes"
     } else {

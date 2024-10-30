@@ -1,12 +1,14 @@
 use std::{sync::Arc, time::Duration};
 
+use crate::error::*;
 use crate::{
     app_id,
     crd::{KeycloakApiStatus, KeycloakClient},
-    endpoint::hierarchy::Hierarchy,
+    endpoint::path::Path,
     error::Result,
     util::K8sKeycloakBuilder,
 };
+use futures::StreamExt;
 use http::Method;
 use k8s_openapi::{api::core::v1::Secret, ByteString};
 use keycloak::types::CredentialRepresentation;
@@ -19,9 +21,8 @@ use kube::{
     Api, Resource as KubeResource, ResourceExt,
 };
 use log::{error, info};
-
-use crate::error::*;
-use futures::StreamExt;
+use up_impl::Container;
+use up_impl::Up;
 
 pub struct KeycloakClientSecretController {
     client: kube::Client,
@@ -92,11 +93,9 @@ impl KeycloakClientSecretController {
         let secret_ref =
             resource.spec.client_secret.clone().unwrap_or_default();
 
-        let hierarchy = Hierarchy::<KeycloakClient>::query(
-            resource.clone(),
-            client.clone(),
-        )
-        .await?;
+        let resource = Arc::unwrap_or_clone(resource);
+        let resource = Up::with((client.clone(), ns.clone()), resource).await?;
+
         let secret_api: Api<Secret> = Api::namespaced(client.clone(), &ns);
         let client_id_key = secret_ref
             .client_id_key
@@ -107,11 +106,10 @@ impl KeycloakClientSecretController {
             .clone()
             .unwrap_or("client_secret".to_string());
 
-        let path = format!("{}/client-secret", hierarchy.path());
-        println!("path: {}", path);
+        let path = format!("{}/client-secret", resource.path());
 
-        let instance = hierarchy.instance(client.clone()).await?;
-        let keycloak = K8sKeycloakBuilder::new(&instance, client)
+        let instance = &resource.up.up;
+        let keycloak = K8sKeycloakBuilder::new(instance, client)
             .with_token()
             .await?;
 
