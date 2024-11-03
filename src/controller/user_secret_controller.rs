@@ -1,6 +1,7 @@
 use std::{sync::Arc, time::Duration};
 
 use crate::error::*;
+use crate::util::RefWatcher;
 use crate::{
     app_id,
     crd::{KeycloakApiStatus, KeycloakUser},
@@ -27,12 +28,16 @@ use up_impl::Up;
 
 pub struct KeycloakUserSecretController {
     client: kube::Client,
+    secret_refs: Arc<RefWatcher<KeycloakUser, Secret>>,
 }
 
 impl KeycloakUserSecretController {
     pub fn new(client: &kube::Client) -> Self {
         let client = client.clone();
-        KeycloakUserSecretController { client }
+        KeycloakUserSecretController {
+            client,
+            secret_refs: Arc::new(RefWatcher::default()),
+        }
     }
 
     pub async fn run(self) -> Result<()> {
@@ -40,14 +45,15 @@ impl KeycloakUserSecretController {
         let config = controller::Config::default().concurrency(2);
 
         info!("starting secret controller for KeycloakUser");
-
+        let secret_api = Api::<Secret>::all(self.client.clone());
+        let secret_refs = self.secret_refs.clone();
         Controller::new(api, watcher::Config::default())
             .with_config(config)
             .shutdown_on_signal()
-            .owns(
-                Api::<Secret>::all(self.client.clone()),
-                watcher::Config::default(),
-            )
+            .owns(secret_api.clone(), watcher::Config::default())
+            .watches(secret_api, watcher::Config::default(), move |secret| {
+                secret_refs.watch(&secret)
+            })
             .run(Self::reconcile, Self::error_policy, Arc::new(self))
             .for_each(|res| async {
                 match res {
@@ -113,6 +119,7 @@ impl KeycloakUserSecretController {
 
         let secret_name =
             secret_ref.secret_name.unwrap_or(resource.name_unchecked());
+        ctx.secret_refs.add(&resource, [&secret_name]);
         let secret =
             if let Some(secret) = secret_api.get_opt(&secret_name).await? {
                 secret
@@ -190,6 +197,7 @@ impl KeycloakUserSecretController {
         let api: Api<KeycloakUser> = Api::namespaced(ctx.client.clone(), ns);
         let patch = KeycloakApiStatus::from(e).into();
 
+        ctx.secret_refs.remove(resource);
         api.patch_status(&name, &PatchParams::apply(app_id!()), &patch)
             .await?;
 

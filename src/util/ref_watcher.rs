@@ -1,9 +1,6 @@
-use kube::{runtime::reflector::ObjectRef, Resource};
+use kube::{runtime::reflector::ObjectRef, Resource, ResourceExt};
+use std::collections::{HashMap, HashSet};
 use std::sync::Mutex;
-use std::{
-    collections::{HashMap, HashSet},
-    sync::Arc,
-};
 
 #[derive(Debug)]
 pub struct RefWatcher<C, W>
@@ -78,8 +75,11 @@ where
     }
 
     pub fn remove(&self, obj: &C) {
-        let obj = Arc::new(ObjectRef::from(obj));
+        let name = obj.name_unchecked();
         let mut refs = self.refs.lock().unwrap();
-        refs.retain(|_, v| v.contains(&obj.name));
+        for (_, v) in refs.iter_mut() {
+            v.retain(|x| x != &name);
+        }
+        refs.retain(|_, v| !v.is_empty());
     }
 }
