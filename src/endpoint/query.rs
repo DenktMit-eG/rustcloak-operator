@@ -28,7 +28,7 @@ where
         user_data: &Self::UserData,
     ) -> Result<Self::Output> {
         let (client, ns) = user_data;
-        let api = Api::<O>::namespaced(client.clone(), &ns);
+        let api = Api::<O>::namespaced(client.clone(), ns);
         Ok(api.get(&key).await?)
     }
 }
@@ -45,7 +45,7 @@ impl up_impl::Query for Query<KeycloakInstance> {
         user_data: &Self::UserData,
     ) -> Result<Self::Output> {
         let (client, ns) = user_data;
-        let api = Api::<KeycloakInstance>::namespaced(client.clone(), &ns);
+        let api = Api::<KeycloakInstance>::namespaced(client.clone(), ns);
         Ok(api.get(&key).await?)
     }
 }

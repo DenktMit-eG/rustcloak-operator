@@ -48,7 +48,7 @@ where
             .map(|v| ObjectRef::new(v))
             .map(|v| {
                 if let Some(ns) = &obj.namespace {
-                    v.within(&ns)
+                    v.within(ns)
                 } else {
                     v
                 }
