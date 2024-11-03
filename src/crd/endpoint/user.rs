@@ -8,6 +8,14 @@ use serde::{Deserialize, Serialize};
 
 use super::KeycloakRealm;
 
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct KeycloakUserSecretReference {
+    pub secret_name: Option<String>,
+    pub username_key: Option<String>,
+    pub password_key: Option<String>,
+}
+
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
     kind = "KeycloakUser",
@@ -24,6 +32,7 @@ pub struct KeycloakUserSpec {
     pub realm_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: UserRepresentation,
+    pub user_secret: Option<KeycloakUserSecretReference>,
 }
 
 api_object_impl!(KeycloakUser, UserRepresentation, "user");

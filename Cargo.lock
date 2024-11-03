@@ -2036,6 +2036,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "randstr"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06609afffff6b2997dbf30b411bae19e8b6cd274f7310574c790d2d4c26ebf8c"
+dependencies = [
+ "rand",
+]
+
+[[package]]
 name = "redox_syscall"
 version = "0.5.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2185,6 +2194,7 @@ dependencies = [
  "log",
  "oauth2",
  "pretty_env_logger",
+ "randstr",
  "reqwest",
  "schemars",
  "serde",
@@ -2890,6 +2900,7 @@ checksum = "8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1"
 [[package]]
 name = "up_impl"
 version = "0.1.0"
+source = "git+https://github.com/Gottox/up_impl.git#1eda4d1ef299e55937359aa25bfa2782b33284b1"
 dependencies = [
  "async-trait",
  "either",
