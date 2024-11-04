@@ -5,15 +5,17 @@ use crate::{
     app_id,
     crd::{
         HasApiObject, HasRoute, KeycloakApiEndpoint, KeycloakApiObject,
-        KeycloakApiObjectSpec,
+        KeycloakApiObjectSpec, KeycloakApiStatus,
     },
     endpoint::hierarchy::{HasHierContainer, Hierarchy, Traversable},
     error::{Error, Result},
     morph::Morph,
 };
 use async_trait::async_trait;
+use k8s_openapi::NamespaceResourceScope;
 use kube::{
     api::{ObjectMeta, Patch, PatchParams},
+    core::object::HasStatus,
     runtime::{controller::Action, watcher, Controller},
     Api, Resource, ResourceExt,
 };
@@ -42,9 +44,10 @@ where
         + Serialize
         + DeserializeOwned
         + std::fmt::Debug
-        + Resource<DynamicType = ()>
+        + Resource<DynamicType = (), Scope = NamespaceResourceScope>
         + HasApiObject
         + HasRoute
+        + HasStatus<Status = KeycloakApiStatus>
         + Clone
         + 'static,
     R: HasRoute + Sync + Send + HasHierContainer,
@@ -96,7 +99,8 @@ where
         )
         .await?;
         let instance_ref = hierarchy.instance_ref().to_string().into();
-        let path = hierarchy.path().into();
+        let path = hierarchy.path();
+        let path = path.rsplit_once('/').unwrap().0.to_string().into();
         let endpoint = KeycloakApiEndpoint { instance_ref, path };
         debug!("Resolved endpoint: {:?}", endpoint);
 
@@ -114,7 +118,7 @@ where
                 payload,
                 vars,
             },
-            status: Default::default(),
+            status: None,
         };
 
         admin_api
@@ -125,6 +129,17 @@ where
             )
             .await?;
 
+        if let Some(api_status) =
+            admin_api.get_status(&name).await?.status.clone()
+        {
+            let api = Api::<Self::Resource>::namespaced(client.clone(), &ns);
+            api.patch_status(
+                &resource.name_unchecked(),
+                &PatchParams::apply(app_id!()),
+                &api_status.into(),
+            )
+            .await?;
+        }
         Ok(Action::await_change())
     }
 

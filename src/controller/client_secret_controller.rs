@@ -4,7 +4,6 @@ use crate::error::*;
 use crate::{
     app_id,
     crd::{KeycloakApiStatus, KeycloakClient},
-    endpoint::path::Path,
     error::Result,
     util::K8sKeycloakBuilder,
 };
@@ -21,8 +20,7 @@ use kube::{
     Api, Resource as KubeResource, ResourceExt,
 };
 use log::{error, info};
-use up_impl::Container;
-use up_impl::Up;
+use up_impl::{Container, Up};
 
 pub struct KeycloakClientSecretController {
     client: kube::Client,
@@ -88,6 +86,13 @@ impl KeycloakClientSecretController {
         resource: Arc<KeycloakClient>,
         ctx: Arc<Self>,
     ) -> Result<Action> {
+        let Some(resource_path) = resource
+            .status
+            .as_ref()
+            .and_then(|x| x.resource_path.clone())
+        else {
+            return Ok(Action::await_change());
+        };
         let client = &ctx.client;
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let secret_ref =
@@ -106,7 +111,7 @@ impl KeycloakClientSecretController {
             .clone()
             .unwrap_or("client_secret".to_string());
 
-        let path = format!("{}/client-secret", resource.path());
+        let path = format!("{}/client-secret", resource_path);
 
         let instance = &resource.up.up;
         let keycloak = K8sKeycloakBuilder::new(instance, client)

@@ -17,6 +17,8 @@ pub enum Error {
     #[error("No Namespace")]
     NoNamespace,
     #[error("{0}")]
+    ToStrError(#[from] reqwest::header::ToStrError),
+    #[error("{0}")]
     FromUtf8Error(#[from] std::string::FromUtf8Error),
     #[error("{0}")]
     Other(#[from] Box<dyn std::error::Error + Send + Sync>),
@@ -80,6 +82,8 @@ pub enum Error {
     NoClientId,
     #[error("No Client Secret")]
     NoClientSecret,
+    #[error("No Location Header")]
+    NoLocationHeader,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

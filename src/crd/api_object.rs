@@ -32,6 +32,12 @@ use std::ops::Add;
             "type":"string",
             "description":"",
             "jsonPath":".status.status"
+        }"#,
+    printcolumn = r#"{
+            "name":"Age",
+            "type":"date",
+            "description":"",
+            "jsonPath":".metadata.creationTimestamp"
         }"#
 )]
 #[serde(rename_all = "camelCase")]

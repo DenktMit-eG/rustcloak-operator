@@ -5,7 +5,6 @@ use crate::util::RefWatcher;
 use crate::{
     app_id,
     crd::{KeycloakApiStatus, KeycloakUser},
-    endpoint::path::Path,
     error::Result,
     util::K8sKeycloakBuilder,
 };
@@ -95,6 +94,13 @@ impl KeycloakUserSecretController {
         resource: Arc<KeycloakUser>,
         ctx: Arc<Self>,
     ) -> Result<Action> {
+        let Some(resource_path) = resource
+            .status
+            .as_ref()
+            .and_then(|x| x.resource_path.clone())
+        else {
+            return Ok(Action::await_change());
+        };
         let client = &ctx.client;
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let secret_ref = resource.spec.user_secret.clone().unwrap_or_default();
@@ -166,7 +172,7 @@ impl KeycloakUserSecretController {
             .ok_or(Error::NoPassword)?;
         let password = String::from_utf8(password.0)?;
 
-        let path = format!("{}/reset-password", resource.path());
+        let path = format!("{}/reset-password", resource_path);
         let credential = CredentialRepresentation {
             temporary: Some(false),
             value: Some(password),
@@ -175,10 +181,11 @@ impl KeycloakUserSecretController {
         };
 
         keycloak
-            .request(Method::POST, &path)
+            .request(Method::PUT, &path)
             .json(&credential)
             .send()
-            .await?;
+            .await?
+            .error_for_status()?;
 
         Ok(Action::await_change())
     }

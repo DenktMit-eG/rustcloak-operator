@@ -23,7 +23,25 @@ pub struct KeycloakUserSecretReference {
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",
-    namespaced
+    namespaced,
+    printcolumn = r#"{
+            "name":"Ready",
+            "type":"boolean",
+            "description":"",
+            "jsonPath":".status.ready"
+        }"#,
+    printcolumn = r#"{
+            "name":"Status",
+            "type":"string",
+            "description":"",
+            "jsonPath":".status.status"
+        }"#,
+    printcolumn = r#"{
+            "name":"Age",
+            "type":"date",
+            "description":"",
+            "jsonPath":".metadata.creationTimestamp"
+        }"#
 )]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakUserSpec {

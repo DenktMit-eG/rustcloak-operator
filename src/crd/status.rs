@@ -4,9 +4,11 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakApiStatus {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_path: Option<String>,
     pub ready: bool,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub status: String,
@@ -22,7 +24,8 @@ impl KeycloakApiStatus {
             ready: true,
             status,
             code: 200,
-            message: "".to_string(),
+            message: "ok".to_string(),
+            resource_path: None,
         }
     }
 }
@@ -35,11 +38,12 @@ impl From<Error> for KeycloakApiStatus {
 
 impl From<&Error> for KeycloakApiStatus {
     fn from(err: &Error) -> Self {
-        KeycloakApiStatus {
+        Self {
             ready: false,
             status: "Error".to_string(),
             code: 0,
             message: err.to_string(),
+            resource_path: None,
         }
     }
 }

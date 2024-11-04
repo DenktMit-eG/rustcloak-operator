@@ -51,8 +51,17 @@ pub trait HasRoute: Resource + Sized {
     fn id_option(&self) -> Option<&str>;
 
     fn id(&self) -> String {
-        self.id_option()
-            .map_or_else(|| self.uid().unwrap(), |v| v.to_string())
+        if let Some(id) = self.id_option() {
+            id.to_string()
+        } else {
+            let ns = self.namespace();
+            let name = self.name_unchecked();
+            if let Some(ns) = ns {
+                format!("{}_{}", ns, name)
+            } else {
+                name
+            }
+        }
     }
 
     fn parent_ref(&self) -> &Self::ParentRefType;

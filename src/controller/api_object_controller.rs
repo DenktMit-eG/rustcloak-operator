@@ -21,8 +21,10 @@ use kube::{
     Api, ResourceExt,
 };
 use log::trace;
-use reqwest::{Method, Response};
+use reqwest::Url;
+use reqwest::{header::LOCATION, Method, Response};
 use serde_json::Value;
+use std::str::FromStr;
 use std::{ops::Deref, sync::Arc};
 use tokio::sync::Notify;
 
@@ -61,7 +63,7 @@ impl KeycloakApiObjectController {
         method: Method,
         path: &str,
         payload: &Value,
-    ) -> Result<Option<Response>> {
+    ) -> Result<Response> {
         let request = client.request(method, path);
         let request = if payload == &Value::Null {
             request
@@ -69,13 +71,8 @@ impl KeycloakApiObjectController {
             request.json(payload)
         };
         trace!("Request: {:?}", request);
-        let res = request.send().await?;
 
-        if res.status().as_u16() == 404 {
-            Ok(None)
-        } else {
-            Ok(Some(res.error_for_status()?))
-        }
+        Ok(request.send().await?.error_for_status()?)
     }
 }
 
@@ -117,29 +114,47 @@ impl LifecycleController for KeycloakApiObjectController {
     ) -> Result<Action> {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let name = resource.name_unchecked();
-        let path = &resource.spec.endpoint.path;
+        let api = Api::<KeycloakApiObject>::namespaced(client.clone(), &ns);
         let keycloak = Self::keycloak(client, &resource).await?;
         let mut payload = resource.resolve(client).await?;
         let immutable_payload = resource.spec.immutable_payload.deref();
         payload.merge_from(immutable_payload.clone());
-        // First try to PUT, if we get a 404, try to POST
-        if self
-            .request(&keycloak, Method::PUT, path, &payload)
-            .await?
-            .is_none()
-        {
-            let path = path.rsplit_once('/').unwrap().0;
-            self.request(&keycloak, Method::POST, path, &payload)
-                .await?;
-        }
 
-        let api = Api::<KeycloakApiObject>::namespaced(client.clone(), &ns);
-        api.patch_status(
-            &name,
-            &PatchParams::apply(app_id!()),
-            &KeycloakApiStatus::ok("Applied").into(),
-        )
-        .await?;
+        if let Some(path) = resource
+            .status
+            .as_ref()
+            .and_then(|x| x.resource_path.as_ref())
+        {
+            self.request(&keycloak, Method::PUT, path, &payload).await?;
+
+            api.patch_status(
+                &name,
+                &PatchParams::apply(app_id!()),
+                &KeycloakApiStatus::ok("Applied").into(),
+            )
+            .await?;
+        } else {
+            let path = &resource.spec.endpoint.path;
+            let response = self
+                .request(&keycloak, Method::POST, path, &payload)
+                .await?;
+            let resource_url = Url::from_str(
+                response
+                    .headers()
+                    .get(LOCATION)
+                    .ok_or(Error::NoLocationHeader)?
+                    .to_str()?,
+            )?;
+            let mut status = resource.status.clone().unwrap_or_default();
+            status.resource_path = Some(resource_url.path().to_string());
+
+            api.patch_status(
+                &name,
+                &PatchParams::apply(app_id!()),
+                &status.into(),
+            )
+            .await?;
+        }
 
         let ref_iter = resource
             .spec
@@ -162,10 +177,20 @@ impl LifecycleController for KeycloakApiObjectController {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
-        let path = &resource.spec.endpoint.path;
+        let Some(path) = resource
+            .status
+            .as_ref()
+            .and_then(|x| x.clone().resource_path)
+        else {
+            return Ok(Action::await_change());
+        };
         let keycloak = Self::keycloak(client, &resource).await?;
-        self.request(&keycloak, Method::DELETE, path, &Value::Null)
+        let res = self
+            .request(&keycloak, Method::DELETE, &path, &Value::Null)
             .await?;
+        if res.status().as_u16() != 404 {
+            res.error_for_status()?;
+        }
 
         self.secret_refs.remove(&resource);
         self.config_map_refs.remove(&resource);

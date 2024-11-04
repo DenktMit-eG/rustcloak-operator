@@ -1,0 +1,14 @@
+apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakUser
+metadata:
+  name: example-keycloakuser
+spec:
+  realmRef: example-keycloakrealm
+  definition:
+    username: awesome-user
+    email: mail@example.com
+    enabled: true
+    firstName: Awesome
+    lastName: User
+  userSecret:
+    secretName: example-keycloakuser

@@ -7,7 +7,7 @@ use futures::{future, FutureExt};
 use rustcloak_operator::controller::{
     ControllerRunner, KeycloakApiObjectController,
     KeycloakClientSecretController, KeycloakInstanceController,
-    MorphController,
+    KeycloakUserSecretController, MorphController,
 };
 use rustcloak_operator::crd::*;
 use rustcloak_operator::opts::{ControllerOpt, Opts};
@@ -217,12 +217,13 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if opts
-        .controllers
-        .contains(&ControllerOpt::RequiredActionProvider)
-    {
+    if opts.controllers.contains(&ControllerOpt::ClientSecret) {
         controllers
             .push(KeycloakClientSecretController::new(&client).run().boxed());
+    }
+    if opts.controllers.contains(&ControllerOpt::UserSecret) {
+        controllers
+            .push(KeycloakUserSecretController::new(&client).run().boxed());
     }
 
     if let Some(sock_addr) = opts.metrics_addr {
