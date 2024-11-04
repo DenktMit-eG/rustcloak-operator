@@ -7,7 +7,7 @@ use crate::{
         HasApiObject, HasRoute, KeycloakApiEndpoint, KeycloakApiObject,
         KeycloakApiObjectSpec, KeycloakApiStatus,
     },
-    endpoint::hierarchy::{HasHierContainer, Hierarchy, Traversable},
+    endpoint::{path::Path, query::Query},
     error::{Error, Result},
     morph::Morph,
 };
@@ -22,6 +22,7 @@ use kube::{
 use log::debug;
 use serde::{de::DeserializeOwned, Serialize};
 use serde_json::json;
+use up_impl::{Container, HasContainer, HasQuery, HasUp, Up};
 
 #[derive(Debug)]
 pub struct MorphController<T> {
@@ -49,10 +50,17 @@ where
         + HasRoute
         + HasStatus<Status = KeycloakApiStatus>
         + Clone
+        + HasUp<Up: HasContainer>
+        + HasContainer<Container: Container>
+        + HasQuery<Query = Query<R, String>>
         + 'static,
-    R: HasRoute + Sync + Send + HasHierContainer,
-    R::ParentType: HasHierContainer + Send + Sync,
-    Hierarchy<R>: Traversable<Object = R> + Send + Sync,
+    Up<R>: Path + Send + Sync,
+    <R::Up as HasContainer>::Container: Container<
+        UserData = (kube::Client, String),
+        Key = R::UpKey,
+        Error = Error,
+    >,
+    R::UpKey: Send + Sync,
 {
     type Resource = R;
 
@@ -93,13 +101,12 @@ where
         .into();
         let payload = payload.into();
 
-        let hierarchy = Hierarchy::<Self::Resource>::query(
-            resource.clone(),
-            client.clone(),
-        )
-        .await?;
-        let instance_ref = hierarchy.instance_ref().to_string().into();
-        let path = hierarchy.path();
+        let resource = Arc::unwrap_or_clone(resource);
+        let resource =
+            Up::<Self::Resource>::with((client.clone(), ns.clone()), resource)
+                .await?;
+        let instance_ref = resource.instance_ref().to_string().into();
+        let path = resource.path();
         let path = path.rsplit_once('/').unwrap().0.to_string().into();
         let endpoint = KeycloakApiEndpoint { instance_ref, path };
         debug!("Resolved endpoint: {:?}", endpoint);

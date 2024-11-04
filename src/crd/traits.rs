@@ -38,7 +38,7 @@ macro_rules! api_object_impl {
         }
 
         impl up_impl::HasQuery for $name {
-            type Query = $crate::endpoint::query::Query<$name>;
+            type Query = $crate::endpoint::query::Query<$name, String>;
         }
     };
 }
@@ -63,8 +63,6 @@ pub trait HasRoute: Resource + Sized {
             }
         }
     }
-
-    fn parent_ref(&self) -> &Self::ParentRefType;
 }
 
 #[macro_export]
@@ -86,11 +84,6 @@ macro_rules! route_impl {
             fn mount_point(&self) -> &'static str {
                 let $self_p = self;
                 $route
-            }
-
-            fn parent_ref(&self) -> &Self::ParentRefType {
-                use kube::core::object::HasSpec;
-                &self.spec().$ref
             }
         }
 

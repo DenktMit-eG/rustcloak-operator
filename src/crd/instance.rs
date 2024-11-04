@@ -106,5 +106,5 @@ impl KeycloakInstanceCredentialReference {
 }
 
 impl HasQuery for KeycloakInstance {
-    type Query = Query<Self>;
+    type Query = Query<Self, String>;
 }

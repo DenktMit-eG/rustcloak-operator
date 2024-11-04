@@ -5,10 +5,10 @@ use k8s_openapi::NamespaceResourceScope;
 use kube::{Api, Resource};
 use serde::de::DeserializeOwned;
 
-pub struct Query<T>(T);
+pub struct Query<T, K>(T, K);
 
 #[async_trait]
-impl<O> up_impl::Query for Query<O>
+impl<O, K> up_impl::Query for Query<O, K>
 where
     O: Resource<DynamicType = (), Scope = NamespaceResourceScope>
         + HasApiObject
@@ -17,16 +17,18 @@ where
         + DeserializeOwned
         + Send
         + Sync,
+    K: Into<String> + Send + Sync,
 {
     type UserData = (kube::Client, String);
     type Error = Error;
-    type Key = String;
+    type Key = K;
     type Output = O;
 
     async fn query(
         key: Self::Key,
         user_data: &Self::UserData,
     ) -> Result<Self::Output> {
+        let key = key.into();
         let (client, ns) = user_data;
         let api = Api::<O>::namespaced(client.clone(), ns);
         Ok(api.get(&key).await?)
@@ -34,7 +36,7 @@ where
 }
 
 #[async_trait]
-impl up_impl::Query for Query<KeycloakInstance> {
+impl up_impl::Query for Query<KeycloakInstance, String> {
     type UserData = (kube::Client, String);
     type Error = Error;
     type Key = String;

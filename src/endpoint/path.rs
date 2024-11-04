@@ -1,11 +1,13 @@
 use crate::crd::{HasApiObject, HasRoute, KeycloakInstance};
 use k8s_openapi::NamespaceResourceScope;
-use kube::Resource;
+use kube::{Resource, ResourceExt};
 use serde::de::DeserializeOwned;
+use std::ops::Deref;
 use up_impl::{Container, HasContainer, HasUp, Root, Up};
 
 pub trait Path {
     fn path(&self) -> String;
+    fn instance_ref(&self) -> String;
 }
 
 impl<O> Path for Up<O>
@@ -31,10 +33,18 @@ where
             self.value.id()
         )
     }
+
+    fn instance_ref(&self) -> String {
+        self.up.instance_ref()
+    }
 }
 
 impl Path for Root<KeycloakInstance> {
     fn path(&self) -> String {
         "".to_string()
+    }
+
+    fn instance_ref(&self) -> String {
+        self.deref().name_unchecked()
     }
 }

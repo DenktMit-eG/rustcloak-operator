@@ -1,6 +1,7 @@
 use crate::crd::{
     api_object_impl, schema_patch, ClientRef, ClientScopeRef,
-    KeycloakApiObjectOptions, KeycloakApiStatus,
+    KeycloakApiObjectOptions, KeycloakApiStatus, KeycloakClient,
+    KeycloakClientScope,
 };
 use either::Either;
 use keycloak::types::ProtocolMapperRepresentation;
@@ -8,7 +9,7 @@ use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
 
-type Parents = Either<ClientRef, ClientScopeRef>;
+type Parents = Either<KeycloakClient, KeycloakClientScope>;
 type ParentRef = Either<ClientRef, ClientScopeRef>;
 
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]

@@ -78,9 +78,6 @@ impl HasRoute for KeycloakRealm {
     fn mount_point(&self) -> &'static str {
         "admin/realms"
     }
-    fn parent_ref(&self) -> &Self::ParentRefType {
-        &self.spec().instance_ref
-    }
 }
 
 schema_patch!(KeycloakRealm: |s| {
