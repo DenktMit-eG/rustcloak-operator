@@ -32,7 +32,7 @@ pub enum ControllerOpt {
     UserSecret,
 }
 
-/// Keyclaok Operator
+/// Keycloak Operator
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
 pub struct Opts {

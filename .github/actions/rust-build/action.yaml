@@ -15,6 +15,6 @@ runs:
     with:
       target: ${{ inputs.target }}
       use-cross: ${{ inputs.use-cross }}
-      binaries: rustclaok
+      binaries: rustcloak
       archive-prefix: rustcloak-operator-${{ github.ref_name }}
       extra-files: README.md
