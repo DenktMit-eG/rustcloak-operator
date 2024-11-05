@@ -1,16 +1,18 @@
 use actix_web::{
     get, middleware, App, HttpRequest, HttpResponse, HttpServer, Responder,
 };
-use anyhow::Result;
 use clap::Parser;
 use futures::{future, FutureExt};
-use rustcloak_operator::controller::{
-    ControllerRunner, KeycloakApiObjectController,
-    KeycloakClientSecretController, KeycloakInstanceController,
-    KeycloakUserSecretController, MorphController,
+use rustcloak_operator::{
+    controller::{
+        ControllerRunner, KeycloakApiObjectController,
+        KeycloakClientSecretController, KeycloakInstanceController,
+        KeycloakUserSecretController, MorphController,
+    },
+    crd::*,
+    error::Result,
+    opts::{ControllerOpt, Opts},
 };
-use rustcloak_operator::crd::*;
-use rustcloak_operator::opts::{ControllerOpt, Opts};
 
 #[get("/healthz")]
 async fn health(_: HttpRequest) -> impl Responder {

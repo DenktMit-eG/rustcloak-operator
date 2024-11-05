@@ -9,7 +9,6 @@ use crate::{
     util::K8sKeycloakBuilder,
 };
 use futures::StreamExt;
-use http::Method;
 use k8s_openapi::{api::core::v1::Secret, ByteString};
 use keycloak::types::CredentialRepresentation;
 use kube::{
@@ -22,6 +21,7 @@ use kube::{
 };
 use log::{error, info};
 use randstr::randstr;
+use reqwest::Method;
 use up_impl::Container;
 use up_impl::Up;
 

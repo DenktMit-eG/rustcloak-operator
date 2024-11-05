@@ -7,7 +7,6 @@ use crate::{
     error::{Error, Result},
 };
 use chrono::{DateTime, Utc};
-use http::Method;
 use k8s_openapi::api::core::v1::Secret;
 use kube::{
     api::{Patch, PatchParams},
@@ -17,6 +16,7 @@ use kube::{
 };
 use log::{debug, warn};
 use oauth2::{ClientId, ClientSecret};
+use reqwest::Method;
 use std::{collections::HashMap, ops::Deref, sync::Arc, time::Duration};
 use tokio::{
     sync::{Mutex, MutexGuard, Notify},
