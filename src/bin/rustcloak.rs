@@ -21,6 +21,11 @@ async fn health(_: HttpRequest) -> impl Responder {
 async fn main() -> Result<()> {
     let opts = Opts::parse();
 
+    eprintln!(
+        "Starting rustcloak-operator version {}",
+        env!("CARGO_PKG_VERSION")
+    );
+
     pretty_env_logger::init();
 
     let client = kube::Client::try_default().await?;
