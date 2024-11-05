@@ -49,6 +49,7 @@ jobs:
     - uses: withlazers/container-action@main
       with:
         repository: rustcloak
+        username: gottox
         password: ${{ secrets.DOCKER_TOKEN }}
         ref-tags: v${{ needs.prepare.outputs.op_version }}
         dockerfile: ./Dockerfile
