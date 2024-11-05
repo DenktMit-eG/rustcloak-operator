@@ -90,6 +90,9 @@ spec:
                 type: string
               ready:
                 type: boolean
+              resourcePath:
+                nullable: true
+                type: string
               status:
                 type: string
             required:

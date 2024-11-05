@@ -13,7 +13,19 @@ spec:
     singular: keycloakprotocolmapper
   scope: Namespaced
   versions:
-  - additionalPrinterColumns: []
+  - additionalPrinterColumns:
+    - description: ''
+      jsonPath: .status.ready
+      name: Ready
+      type: boolean
+    - description: ''
+      jsonPath: .status.status
+      name: Status
+      type: string
+    - description: ''
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
     name: v1
     schema:
       openAPIV3Schema:
@@ -25,12 +37,11 @@ spec:
               - clientRef
             - required:
               - clientScopeRef
+            description: the KeycloakProtocolMapper resource
             properties:
               clientRef:
-                description: This indicates that the ProtocolMapper is a child of a KeycloakClient. Mutually exclusive with `clientScopeRef`
                 type: string
               clientScopeRef:
-                description: This indicates that the ProtocolMapper is a child of a KeycloakClientScope. Mutually exclusive with `clientRef`
                 type: string
               definition:
                 properties:
@@ -65,11 +76,8 @@ spec:
                 - message: Value is immutable
                   rule: has(self.id) == has(oldSelf.id)
               options:
+                description: Options for the request to the Keycloak Admin API.
                 nullable: true
-                properties:
-                  mustCreate:
-                    nullable: true
-                    type: boolean
                 type: object
             required:
             - definition
@@ -85,6 +93,9 @@ spec:
                 type: string
               ready:
                 type: boolean
+              resourcePath:
+                nullable: true
+                type: string
               status:
                 type: string
             required:

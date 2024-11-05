@@ -13,13 +13,26 @@ spec:
     singular: keycloakrequiredactionprovider
   scope: Namespaced
   versions:
-  - additionalPrinterColumns: []
+  - additionalPrinterColumns:
+    - description: ''
+      jsonPath: .status.ready
+      name: Ready
+      type: boolean
+    - description: ''
+      jsonPath: .status.status
+      name: Status
+      type: string
+    - description: ''
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
     name: v1
     schema:
       openAPIV3Schema:
         description: Auto-generated derived type for KeycloakRequiredActionProviderSpec via `CustomResource`
         properties:
           spec:
+            description: the KeycloakRequiredActionProvider resource
             properties:
               definition:
                 properties:
@@ -55,13 +68,11 @@ spec:
                 - message: Value is immutable
                   rule: has(self.alias) == has(oldSelf.alias)
               options:
+                description: Options for the request to the Keycloak Admin API.
                 nullable: true
-                properties:
-                  mustCreate:
-                    nullable: true
-                    type: boolean
                 type: object
               realmRef:
+                description: the name of the kubernetes object that created the realm.
                 type: string
             required:
             - definition
@@ -78,6 +89,9 @@ spec:
                 type: string
               ready:
                 type: boolean
+              resourcePath:
+                nullable: true
+                type: string
               status:
                 type: string
             required:

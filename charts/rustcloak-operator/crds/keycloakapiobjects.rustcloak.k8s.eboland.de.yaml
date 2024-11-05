@@ -26,6 +26,10 @@ spec:
       jsonPath: .status.status
       name: Status
       type: string
+    - description: ''
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
     name: v1
     schema:
       openAPIV3Schema:
@@ -57,11 +61,8 @@ spec:
                 - message: Value is immutable
                   rule: self == oldSelf
               options:
+                description: Options for the request to the Keycloak Admin API.
                 nullable: true
-                properties:
-                  mustCreate:
-                    nullable: true
-                    type: boolean
                 type: object
               payload:
                 additionalProperties: true
@@ -159,6 +160,9 @@ spec:
                 type: string
               ready:
                 type: boolean
+              resourcePath:
+                nullable: true
+                type: string
               status:
                 type: string
             required:
