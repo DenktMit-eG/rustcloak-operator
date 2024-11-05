@@ -105,10 +105,16 @@ where
         let resource =
             Up::<Self::Resource>::with((client.clone(), ns.clone()), resource)
                 .await?;
+        let Some(endpoint_path) = resource.endpoint_path() else {
+            // TODO: proper error handling
+            return Err(Error::NoData);
+        };
+        let endpoint_path = endpoint_path.into();
         let instance_ref = resource.instance_ref().to_string().into();
-        let path = resource.path();
-        let path = path.rsplit_once('/').unwrap().0.to_string().into();
-        let endpoint = KeycloakApiEndpoint { instance_ref, path };
+        let endpoint = KeycloakApiEndpoint {
+            instance_ref,
+            path: endpoint_path,
+        };
         debug!("Resolved endpoint: {:?}", endpoint);
 
         let api_object = KeycloakApiObject {
