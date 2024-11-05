@@ -131,8 +131,10 @@ impl LifecycleController for KeycloakApiObjectController {
             .as_ref()
             .and_then(|x| x.resource_path.as_ref())
         {
-            if let Some(_) =
-                self.request(&keycloak, Method::PUT, path, &payload).await?
+            if self
+                .request(&keycloak, Method::PUT, path, &payload)
+                .await?
+                .is_some()
             {
                 success = true;
                 api.patch_status(

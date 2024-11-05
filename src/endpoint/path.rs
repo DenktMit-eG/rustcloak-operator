@@ -33,9 +33,7 @@ where
     }
 
     fn endpoint_path(&self) -> Option<String> {
-        let Some(up_resource_path) = self.up.resource_path() else {
-            return None;
-        };
+        let up_resource_path = self.up.resource_path()?;
         Some(format!("{}/{}", up_resource_path, self.value.mount_point()))
     }
 
