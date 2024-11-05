@@ -15,9 +15,13 @@ jobs:
     - name: Check If Versions Match
       run: |
         cargo_version=$(cargo pkgid | cut -d'#' -f 2)
+        helm_version=$(yq .version charts/rustcloak-operator/Chart.yaml)
+        helm_appversion=$(yq .appVersion charts/rustcloak-operator/Chart.yaml)
 
         set -x
         test "${cargo_version}"   = "${GITHUB_REF_NAME#v}"
+        test "${helm_version}"    = "${GITHUB_REF_NAME#v}"
+        test "${helm_appversion}" = "${GITHUB_REF_NAME#v}"
 
   build:
     needs: prepare
@@ -26,9 +30,7 @@ jobs:
       matrix:
         target:
         - aarch64-unknown-linux-musl
-        - i686-unknown-linux-musl
         - x86_64-unknown-linux-musl
-        - armv7-unknown-linux-musleabihf
     steps:
     - uses: actions/checkout@v3
     - uses: ./.github/actions/rust-build
@@ -47,6 +49,27 @@ jobs:
     - uses: withlazers/container-action@main
       with:
         repository: rustclaok
+        username: gottox
+        password: ${{ secrets.DOCKER_TOKEN }}
+    - name: Build Docker Image
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        archs: amd64, arm64
+        image: rustcloak-operator
+        tags: >
+          latest
+          ${{ github.ref_name }}
+        containerfiles: ./Dockerfile
+
+    - name: Push to Dockerhub
+      if: startsWith(github.ref, 'refs/tags/v')
+      id: push-to-registry
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build-image.outputs.image }}
+        tags: ${{ steps.build-image.outputs.tags }}
+        registry: docker.io/withlazers
         username: gottox
         password: ${{ secrets.DOCKER_TOKEN }}
 
