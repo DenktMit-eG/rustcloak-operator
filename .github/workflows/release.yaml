@@ -68,4 +68,4 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         ssh_key: ${{ secrets.HELMCHART_SSH_DEPLOY_KEY }}
         artifacts: "*"
-        helm_chart: true
+        helm_chart: rustcloak-operator
