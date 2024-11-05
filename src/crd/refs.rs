@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 pub struct ClientRef {
     pub client_ref: String,
 }
-impl AsRef<str> for ClientRef {
-    fn as_ref(&self) -> &str {
-        &self.client_ref
+impl Into<String> for ClientRef {
+    fn into(self) -> String {
+        self.client_ref
     }
 }
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -16,9 +16,9 @@ impl AsRef<str> for ClientRef {
 pub struct ClientScopeRef {
     pub client_scope_ref: String,
 }
-impl AsRef<str> for ClientScopeRef {
-    fn as_ref(&self) -> &str {
-        &self.client_scope_ref
+impl Into<String> for ClientScopeRef {
+    fn into(self) -> String {
+        self.client_scope_ref
     }
 }
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -26,8 +26,8 @@ impl AsRef<str> for ClientScopeRef {
 pub struct RealmRef {
     pub realm_ref: String,
 }
-impl AsRef<str> for RealmRef {
-    fn as_ref(&self) -> &str {
-        &self.realm_ref
+impl Into<String> for RealmRef {
+    fn into(self) -> String {
+        self.realm_ref
     }
 }

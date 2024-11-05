@@ -8,6 +8,7 @@ use keycloak::types::ProtocolMapperRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
+use up_impl::OneOf;
 
 type Parents = Either<KeycloakClient, KeycloakClientScope>;
 type ParentRef = Either<ClientRef, ClientScopeRef>;
@@ -52,6 +53,6 @@ pub struct KeycloakProtocolMapperSpec {
 api_object_impl!(KeycloakProtocolMapper, ProtocolMapperRepresentation, "pm");
 
 crate::crd::route_impl!(Parents / "protocol-mappers/models"
-    / id: KeycloakProtocolMapper .. parent_ref: ParentRef);
+    / id: KeycloakProtocolMapper .. parent_ref: OneOf<String, String>);
 
 schema_patch!(KeycloakProtocolMapper);

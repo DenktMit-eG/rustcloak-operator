@@ -7,6 +7,7 @@ use keycloak::types::RoleRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
+use up_impl::OneOf;
 
 use super::{KeycloakClient, KeycloakRealm};
 
@@ -49,7 +50,7 @@ pub struct KeycloakRoleSpec {
     pub definition: RoleRepresentation,
 }
 
-crate::crd::route_impl!(Parents / "roles" / id: KeycloakRole .. parent_ref: ParentRef);
+crate::crd::route_impl!(Parents / "roles" / id: KeycloakRole .. parent_ref: OneOf<String, String>);
 
 api_object_impl!(KeycloakRole, RoleRepresentation, "role");
 

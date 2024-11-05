@@ -165,14 +165,14 @@ async fn main() -> Result<()> {
         );
     }
     if opts.controllers.contains(&ControllerOpt::ProtocolMapper) {
-        //controllers.push(
-        //    ControllerRunner::new(
-        //        MorphController::<KeycloakProtocolMapper>::default(),
-        //        &client,
-        //    )
-        //    .run()
-        //    .boxed(),
-        //);
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakProtocolMapper>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
     }
     if opts
         .controllers
@@ -187,26 +187,26 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    //if opts.controllers.contains(&ControllerOpt::Resource) {
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            MorphController::<KeycloakResource>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if opts.controllers.contains(&ControllerOpt::Role) {
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            MorphController::<KeycloakRole>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
+    if opts.controllers.contains(&ControllerOpt::Resource) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakResource>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::Role) {
+        controllers.push(
+            ControllerRunner::new(
+                MorphController::<KeycloakRole>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
     if opts.controllers.contains(&ControllerOpt::Scope) {
         controllers.push(
             ControllerRunner::new(

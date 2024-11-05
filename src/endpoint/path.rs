@@ -1,4 +1,5 @@
 use crate::crd::{HasApiObject, HasRoute, KeycloakInstance};
+use either::Either;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{Resource, ResourceExt};
 use serde::de::DeserializeOwned;
@@ -36,6 +37,22 @@ where
 
     fn instance_ref(&self) -> String {
         self.up.instance_ref()
+    }
+}
+
+impl<L: Path, R: Path> Path for Either<L, R> {
+    fn path(&self) -> String {
+        match self {
+            Either::Left(left) => left.path(),
+            Either::Right(right) => right.path(),
+        }
+    }
+
+    fn instance_ref(&self) -> String {
+        match self {
+            Either::Left(left) => left.instance_ref(),
+            Either::Right(right) => right.instance_ref(),
+        }
     }
 }
 
