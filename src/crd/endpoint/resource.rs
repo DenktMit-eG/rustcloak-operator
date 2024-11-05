@@ -1,4 +1,4 @@
-use super::KeycloakRealm;
+use super::KeycloakClient;
 use crate::crd::{
     api_object_impl, schema_patch, HasRoute, KeycloakApiObjectOptions,
     KeycloakApiStatus,
@@ -40,14 +40,14 @@ use up_impl::HasUp;
 pub struct KeycloakResourceSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
-    pub realm_ref: String,
+    pub client_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: ResourceRepresentation,
 }
 
-//crate::crd::route_impl!(KeycloakRealm / "authz/resource-server/resource" / _id: KeycloakResource .. realm_ref: String);
+//crate::crd::route_impl!(KeycloakClient / "authz/resource-server/resource" / _id: KeycloakResource .. client_ref: String);
 impl HasRoute for KeycloakResource {
-    type ParentType = KeycloakRealm;
+    type ParentType = KeycloakClient;
     type ParentRefType = String;
 
     fn id_ident() -> &'static str {
@@ -64,11 +64,11 @@ impl HasRoute for KeycloakResource {
 }
 
 impl HasUp for KeycloakResource {
-    type Up = KeycloakRealm;
+    type Up = KeycloakClient;
     type UpKey = String;
 
     fn key(&self) -> String {
-        self.spec.realm_ref.clone()
+        self.spec.client_ref.clone()
     }
 }
 
