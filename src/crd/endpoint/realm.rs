@@ -40,6 +40,7 @@ use up_impl::Root;
         }"#
 )]
 #[serde(rename_all = "camelCase")]
+/// the KeycloakRealm resource
 pub struct KeycloakRealmSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,

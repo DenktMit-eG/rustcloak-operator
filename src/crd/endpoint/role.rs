@@ -41,6 +41,7 @@ type Parents = Either<KeycloakRealm, KeycloakClient>;
         }"#
 )]
 #[serde(rename_all = "camelCase")]
+/// the KeycloakRole resource
 pub struct KeycloakRoleSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,

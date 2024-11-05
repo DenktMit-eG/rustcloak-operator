@@ -37,9 +37,11 @@ use up_impl::HasUp;
         }"#
 )]
 #[serde(rename_all = "camelCase")]
+/// the KeycloakResource resource
 pub struct KeycloakResourceSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
+    /// the name of the kubernetes object that created the client.
     pub client_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: ResourceRepresentation,

@@ -36,9 +36,11 @@ use super::KeycloakRealm;
         }"#
 )]
 #[serde(rename_all = "camelCase")]
+/// the KeycloakGroup resource
 pub struct KeycloakGroupSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
+    /// the name of the kubernetes object that created the realm.
     pub realm_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: GroupRepresentation,

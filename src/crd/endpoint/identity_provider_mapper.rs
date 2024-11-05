@@ -36,9 +36,11 @@ use super::KeycloakIdentityProvider;
         }"#
 )]
 #[serde(rename_all = "camelCase")]
+/// the KeycloakIdentityProviderMapper resource
 pub struct KeycloakIdentityProviderMapperSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
+    /// the name of the kubernetes object that created the identity provider.
     pub identity_provider_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: IdentityProviderMapperRepresentation,

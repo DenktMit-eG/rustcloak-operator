@@ -41,10 +41,12 @@ type ParentRef = Either<ClientRef, ClientScopeRef>;
         }"#
 )]
 #[serde(rename_all = "camelCase")]
+/// the KeycloakProtocolMapper resource
 pub struct KeycloakProtocolMapperSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     #[serde(flatten)]
+    /// the name of the kubernetes object that created the parent resource.
     pub parent_ref: ParentRef,
     #[schemars(schema_with = "schema")]
     pub definition: ProtocolMapperRepresentation,

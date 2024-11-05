@@ -81,7 +81,5 @@ where
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
-pub struct KeycloakApiObjectOptions {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub must_create: Option<bool>,
-}
+/// Options for the request to the Keycloak Admin API.
+pub struct KeycloakApiObjectOptions {}

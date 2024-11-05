@@ -36,9 +36,11 @@ use super::KeycloakClient;
         }"#
 )]
 #[serde(rename_all = "camelCase")]
+/// the KeycloakScope resource
 pub struct KeycloakScopeSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
+    /// the name of the kubernetes object that created the client.
     pub client_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: ScopeRepresentation,

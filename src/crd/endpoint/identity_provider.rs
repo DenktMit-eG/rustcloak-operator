@@ -35,9 +35,11 @@ use serde::{Deserialize, Serialize};
         }"#
 )]
 #[serde(rename_all = "camelCase")]
+/// the KeycloakIdentityProvider resource
 pub struct KeycloakIdentityProviderSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
+    /// the name of the kubernetes object that created the realm.
     pub realm_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: IdentityProviderRepresentation,

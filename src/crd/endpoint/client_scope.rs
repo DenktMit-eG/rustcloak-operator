@@ -36,9 +36,11 @@ use super::KeycloakRealm;
         }"#
 )]
 #[serde(rename_all = "camelCase")]
+/// the KeycloakClientScope resource
 pub struct KeycloakClientScopeSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
+    /// the name of the kubernetes object that created the realm.
     pub realm_ref: String,
     // TODO: is_template should be immutable. We can't do immutable options yet.
     #[serde(default, skip_serializing_if = "Option::is_none")]
