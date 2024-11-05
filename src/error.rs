@@ -82,6 +82,8 @@ pub enum Error {
     NoClientId,
     #[error("No Client Secret")]
     NoClientSecret,
+    #[error("Resource not found")]
+    NoResource,
     #[error("No Location Header")]
     NoLocationHeader,
 }
