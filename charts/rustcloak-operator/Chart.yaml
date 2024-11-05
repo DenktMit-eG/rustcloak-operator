@@ -3,5 +3,11 @@ name: rustcloak-operator
 description: |
   The helm-chart for the rustcloak-operator
 type: application
+icon: https://github.com/withlazers/rustcloak-operator/raw/refs/heads/main/icon.svg
+home: https://github.com/withlazers/rustcloak-operator
+maintainers:
+  - name: Enno Boland
+    email: mail@eboland.de
+    url: https://github.com/Gottox
 version: 0.1.0
 appVersion: "0.1.0"
