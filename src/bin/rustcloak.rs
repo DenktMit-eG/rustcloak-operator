@@ -17,6 +17,20 @@ async fn health(_: HttpRequest) -> impl Responder {
     HttpResponse::Ok().json("healthy")
 }
 
+#[cfg(debug_assertions)]
+fn init_logger() {
+    pretty_env_logger::init();
+}
+
+#[cfg(not(debug_assertions))]
+fn init_logger() {
+    use structured_logger::{async_json::new_writer, Builder};
+
+    Builder::with_level("info")
+        .with_target_writer("*", new_writer(tokio::io::stdout()))
+        .init();
+}
+
 #[tokio::main]
 async fn main() -> Result<()> {
     let opts = Opts::parse();
@@ -26,7 +40,7 @@ async fn main() -> Result<()> {
         env!("CARGO_PKG_VERSION")
     );
 
-    pretty_env_logger::init();
+    init_logger();
 
     let client = kube::Client::try_default().await?;
     let mut controllers = vec![];

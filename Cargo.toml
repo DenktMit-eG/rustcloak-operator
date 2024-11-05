@@ -15,7 +15,7 @@ kube-derive = "0.96.0"
 schemars = { version = "0.8.21", features = ["chrono", "either"] }
 serde = "1.0.210"
 thiserror = "1.0.64"
-log = "0.4.22"
+log = { version = "0.4.22", features = ["kv"] }
 futures = "0.3.31"
 async-trait = "0.1.83"
 reqwest = "0.12.8"
@@ -32,6 +32,7 @@ either = { version = "1.13.0", features = ["serde"] }
 #up_impl = { path = "../up_impl" }
 up_impl = { git = "https://github.com/Gottox/up_impl.git" }
 randstr = "0.2.1"
+structured-logger = "1.0.3"
 
 [profile.release]
 strip = true
