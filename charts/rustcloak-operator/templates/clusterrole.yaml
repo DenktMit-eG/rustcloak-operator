@@ -27,11 +27,13 @@ rules:
     - keycloakprotocolmappers/status
     - keycloakrealms/status
     - keycloakrequiredactionproviders/status
+    - keycloakresources/status
     - keycloakroles/status
     - keycloakscopes/status
     - keycloakusers/status
   verbs:
     - patch
+    - get
 - apiGroups:
   - rustcloak.k8s.eboland.de
   resources:
@@ -49,6 +51,7 @@ rules:
     - keycloakprotocolmappers
     - keycloakrealms
     - keycloakrequiredactionproviders
+    - keycloakresources
     - keycloakroles
     - keycloakscopes
     - keycloakusers
