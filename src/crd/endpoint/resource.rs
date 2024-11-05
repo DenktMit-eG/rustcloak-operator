@@ -1,12 +1,13 @@
+use super::KeycloakRealm;
 use crate::crd::{
-    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, HasRoute, KeycloakApiObjectOptions,
+    KeycloakApiStatus,
 };
 use keycloak::types::ResourceRepresentation;
 use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
-
-use super::KeycloakRealm;
+use up_impl::HasUp;
 
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
@@ -44,8 +45,53 @@ pub struct KeycloakResourceSpec {
     pub definition: ResourceRepresentation,
 }
 
-crate::crd::route_impl!(KeycloakRealm / "authz/resource-server/resource" / id: KeycloakResource .. realm_ref: String);
+//crate::crd::route_impl!(KeycloakRealm / "authz/resource-server/resource" / _id: KeycloakResource .. realm_ref: String);
+impl HasRoute for KeycloakResource {
+    type ParentType = KeycloakRealm;
+    type ParentRefType = String;
+
+    fn id_ident() -> &'static str {
+        "_id"
+    }
+
+    fn id_option(&self) -> Option<&str> {
+        self.spec.definition.id.as_deref()
+    }
+
+    fn mount_point(&self) -> &'static str {
+        "authz/resource-server/resource"
+    }
+}
+
+impl HasUp for KeycloakResource {
+    type Up = KeycloakRealm;
+    type UpKey = String;
+
+    fn key(&self) -> String {
+        self.spec.realm_ref.clone()
+    }
+}
 
 api_object_impl!(KeycloakResource, ResourceRepresentation, "resource");
 
-schema_patch!(KeycloakResource);
+schema_patch!(KeycloakResource: |s| {
+    s.prop("scopes")
+        .array_item()
+        .prop("policies")
+        .array_item()
+        .remove("scopesData")
+        .remove("resourcesData")
+        .additional_properties();
+    s.prop("scopes").array_item().remove("resources");
+    s.prop("scopesUma")
+        .array_item()
+        .prop("policies")
+        .array_item()
+        .remove("resourcesData")
+        .remove("scopesData")
+        .additional_properties();
+    s.prop("scopesUma")
+        .array_item()
+        .remove("resources")
+        .additional_properties();
+});

@@ -17,7 +17,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         KeycloakProtocolMapper::crd(),
         KeycloakRealm::crd(),
         KeycloakRequiredActionProvider::crd(),
-        //KeycloakResource::crd(),
+        KeycloakResource::crd(),
         KeycloakRole::crd(),
         KeycloakScope::crd(),
         KeycloakUser::crd(),
