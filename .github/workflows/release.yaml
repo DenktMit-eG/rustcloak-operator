@@ -21,7 +21,7 @@ jobs:
         set -x
         test "${cargo_version}"   = "${GITHUB_REF_NAME#v}"
         test "${helm_version}"    = "${GITHUB_REF_NAME#v}"
-        test "${helm_appversion}" = "${GITHUB_REF_NAME#v}"
+        test "${helm_appversion}" = "${GITHUB_REF_NAME}"
 
   build:
     needs: prepare
