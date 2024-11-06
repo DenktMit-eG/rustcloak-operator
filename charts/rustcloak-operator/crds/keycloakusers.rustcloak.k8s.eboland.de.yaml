@@ -331,11 +331,12 @@ spec:
                     nullable: true
                     type: string
                   secretName:
-                    nullable: true
                     type: string
                   usernameKey:
                     nullable: true
                     type: string
+                required:
+                - secretName
                 type: object
             required:
             - definition

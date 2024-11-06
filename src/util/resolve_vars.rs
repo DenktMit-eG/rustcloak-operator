@@ -26,7 +26,8 @@ impl KeycloakApiObject {
             resolved_vars.insert(r.name.clone(), value);
         }
 
-        Self::visit(&self.spec.payload, &resolved_vars)
+        let payload = serde_yaml::from_str(&self.spec.payload)?;
+        Self::visit(&payload, &resolved_vars)
     }
 
     fn visit(value: &Value, vars: &HashMap<String, String>) -> Result<Value> {

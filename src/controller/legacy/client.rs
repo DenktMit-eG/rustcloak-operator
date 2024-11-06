@@ -10,11 +10,11 @@ use keycloak_crd::{
 };
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;
-use kube::ResourceExt;
 use kube::{
     runtime::{controller::Action, Controller},
     Api,
 };
+use kube::{Resource, ResourceExt};
 use std::sync::Arc;
 
 #[derive(Debug, Default)]
@@ -42,12 +42,14 @@ impl LifecycleController for LegacyClientController {
     ) -> Result<Action> {
         let name = resource.name_unchecked();
         let namespace = resource.namespace().ok_or(Error::NoNamespace)?;
+        let owner_ref = resource.owner_ref(&()).unwrap();
         let api = Api::<KeycloakClient>::namespaced(client.clone(), &namespace);
         let definition = serde_json::to_value(&resource.spec.client)?;
         let instance = KeycloakClient {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
                 namespace: Some(namespace.clone()),
+                owner_references: Some(vec![owner_ref]),
                 ..Default::default()
             },
             spec: KeycloakClientSpec {
@@ -60,10 +62,7 @@ impl LifecycleController for LegacyClientController {
                 .await?,
                 definition: serde_json::from_value(definition)?,
                 client_secret: Some(KeycloakClientSecretReference {
-                    secret_name: Some(format!(
-                        "keycloak-client-secret-{}",
-                        name
-                    )),
+                    secret_name: format!("keycloak-client-secret-{}", name),
                     client_id_key: Some("CLIENT_ID".to_string()),
                     client_secret_key: Some("CLIENT_SECRET".to_string()),
                 }),

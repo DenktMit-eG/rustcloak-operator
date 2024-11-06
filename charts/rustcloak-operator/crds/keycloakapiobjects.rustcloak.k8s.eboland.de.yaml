@@ -55,8 +55,7 @@ spec:
                 - path
                 type: object
               immutablePayload:
-                additionalProperties: true
-                type: object
+                type: string
                 x-kubernetes-validations:
                 - message: Value is immutable
                   rule: self == oldSelf
@@ -65,8 +64,7 @@ spec:
                 nullable: true
                 type: object
               payload:
-                additionalProperties: true
-                type: object
+                type: string
               vars:
                 items:
                   description: EnvVar represents an environment variable present in a Container.

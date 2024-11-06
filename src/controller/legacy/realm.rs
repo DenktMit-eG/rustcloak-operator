@@ -10,11 +10,11 @@ use keycloak_crd::{
 };
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;
-use kube::ResourceExt;
 use kube::{
     runtime::{controller::Action, Controller},
     Api,
 };
+use kube::{Resource, ResourceExt};
 use std::sync::Arc;
 
 #[derive(Debug, Default)]
@@ -42,12 +42,14 @@ impl LifecycleController for LegacyRealmController {
     ) -> Result<Action> {
         let name = resource.name_unchecked();
         let namespace = resource.namespace().ok_or(Error::NoNamespace)?;
+        let owner_ref = resource.owner_ref(&()).unwrap();
         let api = Api::<KeycloakRealm>::namespaced(client.clone(), &namespace);
         let definition = serde_json::to_value(&resource.spec.realm)?;
         let instance = KeycloakRealm {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
                 namespace: Some(namespace.clone()),
+                owner_references: Some(vec![owner_ref]),
                 ..Default::default()
             },
             spec: KeycloakRealmSpec {

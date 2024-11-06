@@ -101,9 +101,11 @@ impl KeycloakUserSecretController {
         else {
             return Ok(Action::await_change());
         };
+        let Some(secret_ref) = resource.spec.user_secret.clone() else {
+            return Ok(Action::await_change());
+        };
         let client = &ctx.client;
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let secret_ref = resource.spec.user_secret.clone().unwrap_or_default();
 
         let resource = Arc::unwrap_or_clone(resource);
         let resource = Up::with((client.clone(), ns.clone()), resource).await?;
@@ -118,13 +120,12 @@ impl KeycloakUserSecretController {
             .clone()
             .unwrap_or("password".to_string());
 
+        let secret_name = &secret_ref.secret_name;
         let instance = &resource.up.up;
         let keycloak = K8sKeycloakBuilder::new(instance, client)
             .with_token()
             .await?;
 
-        let secret_name =
-            secret_ref.secret_name.unwrap_or(resource.name_unchecked());
         ctx.secret_refs.add(&resource, [&secret_name]);
         let secret =
             if let Some(secret) = secret_api.get_opt(&secret_name).await? {
@@ -154,7 +155,7 @@ impl KeycloakUserSecretController {
                 let secret = Secret {
                     data: Some(data),
                     metadata: ObjectMeta {
-                        name: Some(secret_name),
+                        name: Some(secret_name.to_string()),
                         namespace: Some(ns),
                         owner_references: Some(vec![owner_ref]),
                         ..Default::default()

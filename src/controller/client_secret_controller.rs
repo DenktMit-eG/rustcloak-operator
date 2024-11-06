@@ -93,10 +93,11 @@ impl KeycloakClientSecretController {
         else {
             return Ok(Action::await_change());
         };
+        let Some(secret_ref) = resource.spec.client_secret.clone() else {
+            return Ok(Action::await_change());
+        };
         let client = &ctx.client;
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let secret_ref =
-            resource.spec.client_secret.clone().unwrap_or_default();
 
         let resource = Arc::unwrap_or_clone(resource);
         let resource = Up::with((client.clone(), ns.clone()), resource).await?;
@@ -149,9 +150,7 @@ impl KeycloakClientSecretController {
         let secret = Secret {
             data: Some(data),
             metadata: ObjectMeta {
-                name: Some(
-                    secret_ref.secret_name.unwrap_or(resource.name_unchecked()),
-                ),
+                name: Some(secret_ref.secret_name),
                 namespace: Some(ns),
                 owner_references: Some(vec![owner_ref]),
                 ..Default::default()

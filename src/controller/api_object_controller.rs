@@ -25,7 +25,7 @@ use reqwest::Url;
 use reqwest::{header::LOCATION, Method, Response};
 use serde_json::Value;
 use std::str::FromStr;
-use std::{ops::Deref, sync::Arc};
+use std::sync::Arc;
 use tokio::sync::Notify;
 
 /// This controller is responsible for applying the desired keycloak state in kubernetes to a
@@ -122,7 +122,8 @@ impl LifecycleController for KeycloakApiObjectController {
         let api = Api::<KeycloakApiObject>::namespaced(client.clone(), &ns);
         let keycloak = Self::keycloak(client, &resource).await?;
         let mut payload = resource.resolve(client).await?;
-        let immutable_payload = resource.spec.immutable_payload.deref();
+        let immutable_payload: Value =
+            serde_yaml::from_str(&resource.spec.immutable_payload.0)?;
         payload.merge_from(immutable_payload.clone());
         let mut success = false;
 
@@ -201,6 +202,8 @@ impl LifecycleController for KeycloakApiObjectController {
             .as_ref()
             .and_then(|x| x.clone().resource_path)
         else {
+            // If the resource has no resource URL we expect that it never got created, so it's
+            // safe to delete the resource.
             return Ok(Action::await_change());
         };
         let keycloak = Self::keycloak(client, &resource).await?;

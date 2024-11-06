@@ -95,11 +95,11 @@ where
             .unwrap()
             .remove(primary_key);
         let primary_key_value = resource.id();
-        let immutable_payload = json!({
+        let immutable_payload = serde_yaml::to_string(&json!({
             primary_key: primary_key_value,
-        })
+        }))?
         .into();
-        let payload = payload.into();
+        let payload = serde_yaml::to_string(&payload)?.into();
 
         let resource = Arc::unwrap_or_clone(resource);
         let resource =

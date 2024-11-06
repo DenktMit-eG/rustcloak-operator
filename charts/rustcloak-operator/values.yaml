@@ -2,6 +2,7 @@ replicaCount: 1
 
 application:
   logLevel: "info"
+  legacy: false
 
 image:
   repository: withlazers/rustcloak-operator

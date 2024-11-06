@@ -11,7 +11,7 @@ use super::KeycloakRealm;
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakUserSecretReference {
-    pub secret_name: Option<String>,
+    pub secret_name: String,
     pub username_key: Option<String>,
     pub password_key: Option<String>,
 }

@@ -7,11 +7,11 @@ use async_trait::async_trait;
 use keycloak_crd::ExternalKeycloak as LegacyInstance;
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;
-use kube::ResourceExt;
 use kube::{
     runtime::{controller::Action, Controller},
     Api,
 };
+use kube::{Resource, ResourceExt};
 use std::sync::Arc;
 
 #[derive(Debug, Default)]
@@ -39,12 +39,14 @@ impl LifecycleController for LegacyInstanceController {
     ) -> Result<Action> {
         let name = resource.name_unchecked();
         let namespace = resource.namespace().ok_or(Error::NoNamespace)?;
+        let owner_ref = resource.owner_ref(&()).unwrap();
         let api =
             Api::<KeycloakInstance>::namespaced(client.clone(), &namespace);
         let instance = KeycloakInstance {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
                 namespace: Some(namespace),
+                owner_references: Some(vec![owner_ref]),
                 ..Default::default()
             },
             spec: KeycloakInstanceSpec {

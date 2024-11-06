@@ -1,6 +1,4 @@
-use super::{
-    ImmutableJsonObject, ImmutableString, JsonObject, KeycloakApiStatus,
-};
+use super::{ImmutableString, KeycloakApiStatus};
 use k8s_openapi::api::core::v1::EnvVar;
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -46,8 +44,8 @@ pub struct KeycloakApiObjectSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     pub endpoint: KeycloakApiEndpoint,
-    pub immutable_payload: ImmutableJsonObject,
-    pub payload: JsonObject,
+    pub immutable_payload: ImmutableString,
+    pub payload: String,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub vars: Vec<EnvVar>,
 }
