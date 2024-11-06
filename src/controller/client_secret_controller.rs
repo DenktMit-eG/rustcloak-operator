@@ -5,7 +5,7 @@ use crate::{
     app_id,
     crd::{KeycloakApiStatus, KeycloakClient},
     error::Result,
-    util::K8sKeycloakBuilder,
+    util::{FromError, K8sKeycloakBuilder},
 };
 use futures::StreamExt;
 use k8s_openapi::{api::core::v1::Secret, ByteString};
@@ -183,7 +183,7 @@ impl KeycloakClientSecretController {
             .ok_or(Error::NoNamespace)?;
         let name = resource.name_unchecked();
         let api: Api<KeycloakClient> = Api::namespaced(ctx.client.clone(), ns);
-        let patch = KeycloakApiStatus::from(e).into();
+        let patch = KeycloakApiStatus::from_error(e).into();
 
         api.patch_status(&name, &PatchParams::apply(app_id!()), &patch)
             .await?;

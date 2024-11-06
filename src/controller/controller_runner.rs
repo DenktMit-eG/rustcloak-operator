@@ -1,10 +1,10 @@
 use std::{sync::Arc, time::Duration};
 
-use crate::{app_id, crd::KeycloakApiStatus, error::Result};
+use crate::{app_id, error::Result, util::FromError};
 use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{
-    api::PatchParams,
+    api::{Patch, PatchParams},
     core::object::HasStatus,
     runtime::{
         controller::{self, Action},
@@ -14,6 +14,7 @@ use kube::{
 };
 use log::{debug, error, info};
 use serde::{de::DeserializeOwned, Serialize};
+use serde_json::json;
 
 use crate::error::*;
 use futures::StreamExt;
@@ -55,7 +56,7 @@ where
     C: LifecycleController + Sync + Send + 'static,
     C::Resource: KubeResource<Scope = NamespaceResourceScope>
         + Clone
-        + HasStatus<Status = KeycloakApiStatus>
+        + HasStatus<Status: FromError + Serialize + Send + Sync>
         + Debug
         + 'static
         + Send
@@ -164,7 +165,10 @@ where
             .ok_or(Error::NoNamespace)?;
         let name = resource.name_unchecked();
         let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
-        let patch = KeycloakApiStatus::from(e).into();
+        let status = <C::Resource as HasStatus>::Status::from_error(e);
+        let patch = Patch::Merge(json!({
+            "status": status,
+        }));
 
         api.patch_status(&name, &PatchParams::apply(app_id!()), &patch)
             .await?;

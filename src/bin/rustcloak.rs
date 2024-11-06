@@ -7,7 +7,9 @@ use rustcloak_operator::{
     controller::{
         ControllerRunner, KeycloakApiObjectController,
         KeycloakClientSecretController, KeycloakInstanceController,
-        KeycloakUserSecretController, MorphController,
+        KeycloakUserSecretController, LegacyClientController,
+        LegacyInstanceController, LegacyRealmController, LegacyUserController,
+        MorphController,
     },
     crd::*,
     error::Result,
@@ -236,6 +238,35 @@ async fn main() -> Result<()> {
             )
             .run()
             .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::LegacyInstance) || opts.legacy
+    {
+        controllers.push(
+            ControllerRunner::new(LegacyInstanceController::default(), &client)
+                .run()
+                .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::LegacyRealm) || opts.legacy {
+        controllers.push(
+            ControllerRunner::new(LegacyRealmController::default(), &client)
+                .run()
+                .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::LegacyClient) || opts.legacy {
+        controllers.push(
+            ControllerRunner::new(LegacyClientController::default(), &client)
+                .run()
+                .boxed(),
+        );
+    }
+    if opts.controllers.contains(&ControllerOpt::LegacyUser) || opts.legacy {
+        controllers.push(
+            ControllerRunner::new(LegacyUserController::default(), &client)
+                .run()
+                .boxed(),
         );
     }
     if opts.controllers.contains(&ControllerOpt::ClientSecret) {

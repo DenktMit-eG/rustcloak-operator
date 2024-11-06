@@ -5,6 +5,7 @@ use crate::{
     app_id,
     crd::{KeycloakApiStatus, KeycloakInstance},
     error::{Error, Result},
+    util::FromError,
 };
 use chrono::{DateTime, Utc};
 use k8s_openapi::api::core::v1::Secret;
@@ -281,7 +282,7 @@ impl K8sKeycloakRefreshManager {
                         .patch_status(
                             &name,
                             &PatchParams::apply(app_id!()),
-                            &KeycloakApiStatus::from(e).into(),
+                            &KeycloakApiStatus::from_error(&e).into(),
                         )
                         .await
                     {

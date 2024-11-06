@@ -30,6 +30,10 @@ pub enum ControllerOpt {
     Scope,
     ClientSecret,
     UserSecret,
+    LegacyRealm,
+    LegacyInstance,
+    LegacyUser,
+    LegacyClient,
 }
 
 /// Keycloak Operator
@@ -43,4 +47,7 @@ pub struct Opts {
     /// if specified, the operator will report metrics and health checks on the specified address.
     /// e.g. --metrics-addr 0.0.0.0:8080
     pub metrics_addr: Option<SocketAddr>,
+    /// Enables the legacy controllers: legacy-instance, legacy-realm, legacy-user, legacy-client
+    #[clap(long)]
+    pub legacy: bool,
 }

@@ -86,6 +86,12 @@ pub enum Error {
     NoResource,
     #[error("No Location Header")]
     NoLocationHeader,
+    #[error("No Legacy Instance found")]
+    LegacyInstanceNotFound,
+    #[error("Ambiguous Legacy Instances found")]
+    AmbiguousLegacyInstancesFound,
+    #[error("Parse Expression error: {0}")]
+    ParseExpressionError(#[from] kube::core::ParseExpressionError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

@@ -1,4 +1,4 @@
-use crate::error::Error;
+use crate::{error::Error, util::FromError};
 use kube::api::Patch;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -30,14 +30,8 @@ impl KeycloakApiStatus {
     }
 }
 
-impl From<Error> for KeycloakApiStatus {
-    fn from(err: Error) -> Self {
-        Self::from(&err)
-    }
-}
-
-impl From<&Error> for KeycloakApiStatus {
-    fn from(err: &Error) -> Self {
+impl FromError for KeycloakApiStatus {
+    fn from_error(err: &Error) -> Self {
         Self {
             ready: false,
             status: "Error".to_string(),

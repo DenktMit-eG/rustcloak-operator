@@ -25,8 +25,10 @@ derive_builder = "0.20.2"
 async-stream = "0.3.6"
 actix-web = { version = "4.9.0", default-features = false, features = ["http2", "macros"] }
 either = { version = "1.13.0", features = ["serde"] }
-#up_impl = { path = "../up_impl" }
 up_impl = { git = "https://github.com/Gottox/up_impl.git" }
+#up_impl = { path = "../up_impl" }
+keycloak-crd = { git = "https://github.com/withlazers/keycloak-crd.git", branch = "rustcloak" }
+#keycloak-crd = { path = "../keycloak-crd" }
 randstr = "0.2.1"
 structured-logger = "1.0.3"
 
