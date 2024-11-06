@@ -1441,7 +1441,7 @@ dependencies = [
 [[package]]
 name = "keycloak-crd"
 version = "0.1.1"
-source = "git+https://github.com/withlazers/keycloak-crd.git?branch=rustcloak#dbc6ff7ba7da9b541702d4cce713c135aff7a316"
+source = "git+https://github.com/withlazers/keycloak-crd.git?branch=rustcloak#dbf1e8c1fbfbb9b73a0aa25394846a8aab9a0167"
 dependencies = [
  "k8s-openapi",
  "kube",
