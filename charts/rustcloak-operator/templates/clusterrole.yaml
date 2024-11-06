@@ -83,24 +83,24 @@ rules:
     - delete
 {{- if .Values.application.legacy }}
 - apiGroups:
-  - legacy.k8s.keycloak.org
+    - legacy.k8s.keycloak.org
   resources:
-  - externalkeycloaks
-  - externalkeycloaks/status
-  - externalkeycloaks/finalizers
-  - keycloakrealms
-  - keycloakrealms/status
-  - keycloakrealms/finalizers
-  - keycloakclients
-  - keycloakclients/status
-  - keycloakclients/finalizers
-  - keycloakusers
-  - keycloakusers/status
-  - keycloakusers/finalizers
+    - externalkeycloaks
+    - externalkeycloaks/status
+    - externalkeycloaks/finalizers
+    - keycloakrealms
+    - keycloakrealms/status
+    - keycloakrealms/finalizers
+    - keycloakclients
+    - keycloakclients/status
+    - keycloakclients/finalizers
+    - keycloakusers
+    - keycloakusers/status
+    - keycloakusers/finalizers
   verbs:
-  - get
-  - list
-  - update
-  - watch
+    - get
+    - list
+    - update
+    - watch
 {{- end }}
 {{- end }}
