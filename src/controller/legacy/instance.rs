@@ -52,7 +52,8 @@ impl LifecycleController for LegacyInstanceController {
             spec: KeycloakInstanceSpec {
                 base_url: format!(
                     "{}/{}",
-                    resource.spec.url, resource.spec.context_root
+                    resource.spec.url.trim_end_matches('/'),
+                    resource.spec.context_root.trim_matches('/')
                 ),
                 realm: Some("master".to_string()),
                 credentials: KeycloakInstanceCredentialReference {

@@ -24,11 +24,16 @@ async fn make_secret(
     client: &kube::Client,
     resource: &mut LegacyUser,
 ) -> Result<Option<KeycloakUserSecretReference>> {
-    let Some(credentials) = resource.spec.user.credentials.get(0).cloned()
+    let Some(credentials) = resource
+        .spec
+        .user
+        .credentials
+        .as_ref()
+        .and_then(|x| x.get(0).cloned())
     else {
         return Ok(None);
     };
-    if credentials.r#type != "password" {
+    if credentials.r#type.unwrap_or_default() != "password" {
         return Ok(None);
     }
 
@@ -36,9 +41,13 @@ async fn make_secret(
     let namespace = resource.namespace().ok_or(Error::NoNamespace)?;
     let owner_ref = resource.owner_ref(&()).unwrap();
     let api = Api::<Secret>::namespaced(client.clone(), &namespace);
-    let username = resource.spec.user.username.clone();
-    let password = credentials.value.clone();
-    let name = format!("credentials-{}", name);
+    let Some(username) = resource.spec.user.username.clone() else {
+        return Ok(None);
+    };
+    let Some(password) = credentials.value.clone() else {
+        return Ok(None);
+    };
+    let name = format!("user-cred-{}", name);
     let username_key = "username".to_string();
     let password_key = "password".to_string();
 
@@ -63,7 +72,7 @@ async fn make_secret(
         &Patch::Apply(secret),
     )
     .await?;
-    resource.spec.user.credentials = vec![];
+    resource.spec.user.credentials = None;
     Ok(Some(KeycloakUserSecretReference {
         secret_name: name,
         username_key: Some(username_key),

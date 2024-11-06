@@ -18,7 +18,7 @@ use kube::{
     },
     Api, Resource as KubeResource, ResourceExt,
 };
-use log::{error, info};
+use log::{debug, error, info};
 use reqwest::Method;
 use up_impl::{Container, Up};
 
@@ -96,6 +96,9 @@ impl KeycloakClientSecretController {
         let Some(secret_ref) = resource.spec.client_secret.clone() else {
             return Ok(Action::await_change());
         };
+        if !resource.status.as_ref().map_or(false, |x| x.ready) {
+            return Ok(Action::await_change());
+        }
         let client = &ctx.client;
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
 
@@ -119,6 +122,7 @@ impl KeycloakClientSecretController {
             .with_token()
             .await?;
 
+        debug!("fetching client secret from {}", path);
         let credential = keycloak
             .request(Method::GET, &path)
             .send()
@@ -133,7 +137,12 @@ impl KeycloakClientSecretController {
             Some(x) => Err(Error::UnknownSecretType(x.to_string()))?,
         }
 
-        let client_secret = credential.value.ok_or(Error::NoClientSecret)?;
+        let Some(client_secret) = credential.value else {
+            // if there is no secret present in the response, let's assume that the client has a
+            // secret-less flow.
+            debug!("client has no secret, skipping secret creation");
+            return Ok(Action::await_change());
+        };
         let client_id = resource
             .spec
             .definition

@@ -176,8 +176,15 @@ impl KeycloakApiClient {
         method: reqwest::Method,
         path: &str,
     ) -> reqwest::RequestBuilder {
-        self.request_url(method, &format!("{}/{}", self.auth.url, path))
-            .bearer_auth(self.token.access_token().secret())
+        self.request_url(
+            method,
+            &format!(
+                "{}/{}",
+                self.auth.url.trim_end_matches('/'),
+                path.trim_start_matches('/')
+            ),
+        )
+        .bearer_auth(self.token.access_token().secret())
     }
 
     /// Uses the refresh token to get a new access token. The old token is invalidated.
