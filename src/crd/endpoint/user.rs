@@ -2,7 +2,7 @@ use crate::crd::{
     api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
 };
 use keycloak::types::UserRepresentation;
-use kube_derive::CustomResource;
+use kube::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
 

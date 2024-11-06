@@ -6,8 +6,8 @@ use crate::{
     },
 };
 use keycloak::types::RealmRepresentation;
+use kube::CustomResource;
 use kube::{core::object::HasSpec, ResourceExt};
-use kube_derive::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
 use up_impl::Root;

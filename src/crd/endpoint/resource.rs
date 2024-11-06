@@ -4,7 +4,7 @@ use crate::crd::{
     KeycloakApiStatus,
 };
 use keycloak::types::ResourceRepresentation;
-use kube_derive::CustomResource;
+use kube::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
 use up_impl::HasUp;

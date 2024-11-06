@@ -1,8 +1,8 @@
 use crate::endpoint::query::Query;
 
 use super::KeycloakApiStatus;
+use kube::CustomResource;
 use kube::ResourceExt;
-use kube_derive::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use up_impl::HasQuery;

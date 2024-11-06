@@ -3,7 +3,7 @@ use crate::crd::{
     KeycloakRealm,
 };
 use keycloak::types::IdentityProviderRepresentation;
-use kube_derive::CustomResource;
+use kube::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
 

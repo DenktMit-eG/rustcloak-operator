@@ -4,7 +4,7 @@ use crate::crd::{
 };
 use either::Either;
 use keycloak::types::RoleRepresentation;
-use kube_derive::CustomResource;
+use kube::CustomResource;
 use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
 use serde::{Deserialize, Serialize};
 use up_impl::OneOf;

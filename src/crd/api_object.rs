@@ -2,7 +2,7 @@ use super::{
     ImmutableJsonObject, ImmutableString, JsonObject, KeycloakApiStatus,
 };
 use k8s_openapi::api::core::v1::EnvVar;
-use kube_derive::CustomResource;
+use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::ops::Add;
