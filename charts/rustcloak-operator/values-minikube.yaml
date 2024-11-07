@@ -3,5 +3,6 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
-#application:
-#  logLevel: debug
+application:
+  logLevel: debug
+  legacy: true
