@@ -17,9 +17,8 @@ impl FromError for keycloak_crd::KeycloakRealmStatus {
     fn from_error(err: &Error) -> Self {
         // TODO
         Self {
-            phase: "".to_string(),
             message: err.to_string(),
-            ready: false,
+            ..Default::default()
         }
     }
 }
@@ -27,9 +26,8 @@ impl FromError for keycloak_crd::KeycloakClientStatus {
     fn from_error(err: &Error) -> Self {
         // TODO
         Self {
-            phase: "".to_string(),
             message: err.to_string(),
-            ready: false,
+            ..Default::default()
         }
     }
 }
@@ -37,8 +35,8 @@ impl FromError for keycloak_crd::KeycloakUserStatus {
     fn from_error(err: &Error) -> Self {
         // TODO
         Self {
-            phase: "".to_string(),
             message: err.to_string(),
+            ..Default::default()
         }
     }
 }
