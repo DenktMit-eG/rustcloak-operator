@@ -7,7 +7,7 @@ edition = "2021"
 keycloak = { version = "26.0.1", features = ["schemars"] }
 kube = { version = "0.96.0", features = ["runtime", "derive"] }
 k8s-openapi = { version = "0.23.0", features = ["latest", "schemars"] }
-serde_json = "1.0.128"
+serde_json = { version = "1.0.128", features = ["preserve_order"] }
 tokio = { version = "1.32.0", default-features = false, features = ["rt-multi-thread"] }
 clap = { version = "4.5.20", features = ["derive", "env", "help", "std"], default-features = false }
 schemars = { version = "0.8.21", features = ["chrono", "either"] }
