@@ -1,35 +1,42 @@
 name: Check
 on: "push"
 
+env:
+  RUSTFLAGS: "-Dwarnings"
+
 jobs:
   check:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v3
-    - uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
+    - uses: dtolnay/rust-toolchain@stable
     - uses: Swatinem/rust-cache@v2
       with:
         cache-on-failure: "true"
-    - uses: actions-rs/cargo@v1
-      with:
-        command: test
-        args: >
-          --verbose
+    - run: |
+        cargo check --all-targets --all-features
 
   clippy:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v3
-    - uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
+    - uses: dtolnay/rust-toolchain@stable
     - uses: Swatinem/rust-cache@v2
       with:
         cache-on-failure: "true"
-    - uses: actions-rs/clippy-check@v1
+    - uses: actions/checkout@v4
+    - run: |
+        cargo clippy --all-targets --all-features
+
+  check_crds:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dtolnay/rust-toolchain@stable
+    - uses: Swatinem/rust-cache@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        args: >
-          --all-features
+        cache-on-failure: "true"
+    - run: |
+        cargo run --bin=crdgen -- charts/rustcloak-operator/crds
+        git add .
+        git diff --staged --exit-code
