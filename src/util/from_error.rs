@@ -5,13 +5,11 @@ pub trait FromError {
 }
 
 impl FromError for keycloak_crd::ExternalKeycloakStatus {
-    fn from_error(_err: &Error) -> Self {
+    fn from_error(err: &Error) -> Self {
         // TODO
         Self {
-            conditions: vec![],
-            instances: 0,
-            observed_generation: 0,
-            selector: "".to_string(),
+            message: err.to_string(),
+            ..Default::default()
         }
     }
 }
