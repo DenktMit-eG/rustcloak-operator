@@ -152,9 +152,19 @@ impl KeycloakApiAuth {
     }
 }
 
-#[derive(Debug, Deserialize)]
-pub struct KeycloakError {
-    error: String,
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum KeycloakError {
+    Error(String),
+    ErrorMessage(String),
+}
+impl Into<String> for KeycloakError {
+    fn into(self) -> String {
+        match self {
+            KeycloakError::Error(e) => e,
+            KeycloakError::ErrorMessage(e) => e,
+        }
+    }
 }
 
 /// This struct provides the functionality to interact with a Keycloak server. For the creation of
@@ -183,23 +193,23 @@ impl KeycloakApiClient {
 
     pub async fn delete(&self, path: &str) -> Result<()> {
         let res = self.request_builder(Method::DELETE, &path).send().await?;
-        self.handle_response::<Vec<u8>>(res).await?;
+        self.handle_response(res).await?;
         Ok(())
     }
 
-    pub async fn handle_response<T>(&self, res: reqwest::Response) -> Result<T>
-    where
-        T: DeserializeOwned,
-    {
+    pub async fn handle_response(
+        &self,
+        res: reqwest::Response,
+    ) -> Result<reqwest::Response> {
         if res.status().is_success() {
-            Ok(res.json().await?)
+            Ok(res)
         } else {
             let status = res.status();
             let result = res.bytes().await?;
             let error_msg = if let Ok(error) =
                 serde_json::from_slice::<KeycloakError>(&result)
             {
-                error.error
+                error.into()
             } else {
                 String::from_utf8_lossy(&result).to_string()
             };
@@ -209,8 +219,7 @@ impl KeycloakApiClient {
 
     pub async fn get<O: DeserializeOwned>(&self, path: &str) -> Result<O> {
         let res = self.request_builder(Method::GET, path).send().await?;
-
-        self.handle_response::<O>(res).await
+        Ok(self.handle_response(res).await?.json().await?)
     }
 
     pub async fn put<I: Serialize>(
@@ -219,12 +228,12 @@ impl KeycloakApiClient {
         payload: I,
     ) -> Result<()> {
         let res = self
-            .request_builder(Method::POST, path)
+            .request_builder(Method::PUT, path)
             .json(&payload)
             .send()
             .await?;
 
-        self.handle_response::<Vec<u8>>(res).await?;
+        self.handle_response(res).await?;
         Ok(())
     }
 
@@ -239,13 +248,14 @@ impl KeycloakApiClient {
             .send()
             .await?;
 
-        let resource_url = Url::from_str(
-            res.headers()
-                .get(LOCATION)
-                .ok_or(Error::NoLocationHeader)?
-                .to_str()?,
-        )?;
-        self.handle_response::<Vec<u8>>(res).await?;
+        let location = res
+            .headers()
+            .get(LOCATION)
+            .cloned()
+            .ok_or(Error::NoLocationHeader);
+
+        self.handle_response(res).await?;
+        let resource_url = Url::from_str(location?.to_str()?)?;
         Ok(resource_url.path().to_string())
     }
 

@@ -74,10 +74,35 @@ spec:
           status:
             nullable: true
             properties:
-              code:
-                format: uint32
-                minimum: 0.0
-                type: integer
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
+                      format: date-time
+                      nullable: true
+                      type: string
+                    lastUpdateTime:
+                      description: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
+                      format: date-time
+                      nullable: true
+                      type: string
+                    message:
+                      nullable: true
+                      type: string
+                    reason:
+                      nullable: true
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                nullable: true
+                type: array
               message:
                 type: string
               ready:
@@ -88,7 +113,6 @@ spec:
               status:
                 type: string
             required:
-            - code
             - ready
             type: object
         required:
