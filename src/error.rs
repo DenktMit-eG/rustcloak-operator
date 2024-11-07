@@ -92,6 +92,8 @@ pub enum Error {
     AmbiguousLegacyInstancesFound,
     #[error("Parse Expression error: {0}")]
     ParseExpressionError(#[from] kube::core::ParseExpressionError),
+    #[error("Resource in use for deletion: {0:?}")]
+    ResourceInUseForDeletion(Vec<String>),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

@@ -24,7 +24,7 @@ use std::hash::Hash;
 
 #[async_trait]
 pub trait LifecycleController {
-    type Resource: Clone + KubeResource + Debug + 'static;
+    type Resource: Clone + KubeResource + Debug + 'static + Send + Sync;
 
     fn prepare(
         &self,
@@ -33,6 +33,14 @@ pub trait LifecycleController {
     ) -> Controller<Self::Resource>
     where
         <Self::Resource as kube::Resource>::DynamicType: Eq + Hash + From<()>;
+
+    async fn before_finalizer(
+        &self,
+        _client: &kube::Client,
+        _resource: Arc<Self::Resource>,
+    ) -> Result<()> {
+        Ok(())
+    }
 
     async fn apply(
         &self,
@@ -125,6 +133,10 @@ where
         let kind = C::Resource::kind(&dt);
 
         debug!("start reconciling {kind} {}/{}", ns, name);
+
+        ctx.controller
+            .before_finalizer(&client, resource.clone())
+            .await?;
 
         match finalizer(
             &api,

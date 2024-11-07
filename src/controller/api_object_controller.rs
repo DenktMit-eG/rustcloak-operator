@@ -206,7 +206,14 @@ impl LifecycleController for KeycloakApiObjectController {
             // safe to delete the resource.
             return Ok(Action::await_change());
         };
-        let keycloak = Self::keycloak(client, &resource).await?;
+        let keycloak = match Self::keycloak(client, &resource).await {
+            Ok(k) => k,
+            Err(Error::NoInstance(_, _)) => {
+                warn!("Keycloak instance not found, assuming you want to unmanage the whole keycloak instance.");
+                return Ok(Action::await_change());
+            }
+            Err(e) => Err(e)?,
+        };
         let res = self
             .request(&keycloak, Method::DELETE, &path, &Value::Null)
             .await;

@@ -122,6 +122,13 @@ where
                 name: Some(name.clone()),
                 namespace: Some(ns.clone()),
                 owner_references: Some(vec![owner_ref]),
+                labels: Some(
+                    [(
+                        app_id!("instanceRef").to_string(),
+                        endpoint.instance_ref.0.clone(),
+                    )]
+                    .into(),
+                ),
                 ..Default::default()
             },
             spec: KeycloakApiObjectSpec {
