@@ -17,7 +17,7 @@ use kube::{
 };
 use log::{debug, warn};
 use oauth2::{ClientId, ClientSecret};
-use reqwest::Method;
+use serde_json::Value;
 use std::{collections::HashMap, ops::Deref, sync::Arc, time::Duration};
 use tokio::{
     sync::{Mutex, MutexGuard, Notify},
@@ -156,13 +156,7 @@ impl K8sKeycloakRefreshJob {
             self.refresh(&mut keycloak).await?;
         } else {
             // ping keycloak to make sure it's available
-            keycloak
-                .request(Method::GET, "admin/realms")
-                .send()
-                .await?
-                .error_for_status()?
-                .json::<serde_json::Value>()
-                .await?;
+            keycloak.get::<Value>("admin/realms").await?;
         }
 
         Ok(keycloak)

@@ -44,8 +44,6 @@ pub enum Error {
     KubeError(#[from] kube::Error),
     #[error("Reqwest error: {0}")]
     ReqwestError(#[from] reqwest::Error),
-    #[error("Keycloak error: {0}")]
-    KeycloakError(#[from] keycloak::KeycloakError),
     #[error("Serde Yaml error: {0}")]
     SerdeYamlError(#[from] serde_yaml::Error),
     #[error("Serde Json error: {0}")]
@@ -94,6 +92,8 @@ pub enum Error {
     ParseExpressionError(#[from] kube::core::ParseExpressionError),
     #[error("Resource in use for deletion: {0:?}")]
     ResourceInUseForDeletion(Vec<String>),
+    #[error("Keycloak Error Code {0}: {1}")]
+    KeycloakError(reqwest::StatusCode, String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

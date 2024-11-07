@@ -1,4 +1,6 @@
-use crate::error::Result;
+use std::str::FromStr;
+
+use crate::error::{Error, Result};
 use derive_builder::Builder;
 use log::debug;
 use oauth2::basic::BasicClient;
@@ -8,6 +10,10 @@ use oauth2::{
     TokenUrl,
 };
 use oauth2::{ClientSecret, TokenResponse};
+use reqwest::header::LOCATION;
+use reqwest::{Method, Url};
+use serde::de::DeserializeOwned;
+use serde::{Deserialize, Serialize};
 
 // Because of the stupidly overdesigned oauth2 library, we use this generator macro
 // to not have to write idiotic amounts of Generic types.
@@ -146,6 +152,11 @@ impl KeycloakApiAuth {
     }
 }
 
+#[derive(Debug, Deserialize)]
+pub struct KeycloakError {
+    error: String,
+}
+
 /// This struct provides the functionality to interact with a Keycloak server. For the creation of
 /// this client, see [`KeycloakAuth`].
 #[derive(Debug, Clone)]
@@ -169,9 +180,76 @@ impl KeycloakApiClient {
             .request(method, url)
             .bearer_auth(self.token.access_token().secret())
     }
-    /// Prepares a request to the configured keycloak server. KeycloakClient prepares the
-    /// authentication headers for you.
-    pub fn request(
+
+    pub async fn delete(&self, path: &str) -> Result<()> {
+        let res = self.request_builder(Method::DELETE, &path).send().await?;
+        self.handle_response::<Vec<u8>>(res).await?;
+        Ok(())
+    }
+
+    pub async fn handle_response<T>(&self, res: reqwest::Response) -> Result<T>
+    where
+        T: DeserializeOwned,
+    {
+        if res.status().is_success() {
+            Ok(res.json().await?)
+        } else {
+            let status = res.status();
+            let result = res.bytes().await?;
+            let error_msg = if let Ok(error) =
+                serde_json::from_slice::<KeycloakError>(&result)
+            {
+                error.error
+            } else {
+                String::from_utf8_lossy(&result).to_string()
+            };
+            Err(Error::KeycloakError(status, error_msg))
+        }
+    }
+
+    pub async fn get<O: DeserializeOwned>(&self, path: &str) -> Result<O> {
+        let res = self.request_builder(Method::GET, path).send().await?;
+
+        self.handle_response::<O>(res).await
+    }
+
+    pub async fn put<I: Serialize>(
+        &self,
+        path: &str,
+        payload: I,
+    ) -> Result<()> {
+        let res = self
+            .request_builder(Method::POST, path)
+            .json(&payload)
+            .send()
+            .await?;
+
+        self.handle_response::<Vec<u8>>(res).await?;
+        Ok(())
+    }
+
+    pub async fn post_location<I: Serialize>(
+        &self,
+        path: &str,
+        payload: I,
+    ) -> Result<String> {
+        let res = self
+            .request_builder(Method::POST, path)
+            .json(&payload)
+            .send()
+            .await?;
+
+        let resource_url = Url::from_str(
+            res.headers()
+                .get(LOCATION)
+                .ok_or(Error::NoLocationHeader)?
+                .to_str()?,
+        )?;
+        self.handle_response::<Vec<u8>>(res).await?;
+        Ok(resource_url.path().to_string())
+    }
+
+    fn request_builder(
         &self,
         method: reqwest::Method,
         path: &str,
@@ -184,7 +262,6 @@ impl KeycloakApiClient {
                 path.trim_start_matches('/')
             ),
         )
-        .bearer_auth(self.token.access_token().secret())
     }
 
     /// Uses the refresh token to get a new access token. The old token is invalidated.

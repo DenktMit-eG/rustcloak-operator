@@ -21,7 +21,6 @@ use kube::{
 };
 use log::{error, info};
 use randstr::randstr;
-use reqwest::Method;
 use up_impl::Container;
 use up_impl::Up;
 
@@ -181,12 +180,7 @@ impl KeycloakUserSecretController {
             ..Default::default()
         };
 
-        keycloak
-            .request(Method::PUT, &path)
-            .json(&credential)
-            .send()
-            .await?
-            .error_for_status()?;
+        keycloak.put(&path, &credential).await?;
 
         Ok(Action::await_change())
     }

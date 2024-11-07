@@ -20,11 +20,9 @@ use kube::{
     runtime::{controller::Action, Controller},
     Api, ResourceExt,
 };
-use log::{trace, warn};
-use reqwest::Url;
-use reqwest::{header::LOCATION, Method, Response};
+use log::warn;
+use reqwest::StatusCode;
 use serde_json::Value;
-use std::str::FromStr;
 use std::sync::Arc;
 use tokio::sync::Notify;
 
@@ -55,29 +53,6 @@ impl KeycloakApiObjectController {
         K8sKeycloakBuilder::new(&instance, client)
             .with_token()
             .await
-    }
-
-    async fn request(
-        &self,
-        client: &KeycloakApiClient,
-        method: Method,
-        path: &str,
-        payload: &Value,
-    ) -> Result<Option<Response>> {
-        let request = client.request(method, path);
-        let request = if payload == &Value::Null {
-            request
-        } else {
-            request.json(payload)
-        };
-        trace!("Request: {:?}", request);
-        let res = request.send().await?;
-
-        if res.status().as_u16() == 404 {
-            Ok(None)
-        } else {
-            Ok(Some(res.error_for_status()?))
-        }
     }
 }
 
@@ -132,41 +107,28 @@ impl LifecycleController for KeycloakApiObjectController {
             .as_ref()
             .and_then(|x| x.resource_path.as_ref())
         {
-            if self
-                .request(&keycloak, Method::PUT, path, &payload)
-                .await?
-                .is_some()
-            {
-                success = true;
-                api.patch_status(
-                    &name,
-                    &PatchParams::apply(app_id!()),
-                    &KeycloakApiStatus::ok("Applied").into(),
-                )
-                .await?;
-            } else {
-                warn!(
-                    "Failed to update resource at path: {}, try recreating",
-                    path
-                );
+            match keycloak.put(path, &payload).await {
+                Ok(_) => {
+                    success = true;
+                    api.patch_status(
+                        &name,
+                        &PatchParams::apply(app_id!()),
+                        &KeycloakApiStatus::ok("Applied").into(),
+                    )
+                    .await?;
+                }
+                Err(Error::KeycloakError(StatusCode::NOT_FOUND, m)) => {
+                    warn!( "Failed to update resource at path: {}, try recreating. (Message: {})", path, m);
+                }
+                x => x?,
             }
         }
 
         if !success {
             let path = &resource.spec.endpoint.path;
-            let response = self
-                .request(&keycloak, Method::POST, path, &payload)
-                .await?
-                .ok_or(Error::NoResource)?;
-            let resource_url = Url::from_str(
-                response
-                    .headers()
-                    .get(LOCATION)
-                    .ok_or(Error::NoLocationHeader)?
-                    .to_str()?,
-            )?;
+            let resource_path = keycloak.post_location(path, &payload).await?;
             let mut status = resource.status.clone().unwrap_or_default();
-            status.resource_path = Some(resource_url.path().to_string());
+            status.resource_path = Some(resource_path);
 
             api.patch_status(
                 &name,
@@ -214,13 +176,11 @@ impl LifecycleController for KeycloakApiObjectController {
             }
             Err(e) => Err(e)?,
         };
-        let res = self
-            .request(&keycloak, Method::DELETE, &path, &Value::Null)
-            .await;
-        if let Err(Error::ReqwestError(e)) = res {
-            Err(e)?;
-        } else {
-            res?;
+        match keycloak.delete(&path).await {
+            Err(Error::KeycloakError(StatusCode::NOT_FOUND, m)) => {
+                warn!("Resource not found, assuming it's already deleted. Message: {}", m);
+            }
+            x => x?,
         }
 
         self.secret_refs.remove(&resource);

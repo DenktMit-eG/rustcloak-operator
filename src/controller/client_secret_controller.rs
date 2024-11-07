@@ -19,7 +19,6 @@ use kube::{
     Api, Resource as KubeResource, ResourceExt,
 };
 use log::{debug, error, info};
-use reqwest::Method;
 use up_impl::{Container, Up};
 
 pub struct KeycloakClientSecretController {
@@ -123,13 +122,8 @@ impl KeycloakClientSecretController {
             .await?;
 
         debug!("fetching client secret from {}", path);
-        let credential = keycloak
-            .request(Method::GET, &path)
-            .send()
-            .await?
-            .error_for_status()?
-            .json::<CredentialRepresentation>()
-            .await?;
+        let credential =
+            keycloak.get::<CredentialRepresentation>(&path).await?;
 
         match credential.type_.as_deref() {
             Some("secret") => (),
