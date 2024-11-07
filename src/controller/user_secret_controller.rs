@@ -127,7 +127,7 @@ impl KeycloakUserSecretController {
 
         ctx.secret_refs.add(&resource, [&secret_name]);
         let secret =
-            if let Some(secret) = secret_api.get_opt(&secret_name).await? {
+            if let Some(secret) = secret_api.get_opt(secret_name).await? {
                 secret
             } else {
                 let username = resource

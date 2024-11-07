@@ -29,7 +29,7 @@ async fn make_secret(
         .user
         .credentials
         .as_ref()
-        .and_then(|x| x.get(0).cloned())
+        .and_then(|x| x.first().cloned())
     else {
         return Ok(None);
     };

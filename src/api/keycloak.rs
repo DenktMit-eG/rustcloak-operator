@@ -158,9 +158,9 @@ pub enum KeycloakError {
     Error(String),
     ErrorMessage(String),
 }
-impl Into<String> for KeycloakError {
-    fn into(self) -> String {
-        match self {
+impl From<KeycloakError> for String {
+    fn from(val: KeycloakError) -> Self {
+        match val {
             KeycloakError::Error(e) => e,
             KeycloakError::ErrorMessage(e) => e,
         }
@@ -192,7 +192,7 @@ impl KeycloakApiClient {
     }
 
     pub async fn delete(&self, path: &str) -> Result<()> {
-        let res = self.request_builder(Method::DELETE, &path).send().await?;
+        let res = self.request_builder(Method::DELETE, path).send().await?;
         self.handle_response(res).await?;
         Ok(())
     }

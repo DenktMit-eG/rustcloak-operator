@@ -99,7 +99,7 @@ where
             primary_key: primary_key_value,
         }))?
         .into();
-        let payload = serde_yaml::to_string(&payload)?.into();
+        let payload = serde_yaml::to_string(&payload)?;
 
         let resource = Arc::unwrap_or_clone(resource);
         let resource =
