@@ -1,7 +1,9 @@
+use crate::app_id;
 use crate::error::Error;
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::LabelSelector;
 use k8s_openapi::NamespaceResourceScope;
 use kube::api::ListParams;
+use kube::api::ObjectMeta;
 use kube::Api;
 use kube::Resource;
 use kube::ResourceExt;
@@ -13,6 +15,8 @@ pub async fn find_name<T>(
     client: &kube::Client,
     namespace: &str,
     selector: &LabelSelector,
+    meta: &ObjectMeta,
+    parent_ref_ident: &str,
 ) -> Result<String>
 where
     T: Resource<Scope = NamespaceResourceScope, DynamicType = ()>
@@ -20,6 +24,13 @@ where
         + std::fmt::Debug
         + DeserializeOwned,
 {
+    if let Some(name) = meta
+        .annotations
+        .as_ref()
+        .and_then(|x| x.get(&format!(app_id!("{}"), parent_ref_ident)))
+    {
+        return Ok(name.clone());
+    }
     let api = Api::<T>::namespaced(client.clone(), namespace);
     let selector = selector.clone().try_into()?;
 

@@ -121,6 +121,8 @@ impl LifecycleController for LegacyUserController {
                     client,
                     &namespace,
                     &resource.spec.realm_selector,
+                    &resource.metadata,
+                    "realm_ref",
                 )
                 .await?,
                 definition: serde_json::from_value(definition)?,

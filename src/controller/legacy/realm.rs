@@ -58,6 +58,8 @@ impl LifecycleController for LegacyRealmController {
                     client,
                     &namespace,
                     &resource.spec.instance_selector,
+                    &resource.metadata,
+                    "instance_ref",
                 )
                 .await?
                 .into(),
