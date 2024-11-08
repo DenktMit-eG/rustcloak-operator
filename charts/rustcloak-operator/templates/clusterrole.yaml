@@ -98,6 +98,7 @@ rules:
     - keycloakusers/status
     - keycloakusers/finalizers
   verbs:
+    - patch
     - get
     - list
     - update
