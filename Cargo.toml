@@ -12,7 +12,7 @@ tokio = { version = "1.41.1", default-features = false, features = ["rt-multi-th
 clap = { version = "4.5.20", features = ["derive", "env", "help", "std"], default-features = false }
 schemars = { version = "0.8.21", features = ["chrono", "either"] }
 serde = "1.0.214"
-thiserror = "2.0.0"
+thiserror = "2.0.1"
 log = { version = "0.4.22", features = ["kv"] }
 futures = { version = "0.3.31", default-features = false }
 async-trait = "0.1.83"
