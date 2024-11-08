@@ -18,7 +18,13 @@ replacement for the
 
 ## TODO:
 
-### Endpoints
+* [ ] Support Subgroups
+* [ ] Send Kubernetes Events
+* [ ] Update state transitions in .status.conditions
+* [ ] Update phase in .status.phase
+* [ ] Add prometheus metrics
+
+## Endpoints
 
 Table of implemented endpoints:
 
@@ -40,6 +46,7 @@ Table of implemented endpoints:
 
 * [x] `GroupRepresentation`
   * [x] `/admin/realms/{realm}/groups/{group-id}`
+  * [ ] `/admin/realms/{realm}/groups/{group-id}/children`
 
 * [x] `IdentityProviderMapperRepresentation`
   * [x] `/admin/realms/{realm}/identity-provider/instances/{alias}/mappers/{id}`

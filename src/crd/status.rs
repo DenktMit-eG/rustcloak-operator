@@ -26,6 +26,7 @@ pub struct KeycloakApiStatus {
     pub status: String,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub message: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub conditions: Option<Vec<KeycloakApiCondition>>,
 }
 
