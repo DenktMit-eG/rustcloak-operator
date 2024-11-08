@@ -80,3 +80,29 @@ Table of implemented endpoints:
 
 * [x] `UserRepresentation`
   * [x] `/admin/realms/{realm}/users/{user-id}`
+
+# Comments on the License
+
+The AGPL license can seem daunting at first, so here are some
+clarifications on how we interpret it in Rustcloak:
+
+* **CRD Manifests**: Custom Resource Definitions (CRD) manifests are
+  configurations, not modifications of Rustcloak, and are therefore not
+  considered derived work under the AGPL.
+
+* **Using the Official Docker Image**: If you use the official
+  Rustcloak Docker image without changes, you only need to provide a link
+  to [the repository](https://github.com/withlazers/rustcloak-operator)
+  to those who directly interact with Rustcloak itself. This does not
+  include the end-users of applications managed by Rustcloak, but may apply
+  if you provide rustcloak as a service to others.
+
+* **Using Rustcloak in Your Own Docker Image**: If you include
+  Rustcloak in a custom Docker image without modifying its code, the same
+  rules apply as when using the official image.
+
+* **Modifying Rustcloak’s Code**: If you make any changes to the
+  Rustcloak binary, AGPL requirements mean you may need to share the
+  modified source code with users who interact with your modified
+  instance. To simplify compliance, we encourage contributing these
+  changes back to the [upstream project](https://github.com/withlazers/rustcloak-operator).
