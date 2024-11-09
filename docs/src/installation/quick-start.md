@@ -20,7 +20,7 @@ Prepare a `keycloak-values.yaml` file with the following content:
 ```yaml
 command:
   - "/opt/keycloak/bin/kc.sh"
-  - "start-dev"
+  - "start"
   - "--http-port=8080"
   - "--hostname-strict=false"
 extraEnv: |
