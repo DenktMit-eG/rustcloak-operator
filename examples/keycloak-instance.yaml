@@ -3,6 +3,10 @@ kind: KeycloakInstance
 metadata:
   name: keycloak-instance
 spec:
-  baseUrl: http://192.168.83.1:8080
+  baseUrl: http://keycloak-keycloakx-http:80/auth
   credentials:
-    secretName: keycloak-password
+    # Rustcloak will take care of creating this secret with a random password.
+    create: true
+    passwordKey: KEYCLOAK_ADMIN_PASSWORD
+    secretName: keycloak-admin
+    usernameKey: KEYCLOAK_ADMIN

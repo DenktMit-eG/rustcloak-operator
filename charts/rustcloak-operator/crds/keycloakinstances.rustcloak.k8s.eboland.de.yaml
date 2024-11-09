@@ -48,12 +48,15 @@ spec:
                 type: object
               credentials:
                 properties:
+                  create:
+                    nullable: true
+                    type: boolean
                   passwordKey:
                     nullable: true
                     type: string
                   secretName:
                     type: string
-                  userKey:
+                  usernameKey:
                     nullable: true
                     type: string
                 required:

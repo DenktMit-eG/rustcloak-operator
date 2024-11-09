@@ -5,5 +5,4 @@ metadata:
 spec:
   instanceRef: keycloak-instance
   definition:
-    realm: my-awesome-realm
-    enabled: true
+    realm: an-example-realm

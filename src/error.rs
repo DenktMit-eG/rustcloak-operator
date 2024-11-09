@@ -94,6 +94,8 @@ pub enum Error {
     ResourceInUseForDeletion(Vec<String>),
     #[error("Keycloak Error Code {0}: {1}")]
     KeycloakError(reqwest::StatusCode, String),
+    #[error("garbage URL found in Keycloak: {0}")]
+    GarbageUrlFromKeycloak(String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

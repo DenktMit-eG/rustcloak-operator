@@ -5,4 +5,4 @@ image:
 
 application:
   logLevel: debug
-  legacy: true
+  legacy: false

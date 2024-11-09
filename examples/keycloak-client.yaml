@@ -7,3 +7,5 @@ spec:
   definition:
     clientId: example-client
     name: An example client
+  clientSecret:
+    secretName: example-keycloakclient

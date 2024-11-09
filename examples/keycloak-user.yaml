@@ -12,3 +12,4 @@ spec:
     lastName: User
   userSecret:
     secretName: example-keycloakuser
+

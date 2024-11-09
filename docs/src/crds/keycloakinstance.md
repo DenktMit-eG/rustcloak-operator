@@ -12,9 +12,10 @@ This resource makes a Keycloak instance known to the operator
 |[spec.client.id](#specclientid)|string|✅|
 |[spec.client.secret](#specclientsecret)|string||
 |[spec.credentials](#speccredentials)|object|✅|
+|[spec.credentials.create](#speccredentialscreate)|boolean||
 |[spec.credentials.passwordKey](#speccredentialspasswordkey)|string||
 |[spec.credentials.secretName](#speccredentialssecretname)|string|✅|
-|[spec.credentials.userKey](#speccredentialsuserkey)|string||
+|[spec.credentials.usernameKey](#speccredentialsusernamekey)|string||
 |[spec.realm](#specrealm)|string||
 |[spec.token](#spectoken)|object||
 |[spec.token.expiresKey](#spectokenexpireskey)|string||
@@ -94,9 +95,18 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[create](#speccredentialscreate)|boolean||
 |[passwordKey](#speccredentialspasswordkey)|string||
 |[secretName](#speccredentialssecretname)|string|✅|
-|[userKey](#speccredentialsuserkey)|string||
+|[usernameKey](#speccredentialsusernamekey)|string||
+
+*missing*
+
+---
+
+### spec.credentials.create
+
+Type: boolean
 
 *missing*
 
@@ -118,7 +128,7 @@ Type: string
 
 ---
 
-### spec.credentials.userKey
+### spec.credentials.usernameKey
 
 Type: string
 

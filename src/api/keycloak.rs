@@ -75,7 +75,7 @@ pub struct KeycloakApiAuth {
     client_id: ClientId,
     #[builder(setter(into, strip_option), default)]
     client_secret: Option<ClientSecret>,
-    #[builder(setter(into), default)]
+    #[builder(setter(into), default = "self.default_http_client()")]
     http_client: reqwest::Client,
 }
 
@@ -110,6 +110,14 @@ impl KeycloakApiAuthBuilder {
 
     fn default_client_id(&self) -> ClientId {
         ClientId::new("admin-cli".to_string())
+    }
+
+    fn default_http_client(&self) -> reqwest::Client {
+        reqwest::ClientBuilder::new()
+            .user_agent("rustcloak")
+            .connect_timeout(std::time::Duration::from_secs(10))
+            .build()
+            .unwrap()
     }
 }
 
@@ -254,9 +262,16 @@ impl KeycloakApiClient {
             .cloned()
             .ok_or(Error::NoLocationHeader);
 
+        let base_url = Url::from_str(&self.auth.url)?;
         self.handle_response(res).await?;
         let resource_url = Url::from_str(location?.to_str()?)?;
-        Ok(resource_url.path().to_string())
+        Ok(resource_url
+            .path()
+            .strip_prefix(base_url.path().trim_end_matches('/'))
+            .ok_or_else(|| {
+                Error::GarbageUrlFromKeycloak(resource_url.to_string())
+            })?
+            .to_string())
     }
 
     fn request_builder(
