@@ -12,6 +12,7 @@ use super::KeycloakRealm;
 #[kube(
     kind = "KeycloakGroup",
     shortname = "kcg",
+    doc = "resource to define a Group within a [KeycloakRealm](./keycloakrealm.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

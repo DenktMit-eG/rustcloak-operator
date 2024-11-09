@@ -2,10 +2,10 @@
 
 ## v1
 
-Auto-generated derived type for KeycloakIdentityProviderMapperSpec via `CustomResource`
+resource to define a identity provider mapper within a [KeyclaokIdentityProvider](./keycloakidentityprovider.md)
 
-|Name|Type|Required|
-|:---|:---|:------:|
+|Property|Type|Required|
+|:-------|:---|:------:|
 |[spec](#spec)|object|✅|
 |[spec.definition](#specdefinition)|object|✅|
 |[spec.definition.config](#specdefinitionconfig)|object||
@@ -16,14 +16,7 @@ Auto-generated derived type for KeycloakIdentityProviderMapperSpec via `CustomRe
 |[spec.identityProviderRef](#specidentityproviderref)|string|✅|
 |[spec.options](#specoptions)|object||
 |[status](#status)|object||
-|[status.conditions](#statusconditions)|array||
 |[status.conditions[]](#statusconditions)|object||
-|[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
-|[status.conditions[].lastUpdateTime](#statusconditionslastupdatetime)|string||
-|[status.conditions[].message](#statusconditionsmessage)|string||
-|[status.conditions[].reason](#statusconditionsreason)|string||
-|[status.conditions[].status](#statusconditionsstatus)|string|✅|
-|[status.conditions[].type](#statusconditionstype)|string|✅|
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
 |[status.conditions[].lastUpdateTime](#statusconditionslastupdatetime)|string||
 |[status.conditions[].message](#statusconditionsmessage)|string||
@@ -35,23 +28,43 @@ Auto-generated derived type for KeycloakIdentityProviderMapperSpec via `CustomRe
 |[status.resourcePath](#statusresourcepath)|string||
 |[status.status](#statusstatus)|string||
 
+---
+
 ### spec
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[definition](#specdefinition)|object|✅|
+|[identityProviderRef](#specidentityproviderref)|string|✅|
+|[options](#specoptions)|object||
+
 the KeycloakIdentityProviderMapper resource
+
+---
 
 ### spec.definition
 
 Type: object
 
-#### Validations
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[config](#specdefinitionconfig)|object||
+|[id](#specdefinitionid)|string||
+|[identityProviderAlias](#specdefinitionidentityprovideralias)|string||
+|[identityProviderMapper](#specdefinitionidentityprovidermapper)|string||
+|[name](#specdefinitionname)|string||
 
-|Rule|Error Message|
-|:---|:------------|
+&nbsp;
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
 |has(self.id) == has(oldSelf.id)|Value is immutable|
 
 *missing*
+
+---
 
 ### spec.definition.config
 
@@ -59,17 +72,19 @@ Type: object
 
 *missing*
 
+---
+
 ### spec.definition.id
 
 Type: string
 
-#### Validations
-
-|Rule|Error Message|
-|:---|:------------|
+|Validation Rule|Error Message|
+|:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
 *missing*
+
+---
 
 ### spec.definition.identityProviderAlias
 
@@ -77,11 +92,15 @@ Type: string
 
 *missing*
 
+---
+
 ### spec.definition.identityProviderMapper
 
 Type: string
 
 *missing*
+
+---
 
 ### spec.definition.name
 
@@ -89,11 +108,15 @@ Type: string
 
 *missing*
 
+---
+
 ### spec.identityProviderRef
 
 Type: string
 
 the name of the kubernetes object that created the identity provider.
+
+---
 
 ### spec.options
 
@@ -101,23 +124,40 @@ Type: object
 
 Options for the request to the Keycloak Admin API.
 
+---
+
 ### status
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[conditions[]](#statusconditions)|object||
+|[message](#statusmessage)|string||
+|[ready](#statusready)|boolean|✅|
+|[resourcePath](#statusresourcepath)|string||
+|[status](#statusstatus)|string||
+
 *missing*
 
-### status.conditions
-
-Type: array
-
-*missing*
+---
 
 ### status.conditions[]
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[lastTransitionTime](#statusconditionslasttransitiontime)|string||
+|[lastUpdateTime](#statusconditionslastupdatetime)|string||
+|[message](#statusconditionsmessage)|string||
+|[reason](#statusconditionsreason)|string||
+|[status](#statusconditionsstatus)|string|✅|
+|[type](#statusconditionstype)|string|✅|
+
 *missing*
+
+---
 
 ### status.conditions[].lastTransitionTime
 
@@ -125,41 +165,7 @@ Type: string
 
 Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
 
-### status.conditions[].lastUpdateTime
-
-Type: string
-
-Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-
-### status.conditions[].message
-
-Type: string
-
-*missing*
-
-### status.conditions[].reason
-
-Type: string
-
-*missing*
-
-### status.conditions[].status
-
-Type: string
-
-*missing*
-
-### status.conditions[].type
-
-Type: string
-
-*missing*
-
-### status.conditions[].lastTransitionTime
-
-Type: string
-
-Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
+---
 
 ### status.conditions[].lastUpdateTime
 
@@ -167,11 +173,15 @@ Type: string
 
 Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
 
+---
+
 ### status.conditions[].message
 
 Type: string
 
 *missing*
+
+---
 
 ### status.conditions[].reason
 
@@ -179,17 +189,23 @@ Type: string
 
 *missing*
 
+---
+
 ### status.conditions[].status
 
 Type: string
 
 *missing*
 
+---
+
 ### status.conditions[].type
 
 Type: string
 
 *missing*
+
+---
 
 ### status.message
 
@@ -197,17 +213,23 @@ Type: string
 
 *missing*
 
+---
+
 ### status.ready
 
 Type: boolean
 
 *missing*
 
+---
+
 ### status.resourcePath
 
 Type: string
 
 *missing*
+
+---
 
 ### status.status
 

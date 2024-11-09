@@ -4,7 +4,7 @@ description: |
   The helm-chart for the rustcloak-operator
 type: application
 icon: https://github.com/withlazers/rustcloak-operator/raw/refs/heads/main/icon.svg
-home: https://github.com/withlazers/rustcloak-operator
+home: https://rustcloak.withlazers.dev
 maintainers:
   - name: Enno Boland
     email: mail@eboland.de

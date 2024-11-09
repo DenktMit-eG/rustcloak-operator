@@ -29,7 +29,7 @@ spec:
     name: v1
     schema:
       openAPIV3Schema:
-        description: Auto-generated derived type for KeycloakRequiredActionProviderSpec via `CustomResource`
+        description: resource to define an Required Action Provider within a [KeyclaokRealm](./keycloakrealm.md)
         properties:
           spec:
             description: the KeycloakRequiredActionProvider resource

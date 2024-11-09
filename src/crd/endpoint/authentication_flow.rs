@@ -13,6 +13,7 @@ use super::KeycloakRealm;
 #[kube(
     kind = "KeycloakAuthenticationFlow",
     shortname = "kcaf",
+    doc = "resource to define an Authentication Flow within a [KeycloakRealm](./keycloakrealm.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

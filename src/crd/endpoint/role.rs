@@ -17,6 +17,7 @@ type Parents = Either<KeycloakRealm, KeycloakClient>;
 #[kube(
     kind = "KeycloakRole",
     shortname = "kcr",
+    doc = "resource to define a Protocol Mapper within either a [KeycloakRealm](./keycloakrealm.md) or a [KeycloakClient](./keycloakclient.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

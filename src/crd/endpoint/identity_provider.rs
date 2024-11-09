@@ -11,6 +11,7 @@ use serde::{Deserialize, Serialize};
 #[kube(
     kind = "KeycloakIdentityProvider",
     shortname = "kcip",
+    doc = "resource to define a identity provider in a [KeyclaokRealm](./keycloakrealm.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

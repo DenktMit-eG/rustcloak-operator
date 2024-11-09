@@ -17,6 +17,7 @@ type ParentRef = Either<ClientRef, ClientScopeRef>;
 #[kube(
     kind = "KeycloakProtocolMapper",
     shortname = "kcpm",
+    doc = "resource to define a Protocol Mapper within either a [KeycloakClient](./keycloakclient.md) or a [KeycloakClientScope](./keycloakclientscope.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

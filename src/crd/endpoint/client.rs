@@ -20,6 +20,7 @@ pub struct KeycloakClientSecretReference {
 #[kube(
     kind = "KeycloakClient",
     shortname = "kcc",
+    doc = "resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

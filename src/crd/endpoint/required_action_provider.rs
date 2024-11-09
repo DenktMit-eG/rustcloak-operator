@@ -12,6 +12,7 @@ use super::KeycloakRealm;
 #[kube(
     kind = "KeycloakRequiredActionProvider",
     shortname = "kcrap",
+    doc = "resource to define an Required Action Provider within a [KeyclaokRealm](./keycloakrealm.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

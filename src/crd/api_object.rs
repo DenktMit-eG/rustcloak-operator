@@ -9,6 +9,7 @@ use std::ops::Add;
 #[kube(
     kind = "KeycloakApiObject",
     shortname = "kcapi",
+    doc = "Custom Resource for Keycloak API requests. The user should not use this resource directly.",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     namespaced,

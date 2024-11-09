@@ -12,6 +12,7 @@ use super::KeycloakRealm;
 #[kube(
     kind = "KeycloakComponent",
     shortname = "kcco",
+    doc = "resource to define a Component within a [KeycloakRealm](./keycloakrealm.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

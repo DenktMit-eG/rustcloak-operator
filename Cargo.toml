@@ -32,7 +32,7 @@ keycloak-crd = { git = "https://github.com/withlazers/keycloak-crd.git", branch 
 randstr = "0.2.1"
 structured-logger = "1.0.3"
 crd2md = { git = "https://github.com/withlazers/crd2md.git" }
-#crd2md = { path = "../crd2md" }
+#crd2md = { path = "../crd2md/crd2md" }
 
 [profile.release]
 strip = true

@@ -28,7 +28,7 @@ jobs:
     - run: |
         cargo clippy --all-targets --all-features
 
-  check_crds:
+  check_gen:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v4
@@ -38,5 +38,6 @@ jobs:
         cache-on-failure: "true"
     - run: |
         cargo run --bin=crdgen -- --update
+        go run github.com/norwoodj/helm-docs/cmd/helm-docs@latest --chart-search-root charts
         git add .
         git diff --staged --exit-code

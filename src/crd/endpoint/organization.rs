@@ -12,6 +12,7 @@ use super::KeycloakRealm;
 #[kube(
     kind = "KeycloakOrganization",
     shortname = "kcorg",
+    doc = "resource to define an Organisation within a [KeyclaokRealm](./keycloakrealm.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

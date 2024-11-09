@@ -12,6 +12,7 @@ use super::KeycloakIdentityProvider;
 #[kube(
     kind = "KeycloakIdentityProviderMapper",
     shortname = "kcipm",
+    doc = "resource to define a identity provider mapper within a [KeyclaokIdentityProvider](./keycloakidentityprovider.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

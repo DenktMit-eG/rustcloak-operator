@@ -2,10 +2,10 @@
 
 ## v1
 
-Auto-generated derived type for KeycloakInstanceSpec via `CustomResource`
+This resource makes a Keycloak instance known to the operator
 
-|Name|Type|Required|
-|:---|:---|:------:|
+|Property|Type|Required|
+|:-------|:---|:------:|
 |[spec](#spec)|object|✅|
 |[spec.baseUrl](#specbaseurl)|string|✅|
 |[spec.client](#specclient)|object||
@@ -21,14 +21,7 @@ Auto-generated derived type for KeycloakInstanceSpec via `CustomResource`
 |[spec.token.secretName](#spectokensecretname)|string||
 |[spec.token.tokenKey](#spectokentokenkey)|string||
 |[status](#status)|object||
-|[status.conditions](#statusconditions)|array||
 |[status.conditions[]](#statusconditions)|object||
-|[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
-|[status.conditions[].lastUpdateTime](#statusconditionslastupdatetime)|string||
-|[status.conditions[].message](#statusconditionsmessage)|string||
-|[status.conditions[].reason](#statusconditionsreason)|string||
-|[status.conditions[].status](#statusconditionsstatus)|string|✅|
-|[status.conditions[].type](#statusconditionstype)|string|✅|
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
 |[status.conditions[].lastUpdateTime](#statusconditionslastupdatetime)|string||
 |[status.conditions[].message](#statusconditionsmessage)|string||
@@ -40,11 +33,23 @@ Auto-generated derived type for KeycloakInstanceSpec via `CustomResource`
 |[status.resourcePath](#statusresourcepath)|string||
 |[status.status](#statusstatus)|string||
 
+---
+
 ### spec
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[baseUrl](#specbaseurl)|string|✅|
+|[client](#specclient)|object||
+|[credentials](#speccredentials)|object|✅|
+|[realm](#specrealm)|string||
+|[token](#spectoken)|object||
+
 *missing*
+
+---
 
 ### spec.baseUrl
 
@@ -52,11 +57,20 @@ Type: string
 
 *missing*
 
+---
+
 ### spec.client
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[id](#specclientid)|string|✅|
+|[secret](#specclientsecret)|string||
+
 *missing*
+
+---
 
 ### spec.client.id
 
@@ -64,17 +78,29 @@ Type: string
 
 *missing*
 
+---
+
 ### spec.client.secret
 
 Type: string
 
 *missing*
 
+---
+
 ### spec.credentials
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[passwordKey](#speccredentialspasswordkey)|string||
+|[secretName](#speccredentialssecretname)|string|✅|
+|[userKey](#speccredentialsuserkey)|string||
+
 *missing*
+
+---
 
 ### spec.credentials.passwordKey
 
@@ -82,11 +108,15 @@ Type: string
 
 *missing*
 
+---
+
 ### spec.credentials.secretName
 
 Type: string
 
 *missing*
+
+---
 
 ### spec.credentials.userKey
 
@@ -94,17 +124,29 @@ Type: string
 
 *missing*
 
+---
+
 ### spec.realm
 
 Type: string
 
 *missing*
 
+---
+
 ### spec.token
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[expiresKey](#spectokenexpireskey)|string||
+|[secretName](#spectokensecretname)|string||
+|[tokenKey](#spectokentokenkey)|string||
+
 *missing*
+
+---
 
 ### spec.token.expiresKey
 
@@ -112,11 +154,15 @@ Type: string
 
 *missing*
 
+---
+
 ### spec.token.secretName
 
 Type: string
 
 *missing*
+
+---
 
 ### spec.token.tokenKey
 
@@ -124,23 +170,40 @@ Type: string
 
 *missing*
 
+---
+
 ### status
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[conditions[]](#statusconditions)|object||
+|[message](#statusmessage)|string||
+|[ready](#statusready)|boolean|✅|
+|[resourcePath](#statusresourcepath)|string||
+|[status](#statusstatus)|string||
+
 *missing*
 
-### status.conditions
-
-Type: array
-
-*missing*
+---
 
 ### status.conditions[]
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[lastTransitionTime](#statusconditionslasttransitiontime)|string||
+|[lastUpdateTime](#statusconditionslastupdatetime)|string||
+|[message](#statusconditionsmessage)|string||
+|[reason](#statusconditionsreason)|string||
+|[status](#statusconditionsstatus)|string|✅|
+|[type](#statusconditionstype)|string|✅|
+
 *missing*
+
+---
 
 ### status.conditions[].lastTransitionTime
 
@@ -148,41 +211,7 @@ Type: string
 
 Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
 
-### status.conditions[].lastUpdateTime
-
-Type: string
-
-Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-
-### status.conditions[].message
-
-Type: string
-
-*missing*
-
-### status.conditions[].reason
-
-Type: string
-
-*missing*
-
-### status.conditions[].status
-
-Type: string
-
-*missing*
-
-### status.conditions[].type
-
-Type: string
-
-*missing*
-
-### status.conditions[].lastTransitionTime
-
-Type: string
-
-Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
+---
 
 ### status.conditions[].lastUpdateTime
 
@@ -190,11 +219,15 @@ Type: string
 
 Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
 
+---
+
 ### status.conditions[].message
 
 Type: string
 
 *missing*
+
+---
 
 ### status.conditions[].reason
 
@@ -202,17 +235,23 @@ Type: string
 
 *missing*
 
+---
+
 ### status.conditions[].status
 
 Type: string
 
 *missing*
 
+---
+
 ### status.conditions[].type
 
 Type: string
 
 *missing*
+
+---
 
 ### status.message
 
@@ -220,17 +259,23 @@ Type: string
 
 *missing*
 
+---
+
 ### status.ready
 
 Type: boolean
 
 *missing*
 
+---
+
 ### status.resourcePath
 
 Type: string
 
 *missing*
+
+---
 
 ### status.status
 

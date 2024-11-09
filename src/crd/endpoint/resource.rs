@@ -13,6 +13,7 @@ use up_impl::HasUp;
 #[kube(
     kind = "KeycloakResource",
     shortname = "kcrs",
+    doc = "resource to define a Resource within a [KeyclaokClient](./keycloakclient.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

@@ -20,6 +20,7 @@ pub struct KeycloakUserSecretReference {
 #[kube(
     kind = "KeycloakUser",
     shortname = "kcu",
+    doc = "resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

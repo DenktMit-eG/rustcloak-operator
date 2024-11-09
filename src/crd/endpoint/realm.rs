@@ -16,6 +16,7 @@ use up_impl::Root;
 #[kube(
     kind = "KeycloakRealm",
     shortname = "kcrm",
+    doc = "resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

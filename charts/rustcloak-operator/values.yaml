@@ -1,7 +1,10 @@
+# -- must be 1. The rustcloak-operator currently does not support multiple replicas.
 replicaCount: 1
 
 application:
+  # -- one of error, warn, info, debug, trace. Also supports the [env_logger format](https://docs.rs/env_logger/latest/env_logger/#enabling-logging)
   logLevel: "info"
+  # -- enable legacy support. Before enabling, please consult [legacy support section](https://rustcloak.withlazers.dev/configuration/legacy-mode.html) of the rustcloak documentation.
   legacy: false
 
 image:

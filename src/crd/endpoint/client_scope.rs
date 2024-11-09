@@ -12,6 +12,7 @@ use super::KeycloakRealm;
 #[kube(
     kind = "KeycloakClientScope",
     shortname = "kcss",
+    doc = "resource to define a Scope within a [KeycloakClient](./keycloakclient.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

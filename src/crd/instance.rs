@@ -34,6 +34,7 @@ pub struct KeycloakInstanceClient {
 #[kube(
     kind = "KeycloakInstance",
     shortname = "kci",
+    doc = "This resource makes a Keycloak instance known to the operator",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

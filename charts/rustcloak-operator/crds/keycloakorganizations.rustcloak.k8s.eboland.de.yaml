@@ -29,7 +29,7 @@ spec:
     name: v1
     schema:
       openAPIV3Schema:
-        description: Auto-generated derived type for KeycloakOrganizationSpec via `CustomResource`
+        description: resource to define an Organisation within a [KeyclaokRealm](./keycloakrealm.md)
         properties:
           spec:
             description: the KeycloakOrganization resource

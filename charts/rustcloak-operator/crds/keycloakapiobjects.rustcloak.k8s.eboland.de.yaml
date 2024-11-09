@@ -33,7 +33,7 @@ spec:
     name: v1
     schema:
       openAPIV3Schema:
-        description: Auto-generated derived type for KeycloakApiObjectSpec via `CustomResource`
+        description: Custom Resource for Keycloak API requests. The user should not use this resource directly.
         properties:
           spec:
             description: defines an API request to the Keycloak Admin API.

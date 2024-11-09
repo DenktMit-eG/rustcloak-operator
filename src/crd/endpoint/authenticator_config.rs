@@ -12,6 +12,7 @@ use super::KeycloakRealm;
 #[kube(
     kind = "KeycloakAuthenticatorConfig",
     shortname = "kcac",
+    doc = "resource to define an Authenticator Config within a [KeycloakRealm](./keycloakrealm.md)",
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",

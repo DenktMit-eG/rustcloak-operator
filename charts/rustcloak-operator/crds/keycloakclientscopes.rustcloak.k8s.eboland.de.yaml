@@ -29,7 +29,7 @@ spec:
     name: v1
     schema:
       openAPIV3Schema:
-        description: Auto-generated derived type for KeycloakClientScopeSpec via `CustomResource`
+        description: resource to define a Scope within a [KeycloakClient](./keycloakclient.md)
         properties:
           spec:
             description: the KeycloakClientScope resource

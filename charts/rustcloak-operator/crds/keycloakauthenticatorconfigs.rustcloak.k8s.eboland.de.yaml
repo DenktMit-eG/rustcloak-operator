@@ -29,7 +29,7 @@ spec:
     name: v1
     schema:
       openAPIV3Schema:
-        description: Auto-generated derived type for KeycloakAuthenticatorConfigSpec via `CustomResource`
+        description: resource to define an Authenticator Config within a [KeycloakRealm](./keycloakrealm.md)
         properties:
           spec:
             description: the KeycloakAuthenticatorConfig resource

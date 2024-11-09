@@ -29,7 +29,7 @@ spec:
     name: v1
     schema:
       openAPIV3Schema:
-        description: Auto-generated derived type for KeycloakIdentityProviderMapperSpec via `CustomResource`
+        description: resource to define a identity provider mapper within a [KeyclaokIdentityProvider](./keycloakidentityprovider.md)
         properties:
           spec:
             description: the KeycloakIdentityProviderMapper resource
