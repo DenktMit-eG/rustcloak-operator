@@ -2,6 +2,7 @@
 
 - [About](./about.md)
 - [Installation](./installation.md)
+- [Configuration](./configuration.md)
 - [Custom Resource Definitions](./crds.md)
     - [KeycloakInstance](crds/keycloakinstance.md)
     - [KeycloakApiObject](crds/keycloakapiobject.md)
@@ -21,3 +22,4 @@
     - [KeycloakRole](crds/keycloakrole.md)
     - [KeycloakScope](crds/keycloakscope.md)
     - [KeycloakUser](crds/keycloakuser.md)
+- [Architecture](./architecture.md)
