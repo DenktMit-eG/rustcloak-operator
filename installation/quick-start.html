@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Configuration - Rustcloak Operator</title>
+        <title>Quick Start - Rustcloak Operator</title>
 
 
         <!-- Custom HTML head -->
@@ -12,32 +12,32 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
 
         <!-- Provide site root to javascript -->
         <script>
-            var path_to_root = "";
+            var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc.js"></script>
+        <script src="../toc.js"></script>
     </head>
     <body>
     <div id="body-container">
@@ -89,7 +89,7 @@
             <!-- populated by js -->
             <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
             <noscript>
-                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
             </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -123,13 +123,13 @@
                     <h1 class="menu-title">Rustcloak Operator</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                         <a href="https://github.com/withlazers/rustcloak-operator/" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/withlazers/rustcloak-operator/edit/main/docs/src/configuration.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/withlazers/rustcloak-operator/edit/main/docs/src/installation/quick-start.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -158,18 +158,144 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
-<p>Here be dragons.</p>
+                        <h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
+<h2 id="pre-requisites"><a class="header" href="#pre-requisites">Pre-requisites</a></h2>
+<ul>
+<li>A running Kubernetes cluster</li>
+<li><code>kubectl</code> installed and configured to use the cluster</li>
+<li><code>helm</code> installed</li>
+</ul>
+<h2 id="install-rustcloak"><a class="header" href="#install-rustcloak">Install Rustcloak</a></h2>
+<pre><code class="language-bash">helm repo add withlazers https://charts.withlazers.dev
+helm install rustcloak withlazers/rustcloak-operator
+</code></pre>
+<h2 id="install-keycloak"><a class="header" href="#install-keycloak">Install Keycloak</a></h2>
+<p>Prepare a <code>keycloak-values.yaml</code> file with the following content:</p>
+<pre><code class="language-yaml">command:
+  - "/opt/keycloak/bin/kc.sh"
+  - "start-dev"
+  - "--http-port=8080"
+  - "--hostname-strict=false"
+extraEnv: |
+  - name: JAVA_OPTS_APPEND
+    value: &gt;-
+      -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+extraEnvFrom: |
+  - secretRef:
+      name: keycloak-admin
+</code></pre>
+<p>Then install Keycloak:</p>
+<pre><code class="language-bash">helm repo add codecentric https://codecentric.github.io/helm-charts:
+helm install keycloak codecentric/keycloakx -f keycloak-values.yaml
+</code></pre>
+<p>If you see an "CreateContainerConfigError" error, this is expected. Keycloak is waiting for its admin credentials.</p>
+<h2 id="tell-rustcloak-about-keycloak"><a class="header" href="#tell-rustcloak-about-keycloak">Tell Rustcloak about Keycloak</a></h2>
+<p>With Keycloak running, you can now create a <code>KeycloakInstance</code> resource linking Rustcloak to Keycloak:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakInstance
+metadata:
+  name: keycloak-instance
+spec:
+  baseUrl: http://keycloak-keycloakx-http:80/auth
+  credentials:
+    # Rustcloak will take care of creating this secret with a random password.
+    create: true
+    passwordKey: KEYCLOAK_ADMIN_PASSWORD
+    secretName: keycloak-admin
+    usernameKey: KEYCLOAK_ADMIN
+</code></pre>
+<h2 id="create-a-realm"><a class="header" href="#create-a-realm">Create a Realm</a></h2>
+<p>With the <code>KeycloakInstance</code> resource in place, you can now create a <code>KeycloakRealm</code> resource:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakRealm
+metadata:
+  name: example-keycloakrealm
+spec:
+  instanceRef: keycloak-instance
+  definition:
+    realm: an-example-realm
+</code></pre>
+<h2 id="create-a-client"><a class="header" href="#create-a-client">Create a Client</a></h2>
+<p>With the <code>KeycloakRealm</code> resource in place, you can now create a <code>KeycloakClient</code> resource:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakClient
+metadata:
+  name: example-keycloakclient
+spec:
+  realmRef: example-keycloakrealm
+  definition:
+    clientId: example-client
+    name: An example client
+  clientSecret:
+    secretName: example-keycloakclient
+</code></pre>
+<p>Rustcloak will retrieve the client secret from Keycloak and store it in a secret named <code>example-keycloakclient</code>:</p>
+<pre><code class="language-yaml"># kubectl get secret  example-keycloakclient -o yaml
+apiVersion: v1
+data:
+  client_id: ZXhhbXBsZS1jbGllbnQ=
+  client_secret: enNWVmhCYjlqSWtvbjJHdTY5TXZ1R1IwYlFsVTMxbGE=
+kind: Secret
+metadata:
+  creationTimestamp: "2024-11-09T19:20:39Z"
+  name: example-keycloakclient
+  namespace: default
+  ownerReferences:
+  - apiVersion: rustcloak.k8s.eboland.de/v1
+    kind: KeycloakClient
+    name: example-keycloakclient
+    uid: d6529acf-5410-4090-ad01-767c68cbf426
+  resourceVersion: "1097"
+  uid: 16c9244e-e2fd-4dc2-8175-13f5f8dd54c3
+type: Opaque
+</code></pre>
+<h2 id="create-a-user"><a class="header" href="#create-a-user">Create a User</a></h2>
+<p>With the <code>KeycloakRealm</code> resource in place, you can now create a <code>KeycloakUser</code> resource:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakUser
+metadata:
+  name: example-keycloakuser
+spec:
+  realmRef: example-keycloakrealm
+  definition:
+    username: awesome-user
+    email: mail@example.com
+    enabled: true
+    firstName: Awesome
+    lastName: User
+  userSecret:
+    secretName: example-keycloakuser
+</code></pre>
+<p>Rustcloak will create a user in Keycloak and set the password from the secret named <code>example-keycloakuser</code>. If it doesn't exist, it will create it with a random password:</p>
+<pre><code class="language-yaml"># kubectl get secret  example-keycloakuser -o yaml
+apiVersion: v1
+data:
+  password: ZXMmPGk6TGpyKX0vOG0hdi95W15MPz83WVxPP3MpKig=
+  username: YXdlc29tZS11c2Vy
+kind: Secret
+metadata:
+  creationTimestamp: "2024-11-09T19:21:14Z"
+  name: example-keycloakuser
+  namespace: default
+  ownerReferences:
+  - apiVersion: rustcloak.k8s.eboland.de/v1
+    kind: KeycloakUser
+    name: example-keycloakuser
+    uid: aeee2245-b790-48d0-b9f2-79af86cc1753
+  resourceVersion: "1135"
+  uid: e1d607fa-8dc6-4db9-bf6b-764d18fc0a57
+type: Opaque
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="installation/quick-start.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../installation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="crds.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../configuration.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -179,11 +305,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="installation/quick-start.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../installation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="crds.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../configuration.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
@@ -198,13 +324,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

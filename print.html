@@ -187,6 +187,134 @@ lifecycle of the Keycloak objects.</p>
 helm install rustcloak withlazers/rustcloak
 </code></pre>
 <p>For more information on how to configure the helm chart, see the <a href="https://github.com/withlazers/rustcloak-operator/tree/main/charts/rustcloak-operator">helm chart documentation</a> on Github.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
+<h2 id="pre-requisites"><a class="header" href="#pre-requisites">Pre-requisites</a></h2>
+<ul>
+<li>A running Kubernetes cluster</li>
+<li><code>kubectl</code> installed and configured to use the cluster</li>
+<li><code>helm</code> installed</li>
+</ul>
+<h2 id="install-rustcloak"><a class="header" href="#install-rustcloak">Install Rustcloak</a></h2>
+<pre><code class="language-bash">helm repo add withlazers https://charts.withlazers.dev
+helm install rustcloak withlazers/rustcloak-operator
+</code></pre>
+<h2 id="install-keycloak"><a class="header" href="#install-keycloak">Install Keycloak</a></h2>
+<p>Prepare a <code>keycloak-values.yaml</code> file with the following content:</p>
+<pre><code class="language-yaml">command:
+  - "/opt/keycloak/bin/kc.sh"
+  - "start-dev"
+  - "--http-port=8080"
+  - "--hostname-strict=false"
+extraEnv: |
+  - name: JAVA_OPTS_APPEND
+    value: &gt;-
+      -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+extraEnvFrom: |
+  - secretRef:
+      name: keycloak-admin
+</code></pre>
+<p>Then install Keycloak:</p>
+<pre><code class="language-bash">helm repo add codecentric https://codecentric.github.io/helm-charts:
+helm install keycloak codecentric/keycloakx -f keycloak-values.yaml
+</code></pre>
+<p>If you see an "CreateContainerConfigError" error, this is expected. Keycloak is waiting for its admin credentials.</p>
+<h2 id="tell-rustcloak-about-keycloak"><a class="header" href="#tell-rustcloak-about-keycloak">Tell Rustcloak about Keycloak</a></h2>
+<p>With Keycloak running, you can now create a <code>KeycloakInstance</code> resource linking Rustcloak to Keycloak:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakInstance
+metadata:
+  name: keycloak-instance
+spec:
+  baseUrl: http://keycloak-keycloakx-http:80/auth
+  credentials:
+    # Rustcloak will take care of creating this secret with a random password.
+    create: true
+    passwordKey: KEYCLOAK_ADMIN_PASSWORD
+    secretName: keycloak-admin
+    usernameKey: KEYCLOAK_ADMIN
+</code></pre>
+<h2 id="create-a-realm"><a class="header" href="#create-a-realm">Create a Realm</a></h2>
+<p>With the <code>KeycloakInstance</code> resource in place, you can now create a <code>KeycloakRealm</code> resource:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakRealm
+metadata:
+  name: example-keycloakrealm
+spec:
+  instanceRef: keycloak-instance
+  definition:
+    realm: an-example-realm
+</code></pre>
+<h2 id="create-a-client"><a class="header" href="#create-a-client">Create a Client</a></h2>
+<p>With the <code>KeycloakRealm</code> resource in place, you can now create a <code>KeycloakClient</code> resource:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakClient
+metadata:
+  name: example-keycloakclient
+spec:
+  realmRef: example-keycloakrealm
+  definition:
+    clientId: example-client
+    name: An example client
+  clientSecret:
+    secretName: example-keycloakclient
+</code></pre>
+<p>Rustcloak will retrieve the client secret from Keycloak and store it in a secret named <code>example-keycloakclient</code>:</p>
+<pre><code class="language-yaml"># kubectl get secret  example-keycloakclient -o yaml
+apiVersion: v1
+data:
+  client_id: ZXhhbXBsZS1jbGllbnQ=
+  client_secret: enNWVmhCYjlqSWtvbjJHdTY5TXZ1R1IwYlFsVTMxbGE=
+kind: Secret
+metadata:
+  creationTimestamp: "2024-11-09T19:20:39Z"
+  name: example-keycloakclient
+  namespace: default
+  ownerReferences:
+  - apiVersion: rustcloak.k8s.eboland.de/v1
+    kind: KeycloakClient
+    name: example-keycloakclient
+    uid: d6529acf-5410-4090-ad01-767c68cbf426
+  resourceVersion: "1097"
+  uid: 16c9244e-e2fd-4dc2-8175-13f5f8dd54c3
+type: Opaque
+</code></pre>
+<h2 id="create-a-user"><a class="header" href="#create-a-user">Create a User</a></h2>
+<p>With the <code>KeycloakRealm</code> resource in place, you can now create a <code>KeycloakUser</code> resource:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakUser
+metadata:
+  name: example-keycloakuser
+spec:
+  realmRef: example-keycloakrealm
+  definition:
+    username: awesome-user
+    email: mail@example.com
+    enabled: true
+    firstName: Awesome
+    lastName: User
+  userSecret:
+    secretName: example-keycloakuser
+</code></pre>
+<p>Rustcloak will create a user in Keycloak and set the password from the secret named <code>example-keycloakuser</code>. If it doesn't exist, it will create it with a random password:</p>
+<pre><code class="language-yaml"># kubectl get secret  example-keycloakuser -o yaml
+apiVersion: v1
+data:
+  password: ZXMmPGk6TGpyKX0vOG0hdi95W15MPz83WVxPP3MpKig=
+  username: YXdlc29tZS11c2Vy
+kind: Secret
+metadata:
+  creationTimestamp: "2024-11-09T19:21:14Z"
+  name: example-keycloakuser
+  namespace: default
+  ownerReferences:
+  - apiVersion: rustcloak.k8s.eboland.de/v1
+    kind: KeycloakUser
+    name: example-keycloakuser
+    uid: aeee2245-b790-48d0-b9f2-79af86cc1753
+  resourceVersion: "1135"
+  uid: e1d607fa-8dc6-4db9-bf6b-764d18fc0a57
+type: Opaque
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
 <p>Here be dragons.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-resource-definitions"><a class="header" href="#custom-resource-definitions">Custom Resource Definitions</a></h1>
@@ -201,9 +329,10 @@ helm install rustcloak withlazers/rustcloak
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#specclientid">spec.client.id</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#specclientsecret">spec.client.secret</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentials">spec.credentials</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentialscreate">spec.credentials.create</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentialspasswordkey">spec.credentials.passwordKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentialssecretname">spec.credentials.secretName</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentialsuserkey">spec.credentials.userKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentialsusernamekey">spec.credentials.usernameKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#specrealm">spec.realm</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#spectoken">spec.token</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#spectokenexpireskey">spec.token.expiresKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -260,11 +389,16 @@ helm install rustcloak withlazers/rustcloak
 <h3 id="speccredentials"><a class="header" href="#speccredentials">spec.credentials</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentialscreate">create</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentialspasswordkey">passwordKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentialssecretname">secretName</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentialsuserkey">userKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#speccredentialsusernamekey">usernameKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
+<p><em>missing</em></p>
+<hr />
+<h3 id="speccredentialscreate"><a class="header" href="#speccredentialscreate">spec.credentials.create</a></h3>
+<p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
 <h3 id="speccredentialspasswordkey"><a class="header" href="#speccredentialspasswordkey">spec.credentials.passwordKey</a></h3>
@@ -275,7 +409,7 @@ helm install rustcloak withlazers/rustcloak
 <p>Type: string</p>
 <p><em>missing</em></p>
 <hr />
-<h3 id="speccredentialsuserkey"><a class="header" href="#speccredentialsuserkey">spec.credentials.userKey</a></h3>
+<h3 id="speccredentialsusernamekey"><a class="header" href="#speccredentialsusernamekey">spec.credentials.usernameKey</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
 <hr />
