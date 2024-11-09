@@ -321,6 +321,15 @@ type: Opaque
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
 <p>Here be dragons.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="legacy-mode"><a class="header" href="#legacy-mode">Legacy Mode</a></h1>
+<p>Rustcloak supports a mode called "legacy mode" in which it can control
+the CRDs of the <a href="https://github.com/keycloak/keycloak-realm-operator">keycloak-realms-operator</a>.</p>
+<p>Please note that Rustcloak cannot run alongside the
+keycloak-realm-operator. It is a good idea to remove all objects
+managed by the old controller before starting Rustcloak and redeploying
+it for rustcloak to take over.</p>
+<p>To enable legacy mode, enabled the <code>legacy: true</code> option in the rustcloak
+helm chart.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-resource-definitions"><a class="header" href="#custom-resource-definitions">Custom Resource Definitions</a></h1>
 <p>Rustcloak uses ships various custom resource definitions (CRDs) to manage keycloak instances.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="keycloakinstance"><a class="header" href="#keycloakinstance">KeycloakInstance</a></h1>
