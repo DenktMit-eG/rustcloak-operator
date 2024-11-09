@@ -1,6 +1,6 @@
 # Summary
 
-- [About](./about.md)
+- [About](./index.md)
 - [Installation](./installation.md)
 - [Configuration](./configuration.md)
 - [Custom Resource Definitions](./crds.md)
