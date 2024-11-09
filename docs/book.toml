@@ -1,0 +1,10 @@
+[book]
+authors = ["Enno Boland"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Rustcloak Operator"
+
+[output.html]
+git-repository-url = "https://github.com/withlazers/rustcloak-operator/"
+edit-url-template = "https://github.com/withlazers/rustcloak-operator/edit/main/{path}"
