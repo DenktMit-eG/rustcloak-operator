@@ -1,3 +1,7 @@
+<div align="center">
+    <a href="/"><img src="https://github.com/withlazers/rustcloak-operator/raw/refs/heads/main/icon.svg"></a>
+</div>
+
 # About
 
 The rustcloak operator is a Kubernetes operator that manages Keycloak instances 
