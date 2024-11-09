@@ -205,7 +205,7 @@ helm install rustcloak withlazers/rustcloak-operator
 <p>Prepare a <code>keycloak-values.yaml</code> file with the following content:</p>
 <pre><code class="language-yaml">command:
   - "/opt/keycloak/bin/kc.sh"
-  - "start-dev"
+  - "start"
   - "--http-port=8080"
   - "--hostname-strict=false"
 extraEnv: |
