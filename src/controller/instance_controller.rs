@@ -8,9 +8,9 @@ use crate::{
 };
 use async_trait::async_trait;
 use chrono::{Duration, Utc};
-use k8s_openapi::api::core::v1::Secret;
+use k8s_openapi::{api::core::v1::Secret, ByteString};
 use kube::{
-    api::{ListParams, PatchParams},
+    api::{ListParams, ObjectMeta, Patch, PatchParams},
     runtime::{controller::Action, watcher, Controller},
     Api, Resource, ResourceExt,
 };
@@ -18,6 +18,7 @@ use kube::{
 use super::controller_runner::LifecycleController;
 use crate::crd::KeycloakInstance;
 use log::warn;
+use randstr::randstr;
 
 #[derive(Debug, Default)]
 pub struct KeycloakInstanceController {
@@ -51,6 +52,60 @@ impl LifecycleController for KeycloakInstanceController {
         self.manager
             .schedule_refresh(&resource, client.clone())
             .await?;
+
+        if resource.spec.credentials.create.unwrap_or(false) {
+            let secret_name = &resource.spec.credentials.secret_name;
+            let ns = resource.namespace().ok_or(Error::NoNamespace)?;
+            let secret_api = Api::<Secret>::namespaced(client.clone(), &ns);
+            let username_key = resource
+                .spec
+                .credentials
+                .username_key
+                .clone()
+                .unwrap_or("username".to_string());
+            let password_key = resource
+                .spec
+                .credentials
+                .password_key
+                .clone()
+                .unwrap_or("password".to_string());
+
+            let username = "rustcloak-admin".to_string();
+            let password = randstr()
+                .must_upper()
+                .must_lower()
+                .must_digit()
+                .must_symbol()
+                .len(32)
+                .build()
+                .generate();
+            let data = [
+                (username_key, ByteString(username.into_bytes())),
+                (password_key.clone(), ByteString(password.into_bytes())),
+            ]
+            .into();
+            let owner_ref = resource.owner_ref(&()).unwrap();
+
+            let secret = Secret {
+                data: Some(data),
+                metadata: ObjectMeta {
+                    name: Some(secret_name.to_string()),
+                    namespace: Some(ns),
+                    owner_references: Some(vec![owner_ref]),
+                    ..Default::default()
+                },
+                type_: Some("Opaque".to_string()),
+                ..Default::default()
+            };
+
+            secret_api
+                .patch_status(
+                    secret_name,
+                    &PatchParams::apply(app_id!()),
+                    &Patch::Apply(secret),
+                )
+                .await?;
+        }
 
         Ok(())
     }

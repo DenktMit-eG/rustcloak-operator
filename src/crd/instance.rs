@@ -10,8 +10,9 @@ use up_impl::HasQuery;
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakInstanceCredentialReference {
+    pub create: Option<bool>,
     pub secret_name: String,
-    pub user_key: Option<String>,
+    pub username_key: Option<String>,
     pub password_key: Option<String>,
 }
 
@@ -100,9 +101,9 @@ impl KeycloakInstance {
 
 impl KeycloakInstanceCredentialReference {
     pub fn key_names(&self) -> (&str, &str) {
-        let user_key = self.user_key.as_ref().map_or("user", |x| x);
+        let username_key = self.username_key.as_ref().map_or("user", |x| x);
         let password_key = self.password_key.as_ref().map_or("password", |x| x);
-        (user_key, password_key)
+        (username_key, password_key)
     }
 }
 

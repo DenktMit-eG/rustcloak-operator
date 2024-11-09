@@ -2,6 +2,7 @@
 
 - [About](./index.md)
 - [Installation](./installation.md)
+  - [Quick Start](./installation/quick-start.md)
 - [Configuration](./configuration.md)
 - [Custom Resource Definitions](./crds.md)
     - [KeycloakInstance](crds/keycloakinstance.md)

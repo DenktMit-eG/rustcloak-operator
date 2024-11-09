@@ -57,8 +57,9 @@ impl LifecycleController for LegacyInstanceController {
                 ),
                 realm: Some("master".to_string()),
                 credentials: KeycloakInstanceCredentialReference {
+                    create: Some(false),
                     secret_name: format!("credential-{}", &name),
-                    user_key: Some("ADMIN_USERNAME".to_string()),
+                    username_key: Some("ADMIN_USERNAME".to_string()),
                     password_key: Some("ADMIN_PASSWORD".to_string()),
                 },
                 token: None,

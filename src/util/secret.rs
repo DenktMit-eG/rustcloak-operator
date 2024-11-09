@@ -25,10 +25,10 @@ impl SecretUtils for Secret {
         &self,
         secret_ref: &KeycloakInstanceCredentialReference,
     ) -> Result<(String, String)> {
-        let (user_key, password_key) = secret_ref.key_names();
+        let (username_key, password_key) = secret_ref.key_names();
         let data = self.data.as_ref().ok_or(Error::NoData)?;
         let user = data
-            .get(user_key)
+            .get(username_key)
             .and_then(|u| String::from_utf8(u.0.clone()).ok())
             .ok_or(Error::NoUsername)?;
         let password = data
