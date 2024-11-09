@@ -233,6 +233,10 @@ spec:
     secretName: keycloak-admin
     usernameKey: KEYCLOAK_ADMIN
 </code></pre>
+<p>Now keycloak should start up and Rustcloak should be able to connect to it. You can extract the login credentials from the secret:</p>
+<pre><code class="language-bash">echo "$(kubectl get secrets keycloak-admin --template={{.data.KEYCLOAK_ADMIN_PASSWORD}} | base64 -d)"
+</code></pre>
+<p>The user name is <code>rustcloak-admin</code></p>
 <h2 id="create-a-realm"><a class="header" href="#create-a-realm">Create a Realm</a></h2>
 <p>With the <code>KeycloakInstance</code> resource in place, you can now create a <code>KeycloakRealm</code> resource:</p>
 <pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
