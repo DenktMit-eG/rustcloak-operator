@@ -61,6 +61,14 @@ spec:
     usernameKey: KEYCLOAK_ADMIN
 ```
 
+Now keycloak should start up and Rustcloak should be able to connect to it. You can extract the login credentials from the secret:
+
+```bash
+echo "$(kubectl get secrets keycloak-admin --template={{.data.KEYCLOAK_ADMIN_PASSWORD}} | base64 -d)"
+```
+
+The user name is `rustcloak-admin`
+
 ## Create a Realm
 
 With the `KeycloakInstance` resource in place, you can now create a `KeycloakRealm` resource:
@@ -117,7 +125,7 @@ metadata:
 type: Opaque
 ```
 
-## Create a User 
+## Create a User
 
 With the `KeycloakRealm` resource in place, you can now create a `KeycloakUser` resource:
 
