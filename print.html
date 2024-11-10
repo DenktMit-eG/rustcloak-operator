@@ -161,28 +161,31 @@
 </div>
 <h1 id="about"><a class="header" href="#about">About</a></h1>
 <p>The rustcloak operator is a Kubernetes operator that manages Keycloak instances
-through the <a href="https://www.keycloak.org/docs-api/latest/rest-api/">Keycloak Admin API</a>.</p>
-<h2 id="features"><a class="header" href="#features">Features</a></h2>
+through the <a href="https://www.keycloak.org/docs-api/latest/rest-api/">Keycloak Admin API</a>. The overall goal is to provide a cloud native
+management interface for Keycloak instances.</p>
+<h2 id="goals"><a class="header" href="#goals">Goals</a></h2>
 <ul>
 <li>
-<p>Supports nearly all Keycloak endpoints.</p>
+<p>Manage Keycloak instances solely through kubernetes resources.<sup class="footnote-reference"><a href="#1">1</a></sup></p>
 </li>
 <li>
-<p>Legacy mode to be used as a drop-in<sup class="footnote-reference"><a href="#1">1</a></sup> replacement for the <a href="https://github.com/keycloak/keycloak-realm-operator">keycloak-realm-operator</a>.</p>
-</li>
-<li>
-<p>Supports multiple Keycloak instances.</p>
+<p>Provide a migration path for people that have been let down by Keycloak's own
+efforts to provide an operator.</p>
 </li>
 </ul>
-<h2 id="non-features"><a class="header" href="#non-features">Non-Features</a></h2>
-<p>While managing the lifecycle of Keycloak Objects is supported, we believe that the
-deployment of Keycloak itself is too inflexible to be managed by an operator. Modern
-deployment tools like Helm are better suited for this task.</p>
+<h2 id="non-goals"><a class="header" href="#non-goals">Non-Goals</a></h2>
+<ul>
+<li>
+<p>Manage the deployment of Keycloak instances.</p>
+</li>
+<li>
+<p>Support other IdM solutions than Keycloak.</p>
+</li>
+</ul>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>While rustcloak can manage the CRDs of the keycloak-realm-operator it is currently
-not able to manage instances that have been managed by the keycloak-realm-operator.
-You currently need to redeploy Keycloak, allowing rustcloak have control over the
-lifecycle of the Keycloak objects.</p>
+<p>Most of the management interface can be already provisioned through rustcloak's CRDs
+One notable exception are Subgroups. So currently Rustcloak can only handle a single
+layer of groups.</p>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
 <p>The prefered way to install the rustcloak operator is to use the provided helm chart. The helm chart is available through the <a href="https://charts.withlazers.dev">withlazers helm repository</a>.</p>
@@ -202,7 +205,7 @@ helm install rustcloak withlazers/rustcloak
 helm install rustcloak withlazers/rustcloak-operator
 </code></pre>
 <h2 id="install-keycloak"><a class="header" href="#install-keycloak">Install Keycloak</a></h2>
-<p>Prepare a <code>keycloak-values.yaml</code> file with the following content:</p>
+<p>Prepare a <code>keycloak-values.yaml</code> file with the following content:<sup class="footnote-reference"><a href="#1">1</a></sup></p>
 <pre><code class="language-yaml">command:
   - "/opt/keycloak/bin/kc.sh"
   - "start"
@@ -240,7 +243,15 @@ spec:
 <pre><code class="language-bash">echo "$(kubectl get secrets keycloak-admin --template={{.data.KEYCLOAK_ADMIN_PASSWORD}} | base64 -d)"
 </code></pre>
 <p>The user name is <code>rustcloak-admin</code></p>
-<h2 id="create-a-realm"><a class="header" href="#create-a-realm">Create a Realm</a></h2>
+<h2 id="verify-rustcloak-is-able-to-connect-to-keycloak"><a class="header" href="#verify-rustcloak-is-able-to-connect-to-keycloak">Verify Rustcloak is able to connect to Keycloak</a></h2>
+<pre><code class="language-bash"># kubectl get kci keycloak-instance
+NAME                BASE URL                                 READY   STATUS
+keycloak-instance   http://keycloak-keycloakx-http:80/auth   true    Authenticated
+</code></pre>
+<p>If the <code>READY</code> column is <code>true</code>, Rustcloak is able to connect to Keycloak. To debug any issues, have a look at the <code>status</code> section of the <code>KeycloakInstance</code> resource or the logs of the Rustcloak pod.</p>
+<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
+<p>Congratulations! You are now able to configure Keycloak using Kubernetes resources. Here are a few examples what you can do now:</p>
+<h3 id="create-a-realm"><a class="header" href="#create-a-realm">Create a Realm</a></h3>
 <p>With the <code>KeycloakInstance</code> resource in place, you can now create a <code>KeycloakRealm</code> resource:</p>
 <pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
 kind: KeycloakRealm
@@ -251,7 +262,7 @@ spec:
   definition:
     realm: an-example-realm
 </code></pre>
-<h2 id="create-a-client"><a class="header" href="#create-a-client">Create a Client</a></h2>
+<h3 id="create-a-client"><a class="header" href="#create-a-client">Create a Client</a></h3>
 <p>With the <code>KeycloakRealm</code> resource in place, you can now create a <code>KeycloakClient</code> resource:</p>
 <pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
 kind: KeycloakClient
@@ -285,7 +296,7 @@ metadata:
   uid: 16c9244e-e2fd-4dc2-8175-13f5f8dd54c3
 type: Opaque
 </code></pre>
-<h2 id="create-a-user"><a class="header" href="#create-a-user">Create a User</a></h2>
+<h3 id="create-a-user"><a class="header" href="#create-a-user">Create a User</a></h3>
 <p>With the <code>KeycloakRealm</code> resource in place, you can now create a <code>KeycloakUser</code> resource:</p>
 <pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
 kind: KeycloakUser
@@ -322,7 +333,10 @@ metadata:
   uid: e1d607fa-8dc6-4db9-bf6b-764d18fc0a57
 type: Opaque
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>This example an adapted version from the <a href="https://github.com/codecentric/helm-charts/tree/master/charts/keycloakx#tldr">codecentric helmchart documentation</a></p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h1>
 <p>Here be dragons.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="legacy-mode"><a class="header" href="#legacy-mode">Legacy Mode</a></h1>
 <p>Rustcloak supports a mode called "legacy mode" in which it can control

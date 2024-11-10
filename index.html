@@ -163,28 +163,31 @@
 </div>
 <h1 id="about"><a class="header" href="#about">About</a></h1>
 <p>The rustcloak operator is a Kubernetes operator that manages Keycloak instances
-through the <a href="https://www.keycloak.org/docs-api/latest/rest-api/">Keycloak Admin API</a>.</p>
-<h2 id="features"><a class="header" href="#features">Features</a></h2>
+through the <a href="https://www.keycloak.org/docs-api/latest/rest-api/">Keycloak Admin API</a>. The overall goal is to provide a cloud native
+management interface for Keycloak instances.</p>
+<h2 id="goals"><a class="header" href="#goals">Goals</a></h2>
 <ul>
 <li>
-<p>Supports nearly all Keycloak endpoints.</p>
+<p>Manage Keycloak instances solely through kubernetes resources.<sup class="footnote-reference"><a href="#1">1</a></sup></p>
 </li>
 <li>
-<p>Legacy mode to be used as a drop-in<sup class="footnote-reference"><a href="#1">1</a></sup> replacement for the <a href="https://github.com/keycloak/keycloak-realm-operator">keycloak-realm-operator</a>.</p>
-</li>
-<li>
-<p>Supports multiple Keycloak instances.</p>
+<p>Provide a migration path for people that have been let down by Keycloak's own
+efforts to provide an operator.</p>
 </li>
 </ul>
-<h2 id="non-features"><a class="header" href="#non-features">Non-Features</a></h2>
-<p>While managing the lifecycle of Keycloak Objects is supported, we believe that the
-deployment of Keycloak itself is too inflexible to be managed by an operator. Modern
-deployment tools like Helm are better suited for this task.</p>
+<h2 id="non-goals"><a class="header" href="#non-goals">Non-Goals</a></h2>
+<ul>
+<li>
+<p>Manage the deployment of Keycloak instances.</p>
+</li>
+<li>
+<p>Support other IdM solutions than Keycloak.</p>
+</li>
+</ul>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>While rustcloak can manage the CRDs of the keycloak-realm-operator it is currently
-not able to manage instances that have been managed by the keycloak-realm-operator.
-You currently need to redeploy Keycloak, allowing rustcloak have control over the
-lifecycle of the Keycloak objects.</p>
+<p>Most of the management interface can be already provisioned through rustcloak's CRDs
+One notable exception are Subgroups. So currently Rustcloak can only handle a single
+layer of groups.</p>
 </div>
 
                     </main>
