@@ -5,26 +5,25 @@
 # About
 
 The rustcloak operator is a Kubernetes operator that manages Keycloak instances 
-through the [Keycloak Admin API][1].
+through the [Keycloak Admin API][1]. The overall goal is to provide a cloud native
+management interface for Keycloak instances.
 
-## Features
+## Goals
 
-* Supports nearly all Keycloak endpoints.
+* Manage Keycloak instances solely through kubernetes resources.[^1]
 
-* Legacy mode to be used as a drop-in[^1] replacement for the [keycloak-realm-operator][2].
+* Provide a migration path for people that have been let down by Keycloak's own
+  efforts to provide an operator.
 
-* Supports multiple Keycloak instances.
+## Non-Goals
 
-## Non-Features
+* Manage the deployment of Keycloak instances.
 
-While managing the lifecycle of Keycloak Objects is supported, we believe that the
-deployment of Keycloak itself is too inflexible to be managed by an operator. Modern
-deployment tools like Helm are better suited for this task.
+* Support other IdM solutions than Keycloak.
 
-[^1]: While rustcloak can manage the CRDs of the keycloak-realm-operator it is currently
-      not able to manage instances that have been managed by the keycloak-realm-operator.
-      You currently need to redeploy Keycloak, allowing rustcloak have control over the
-      lifecycle of the Keycloak objects.
+[^1]: Most of the management interface can be already provisioned through rustcloak's CRDs
+      One notable exception are Subgroups. So currently Rustcloak can only handle a single
+      layer of groups.
 
 [1]: https://www.keycloak.org/docs-api/latest/rest-api/
 

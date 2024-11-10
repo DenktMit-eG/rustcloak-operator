@@ -15,7 +15,7 @@ helm install rustcloak withlazers/rustcloak-operator
 
 ## Install Keycloak
 
-Prepare a `keycloak-values.yaml` file with the following content:
+Prepare a `keycloak-values.yaml` file with the following content:[^1]
 
 ```yaml
 command:
@@ -69,7 +69,21 @@ echo "$(kubectl get secrets keycloak-admin --template={{.data.KEYCLOAK_ADMIN_PAS
 
 The user name is `rustcloak-admin`
 
-## Create a Realm
+## Verify Rustcloak is able to connect to Keycloak
+
+```bash
+# kubectl get kci keycloak-instance
+NAME                BASE URL                                 READY   STATUS
+keycloak-instance   http://keycloak-keycloakx-http:80/auth   true    Authenticated
+```
+
+If the `READY` column is `true`, Rustcloak is able to connect to Keycloak. To debug any issues, have a look at the `status` section of the `KeycloakInstance` resource or the logs of the Rustcloak pod.
+
+## Configuration
+
+Congratulations! You are now able to configure Keycloak using Kubernetes resources. Here are a few examples what you can do now:
+
+### Create a Realm
 
 With the `KeycloakInstance` resource in place, you can now create a `KeycloakRealm` resource:
 
@@ -84,7 +98,7 @@ spec:
     realm: an-example-realm
 ```
 
-## Create a Client
+### Create a Client
 
 With the `KeycloakRealm` resource in place, you can now create a `KeycloakClient` resource:
 
@@ -125,7 +139,7 @@ metadata:
 type: Opaque
 ```
 
-## Create a User
+### Create a User
 
 With the `KeycloakRealm` resource in place, you can now create a `KeycloakUser` resource:
 
@@ -168,3 +182,7 @@ metadata:
   uid: e1d607fa-8dc6-4db9-bf6b-764d18fc0a57
 type: Opaque
 ````
+
+[^1]: This example an adapted version from the [codecentric helmchart documentation][1]
+
+[1]: https://github.com/codecentric/helm-charts/tree/master/charts/keycloakx#tldr
