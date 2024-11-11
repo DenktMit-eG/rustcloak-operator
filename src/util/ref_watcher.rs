@@ -1,6 +1,6 @@
 use kube::{runtime::reflector::ObjectRef, Resource, ResourceExt};
 use std::collections::{HashMap, HashSet};
-use std::sync::Mutex;
+use std::sync::RwLock;
 
 #[derive(Debug)]
 pub struct RefWatcher<C, W>
@@ -11,7 +11,7 @@ where
     W::DynamicType: Default + std::fmt::Debug,
 {
     phantom: std::marker::PhantomData<(C, W)>,
-    refs: Mutex<HashMap<ObjectRef<W>, HashSet<String>>>,
+    refs: RwLock<HashMap<ObjectRef<W>, HashSet<String>>>,
 }
 
 impl<C, W> Default for RefWatcher<C, W>
@@ -24,7 +24,7 @@ where
     fn default() -> Self {
         Self {
             phantom: std::marker::PhantomData,
-            refs: Mutex::new(HashMap::new()),
+            refs: RwLock::new(HashMap::new()),
         }
     }
 }
@@ -37,7 +37,7 @@ where
     W::DynamicType: Default + std::fmt::Debug + Eq + std::hash::Hash + Clone,
 {
     pub fn watch(&self, obj: &W) -> Vec<ObjectRef<C>> {
-        let refs = self.refs.lock().unwrap();
+        let refs = self.refs.read().unwrap();
         let obj = ObjectRef::from(obj);
         refs.get(&obj)
             .into_iter()
@@ -59,7 +59,7 @@ where
         S: AsRef<str>,
     {
         let obj = ObjectRef::from(obj);
-        let mut refs = self.refs.lock().unwrap();
+        let mut refs = self.refs.write().unwrap();
         for w in watched {
             let obj = obj.clone();
             let mut key = ObjectRef::new(w.as_ref());
@@ -76,7 +76,7 @@ where
 
     pub fn remove(&self, obj: &C) {
         let name = obj.name_unchecked();
-        let mut refs = self.refs.lock().unwrap();
+        let mut refs = self.refs.write().unwrap();
         for (_, v) in refs.iter_mut() {
             v.retain(|x| x != &name);
         }
