@@ -51,10 +51,10 @@ By default the value is autodetected. You can change this behavior by explicitel
 `valueAs` field. The following values are supported:
 
 - `auto`: Autodetect the value type. This is the default.
-- `string`: the value is loaded as a String
-- `number`: the value is loaded as a number
-- `yaml`: the value is loaded as a YAML object
-- `json`: the value is loaded as a JSON object
+- `string`: The secret value is interpreted as a string
+- `number`: The secret value is interpreted as a number
+- `yaml`: the value is interpreted as a YAML object (default for auto detected objects)
+- `json`: the value is interpreted as a JSON object
 
 ## Note:
 
@@ -62,4 +62,3 @@ For managing passwords of [`KeycloakUsers`][1] and client credentials of [`Keycl
 
 [1]: ../crds/keycloakuser.md
 [2]: ../crds/keycloakclient.md
-```
