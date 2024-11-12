@@ -1,6 +1,6 @@
 use crate::crd::{
     api_object_impl, route_impl, schema_patch, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    KeycloakApiPatchList, KeycloakApiStatus,
 };
 use keycloak::types::AuthenticationFlowRepresentation;
 use kube::CustomResource;
@@ -46,6 +46,8 @@ pub struct KeycloakAuthenticationFlowSpec {
     pub realm_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: AuthenticationFlowRepresentation,
+    #[serde(default, flatten)]
+    pub patches: Option<KeycloakApiPatchList>,
 }
 
 api_object_impl!(

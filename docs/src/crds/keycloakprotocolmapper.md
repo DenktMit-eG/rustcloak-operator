@@ -18,6 +18,7 @@ resource to define a Protocol Mapper within either a [KeycloakClient](./keycloak
 |[spec.definition.protocol](#specdefinitionprotocol)|string||
 |[spec.definition.protocolMapper](#specdefinitionprotocolmapper)|string||
 |[spec.options](#specoptions)|object||
+|[spec.patchFrom](#specpatchfrom)|object||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
@@ -43,6 +44,7 @@ Type: object
 |[clientScopeRef](#specclientscoperef)|string||
 |[definition](#specdefinition)|object|✅|
 |[options](#specoptions)|object||
+|[patchFrom](#specpatchfrom)|object||
 
 the KeycloakProtocolMapper resource
 
@@ -153,6 +155,14 @@ Type: string
 Type: object
 
 Options for the request to the Keycloak Admin API.
+
+---
+
+### spec.patchFrom
+
+Type: object
+
+Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
 
 ---
 

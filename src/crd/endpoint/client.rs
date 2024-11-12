@@ -1,5 +1,6 @@
 use crate::crd::{
-    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions,
+    KeycloakApiPatchList, KeycloakApiStatus,
 };
 use keycloak::types::ClientRepresentation;
 use kube::CustomResource;
@@ -53,6 +54,8 @@ pub struct KeycloakClientSpec {
     pub realm_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: ClientRepresentation,
+    #[serde(default, flatten)]
+    pub patches: Option<KeycloakApiPatchList>,
     pub client_secret: Option<KeycloakClientSecretReference>,
 }
 

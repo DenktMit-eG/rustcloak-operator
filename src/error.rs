@@ -96,6 +96,10 @@ pub enum Error {
     KeycloakError(reqwest::StatusCode, String),
     #[error("garbage URL found in Keycloak: {0}")]
     GarbageUrlFromKeycloak(String),
+    #[error("Path not found: {0}")]
+    PathNotFound(String),
+    #[error("Invalid patch value as auto: {0}")]
+    InvalidPatchValueAsAuto(String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

@@ -64,6 +64,7 @@ impl LifecycleController for LegacyRealmController {
                 .await?
                 .into(),
                 definition: serde_json::from_value(definition)?,
+                patches: None,
             },
             status: None,
         };

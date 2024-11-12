@@ -68,6 +68,7 @@ impl LifecycleController for LegacyClientController {
                     client_id_key: Some("CLIENT_ID".to_string()),
                     client_secret_key: Some("CLIENT_SECRET".to_string()),
                 }),
+                patches: None,
             },
             status: None,
         };

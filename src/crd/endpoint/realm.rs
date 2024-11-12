@@ -2,7 +2,7 @@ use crate::{
     api_object_impl,
     crd::{
         schema_patch, HasRoute, ImmutableString, KeycloakApiObjectOptions,
-        KeycloakApiStatus, KeycloakInstance,
+        KeycloakApiPatchList, KeycloakApiStatus, KeycloakInstance,
     },
 };
 use keycloak::types::RealmRepresentation;
@@ -49,6 +49,8 @@ pub struct KeycloakRealmSpec {
     pub instance_ref: ImmutableString,
     #[schemars(schema_with = "schema")]
     pub definition: RealmRepresentation,
+    #[serde(default, flatten)]
+    pub patches: Option<KeycloakApiPatchList>,
 }
 
 api_object_impl!(KeycloakRealm, RealmRepresentation, "realm");

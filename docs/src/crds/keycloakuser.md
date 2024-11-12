@@ -79,6 +79,7 @@ resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)
 |[spec.definition.userProfileMetadata.groups[].name](#specdefinitionuserprofilemetadatagroupsname)|string||
 |[spec.definition.username](#specdefinitionusername)|string||
 |[spec.options](#specoptions)|object||
+|[spec.patchFrom](#specpatchfrom)|object||
 |[spec.realmRef](#specrealmref)|string|✅|
 |[spec.userSecret](#specusersecret)|object||
 |[spec.userSecret.passwordKey](#specusersecretpasswordkey)|string||
@@ -107,6 +108,7 @@ Type: object
 |:-------|:---|:------:|
 |[definition](#specdefinition)|object|✅|
 |[options](#specoptions)|object||
+|[patchFrom](#specpatchfrom)|object||
 |[realmRef](#specrealmref)|string|✅|
 |[userSecret](#specusersecret)|object||
 
@@ -791,6 +793,14 @@ Type: string
 Type: object
 
 Options for the request to the Keycloak Admin API.
+
+---
+
+### spec.patchFrom
+
+Type: object
+
+Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
 
 ---
 

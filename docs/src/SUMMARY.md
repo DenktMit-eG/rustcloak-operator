@@ -5,6 +5,7 @@
   - [Quick Start](./installation/quick-start.md)
 - [Configuration](./configuration.md)
     - [Legacy Mode](./configuration/legacy-mode.md)
+    - [Patches](./configuration/patches.md)
 - [Custom Resource Definitions](./crds.md)
     - [KeycloakInstance](crds/keycloakinstance.md)
     - [KeycloakApiObject](crds/keycloakapiobject.md)

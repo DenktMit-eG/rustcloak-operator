@@ -1,5 +1,6 @@
 use crate::crd::{
-    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions,
+    KeycloakApiPatchList, KeycloakApiStatus,
 };
 use keycloak::types::GroupRepresentation;
 use kube::CustomResource;
@@ -45,6 +46,8 @@ pub struct KeycloakGroupSpec {
     pub realm_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: GroupRepresentation,
+    #[serde(default, flatten)]
+    pub patches: Option<KeycloakApiPatchList>,
 }
 
 api_object_impl!(KeycloakGroup, GroupRepresentation, "group");

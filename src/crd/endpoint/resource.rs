@@ -1,7 +1,7 @@
 use super::KeycloakClient;
 use crate::crd::{
     api_object_impl, schema_patch, HasRoute, KeycloakApiObjectOptions,
-    KeycloakApiStatus,
+    KeycloakApiPatchList, KeycloakApiStatus,
 };
 use keycloak::types::ResourceRepresentation;
 use kube::CustomResource;
@@ -46,6 +46,8 @@ pub struct KeycloakResourceSpec {
     pub client_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: ResourceRepresentation,
+    #[serde(default, flatten)]
+    pub patches: Option<KeycloakApiPatchList>,
 }
 
 //crate::crd::route_impl!(KeycloakClient / "authz/resource-server/resource" / _id: KeycloakResource .. client_ref: String);

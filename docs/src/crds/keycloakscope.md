@@ -52,6 +52,7 @@ resource to define a Scope within a [KeyclaokClient](./keycloakclient.md)
 |[spec.definition.resources[].uri](#specdefinitionresourcesuri)|string||
 |[spec.definition.resources[].uris[]](#specdefinitionresourcesuris)|string||
 |[spec.options](#specoptions)|object||
+|[spec.patchFrom](#specpatchfrom)|object||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
@@ -76,6 +77,7 @@ Type: object
 |[clientRef](#specclientref)|string|✅|
 |[definition](#specdefinition)|object|✅|
 |[options](#specoptions)|object||
+|[patchFrom](#specpatchfrom)|object||
 
 the KeycloakScope resource
 
@@ -508,6 +510,14 @@ Type: string
 Type: object
 
 Options for the request to the Keycloak Admin API.
+
+---
+
+### spec.patchFrom
+
+Type: object
+
+Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
 
 ---
 

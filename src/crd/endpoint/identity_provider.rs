@@ -1,6 +1,6 @@
 use crate::crd::{
-    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
-    KeycloakRealm,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions,
+    KeycloakApiPatchList, KeycloakApiStatus, KeycloakRealm,
 };
 use keycloak::types::IdentityProviderRepresentation;
 use kube::CustomResource;
@@ -44,6 +44,8 @@ pub struct KeycloakIdentityProviderSpec {
     pub realm_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: IdentityProviderRepresentation,
+    #[serde(default, flatten)]
+    pub patches: Option<KeycloakApiPatchList>,
 }
 
 api_object_impl!(

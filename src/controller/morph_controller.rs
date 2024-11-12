@@ -9,7 +9,7 @@ use crate::{
     },
     endpoint::{path::Path, query::Query},
     error::{Error, Result},
-    morph::Morph,
+    morph::{Morph, Patcher},
 };
 use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
@@ -88,7 +88,6 @@ where
 
         let primary_key = R::id_ident();
         let mut payload = resource.payload()?;
-        let vars = resource.variables()?;
         payload
             .as_object_mut()
             .as_mut()
@@ -99,7 +98,16 @@ where
             primary_key: primary_key_value,
         }))?
         .into();
-        let payload = serde_yaml::to_string(&payload)?;
+        let mut patcher = Patcher::new(payload);
+        for (path, patch) in resource
+            .patches()
+            .map(|x| x.patch_from.iter())
+            .unwrap_or_default()
+        {
+            patcher.patch(path, patch)?;
+        }
+        let vars = patcher.vars;
+        let payload = serde_yaml::to_string(&patcher.value)?;
 
         let resource = Arc::unwrap_or_clone(resource);
         let resource =

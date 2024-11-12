@@ -126,6 +126,7 @@ impl LifecycleController for LegacyUserController {
                 )
                 .await?,
                 definition: serde_json::from_value(definition)?,
+                patches: None,
                 user_secret,
             },
             status: None,

@@ -1,4 +1,4 @@
-use super::KeycloakApiObjectOptions;
+use super::{KeycloakApiObjectOptions, KeycloakApiPatchList};
 use kube::{Resource, ResourceExt};
 use schemars::JsonSchema;
 use serde::Serialize;
@@ -12,6 +12,8 @@ where
     fn definition(&self) -> &Self::Definition;
 
     fn options(&self) -> Option<&KeycloakApiObjectOptions>;
+
+    fn patches(&self) -> Option<&KeycloakApiPatchList>;
 
     fn prefix() -> &'static str;
 }
@@ -30,6 +32,10 @@ macro_rules! api_object_impl {
                 &self,
             ) -> Option<&$crate::crd::KeycloakApiObjectOptions> {
                 self.spec.options.as_ref()
+            }
+
+            fn patches(&self) -> Option<&$crate::crd::KeycloakApiPatchList> {
+                self.spec.patches.as_ref()
             }
 
             fn prefix() -> &'static str {

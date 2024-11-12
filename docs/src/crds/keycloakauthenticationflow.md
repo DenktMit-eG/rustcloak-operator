@@ -24,6 +24,7 @@ resource to define an Authentication Flow within a [KeycloakRealm](./keycloakrea
 |[spec.definition.providerId](#specdefinitionproviderid)|string||
 |[spec.definition.topLevel](#specdefinitiontoplevel)|boolean||
 |[spec.options](#specoptions)|object||
+|[spec.patchFrom](#specpatchfrom)|object||
 |[spec.realmRef](#specrealmref)|string|✅|
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
@@ -48,6 +49,7 @@ Type: object
 |:-------|:---|:------:|
 |[definition](#specdefinition)|object|✅|
 |[options](#specoptions)|object||
+|[patchFrom](#specpatchfrom)|object||
 |[realmRef](#specrealmref)|string|✅|
 
 the KeycloakAuthenticationFlow resource
@@ -218,6 +220,14 @@ Type: boolean
 Type: object
 
 Options for the request to the Keycloak Admin API.
+
+---
+
+### spec.patchFrom
+
+Type: object
+
+Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
 
 ---
 

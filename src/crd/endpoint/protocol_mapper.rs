@@ -1,7 +1,7 @@
 use crate::crd::{
     api_object_impl, schema_patch, ClientRef, ClientScopeRef,
-    KeycloakApiObjectOptions, KeycloakApiStatus, KeycloakClient,
-    KeycloakClientScope,
+    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+    KeycloakClient, KeycloakClientScope,
 };
 use either::Either;
 use keycloak::types::ProtocolMapperRepresentation;
@@ -51,6 +51,8 @@ pub struct KeycloakProtocolMapperSpec {
     pub parent_ref: ParentRef,
     #[schemars(schema_with = "schema")]
     pub definition: ProtocolMapperRepresentation,
+    #[serde(default, flatten)]
+    pub patches: Option<KeycloakApiPatchList>,
 }
 
 api_object_impl!(KeycloakProtocolMapper, ProtocolMapperRepresentation, "pm");

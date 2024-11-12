@@ -554,6 +554,7 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.webAuthnPolicyUserVerificationRequirement](#specdefinitionwebauthnpolicyuserverificationrequirement)|string||
 |[spec.instanceRef](#specinstanceref)|string|✅|
 |[spec.options](#specoptions)|object||
+|[spec.patchFrom](#specpatchfrom)|object||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
@@ -578,6 +579,7 @@ Type: object
 |[definition](#specdefinition)|object|✅|
 |[instanceRef](#specinstanceref)|string|✅|
 |[options](#specoptions)|object||
+|[patchFrom](#specpatchfrom)|object||
 
 the KeycloakRealm resource
 
@@ -5685,6 +5687,14 @@ The name of the instance to which this realm belongs
 Type: object
 
 Options for the request to the Keycloak Admin API.
+
+---
+
+### spec.patchFrom
+
+Type: object
+
+Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
 
 ---
 

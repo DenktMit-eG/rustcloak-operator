@@ -1,5 +1,6 @@
 use crate::crd::{
-    api_object_impl, schema_patch, KeycloakApiObjectOptions, KeycloakApiStatus,
+    api_object_impl, schema_patch, KeycloakApiObjectOptions,
+    KeycloakApiPatchList, KeycloakApiStatus,
 };
 use keycloak::types::ScopeRepresentation;
 use kube::CustomResource;
@@ -45,6 +46,8 @@ pub struct KeycloakScopeSpec {
     pub client_ref: String,
     #[schemars(schema_with = "schema")]
     pub definition: ScopeRepresentation,
+    #[serde(default, flatten)]
+    pub patches: Option<KeycloakApiPatchList>,
 }
 
 api_object_impl!(KeycloakScope, ScopeRepresentation, "scope");

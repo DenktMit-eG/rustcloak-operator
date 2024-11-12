@@ -1,6 +1,6 @@
 use crate::crd::{
     api_object_impl, schema_patch, ClientRef, KeycloakApiObjectOptions,
-    KeycloakApiStatus, RealmRef,
+    KeycloakApiPatchList, KeycloakApiStatus, RealmRef,
 };
 use either::Either;
 use keycloak::types::RoleRepresentation;
@@ -50,6 +50,8 @@ pub struct KeycloakRoleSpec {
     pub parent_ref: ParentRef,
     #[schemars(schema_with = "schema")]
     pub definition: RoleRepresentation,
+    #[serde(default, flatten)]
+    pub patches: Option<KeycloakApiPatchList>,
 }
 
 crate::crd::route_impl!(Parents / "roles" / id: KeycloakRole .. parent_ref: OneOf<String, String>);

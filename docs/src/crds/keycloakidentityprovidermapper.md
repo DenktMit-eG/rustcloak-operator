@@ -15,6 +15,7 @@ resource to define a identity provider mapper within a [KeyclaokIdentityProvider
 |[spec.definition.name](#specdefinitionname)|string||
 |[spec.identityProviderRef](#specidentityproviderref)|string|✅|
 |[spec.options](#specoptions)|object||
+|[spec.patchFrom](#specpatchfrom)|object||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
@@ -39,6 +40,7 @@ Type: object
 |[definition](#specdefinition)|object|✅|
 |[identityProviderRef](#specidentityproviderref)|string|✅|
 |[options](#specoptions)|object||
+|[patchFrom](#specpatchfrom)|object||
 
 the KeycloakIdentityProviderMapper resource
 
@@ -123,6 +125,14 @@ the name of the kubernetes object that created the identity provider.
 Type: object
 
 Options for the request to the Keycloak Admin API.
+
+---
+
+### spec.patchFrom
+
+Type: object
+
+Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
 
 ---
 

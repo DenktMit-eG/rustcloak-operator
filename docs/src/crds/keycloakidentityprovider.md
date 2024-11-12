@@ -26,6 +26,7 @@ resource to define a identity provider in a [KeyclaokRealm](./keycloakrealm.md)
 |[spec.definition.updateProfileFirstLogin](#specdefinitionupdateprofilefirstlogin)|boolean||
 |[spec.definition.updateProfileFirstLoginMode](#specdefinitionupdateprofilefirstloginmode)|string||
 |[spec.options](#specoptions)|object||
+|[spec.patchFrom](#specpatchfrom)|object||
 |[spec.realmRef](#specrealmref)|string|✅|
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
@@ -50,6 +51,7 @@ Type: object
 |:-------|:---|:------:|
 |[definition](#specdefinition)|object|✅|
 |[options](#specoptions)|object||
+|[patchFrom](#specpatchfrom)|object||
 |[realmRef](#specrealmref)|string|✅|
 
 the KeycloakIdentityProvider resource
@@ -235,6 +237,14 @@ Type: string
 Type: object
 
 Options for the request to the Keycloak Admin API.
+
+---
+
+### spec.patchFrom
+
+Type: object
+
+Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
 
 ---
 

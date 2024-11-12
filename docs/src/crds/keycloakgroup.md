@@ -18,6 +18,7 @@ resource to define a Group within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.definition.realmRoles[]](#specdefinitionrealmroles)|string||
 |[spec.definition.subGroupCount](#specdefinitionsubgroupcount)|integer||
 |[spec.options](#specoptions)|object||
+|[spec.patchFrom](#specpatchfrom)|object||
 |[spec.realmRef](#specrealmref)|string|✅|
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
@@ -42,6 +43,7 @@ Type: object
 |:-------|:---|:------:|
 |[definition](#specdefinition)|object|✅|
 |[options](#specoptions)|object||
+|[patchFrom](#specpatchfrom)|object||
 |[realmRef](#specrealmref)|string|✅|
 
 the KeycloakGroup resource
@@ -155,6 +157,14 @@ Type: integer
 Type: object
 
 Options for the request to the Keycloak Admin API.
+
+---
+
+### spec.patchFrom
+
+Type: object
+
+Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
 
 ---
 
