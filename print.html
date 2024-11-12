@@ -347,6 +347,59 @@ managed by the old controller before starting Rustcloak and redeploying
 it for rustcloak to take over.</p>
 <p>To enable legacy mode, enabled the <code>legacy: true</code> option in the rustcloak
 helm chart.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="patches"><a class="header" href="#patches">Patches</a></h1>
+<p>In order to load arbitrary values from secrets and configmaps, you can use the <code>patchFrom</code> field of most <code>Keycloak*</code> resources.</p>
+<p>Take this example:
+you have the following definition:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakRealm
+metadata:
+  name: example-keycloakrealm
+spec:
+  instanceRef: keycloak-instance
+  definition:
+    realm: an-example-realm
+    identityProviders:
+      - alias: example-identity-provider
+        providerId: example-provider
+        enabled: true
+        config:
+          secret: "secret"
+</code></pre>
+<p>Instead of storing the secret in the definition, you can store it in a secret and reference it like this:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakRealm
+metadata:
+  name: example-keycloakrealm
+spec:
+  instanceRef: keycloak-instance
+  definition:
+    realm: an-example-realm
+    identityProviders:
+      - alias: example-identity-provider
+        providerId: example-provider
+        enabled: true
+        config:
+          secret: "" # must have a dummy value, must be not null
+  patchFrom:
+    "identityProviders.0.config.secret":
+      secret_key_ref:
+        name: my-secret
+        key: IDENTITY_PROVIDER_SECRET
+        valueAs: auto
+</code></pre>
+<p>By default the value is autodetected. You can change this behavior by explicitely setting the
+<code>valueAs</code> field. The following values are supported:</p>
+<ul>
+<li><code>auto</code>: Autodetect the value type. This is the default.</li>
+<li><code>string</code>: the value is loaded as a String</li>
+<li><code>number</code>: the value is loaded as a number</li>
+<li><code>yaml</code>: the value is loaded as a YAML object</li>
+<li><code>json</code>: the value is loaded as a JSON object</li>
+</ul>
+<h2 id="note"><a class="header" href="#note">Note:</a></h2>
+<p>For managing passwords of <a href="configuration/../crds/keycloakuser.html"><code>KeycloakUsers</code></a> and client credentials of <a href="configuration/../crds/keycloakclient.html"><code>KeycloakClients</code></a> there are dedicated resources available. Please refer to the documentation of the respective resources for more information.</p>
+<pre><code></code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="custom-resource-definitions"><a class="header" href="#custom-resource-definitions">Custom Resource Definitions</a></h1>
 <p>Rustcloak uses ships various custom resource definitions (CRDs) to manage keycloak instances.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="keycloakinstance"><a class="header" href="#keycloakinstance">KeycloakInstance</a></h1>
@@ -829,6 +882,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specdefinitionproviderid">spec.definition.providerId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specdefinitiontoplevel">spec.definition.topLevel</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -850,6 +904,7 @@ helm chart.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
@@ -953,6 +1008,10 @@ helm chart.</p>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
 <hr />
+<h3 id="specpatchfrom"><a class="header" href="#specpatchfrom">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
+<hr />
 <h3 id="specrealmref"><a class="header" href="#specrealmref">spec.realmRef</a></h3>
 <p>Type: string</p>
 <p>the name of the kubernetes object that created the realm.</p>
@@ -1031,6 +1090,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specdefinitionconfig">spec.definition.config</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specdefinitionid">spec.definition.id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -1052,6 +1112,7 @@ helm chart.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
@@ -1091,6 +1152,10 @@ helm chart.</p>
 <h3 id="specoptions-2"><a class="header" href="#specoptions-2">spec.options</a></h3>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
+<hr />
+<h3 id="specpatchfrom-1"><a class="header" href="#specpatchfrom-1">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
 <hr />
 <h3 id="specrealmref-1"><a class="header" href="#specrealmref-1">spec.realmRef</a></h3>
 <p>Type: string</p>
@@ -1371,6 +1436,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specdefinitionusetemplatescope">spec.definition.useTemplateScope</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specdefinitionweborigins">spec.definition.webOrigins[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -1393,6 +1459,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specclientsecret">clientSecret</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
@@ -2506,6 +2573,10 @@ helm chart.</p>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
 <hr />
+<h3 id="specpatchfrom-2"><a class="header" href="#specpatchfrom-2">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
+<hr />
 <h3 id="specrealmref-2"><a class="header" href="#specrealmref-2">spec.realmRef</a></h3>
 <p>Type: string</p>
 <p>the name of the kubernetes object that created the realm.</p>
@@ -2595,6 +2666,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specdefinitionprotocolmappersprotocolmapper">spec.definition.protocolMappers[].protocolMapper</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specistemplate">spec.isTemplate</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -2617,6 +2689,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specistemplate">isTemplate</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
@@ -2714,6 +2787,10 @@ helm chart.</p>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
 <hr />
+<h3 id="specpatchfrom-3"><a class="header" href="#specpatchfrom-3">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
+<hr />
 <h3 id="specrealmref-3"><a class="header" href="#specrealmref-3">spec.realmRef</a></h3>
 <p>Type: string</p>
 <p>the name of the kubernetes object that created the realm.</p>
@@ -2796,6 +2873,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specdefinitionprovidertype">spec.definition.providerType</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specdefinitionsubtype">spec.definition.subType</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -2817,6 +2895,7 @@ helm chart.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
@@ -2876,6 +2955,10 @@ helm chart.</p>
 <h3 id="specoptions-5"><a class="header" href="#specoptions-5">spec.options</a></h3>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
+<hr />
+<h3 id="specpatchfrom-4"><a class="header" href="#specpatchfrom-4">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
 <hr />
 <h3 id="specrealmref-4"><a class="header" href="#specrealmref-4">spec.realmRef</a></h3>
 <p>Type: string</p>
@@ -2961,6 +3044,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specdefinitionrealmroles">spec.definition.realmRoles[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specdefinitionsubgroupcount">spec.definition.subGroupCount</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -2982,6 +3066,7 @@ helm chart.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
@@ -3051,6 +3136,10 @@ helm chart.</p>
 <h3 id="specoptions-6"><a class="header" href="#specoptions-6">spec.options</a></h3>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
+<hr />
+<h3 id="specpatchfrom-5"><a class="header" href="#specpatchfrom-5">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
 <hr />
 <h3 id="specrealmref-5"><a class="header" href="#specrealmref-5">spec.realmRef</a></h3>
 <p>Type: string</p>
@@ -3144,6 +3233,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specdefinitionupdateprofilefirstlogin">spec.definition.updateProfileFirstLogin</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specdefinitionupdateprofilefirstloginmode">spec.definition.updateProfileFirstLoginMode</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -3165,6 +3255,7 @@ helm chart.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
@@ -3275,6 +3366,10 @@ helm chart.</p>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
 <hr />
+<h3 id="specpatchfrom-6"><a class="header" href="#specpatchfrom-6">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
+<hr />
 <h3 id="specrealmref-6"><a class="header" href="#specrealmref-6">spec.realmRef</a></h3>
 <p>Type: string</p>
 <p>the name of the kubernetes object that created the realm.</p>
@@ -3356,6 +3451,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specdefinitionname">spec.definition.name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specidentityproviderref">spec.identityProviderRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -3377,6 +3473,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specidentityproviderref">identityProviderRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p>the KeycloakIdentityProviderMapper resource</p>
@@ -3429,6 +3526,10 @@ helm chart.</p>
 <h3 id="specoptions-8"><a class="header" href="#specoptions-8">spec.options</a></h3>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
+<hr />
+<h3 id="specpatchfrom-7"><a class="header" href="#specpatchfrom-7">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
 <hr />
 <h3 id="status-9"><a class="header" href="#status-9">status</a></h3>
 <p>Type: object</p>
@@ -3601,6 +3702,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionname">spec.definition.name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionredirecturl">spec.definition.redirectUrl</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -3622,6 +3724,7 @@ helm chart.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
@@ -4177,6 +4280,10 @@ helm chart.</p>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
 <hr />
+<h3 id="specpatchfrom-8"><a class="header" href="#specpatchfrom-8">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
+<hr />
 <h3 id="specrealmref-7"><a class="header" href="#specrealmref-7">spec.realmRef</a></h3>
 <p>Type: string</p>
 <p>the name of the kubernetes object that created the realm.</p>
@@ -4261,6 +4368,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specdefinitionprotocol">spec.definition.protocol</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specdefinitionprotocolmapper">spec.definition.protocolMapper</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -4283,6 +4391,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specclientscoperef">clientScopeRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p>the KeycloakProtocolMapper resource</p>
@@ -4349,6 +4458,10 @@ helm chart.</p>
 <h3 id="specoptions-10"><a class="header" href="#specoptions-10">spec.options</a></h3>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
+<hr />
+<h3 id="specpatchfrom-9"><a class="header" href="#specpatchfrom-9">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
 <hr />
 <h3 id="status-11"><a class="header" href="#status-11">status</a></h3>
 <p>Type: object</p>
@@ -4966,6 +5079,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specdefinitionwebauthnpolicyuserverificationrequirement">spec.definition.webAuthnPolicyUserVerificationRequirement</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specinstanceref">spec.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -4987,6 +5101,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p>the KeycloakRealm resource</p>
@@ -7907,6 +8022,10 @@ helm chart.</p>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
 <hr />
+<h3 id="specpatchfrom-10"><a class="header" href="#specpatchfrom-10">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
+<hr />
 <h3 id="status-12"><a class="header" href="#status-12">status</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
@@ -7985,6 +8104,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specdefinitionpriority">spec.definition.priority</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specdefinitionproviderid">spec.definition.providerId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -8006,6 +8126,7 @@ helm chart.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
@@ -8065,6 +8186,10 @@ helm chart.</p>
 <h3 id="specoptions-12"><a class="header" href="#specoptions-12">spec.options</a></h3>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
+<hr />
+<h3 id="specpatchfrom-11"><a class="header" href="#specpatchfrom-11">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
 <hr />
 <h3 id="specrealmref-8"><a class="header" href="#specrealmref-8">spec.realmRef</a></h3>
 <p>Type: string</p>
@@ -8188,6 +8313,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specdefinitionuri">spec.definition.uri</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specdefinitionuris">spec.definition.uris[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -8209,6 +8335,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p>the KeycloakResource resource</p>
@@ -8482,6 +8609,10 @@ helm chart.</p>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
 <hr />
+<h3 id="specpatchfrom-12"><a class="header" href="#specpatchfrom-12">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
+<hr />
 <h3 id="status-14"><a class="header" href="#status-14">status</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
@@ -8566,6 +8697,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specdefinitionname">spec.definition.name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specdefinitionscopeparamrequired">spec.definition.scopeParamRequired</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -8588,6 +8720,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
@@ -8679,6 +8812,10 @@ helm chart.</p>
 <h3 id="specoptions-14"><a class="header" href="#specoptions-14">spec.options</a></h3>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
+<hr />
+<h3 id="specpatchfrom-13"><a class="header" href="#specpatchfrom-13">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
 <hr />
 <h3 id="specrealmref-9"><a class="header" href="#specrealmref-9">spec.realmRef</a></h3>
 <p>Type: string</p>
@@ -8798,6 +8935,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specdefinitionresourcesuri">spec.definition.resources[].uri</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specdefinitionresourcesuris">spec.definition.resources[].uris[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -8819,6 +8957,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p>the KeycloakScope resource</p>
@@ -9072,6 +9211,10 @@ helm chart.</p>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
 <hr />
+<h3 id="specpatchfrom-14"><a class="header" href="#specpatchfrom-14">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
+<hr />
 <h3 id="status-16"><a class="header" href="#status-16">status</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
@@ -9213,6 +9356,7 @@ helm chart.</p>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitionuserprofilemetadatagroupsname">spec.definition.userProfileMetadata.groups[].name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitionusername">spec.definition.username</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specusersecret">spec.userSecret</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specusersecretpasswordkey">spec.userSecret.passwordKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -9238,6 +9382,7 @@ helm chart.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specusersecret">userSecret</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -9634,6 +9779,10 @@ helm chart.</p>
 <h3 id="specoptions-16"><a class="header" href="#specoptions-16">spec.options</a></h3>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
+<hr />
+<h3 id="specpatchfrom-15"><a class="header" href="#specpatchfrom-15">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="crds/../configuration/patches.html">the patches documentation</a>.</p>
 <hr />
 <h3 id="specrealmref-10"><a class="header" href="#specrealmref-10">spec.realmRef</a></h3>
 <p>Type: string</p>

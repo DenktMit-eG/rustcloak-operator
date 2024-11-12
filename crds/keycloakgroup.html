@@ -174,6 +174,7 @@
 <tr><td style="text-align: left"><a href="#specdefinitionrealmroles">spec.definition.realmRoles[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitionsubgroupcount">spec.definition.subGroupCount</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -195,6 +196,7 @@
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
@@ -264,6 +266,10 @@
 <h3 id="specoptions"><a class="header" href="#specoptions">spec.options</a></h3>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
+<hr />
+<h3 id="specpatchfrom"><a class="header" href="#specpatchfrom">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="../configuration/patches.html">the patches documentation</a>.</p>
 <hr />
 <h3 id="specrealmref"><a class="header" href="#specrealmref">spec.realmRef</a></h3>
 <p>Type: string</p>
