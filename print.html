@@ -392,10 +392,10 @@ spec:
 <code>valueAs</code> field. The following values are supported:</p>
 <ul>
 <li><code>auto</code>: Autodetect the value type. This is the default.</li>
-<li><code>string</code>: the value is loaded as a String</li>
-<li><code>number</code>: the value is loaded as a number</li>
-<li><code>yaml</code>: the value is loaded as a YAML object</li>
-<li><code>json</code>: the value is loaded as a JSON object</li>
+<li><code>string</code>: The secret value is interpreted as a string</li>
+<li><code>number</code>: The secret value is interpreted as a number</li>
+<li><code>yaml</code>: the value is interpreted as a YAML object (default for auto detected objects)</li>
+<li><code>json</code>: the value is interpreted as a JSON object</li>
 </ul>
 <h2 id="note"><a class="header" href="#note">Note:</a></h2>
 <p>For managing passwords of <a href="configuration/../crds/keycloakuser.html"><code>KeycloakUsers</code></a> and client credentials of <a href="configuration/../crds/keycloakclient.html"><code>KeycloakClients</code></a> there are dedicated resources available. Please refer to the documentation of the respective resources for more information.</p>
