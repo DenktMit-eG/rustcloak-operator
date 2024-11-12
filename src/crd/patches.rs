@@ -15,19 +15,15 @@ pub struct KeycloakApiPatchList {
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
+#[derive(Default)]
 pub enum KeycloakApiPatchValueAs {
+    #[default]
+    Auto,
     String,
     Number,
     Yaml,
     Json,
     Bool,
-    Auto,
-}
-
-impl Default for KeycloakApiPatchValueAs {
-    fn default() -> Self {
-        KeycloakApiPatchValueAs::String
-    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
