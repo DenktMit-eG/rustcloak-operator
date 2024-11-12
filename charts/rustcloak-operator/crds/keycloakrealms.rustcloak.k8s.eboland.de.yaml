@@ -2345,12 +2345,12 @@ spec:
                       type: object
                     valueAs:
                       enum:
+                      - auto
                       - string
                       - number
                       - yaml
                       - json
                       - bool
-                      - auto
                       nullable: true
                       type: string
                   type: object

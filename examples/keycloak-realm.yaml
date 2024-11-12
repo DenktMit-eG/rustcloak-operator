@@ -6,3 +6,9 @@ spec:
   instanceRef: keycloak-instance
   definition:
     realm: an-example-realm
+    displayName: ""
+  patchFrom:
+    displayName:
+      secretKeyRef:
+        name: example-secret
+        key: realm_name
