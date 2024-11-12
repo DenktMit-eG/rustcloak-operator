@@ -44,7 +44,7 @@ spec:
       secret_key_ref:
         name: my-secret
         key: IDENTITY_PROVIDER_SECRET
-        valueAs: auto
+        valueAs: auto # optional
 ```
 
 By default the value is autodetected. You can change this behavior by explicitely setting the
