@@ -41,7 +41,7 @@ spec:
           secret: "" # must have a dummy value, must be not null
   patchFrom:
     "identityProviders.0.config.secret":
-      secret_key_ref:
+      secretKeyRef:
         name: my-secret
         key: IDENTITY_PROVIDER_SECRET
         valueAs: auto # optional
