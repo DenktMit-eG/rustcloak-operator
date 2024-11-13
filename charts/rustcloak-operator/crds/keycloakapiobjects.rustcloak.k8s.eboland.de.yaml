@@ -16,7 +16,7 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - description: ''
+    - description: Instance that API request is sent to
       jsonPath: .spec.endpoint.instanceRef
       name: Instance
       type: string
