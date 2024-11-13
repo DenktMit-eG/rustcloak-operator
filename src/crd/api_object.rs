@@ -19,7 +19,7 @@ use std::ops::Add;
     printcolumn = r#"{
             "name":"Instance",
             "type":"string",
-            "description":"",
+            "description":"Instance that API request is sent to",
             "jsonPath":".spec.endpoint.instanceRef"
         }"#,
     printcolumn = r#"{
