@@ -45,7 +45,7 @@ pub struct KeycloakInstanceClient {
     printcolumn = r#"{
             "name":"Base URL",
             "type":"string",
-            "description":"",
+            "description":"The base URL of the Keycloak instance",
             "jsonPath":".spec.baseUrl"
         }"#,
     printcolumn = r#"{
