@@ -5,7 +5,9 @@ metadata:
 spec:
   group: rustcloak.k8s.eboland.de
   names:
-    categories: []
+    categories:
+    - keycloak
+    - all
     kind: KeycloakClient
     plural: keycloakclients
     shortNames:
@@ -14,15 +16,15 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - description: ''
+    - description: true if the realm is ready
       jsonPath: .status.ready
       name: Ready
       type: boolean
-    - description: ''
+    - description: Status String of the resource
       jsonPath: .status.status
       name: Status
       type: string
-    - description: ''
+    - description: time since the realm was created
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date

@@ -21,23 +21,25 @@ type Parents = Either<KeycloakRealm, KeycloakClient>;
     group = "rustcloak.k8s.eboland.de",
     version = "v1",
     status = "KeycloakApiStatus",
+    category = "keycloak",
+    category = "all",
     namespaced,
     printcolumn = r#"{
             "name":"Ready",
             "type":"boolean",
-            "description":"",
+            "description":"true if the realm is ready",
             "jsonPath":".status.ready"
         }"#,
     printcolumn = r#"{
             "name":"Status",
             "type":"string",
-            "description":"",
+            "description":"Status String of the resource",
             "jsonPath":".status.status"
         }"#,
     printcolumn = r#"{
             "name":"Age",
             "type":"date",
-            "description":"",
+            "description":"time since the realm was created",
             "jsonPath":".metadata.creationTimestamp"
         }"#
 )]
