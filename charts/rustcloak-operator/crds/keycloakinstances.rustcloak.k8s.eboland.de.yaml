@@ -16,7 +16,7 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - description: ''
+    - description: The base URL of the Keycloak instance
       jsonPath: .spec.baseUrl
       name: Base URL
       type: string
