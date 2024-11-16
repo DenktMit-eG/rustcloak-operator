@@ -13,7 +13,7 @@ use kube::{
     api::{Patch, PatchParams},
     core::object::HasStatus,
     runtime::reflector::ObjectRef,
-    Api, ResourceExt,
+    Api, Resource, ResourceExt,
 };
 use log::{debug, warn};
 use oauth2::{ClientId, ClientSecret};
@@ -60,10 +60,16 @@ impl<'a> K8sKeycloakBuilder<'a> {
 
     pub async fn with_credentials(self) -> Result<KeycloakApiClient> {
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
+        let kind = KeycloakInstance::kind(&());
         let secret_api = Api::<Secret>::namespaced(self.client.clone(), &ns);
         let credential_secret_name =
             self.instance.credential_secret_name().to_string();
-        debug!( "Using keycloak with credential secret {ns}/{credential_secret_name}");
+        debug!(
+            name = self.instance.name_unchecked(),
+            namespace = ns,
+            kind = kind;
+            "Using keycloak with credential secret {credential_secret_name}"
+        );
 
         let (user, password) = secret_api
             .get_opt(&credential_secret_name)
@@ -76,9 +82,15 @@ impl<'a> K8sKeycloakBuilder<'a> {
 
     pub async fn with_token(self) -> Result<KeycloakApiClient> {
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
+        let kind = KeycloakInstance::kind(&());
         let secret_api = Api::<Secret>::namespaced(self.client.clone(), &ns);
         let token_secret_name = self.instance.token_secret_name().to_string();
-        debug!("Using keycloak with token secret {ns}/{token_secret_name}");
+        debug!(
+            name = self.instance.name_unchecked(),
+            namespace = ns,
+            kind = kind;
+            "Using keycloak with token secret {token_secret_name}"
+        );
 
         let token = secret_api
             .get_opt(&token_secret_name)
@@ -163,13 +175,22 @@ impl K8sKeycloakRefreshJob {
     }
 
     pub async fn keycloak_from_somewhere(&self) -> Result<KeycloakApiClient> {
-        debug!("Trying to get keycloak client, trying token first.");
+        let name = self.instance.name_unchecked();
+        let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
+        let kind = KeycloakInstance::kind(&());
+        debug!(
+            name = name,
+            namespace = ns,
+            kind = kind;
+            "Trying to get keycloak client, trying token first."
+        );
         match self.keycloak_with_token().await {
             Err(e) => {
-                debug!("{}", e);
                 debug!(
-                    "Trying to get keycloak client, trying credentials next."
-                );
+                    name = name,
+                    namespace = ns,
+                    kind = kind;
+                    "Error while getting secret from token: {e}; Trying credentials next.");
                 self.keycloak_with_credentials().await
             }
             ok => ok,
@@ -179,7 +200,15 @@ impl K8sKeycloakRefreshJob {
     pub async fn wait(&self, duration: Duration) -> Result<bool> {
         match time::timeout(duration, self.stopper.notified()).await {
             Ok(_) => {
-                debug!("Stop notification received");
+                let name = self.instance.name_unchecked();
+                let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
+                let kind = KeycloakInstance::kind(&());
+                debug!(
+                    name = name,
+                    namespace = ns,
+                    kind = kind;
+                    "Stop notification received"
+                );
                 Ok(false)
             }
             Err(_) => Ok(true),
@@ -190,18 +219,34 @@ impl K8sKeycloakRefreshJob {
         &self,
         expires: DateTime<Utc>,
     ) -> Result<bool> {
+        let name = self.instance.name_unchecked();
+        let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
+        let kind = KeycloakInstance::kind(&());
         let now = chrono::Utc::now();
         let timeout = if expires > now {
             let timeout = (expires - now) * 5 / 6;
             timeout.to_std().unwrap()
         } else if self.instance.status().map_or(true, |s| s.ready) {
-            debug!("Token already expired, refreshing now.");
+            debug!(
+                name = name,
+                namespace = ns,
+                kind = kind;
+                "Token already expired, refreshing now."
+            );
             Duration::from_secs(0)
         } else {
-            debug!("Token is expired, but instance is not ready, waiting 5 seconds");
+            debug!(
+                name = name,
+                namespace = ns,
+                kind = kind;
+                "Token is expired, but instance is not ready, waiting 5 seconds"
+            );
             Duration::from_secs(5)
         };
         debug!(
+            name = name,
+            namespace = ns,
+            kind = kind;
             "Next token refresh at {expires} ({} seconds)",
             timeout.as_secs()
         );
@@ -214,10 +259,25 @@ impl K8sKeycloakRefreshJob {
         }
 
         let mut keycloak = self.keycloak_builder().with_token().await?;
+        let name = self.instance.name_unchecked();
+        let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
         match self.refresh(&mut keycloak).await {
-            Ok(_) => debug!("Token refreshed"),
+            Ok(_) => {
+                debug!(
+                    kind = KeycloakInstance::kind(&()),
+                    name = name,
+                    namespace = ns;
+                    "Token refreshed"
+                )
+            }
             Err(e) => {
-                warn!("Error refreshing token: {}, trying to login", e);
+                warn!(
+                    kind = KeycloakInstance::kind(&()),
+                    name = name,
+                    namespace = ns;
+                    "Error refreshing token: {}, trying to login",
+                    e
+                );
                 self.keycloak_with_credentials().await?;
             }
         }
@@ -254,6 +314,7 @@ impl K8sKeycloakRefreshManager {
         let mut jobs = self.jobs.lock().await;
         self.cancel_refresh_locked(&mut jobs, &resource).await?;
 
+        let kind = KeycloakInstance::kind(&());
         let session_handler = K8sKeycloakRefreshJob::new(resource, client);
         let instance = &session_handler.instance;
         let ns = instance.namespace().ok_or(Error::NoNamespace)?;
@@ -267,7 +328,12 @@ impl K8sKeycloakRefreshManager {
         let keycloak = session_handler.keycloak_from_somewhere().await?;
 
         if let Some(expires) = keycloak.token().expires {
-            debug!("Scheduling token refresh for {}/{}", ns, name);
+            debug!(
+                name = name,
+                namespace = ns,
+                kind = kind;
+                "Scheduling token refresh"
+            );
             let stopper = session_handler.stopper();
             let handle = tokio::spawn(async move {
                 if let Err(e) = session_handler.run_expire(expires).await {

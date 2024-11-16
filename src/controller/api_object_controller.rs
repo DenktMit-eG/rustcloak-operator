@@ -15,6 +15,7 @@ use k8s_openapi::{
     DeepMerge,
 };
 use kube::runtime::watcher;
+use kube::Resource;
 use kube::{
     api::PatchParams,
     runtime::{controller::Action, Controller},
@@ -101,6 +102,7 @@ impl LifecycleController for KeycloakApiObjectController {
             serde_yaml::from_str(&resource.spec.immutable_payload.0)?;
         payload.merge_from(immutable_payload.clone());
         let mut success = false;
+        let kind = KeycloakApiObject::kind(&());
 
         if let Some(path) = resource
             .status
@@ -118,7 +120,14 @@ impl LifecycleController for KeycloakApiObjectController {
                     .await?;
                 }
                 Err(Error::KeycloakError(StatusCode::NOT_FOUND, m)) => {
-                    warn!( "Failed to update resource at path: {}, try recreating. (Message: {})", path, m);
+                    warn!(
+                        kind = kind,
+                        name = name,
+                        namespace = ns,
+                        path = path;
+                        "Failed to update resource at path, try recreating. (Message: {})",
+                        m
+                    );
                 }
                 x => x?,
             }
@@ -159,6 +168,9 @@ impl LifecycleController for KeycloakApiObjectController {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
+        let kind = KeycloakApiObject::kind(&());
+        let name = resource.name_unchecked();
+        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let Some(path) = resource
             .status
             .as_ref()
@@ -171,14 +183,25 @@ impl LifecycleController for KeycloakApiObjectController {
         let keycloak = match Self::keycloak(client, &resource).await {
             Ok(k) => k,
             Err(Error::NoInstance(_, _)) => {
-                warn!("Keycloak instance not found, assuming you want to unmanage the whole keycloak instance.");
+                warn!(
+                    kind = kind,
+                    name = name,
+                    namespace = ns,
+                    path = path;
+                    "Keycloak instance not found, assuming you want to unmanage the whole keycloak instance."
+                );
                 return Ok(Action::await_change());
             }
             Err(e) => Err(e)?,
         };
         match keycloak.delete(&path).await {
             Err(Error::KeycloakError(StatusCode::NOT_FOUND, m)) => {
-                warn!("Resource not found, assuming it's already deleted. Message: {}", m);
+                warn!(
+                    kind = kind,
+                    name = name,
+                    namespace = ns,
+                    path = path;
+                    "Resource not found, assuming it's already deleted. Message: {}", m);
             }
             x => x?,
         }

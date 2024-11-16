@@ -100,6 +100,8 @@ pub enum Error {
     PathNotFound(String),
     #[error("Invalid patch value as auto: {0}")]
     InvalidPatchValueAsAuto(String),
+    #[error("Wait Error: {0}")]
+    WaitError(#[from] kube::runtime::wait::Error),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

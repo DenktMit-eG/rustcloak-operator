@@ -6,7 +6,7 @@ use crate::{
     app_id,
     crd::{KeycloakApiStatus, KeycloakUser},
     error::Result,
-    util::{FromError, K8sKeycloakBuilder},
+    util::{wait_for_crd, FromError, K8sKeycloakBuilder},
 };
 use futures::StreamExt;
 use k8s_openapi::{api::core::v1::Secret, ByteString};
@@ -19,7 +19,7 @@ use kube::{
     },
     Api, Resource as KubeResource, ResourceExt,
 };
-use log::{error, info};
+use log::{info, warn};
 use randstr::randstr;
 use up_impl::Container;
 use up_impl::Up;
@@ -41,8 +41,11 @@ impl KeycloakUserSecretController {
     pub async fn run(self) -> Result<()> {
         let api = Api::<KeycloakUser>::all(self.client.clone());
         let config = controller::Config::default().concurrency(2);
+        let kind = KeycloakUser::kind(&());
 
-        info!("starting secret controller for KeycloakUser");
+        wait_for_crd::<KeycloakUser, Self>(&self.client).await?;
+
+        info!(kind = kind; "starting secret controller");
         let secret_api = Api::<Secret>::all(self.client.clone());
         let secret_refs = self.secret_refs.clone();
         Controller::new(api, watcher::Config::default())
@@ -57,19 +60,21 @@ impl KeycloakUserSecretController {
                 match res {
                     Ok((o, _)) => {
                         info!(
-                            "reconciled secret for KeycloakUser {ns}/{name}",
-                            ns = o.namespace.unwrap(),
-                            name = o.name
+                            namespace = o.namespace.unwrap(),
+                            name = o.name,
+                            kind = kind;
+                            "reconciled secret",
                         )
                     }
                     Err(controller::Error::ReconcilerFailed(e, o)) => {
-                        error!(
-                            "KeycloakUser {ns}/{name}: {e}",
-                            ns = o.namespace.unwrap(),
-                            name = o.name
+                        warn!(
+                            namespace = o.namespace.unwrap(),
+                            name = o.name,
+                            kind = kind;
+                            "{e}",
                         )
                     }
-                    Err(e) => error!("{e}"),
+                    Err(e) => warn!( kind = kind; "{e}"),
                 }
             })
             .await;

@@ -1,6 +1,10 @@
 use std::{sync::Arc, time::Duration};
 
-use crate::{app_id, error::Result, util::FromError};
+use crate::{
+    app_id,
+    error::Result,
+    util::{wait_for_crd, FromError},
+};
 use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{
@@ -12,7 +16,7 @@ use kube::{
     },
     Api, Resource as KubeResource, ResourceExt,
 };
-use log::{debug, error, info};
+use log::{debug, info, warn};
 use serde::{de::DeserializeOwned, Serialize};
 use serde_json::json;
 
@@ -86,7 +90,9 @@ where
         let dt = ().into();
         let kind = C::Resource::kind(&dt);
 
-        info!("starting controller for {kind}");
+        wait_for_crd::<C::Resource, C>(&self.client).await?;
+
+        info!(kind = kind; "starting controller");
 
         let controller = Controller::new(api, watcher::Config::default())
             .with_config(config)
@@ -97,20 +103,24 @@ where
             .for_each(|res| async {
                 match res {
                     Ok((o, _)) => {
-                        info!(
-                            "reconciled {kind} {ns}/{name}",
-                            ns = o.namespace.unwrap(),
-                            name = o.name
+                        info!(target: std::any::type_name::<C>(),
+                            kind = kind,
+                            namespace = o.namespace.unwrap(),
+                            name = o.name;
+                            "reconciled"
                         )
                     }
                     Err(controller::Error::ReconcilerFailed(e, o)) => {
-                        error!(
-                            "{kind} {ns}/{name}: {e}",
-                            ns = o.namespace.unwrap(),
-                            name = o.name
+                        warn!(target: std::any::type_name::<C>(),
+                            namespace = o.namespace.unwrap(),
+                            name = o.name,
+                            kind = kind;
+                            "reconciling failed: {e}",
                         )
                     }
-                    Err(e) => error!("{e}"),
+                    Err(e) => {
+                        warn!(target: std::any::type_name::<C>(), kind = kind; "{e}")
+                    }
                 }
             })
             .await;
@@ -132,7 +142,12 @@ where
         let dt = ().into();
         let kind = C::Resource::kind(&dt);
 
-        debug!("start reconciling {kind} {}/{}", ns, name);
+        debug!(
+            kind = kind,
+            namespace = ns,
+            name = name;
+            "start reconciling"
+        );
 
         ctx.controller
             .before_finalizer(&client, resource.clone())

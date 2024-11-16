@@ -83,6 +83,8 @@ where
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let admin_api: Api<KeycloakApiObject> =
             Api::namespaced(client.clone(), &ns);
+        let dt = ().into();
+        let kind = Self::Resource::kind(&dt);
         let name = format!("{}-{}", R::prefix(), resource.name_unchecked());
         let owner_ref = resource.owner_ref(&()).unwrap();
 
@@ -123,7 +125,11 @@ where
             instance_ref,
             path: endpoint_path,
         };
-        debug!("Resolved endpoint: {:?}", endpoint);
+        debug!(
+            kind = kind, name = resource.name_unchecked(), namesapce = ns;
+            "Resolved endpoint: {:?}",
+            endpoint
+        );
 
         let api_object = KeycloakApiObject {
             metadata: ObjectMeta {
