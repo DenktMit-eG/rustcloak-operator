@@ -31,7 +31,7 @@ pub enum Error {
     #[error("No password")]
     NoPassword,
     #[error("No Secret")]
-    NoSecret,
+    NoSecret(String, String),
     #[error("No token")]
     NoToken,
     #[error("No key {} in Secret {}", r.key, r.name)]
@@ -102,6 +102,8 @@ pub enum Error {
     InvalidPatchValueAsAuto(String),
     #[error("Wait Error: {0}")]
     WaitError(#[from] kube::runtime::wait::Error),
+    #[error("No ConfigMap in namespace {0} with name {1} found")]
+    NoConfigMap(String, String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
