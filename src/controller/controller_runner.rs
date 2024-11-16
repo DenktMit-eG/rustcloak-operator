@@ -156,9 +156,17 @@ where
             "start reconciling"
         );
 
-        ctx.controller
+        match ctx
+            .controller
             .before_finalizer(&client, resource.clone())
-            .await?;
+            .await
+        {
+            Ok(()) => (),
+            Err(e) => {
+                Self::handle_error(ctx.clone(), &resource, &e).await?;
+                return Err(e);
+            }
+        }
 
         match finalizer(
             &api,
