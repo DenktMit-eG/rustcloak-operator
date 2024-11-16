@@ -29,6 +29,7 @@ use std::hash::Hash;
 #[async_trait]
 pub trait LifecycleController {
     type Resource: Clone + KubeResource + Debug + 'static + Send + Sync;
+    const MODULE_PATH: &'static str;
 
     fn prepare(
         &self,
@@ -103,7 +104,7 @@ where
             .for_each(|res| async {
                 match res {
                     Ok((o, _)) => {
-                        info!(target: std::any::type_name::<C>(),
+                        info!(target: C::MODULE_PATH,
                             kind = kind,
                             namespace = o.namespace.unwrap(),
                             name = o.name;
@@ -111,7 +112,7 @@ where
                         )
                     }
                     Err(controller::Error::ReconcilerFailed(e, o)) => {
-                        warn!(target: std::any::type_name::<C>(),
+                        warn!(target: C::MODULE_PATH,
                             namespace = o.namespace.unwrap(),
                             name = o.name,
                             kind = kind;
@@ -119,7 +120,7 @@ where
                         )
                     }
                     Err(e) => {
-                        warn!(target: std::any::type_name::<C>(), kind = kind; "{e}")
+                        warn!(target: C::MODULE_PATH, kind = kind; "{:?}", e)
                     }
                 }
             })

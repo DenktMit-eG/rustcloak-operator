@@ -63,6 +63,7 @@ where
     R::UpKey: Send + Sync,
 {
     type Resource = R;
+    const MODULE_PATH: &'static str = module_path!();
 
     fn prepare(
         &self,

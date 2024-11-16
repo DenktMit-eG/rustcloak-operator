@@ -83,6 +83,7 @@ async fn make_secret(
 #[async_trait]
 impl LifecycleController for LegacyUserController {
     type Resource = LegacyUser;
+    const MODULE_PATH: &'static str = module_path!();
 
     fn prepare(
         &self,

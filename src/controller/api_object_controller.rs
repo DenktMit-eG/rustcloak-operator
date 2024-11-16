@@ -60,6 +60,7 @@ impl KeycloakApiObjectController {
 #[async_trait]
 impl LifecycleController for KeycloakApiObjectController {
     type Resource = KeycloakApiObject;
+    const MODULE_PATH: &'static str = module_path!();
 
     fn prepare(
         &self,

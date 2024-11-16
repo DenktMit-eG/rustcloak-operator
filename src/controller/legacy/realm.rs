@@ -23,6 +23,7 @@ pub struct LegacyRealmController {}
 #[async_trait]
 impl LifecycleController for LegacyRealmController {
     type Resource = LegacyRealm;
+    const MODULE_PATH: &'static str = module_path!();
 
     fn prepare(
         &self,

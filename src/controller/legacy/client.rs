@@ -23,6 +23,7 @@ pub struct LegacyClientController {}
 #[async_trait]
 impl LifecycleController for LegacyClientController {
     type Resource = LegacyClient;
+    const MODULE_PATH: &'static str = module_path!();
 
     fn prepare(
         &self,

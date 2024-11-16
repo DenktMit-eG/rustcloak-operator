@@ -84,6 +84,7 @@ impl KeycloakInstanceController {
 #[async_trait]
 impl LifecycleController for KeycloakInstanceController {
     type Resource = KeycloakInstance;
+    const MODULE_PATH: &'static str = module_path!();
 
     fn prepare(
         &self,
