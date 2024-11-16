@@ -83,8 +83,7 @@ where
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let admin_api: Api<KeycloakApiObject> =
             Api::namespaced(client.clone(), &ns);
-        let dt = ().into();
-        let kind = Self::Resource::kind(&dt);
+        let kind = Self::Resource::kind(&());
         let name = format!("{}-{}", R::prefix(), resource.name_unchecked());
         let owner_ref = resource.owner_ref(&()).unwrap();
 
