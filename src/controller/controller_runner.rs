@@ -119,8 +119,14 @@ where
                             "reconciling failed: {e}",
                         )
                     }
+                    Err(controller::Error::QueueError(e)) => {
+                        warn!(target: C::MODULE_PATH, kind = kind; "Queue Error: {}", e)
+                    },
+                    Err(controller::Error::RunnerError(e)) => {
+                        warn!(target: C::MODULE_PATH, kind = kind; "Runner Error: {}", e)
+                    },
                     Err(e) => {
-                        warn!(target: C::MODULE_PATH, kind = kind; "{:?}", e)
+                        warn!(target: C::MODULE_PATH, kind = kind; "{}", e)
                     }
                 }
             })
