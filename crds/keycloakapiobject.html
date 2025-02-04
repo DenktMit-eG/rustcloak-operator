@@ -165,7 +165,10 @@
 <tr><td style="text-align: left"><a href="#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specendpoint">spec.endpoint</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specendpointinstanceref">spec.endpoint.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="#specendpointpath">spec.endpoint.path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparent">spec.endpoint.parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentparentref">spec.endpoint.parent.parent_ref</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentsubpath">spec.endpoint.parent.sub_path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointpath">spec.endpoint.path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specimmutablepayload">spec.immutablePayload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specpayload">spec.payload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
@@ -219,12 +222,38 @@
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="#specendpointinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="#specendpointpath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparent">parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointpath">path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
 <hr />
 <h3 id="specendpointinstanceref"><a class="header" href="#specendpointinstanceref">spec.endpoint.instanceRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specendpointparent"><a class="header" href="#specendpointparent">spec.endpoint.parent</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specendpointparentparentref">parent_ref</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentsubpath">sub_path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+</tbody></table>
+</div>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specendpointparentparent_ref"><a class="header" href="#specendpointparentparent_ref">spec.endpoint.parent.parent_ref</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specendpointparentsub_path"><a class="header" href="#specendpointparentsub_path">spec.endpoint.parent.sub_path</a></h3>
 <p>Type: string</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
