@@ -9,7 +9,10 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |[spec](#spec)|object|✅|
 |[spec.endpoint](#specendpoint)|object|✅|
 |[spec.endpoint.instanceRef](#specendpointinstanceref)|string|✅|
-|[spec.endpoint.path](#specendpointpath)|string|✅|
+|[spec.endpoint.parent](#specendpointparent)|object||
+|[spec.endpoint.parent.parent_ref](#specendpointparentparentref)|string|✅|
+|[spec.endpoint.parent.sub_path](#specendpointparentsubpath)|string|✅|
+|[spec.endpoint.path](#specendpointpath)|string||
 |[spec.immutablePayload](#specimmutablepayload)|string|✅|
 |[spec.options](#specoptions)|object||
 |[spec.payload](#specpayload)|string|✅|
@@ -70,13 +73,51 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[instanceRef](#specendpointinstanceref)|string|✅|
-|[path](#specendpointpath)|string|✅|
+|[parent](#specendpointparent)|object||
+|[path](#specendpointpath)|string||
 
 *missing*
 
 ---
 
 ### spec.endpoint.instanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+*missing*
+
+---
+
+### spec.endpoint.parent
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[parent_ref](#specendpointparentparentref)|string|✅|
+|[sub_path](#specendpointparentsubpath)|string|✅|
+
+*missing*
+
+---
+
+### spec.endpoint.parent.parent_ref
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+*missing*
+
+---
+
+### spec.endpoint.parent.sub_path
 
 Type: string
 

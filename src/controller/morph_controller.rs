@@ -119,12 +119,8 @@ where
             // TODO: proper error handling
             return Err(Error::NoData);
         };
-        let endpoint_path = endpoint_path.into();
-        let instance_ref = resource.instance_ref().to_string().into();
-        let endpoint = KeycloakApiEndpoint {
-            instance_ref,
-            path: endpoint_path,
-        };
+        let instance_ref = resource.instance_ref().to_string();
+        let endpoint = KeycloakApiEndpoint::new(&instance_ref, &endpoint_path);
         debug!(
             kind = kind, name = resource.name_unchecked(), namesapce = ns;
             "Resolved endpoint: {:?}",

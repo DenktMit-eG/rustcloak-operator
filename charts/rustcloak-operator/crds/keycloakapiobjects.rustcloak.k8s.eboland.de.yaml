@@ -41,12 +41,33 @@ spec:
             description: defines an API request to the Keycloak Admin API.
             properties:
               endpoint:
+                oneOf:
+                - required:
+                  - path
+                - required:
+                  - parent
                 properties:
                   instanceRef:
                     type: string
                     x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
+                  parent:
+                    properties:
+                      parent_ref:
+                        type: string
+                        x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                      sub_path:
+                        type: string
+                        x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    required:
+                    - parent_ref
+                    - sub_path
+                    type: object
                   path:
                     type: string
                     x-kubernetes-validations:
@@ -54,7 +75,6 @@ spec:
                       rule: self == oldSelf
                 required:
                 - instanceRef
-                - path
                 type: object
               immutablePayload:
                 type: string

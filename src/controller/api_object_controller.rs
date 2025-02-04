@@ -1,4 +1,5 @@
 use super::controller_runner::LifecycleController;
+use crate::crd::KeycloakApiEndpointPath;
 use crate::crd::KeycloakApiObject;
 use crate::util::RefWatcher;
 use crate::{
@@ -37,6 +38,48 @@ pub struct KeycloakApiObjectController {
 }
 
 impl KeycloakApiObjectController {
+    async fn resolve_path(
+        &self,
+        client: &kube::Client,
+        ns: &str,
+        resource: &KeycloakApiObject,
+        stack: Vec<String>,
+    ) -> Result<String> {
+        let (name, sub_path) = match &resource.spec.endpoint.path_def {
+            KeycloakApiEndpointPath::Path(path) => return Ok(path.to_string()),
+            KeycloakApiEndpointPath::Parent {
+                parent_ref,
+                sub_path,
+            } => (parent_ref, sub_path),
+        };
+
+        let api = Api::<KeycloakApiObject>::namespaced(client.clone(), ns);
+        let parent = api
+            .get_opt(&name)
+            .await?
+            .ok_or(Error::NoParent(ns.to_string(), name.to_string()))?;
+
+        let is_recursive = stack.contains(&parent.name_any());
+
+        let mut stack = stack;
+        stack.push(parent.name_any());
+
+        if is_recursive {
+            return Err(Error::RecursiveParent(
+                ns.to_string(),
+                stack.join(" -> "),
+            ));
+        }
+
+        let path =
+            Box::pin(self.resolve_path(client, ns, &parent, stack)).await?;
+        Ok(format!(
+            "{}/{}",
+            path.trim_end_matches('/'),
+            sub_path.trim_start_matches('/')
+        ))
+    }
+
     async fn keycloak(
         client: &kube::Client,
         resource: &KeycloakApiObject,
@@ -135,8 +178,10 @@ impl LifecycleController for KeycloakApiObjectController {
         }
 
         if !success {
-            let path = &resource.spec.endpoint.path;
-            let resource_path = keycloak.post_location(path, &payload).await?;
+            let path = self
+                .resolve_path(client, &ns, &resource, vec![resource.name_any()])
+                .await?;
+            let resource_path = keycloak.post_location(&path, &payload).await?;
             let mut status = resource.status.clone().unwrap_or_default();
             status.resource_path = Some(resource_path);
 

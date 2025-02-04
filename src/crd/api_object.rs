@@ -3,7 +3,6 @@ use k8s_openapi::api::core::v1::EnvVar;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use std::ops::Add;
 
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
@@ -54,29 +53,35 @@ pub struct KeycloakApiObjectSpec {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+pub enum KeycloakApiEndpointPath {
+    // BUG: while the values of Path and Parent variants are both ImmutableString, there's
+    // there's currently no guard in place prevent the user from replacing the Parent variant with
+    // a Path variant. This is a potential source of bugs.
+    #[serde(rename = "path")]
+    Path(ImmutableString),
+    #[serde(rename = "parent")]
+    Parent {
+        parent_ref: ImmutableString,
+        sub_path: ImmutableString,
+    },
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakApiEndpoint {
     pub instance_ref: ImmutableString,
-    pub path: ImmutableString,
+    #[serde(flatten)]
+    pub path_def: KeycloakApiEndpointPath,
 }
 
 impl KeycloakApiEndpoint {
     pub fn new(instance_ref: &str, path: &str) -> Self {
         let instance_ref = instance_ref.to_string().into();
         let path = path.to_string().into();
-        Self { instance_ref, path }
-    }
-}
-
-impl<T> Add<T> for KeycloakApiEndpoint
-where
-    T: AsRef<str>,
-{
-    type Output = KeycloakApiEndpoint;
-
-    fn add(self, rhs: T) -> Self::Output {
-        let path = self.path.to_string() + rhs.as_ref();
-        KeycloakApiEndpoint::new(&self.instance_ref, &path)
+        Self {
+            instance_ref,
+            path_def: KeycloakApiEndpointPath::Path(path),
+        }
     }
 }
 

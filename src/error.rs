@@ -14,6 +14,10 @@ pub enum Error {
     GenericError,
     #[error("Keycloak instance not found: {0}")]
     KeycloakInstanceNotFound(String),
+    #[error("No Parent: {0}/{1}")]
+    NoParent(String, String),
+    #[error("Recursive Parent: {0}/{1}")]
+    RecursiveParent(String, String),
     #[error("No Namespace")]
     NoNamespace,
     #[error("{0}")]
