@@ -100,7 +100,7 @@ impl KeycloakClientSecretController {
         let Some(secret_ref) = resource.spec.client_secret.clone() else {
             return Ok(Action::await_change());
         };
-        if !resource.status.as_ref().map_or(false, |x| x.ready) {
+        if resource.status.as_ref().is_none_or(|x| !x.ready) {
             return Ok(Action::await_change());
         }
         let client = &ctx.client;

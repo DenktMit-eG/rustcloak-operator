@@ -55,7 +55,7 @@ impl KeycloakApiObjectController {
 
         let api = Api::<KeycloakApiObject>::namespaced(client.clone(), ns);
         let parent = api
-            .get_opt(&name)
+            .get_opt(name)
             .await?
             .ok_or(Error::NoParent(ns.to_string(), name.to_string()))?;
 

@@ -164,7 +164,7 @@ impl K8sKeycloakRefreshJob {
         let mut keycloak = self.keycloak_builder().with_token().await?;
         let now = chrono::Utc::now();
 
-        if keycloak.token().expires.map_or(false, |e| now > e) {
+        if keycloak.token().expires.is_some_and(|e| now > e) {
             self.refresh(&mut keycloak).await?;
         } else {
             // ping keycloak to make sure it's available

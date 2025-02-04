@@ -12,7 +12,7 @@ use serde::de::DeserializeOwned;
 use crate::error::Result;
 
 pub fn should_handle_prudent(meta: &ObjectMeta, prudent: bool) -> bool {
-    if prudent == false {
+    if !prudent {
         true
     } else if let Some(annotations) = &meta.annotations {
         annotations.contains_key(app_id!("handle"))

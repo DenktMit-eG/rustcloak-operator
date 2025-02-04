@@ -19,7 +19,7 @@ struct Resolver<'a> {
     config_map_cache: HashMap<String, ConfigMap>,
 }
 
-impl<'a> Resolver<'a> {
+impl Resolver<'_> {
     fn visit(&self, value: Value) -> Result<Value> {
         use Value::*;
         let vars = &self.resolved_vars;
