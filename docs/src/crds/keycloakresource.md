@@ -32,6 +32,7 @@ resource to define a Resource within a [KeyclaokClient](./keycloakclient.md)
 |[spec.definition.scopes[].policies[].name](#specdefinitionscopespoliciesname)|string||
 |[spec.definition.scopes[].policies[].owner](#specdefinitionscopespoliciesowner)|string||
 |[spec.definition.scopes[].policies[].policies[]](#specdefinitionscopespoliciespolicies)|string||
+|[spec.definition.scopes[].policies[].resourceType](#specdefinitionscopespoliciesresourcetype)|string||
 |[spec.definition.scopes[].policies[].resources[]](#specdefinitionscopespoliciesresources)|string||
 |[spec.definition.scopes[].policies[].scopes[]](#specdefinitionscopespoliciesscopes)|string||
 |[spec.definition.scopes[].policies[].type](#specdefinitionscopespoliciestype)|string||
@@ -49,6 +50,7 @@ resource to define a Resource within a [KeyclaokClient](./keycloakclient.md)
 |[spec.definition.scopesUma[].policies[].name](#specdefinitionscopesumapoliciesname)|string||
 |[spec.definition.scopesUma[].policies[].owner](#specdefinitionscopesumapoliciesowner)|string||
 |[spec.definition.scopesUma[].policies[].policies[]](#specdefinitionscopesumapoliciespolicies)|string||
+|[spec.definition.scopesUma[].policies[].resourceType](#specdefinitionscopesumapoliciesresourcetype)|string||
 |[spec.definition.scopesUma[].policies[].resources[]](#specdefinitionscopesumapoliciesresources)|string||
 |[spec.definition.scopesUma[].policies[].scopes[]](#specdefinitionscopesumapoliciesscopes)|string||
 |[spec.definition.scopesUma[].policies[].type](#specdefinitionscopesumapoliciestype)|string||
@@ -267,6 +269,7 @@ Type: object
 |[name](#specdefinitionscopespoliciesname)|string||
 |[owner](#specdefinitionscopespoliciesowner)|string||
 |[policies[]](#specdefinitionscopespoliciespolicies)|string||
+|[resourceType](#specdefinitionscopespoliciesresourcetype)|string||
 |[resources[]](#specdefinitionscopespoliciesresources)|string||
 |[scopes[]](#specdefinitionscopespoliciesscopes)|string||
 |[type](#specdefinitionscopespoliciestype)|string||
@@ -332,6 +335,14 @@ Type: string
 ---
 
 ### spec.definition.scopes[].policies[].policies[]
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.scopes[].policies[].resourceType
 
 Type: string
 
@@ -425,6 +436,7 @@ Type: object
 |[name](#specdefinitionscopesumapoliciesname)|string||
 |[owner](#specdefinitionscopesumapoliciesowner)|string||
 |[policies[]](#specdefinitionscopesumapoliciespolicies)|string||
+|[resourceType](#specdefinitionscopesumapoliciesresourcetype)|string||
 |[resources[]](#specdefinitionscopesumapoliciesresources)|string||
 |[scopes[]](#specdefinitionscopesumapoliciesscopes)|string||
 |[type](#specdefinitionscopesumapoliciestype)|string||
@@ -490,6 +502,14 @@ Type: string
 ---
 
 ### spec.definition.scopesUma[].policies[].policies[]
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.scopesUma[].policies[].resourceType
 
 Type: string
 

@@ -94,6 +94,9 @@ spec:
                             type: string
                           nullable: true
                           type: array
+                        resourceType:
+                          nullable: true
+                          type: string
                         resources:
                           items:
                             type: string

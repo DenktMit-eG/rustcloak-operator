@@ -22,6 +22,7 @@ resource to define a Scope within a [KeyclaokClient](./keycloakclient.md)
 |[spec.definition.policies[].name](#specdefinitionpoliciesname)|string||
 |[spec.definition.policies[].owner](#specdefinitionpoliciesowner)|string||
 |[spec.definition.policies[].policies[]](#specdefinitionpoliciespolicies)|string||
+|[spec.definition.policies[].resourceType](#specdefinitionpoliciesresourcetype)|string||
 |[spec.definition.policies[].resources[]](#specdefinitionpoliciesresources)|string||
 |[spec.definition.policies[].resourcesData[]](#specdefinitionpoliciesresourcesdata)|object||
 |[spec.definition.policies[].resourcesData[]._id](#specdefinitionpoliciesresourcesdataid)|string||
@@ -164,6 +165,7 @@ Type: object
 |[name](#specdefinitionpoliciesname)|string||
 |[owner](#specdefinitionpoliciesowner)|string||
 |[policies[]](#specdefinitionpoliciespolicies)|string||
+|[resourceType](#specdefinitionpoliciesresourcetype)|string||
 |[resources[]](#specdefinitionpoliciesresources)|string||
 |[resourcesData[]](#specdefinitionpoliciesresourcesdata)|object||
 |[scopes[]](#specdefinitionpoliciesscopes)|string||
@@ -230,6 +232,14 @@ Type: string
 ---
 
 ### spec.definition.policies[].policies[]
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.policies[].resourceType
 
 Type: string
 

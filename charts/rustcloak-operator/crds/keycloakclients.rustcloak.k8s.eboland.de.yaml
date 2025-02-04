@@ -82,6 +82,24 @@ spec:
                       allowRemoteResourceManagement:
                         nullable: true
                         type: boolean
+                      authorizationSchema:
+                        nullable: true
+                        properties:
+                          resourceTypes:
+                            additionalProperties:
+                              properties:
+                                scopes:
+                                  items:
+                                    type: string
+                                  nullable: true
+                                  type: array
+                                type:
+                                  nullable: true
+                                  type: string
+                              type: object
+                            nullable: true
+                            type: object
+                        type: object
                       clientId:
                         nullable: true
                         type: string
@@ -136,6 +154,9 @@ spec:
                                 type: string
                               nullable: true
                               type: array
+                            resourceType:
+                              nullable: true
+                              type: string
                             resources:
                               items:
                                 type: string
@@ -403,6 +424,9 @@ spec:
                                             type: string
                                           nullable: true
                                           type: array
+                                        resourceType:
+                                          nullable: true
+                                          type: string
                                         resources:
                                           items:
                                             type: string
@@ -477,6 +501,9 @@ spec:
                                             type: string
                                           nullable: true
                                           type: array
+                                        resourceType:
+                                          nullable: true
+                                          type: string
                                         resources:
                                           items:
                                             type: string
@@ -565,6 +592,9 @@ spec:
                                       type: string
                                     nullable: true
                                     type: array
+                                  resourceType:
+                                    nullable: true
+                                    type: string
                                   resources:
                                     items:
                                       type: string

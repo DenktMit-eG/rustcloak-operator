@@ -75,6 +75,908 @@ spec:
                   adminEventsEnabled:
                     nullable: true
                     type: boolean
+                  adminPermissionsClient:
+                    nullable: true
+                    properties:
+                      access:
+                        additionalProperties:
+                          type: boolean
+                        nullable: true
+                        type: object
+                      adminUrl:
+                        nullable: true
+                        type: string
+                      alwaysDisplayInConsole:
+                        nullable: true
+                        type: boolean
+                      attributes:
+                        additionalProperties:
+                          type: string
+                        nullable: true
+                        type: object
+                      authenticationFlowBindingOverrides:
+                        additionalProperties:
+                          type: string
+                        nullable: true
+                        type: object
+                      authorizationServicesEnabled:
+                        nullable: true
+                        type: boolean
+                      authorizationSettings:
+                        nullable: true
+                        properties:
+                          allowRemoteResourceManagement:
+                            nullable: true
+                            type: boolean
+                          authorizationSchema:
+                            nullable: true
+                            properties:
+                              resourceTypes:
+                                additionalProperties:
+                                  properties:
+                                    scopes:
+                                      items:
+                                        type: string
+                                      nullable: true
+                                      type: array
+                                    type:
+                                      nullable: true
+                                      type: string
+                                  type: object
+                                nullable: true
+                                type: object
+                            type: object
+                          clientId:
+                            nullable: true
+                            type: string
+                          decisionStrategy:
+                            enum:
+                            - AFFIRMATIVE
+                            - UNANIMOUS
+                            - CONSENSUS
+                            nullable: true
+                            type: string
+                          id:
+                            nullable: true
+                            type: string
+                          name:
+                            nullable: true
+                            type: string
+                          policies:
+                            items:
+                              properties:
+                                config:
+                                  additionalProperties:
+                                    type: string
+                                  nullable: true
+                                  type: object
+                                decisionStrategy:
+                                  enum:
+                                  - AFFIRMATIVE
+                                  - UNANIMOUS
+                                  - CONSENSUS
+                                  nullable: true
+                                  type: string
+                                description:
+                                  nullable: true
+                                  type: string
+                                id:
+                                  nullable: true
+                                  type: string
+                                logic:
+                                  enum:
+                                  - POSITIVE
+                                  - NEGATIVE
+                                  nullable: true
+                                  type: string
+                                name:
+                                  nullable: true
+                                  type: string
+                                owner:
+                                  nullable: true
+                                  type: string
+                                policies:
+                                  items:
+                                    type: string
+                                  nullable: true
+                                  type: array
+                                resourceType:
+                                  nullable: true
+                                  type: string
+                                resources:
+                                  items:
+                                    type: string
+                                  nullable: true
+                                  type: array
+                                resourcesData:
+                                  items:
+                                    properties:
+                                      _id:
+                                        nullable: true
+                                        type: string
+                                      attributes:
+                                        additionalProperties:
+                                          items:
+                                            type: string
+                                          type: array
+                                        nullable: true
+                                        type: object
+                                      displayName:
+                                        nullable: true
+                                        type: string
+                                      icon_uri:
+                                        nullable: true
+                                        type: string
+                                      name:
+                                        nullable: true
+                                        type: string
+                                      owner:
+                                        nullable: true
+                                        properties:
+                                          id:
+                                            nullable: true
+                                            type: string
+                                          name:
+                                            nullable: true
+                                            type: string
+                                        type: object
+                                      ownerManagedAccess:
+                                        nullable: true
+                                        type: boolean
+                                      scopes:
+                                        items:
+                                          properties:
+                                            displayName:
+                                              nullable: true
+                                              type: string
+                                            iconUri:
+                                              nullable: true
+                                              type: string
+                                            id:
+                                              nullable: true
+                                              type: string
+                                            name:
+                                              nullable: true
+                                              type: string
+                                            policies:
+                                              items:
+                                                $ref: '#/components/schemas/PolicyRepresentation'
+                                              nullable: true
+                                              type: array
+                                            resources:
+                                              items:
+                                                $ref: '#/components/schemas/ResourceRepresentation'
+                                              nullable: true
+                                              type: array
+                                          type: object
+                                        nullable: true
+                                        type: array
+                                      scopesUma:
+                                        items:
+                                          properties:
+                                            displayName:
+                                              nullable: true
+                                              type: string
+                                            iconUri:
+                                              nullable: true
+                                              type: string
+                                            id:
+                                              nullable: true
+                                              type: string
+                                            name:
+                                              nullable: true
+                                              type: string
+                                            policies:
+                                              items:
+                                                $ref: '#/components/schemas/PolicyRepresentation'
+                                              nullable: true
+                                              type: array
+                                            resources:
+                                              items:
+                                                $ref: '#/components/schemas/ResourceRepresentation'
+                                              nullable: true
+                                              type: array
+                                          type: object
+                                        nullable: true
+                                        type: array
+                                      type:
+                                        nullable: true
+                                        type: string
+                                      uri:
+                                        nullable: true
+                                        type: string
+                                      uris:
+                                        items:
+                                          type: string
+                                        nullable: true
+                                        type: array
+                                    type: object
+                                  nullable: true
+                                  type: array
+                                scopes:
+                                  items:
+                                    type: string
+                                  nullable: true
+                                  type: array
+                                scopesData:
+                                  items:
+                                    properties:
+                                      displayName:
+                                        nullable: true
+                                        type: string
+                                      iconUri:
+                                        nullable: true
+                                        type: string
+                                      id:
+                                        nullable: true
+                                        type: string
+                                      name:
+                                        nullable: true
+                                        type: string
+                                      policies:
+                                        items:
+                                          $ref: '#/components/schemas/PolicyRepresentation'
+                                        nullable: true
+                                        type: array
+                                      resources:
+                                        items:
+                                          properties:
+                                            _id:
+                                              nullable: true
+                                              type: string
+                                            attributes:
+                                              additionalProperties:
+                                                items:
+                                                  type: string
+                                                type: array
+                                              nullable: true
+                                              type: object
+                                            displayName:
+                                              nullable: true
+                                              type: string
+                                            icon_uri:
+                                              nullable: true
+                                              type: string
+                                            name:
+                                              nullable: true
+                                              type: string
+                                            owner:
+                                              nullable: true
+                                              properties:
+                                                id:
+                                                  nullable: true
+                                                  type: string
+                                                name:
+                                                  nullable: true
+                                                  type: string
+                                              type: object
+                                            ownerManagedAccess:
+                                              nullable: true
+                                              type: boolean
+                                            scopes:
+                                              items:
+                                                $ref: '#/components/schemas/ScopeRepresentation'
+                                              nullable: true
+                                              type: array
+                                            scopesUma:
+                                              items:
+                                                $ref: '#/components/schemas/ScopeRepresentation'
+                                              nullable: true
+                                              type: array
+                                            type:
+                                              nullable: true
+                                              type: string
+                                            uri:
+                                              nullable: true
+                                              type: string
+                                            uris:
+                                              items:
+                                                type: string
+                                              nullable: true
+                                              type: array
+                                          type: object
+                                        nullable: true
+                                        type: array
+                                    type: object
+                                  nullable: true
+                                  type: array
+                                type:
+                                  nullable: true
+                                  type: string
+                              type: object
+                            nullable: true
+                            type: array
+                          policyEnforcementMode:
+                            enum:
+                            - ENFORCING
+                            - PERMISSIVE
+                            - DISABLED
+                            nullable: true
+                            type: string
+                          resources:
+                            items:
+                              properties:
+                                _id:
+                                  nullable: true
+                                  type: string
+                                attributes:
+                                  additionalProperties:
+                                    items:
+                                      type: string
+                                    type: array
+                                  nullable: true
+                                  type: object
+                                displayName:
+                                  nullable: true
+                                  type: string
+                                icon_uri:
+                                  nullable: true
+                                  type: string
+                                name:
+                                  nullable: true
+                                  type: string
+                                owner:
+                                  nullable: true
+                                  properties:
+                                    id:
+                                      nullable: true
+                                      type: string
+                                    name:
+                                      nullable: true
+                                      type: string
+                                  type: object
+                                ownerManagedAccess:
+                                  nullable: true
+                                  type: boolean
+                                scopes:
+                                  items:
+                                    properties:
+                                      displayName:
+                                        nullable: true
+                                        type: string
+                                      iconUri:
+                                        nullable: true
+                                        type: string
+                                      id:
+                                        nullable: true
+                                        type: string
+                                      name:
+                                        nullable: true
+                                        type: string
+                                      policies:
+                                        items:
+                                          properties:
+                                            config:
+                                              additionalProperties:
+                                                type: string
+                                              nullable: true
+                                              type: object
+                                            decisionStrategy:
+                                              enum:
+                                              - AFFIRMATIVE
+                                              - UNANIMOUS
+                                              - CONSENSUS
+                                              nullable: true
+                                              type: string
+                                            description:
+                                              nullable: true
+                                              type: string
+                                            id:
+                                              nullable: true
+                                              type: string
+                                            logic:
+                                              enum:
+                                              - POSITIVE
+                                              - NEGATIVE
+                                              nullable: true
+                                              type: string
+                                            name:
+                                              nullable: true
+                                              type: string
+                                            owner:
+                                              nullable: true
+                                              type: string
+                                            policies:
+                                              items:
+                                                type: string
+                                              nullable: true
+                                              type: array
+                                            resourceType:
+                                              nullable: true
+                                              type: string
+                                            resources:
+                                              items:
+                                                type: string
+                                              nullable: true
+                                              type: array
+                                            resourcesData:
+                                              items:
+                                                $ref: '#/components/schemas/ResourceRepresentation'
+                                              nullable: true
+                                              type: array
+                                            scopes:
+                                              items:
+                                                type: string
+                                              nullable: true
+                                              type: array
+                                            scopesData:
+                                              items:
+                                                $ref: '#/components/schemas/ScopeRepresentation'
+                                              nullable: true
+                                              type: array
+                                            type:
+                                              nullable: true
+                                              type: string
+                                          type: object
+                                        nullable: true
+                                        type: array
+                                      resources:
+                                        items:
+                                          $ref: '#/components/schemas/ResourceRepresentation'
+                                        nullable: true
+                                        type: array
+                                    type: object
+                                  nullable: true
+                                  type: array
+                                scopesUma:
+                                  items:
+                                    properties:
+                                      displayName:
+                                        nullable: true
+                                        type: string
+                                      iconUri:
+                                        nullable: true
+                                        type: string
+                                      id:
+                                        nullable: true
+                                        type: string
+                                      name:
+                                        nullable: true
+                                        type: string
+                                      policies:
+                                        items:
+                                          properties:
+                                            config:
+                                              additionalProperties:
+                                                type: string
+                                              nullable: true
+                                              type: object
+                                            decisionStrategy:
+                                              enum:
+                                              - AFFIRMATIVE
+                                              - UNANIMOUS
+                                              - CONSENSUS
+                                              nullable: true
+                                              type: string
+                                            description:
+                                              nullable: true
+                                              type: string
+                                            id:
+                                              nullable: true
+                                              type: string
+                                            logic:
+                                              enum:
+                                              - POSITIVE
+                                              - NEGATIVE
+                                              nullable: true
+                                              type: string
+                                            name:
+                                              nullable: true
+                                              type: string
+                                            owner:
+                                              nullable: true
+                                              type: string
+                                            policies:
+                                              items:
+                                                type: string
+                                              nullable: true
+                                              type: array
+                                            resourceType:
+                                              nullable: true
+                                              type: string
+                                            resources:
+                                              items:
+                                                type: string
+                                              nullable: true
+                                              type: array
+                                            resourcesData:
+                                              items:
+                                                $ref: '#/components/schemas/ResourceRepresentation'
+                                              nullable: true
+                                              type: array
+                                            scopes:
+                                              items:
+                                                type: string
+                                              nullable: true
+                                              type: array
+                                            scopesData:
+                                              items:
+                                                $ref: '#/components/schemas/ScopeRepresentation'
+                                              nullable: true
+                                              type: array
+                                            type:
+                                              nullable: true
+                                              type: string
+                                          type: object
+                                        nullable: true
+                                        type: array
+                                      resources:
+                                        items:
+                                          $ref: '#/components/schemas/ResourceRepresentation'
+                                        nullable: true
+                                        type: array
+                                    type: object
+                                  nullable: true
+                                  type: array
+                                type:
+                                  nullable: true
+                                  type: string
+                                uri:
+                                  nullable: true
+                                  type: string
+                                uris:
+                                  items:
+                                    type: string
+                                  nullable: true
+                                  type: array
+                              type: object
+                            nullable: true
+                            type: array
+                          scopes:
+                            items:
+                              properties:
+                                displayName:
+                                  nullable: true
+                                  type: string
+                                iconUri:
+                                  nullable: true
+                                  type: string
+                                id:
+                                  nullable: true
+                                  type: string
+                                name:
+                                  nullable: true
+                                  type: string
+                                policies:
+                                  items:
+                                    properties:
+                                      config:
+                                        additionalProperties:
+                                          type: string
+                                        nullable: true
+                                        type: object
+                                      decisionStrategy:
+                                        enum:
+                                        - AFFIRMATIVE
+                                        - UNANIMOUS
+                                        - CONSENSUS
+                                        nullable: true
+                                        type: string
+                                      description:
+                                        nullable: true
+                                        type: string
+                                      id:
+                                        nullable: true
+                                        type: string
+                                      logic:
+                                        enum:
+                                        - POSITIVE
+                                        - NEGATIVE
+                                        nullable: true
+                                        type: string
+                                      name:
+                                        nullable: true
+                                        type: string
+                                      owner:
+                                        nullable: true
+                                        type: string
+                                      policies:
+                                        items:
+                                          type: string
+                                        nullable: true
+                                        type: array
+                                      resourceType:
+                                        nullable: true
+                                        type: string
+                                      resources:
+                                        items:
+                                          type: string
+                                        nullable: true
+                                        type: array
+                                      resourcesData:
+                                        items:
+                                          properties:
+                                            _id:
+                                              nullable: true
+                                              type: string
+                                            attributes:
+                                              additionalProperties:
+                                                items:
+                                                  type: string
+                                                type: array
+                                              nullable: true
+                                              type: object
+                                            displayName:
+                                              nullable: true
+                                              type: string
+                                            icon_uri:
+                                              nullable: true
+                                              type: string
+                                            name:
+                                              nullable: true
+                                              type: string
+                                            owner:
+                                              nullable: true
+                                              properties:
+                                                id:
+                                                  nullable: true
+                                                  type: string
+                                                name:
+                                                  nullable: true
+                                                  type: string
+                                              type: object
+                                            ownerManagedAccess:
+                                              nullable: true
+                                              type: boolean
+                                            scopes:
+                                              items:
+                                                $ref: '#/components/schemas/ScopeRepresentation'
+                                              nullable: true
+                                              type: array
+                                            scopesUma:
+                                              items:
+                                                $ref: '#/components/schemas/ScopeRepresentation'
+                                              nullable: true
+                                              type: array
+                                            type:
+                                              nullable: true
+                                              type: string
+                                            uri:
+                                              nullable: true
+                                              type: string
+                                            uris:
+                                              items:
+                                                type: string
+                                              nullable: true
+                                              type: array
+                                          type: object
+                                        nullable: true
+                                        type: array
+                                      scopes:
+                                        items:
+                                          type: string
+                                        nullable: true
+                                        type: array
+                                      scopesData:
+                                        items:
+                                          $ref: '#/components/schemas/ScopeRepresentation'
+                                        nullable: true
+                                        type: array
+                                      type:
+                                        nullable: true
+                                        type: string
+                                    type: object
+                                  nullable: true
+                                  type: array
+                                resources:
+                                  items:
+                                    properties:
+                                      _id:
+                                        nullable: true
+                                        type: string
+                                      attributes:
+                                        additionalProperties:
+                                          items:
+                                            type: string
+                                          type: array
+                                        nullable: true
+                                        type: object
+                                      displayName:
+                                        nullable: true
+                                        type: string
+                                      icon_uri:
+                                        nullable: true
+                                        type: string
+                                      name:
+                                        nullable: true
+                                        type: string
+                                      owner:
+                                        nullable: true
+                                        properties:
+                                          id:
+                                            nullable: true
+                                            type: string
+                                          name:
+                                            nullable: true
+                                            type: string
+                                        type: object
+                                      ownerManagedAccess:
+                                        nullable: true
+                                        type: boolean
+                                      scopes:
+                                        items:
+                                          $ref: '#/components/schemas/ScopeRepresentation'
+                                        nullable: true
+                                        type: array
+                                      scopesUma:
+                                        items:
+                                          $ref: '#/components/schemas/ScopeRepresentation'
+                                        nullable: true
+                                        type: array
+                                      type:
+                                        nullable: true
+                                        type: string
+                                      uri:
+                                        nullable: true
+                                        type: string
+                                      uris:
+                                        items:
+                                          type: string
+                                        nullable: true
+                                        type: array
+                                    type: object
+                                  nullable: true
+                                  type: array
+                              type: object
+                            nullable: true
+                            type: array
+                        type: object
+                      baseUrl:
+                        nullable: true
+                        type: string
+                      bearerOnly:
+                        nullable: true
+                        type: boolean
+                      clientAuthenticatorType:
+                        nullable: true
+                        type: string
+                      clientId:
+                        nullable: true
+                        type: string
+                      clientTemplate:
+                        nullable: true
+                        type: string
+                      consentRequired:
+                        nullable: true
+                        type: boolean
+                      defaultClientScopes:
+                        items:
+                          type: string
+                        nullable: true
+                        type: array
+                      defaultRoles:
+                        items:
+                          type: string
+                        nullable: true
+                        type: array
+                      description:
+                        nullable: true
+                        type: string
+                      directAccessGrantsEnabled:
+                        nullable: true
+                        type: boolean
+                      directGrantsOnly:
+                        nullable: true
+                        type: boolean
+                      enabled:
+                        nullable: true
+                        type: boolean
+                      frontchannelLogout:
+                        nullable: true
+                        type: boolean
+                      fullScopeAllowed:
+                        nullable: true
+                        type: boolean
+                      id:
+                        nullable: true
+                        type: string
+                      implicitFlowEnabled:
+                        nullable: true
+                        type: boolean
+                      name:
+                        nullable: true
+                        type: string
+                      nodeReRegistrationTimeout:
+                        format: int32
+                        nullable: true
+                        type: integer
+                      notBefore:
+                        format: int32
+                        nullable: true
+                        type: integer
+                      optionalClientScopes:
+                        items:
+                          type: string
+                        nullable: true
+                        type: array
+                      origin:
+                        nullable: true
+                        type: string
+                      protocol:
+                        nullable: true
+                        type: string
+                      protocolMappers:
+                        items:
+                          properties:
+                            config:
+                              additionalProperties:
+                                type: string
+                              nullable: true
+                              type: object
+                            consentRequired:
+                              nullable: true
+                              type: boolean
+                            consentText:
+                              nullable: true
+                              type: string
+                            id:
+                              nullable: true
+                              type: string
+                            name:
+                              nullable: true
+                              type: string
+                            protocol:
+                              nullable: true
+                              type: string
+                            protocolMapper:
+                              nullable: true
+                              type: string
+                          type: object
+                        nullable: true
+                        type: array
+                      publicClient:
+                        nullable: true
+                        type: boolean
+                      redirectUris:
+                        items:
+                          type: string
+                        nullable: true
+                        type: array
+                      registeredNodes:
+                        additionalProperties:
+                          format: int32
+                          type: integer
+                        nullable: true
+                        type: object
+                      registrationAccessToken:
+                        nullable: true
+                        type: string
+                      rootUrl:
+                        nullable: true
+                        type: string
+                      secret:
+                        nullable: true
+                        type: string
+                      serviceAccountsEnabled:
+                        nullable: true
+                        type: boolean
+                      standardFlowEnabled:
+                        nullable: true
+                        type: boolean
+                      surrogateAuthRequired:
+                        nullable: true
+                        type: boolean
+                      type:
+                        nullable: true
+                        type: string
+                      useTemplateConfig:
+                        nullable: true
+                        type: boolean
+                      useTemplateMappers:
+                        nullable: true
+                        type: boolean
+                      useTemplateScope:
+                        nullable: true
+                        type: boolean
+                      webOrigins:
+                        items:
+                          type: string
+                        nullable: true
+                        type: array
+                    type: object
+                  adminPermissionsEnabled:
+                    nullable: true
+                    type: boolean
                   adminTheme:
                     nullable: true
                     type: string
@@ -191,6 +1093,12 @@ spec:
                   bruteForceProtected:
                     nullable: true
                     type: boolean
+                  bruteForceStrategy:
+                    enum:
+                    - LINEAR
+                    - MULTIPLE
+                    nullable: true
+                    type: string
                   certificate:
                     nullable: true
                     type: string
@@ -2181,6 +3089,9 @@ spec:
                       type: object
                     nullable: true
                     type: array
+                  verifiableCredentialsEnabled:
+                    nullable: true
+                    type: boolean
                   verifyEmail:
                     nullable: true
                     type: boolean

@@ -20,6 +20,8 @@ resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.definition.authorizationServicesEnabled](#specdefinitionauthorizationservicesenabled)|boolean||
 |[spec.definition.authorizationSettings](#specdefinitionauthorizationsettings)|object||
 |[spec.definition.authorizationSettings.allowRemoteResourceManagement](#specdefinitionauthorizationsettingsallowremoteresourcemanagement)|boolean||
+|[spec.definition.authorizationSettings.authorizationSchema](#specdefinitionauthorizationsettingsauthorizationschema)|object||
+|[spec.definition.authorizationSettings.authorizationSchema.resourceTypes](#specdefinitionauthorizationsettingsauthorizationschemaresourcetypes)|object||
 |[spec.definition.authorizationSettings.clientId](#specdefinitionauthorizationsettingsclientid)|string||
 |[spec.definition.authorizationSettings.decisionStrategy](#specdefinitionauthorizationsettingsdecisionstrategy)|string||
 |[spec.definition.authorizationSettings.id](#specdefinitionauthorizationsettingsid)|string||
@@ -33,6 +35,7 @@ resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.definition.authorizationSettings.policies[].name](#specdefinitionauthorizationsettingspoliciesname)|string||
 |[spec.definition.authorizationSettings.policies[].owner](#specdefinitionauthorizationsettingspoliciesowner)|string||
 |[spec.definition.authorizationSettings.policies[].policies[]](#specdefinitionauthorizationsettingspoliciespolicies)|string||
+|[spec.definition.authorizationSettings.policies[].resourceType](#specdefinitionauthorizationsettingspoliciesresourcetype)|string||
 |[spec.definition.authorizationSettings.policies[].resources[]](#specdefinitionauthorizationsettingspoliciesresources)|string||
 |[spec.definition.authorizationSettings.policies[].resourcesData[]](#specdefinitionauthorizationsettingspoliciesresourcesdata)|object||
 |[spec.definition.authorizationSettings.policies[].resourcesData[]._id](#specdefinitionauthorizationsettingspoliciesresourcesdataid)|string||
@@ -102,6 +105,7 @@ resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.definition.authorizationSettings.resources[].scopes[].policies[].name](#specdefinitionauthorizationsettingsresourcesscopespoliciesname)|string||
 |[spec.definition.authorizationSettings.resources[].scopes[].policies[].owner](#specdefinitionauthorizationsettingsresourcesscopespoliciesowner)|string||
 |[spec.definition.authorizationSettings.resources[].scopes[].policies[].policies[]](#specdefinitionauthorizationsettingsresourcesscopespoliciespolicies)|string||
+|[spec.definition.authorizationSettings.resources[].scopes[].policies[].resourceType](#specdefinitionauthorizationsettingsresourcesscopespoliciesresourcetype)|string||
 |[spec.definition.authorizationSettings.resources[].scopes[].policies[].resources[]](#specdefinitionauthorizationsettingsresourcesscopespoliciesresources)|string||
 |[spec.definition.authorizationSettings.resources[].scopes[].policies[].scopes[]](#specdefinitionauthorizationsettingsresourcesscopespoliciesscopes)|string||
 |[spec.definition.authorizationSettings.resources[].scopes[].policies[].type](#specdefinitionauthorizationsettingsresourcesscopespoliciestype)|string||
@@ -119,6 +123,7 @@ resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.definition.authorizationSettings.resources[].scopesUma[].policies[].name](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesname)|string||
 |[spec.definition.authorizationSettings.resources[].scopesUma[].policies[].owner](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesowner)|string||
 |[spec.definition.authorizationSettings.resources[].scopesUma[].policies[].policies[]](#specdefinitionauthorizationsettingsresourcesscopesumapoliciespolicies)|string||
+|[spec.definition.authorizationSettings.resources[].scopesUma[].policies[].resourceType](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesresourcetype)|string||
 |[spec.definition.authorizationSettings.resources[].scopesUma[].policies[].resources[]](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesresources)|string||
 |[spec.definition.authorizationSettings.resources[].scopesUma[].policies[].scopes[]](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesscopes)|string||
 |[spec.definition.authorizationSettings.resources[].scopesUma[].policies[].type](#specdefinitionauthorizationsettingsresourcesscopesumapoliciestype)|string||
@@ -139,6 +144,7 @@ resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.definition.authorizationSettings.scopes[].policies[].name](#specdefinitionauthorizationsettingsscopespoliciesname)|string||
 |[spec.definition.authorizationSettings.scopes[].policies[].owner](#specdefinitionauthorizationsettingsscopespoliciesowner)|string||
 |[spec.definition.authorizationSettings.scopes[].policies[].policies[]](#specdefinitionauthorizationsettingsscopespoliciespolicies)|string||
+|[spec.definition.authorizationSettings.scopes[].policies[].resourceType](#specdefinitionauthorizationsettingsscopespoliciesresourcetype)|string||
 |[spec.definition.authorizationSettings.scopes[].policies[].resources[]](#specdefinitionauthorizationsettingsscopespoliciesresources)|string||
 |[spec.definition.authorizationSettings.scopes[].policies[].resourcesData[]](#specdefinitionauthorizationsettingsscopespoliciesresourcesdata)|object||
 |[spec.definition.authorizationSettings.scopes[].policies[].resourcesData[]._id](#specdefinitionauthorizationsettingsscopespoliciesresourcesdataid)|string||
@@ -400,6 +406,7 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[allowRemoteResourceManagement](#specdefinitionauthorizationsettingsallowremoteresourcemanagement)|boolean||
+|[authorizationSchema](#specdefinitionauthorizationsettingsauthorizationschema)|object||
 |[clientId](#specdefinitionauthorizationsettingsclientid)|string||
 |[decisionStrategy](#specdefinitionauthorizationsettingsdecisionstrategy)|string||
 |[id](#specdefinitionauthorizationsettingsid)|string||
@@ -416,6 +423,26 @@ Type: object
 ### spec.definition.authorizationSettings.allowRemoteResourceManagement
 
 Type: boolean
+
+*missing*
+
+---
+
+### spec.definition.authorizationSettings.authorizationSchema
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[resourceTypes](#specdefinitionauthorizationsettingsauthorizationschemaresourcetypes)|object||
+
+*missing*
+
+---
+
+### spec.definition.authorizationSettings.authorizationSchema.resourceTypes
+
+Type: object
 
 *missing*
 
@@ -467,6 +494,7 @@ Type: object
 |[name](#specdefinitionauthorizationsettingspoliciesname)|string||
 |[owner](#specdefinitionauthorizationsettingspoliciesowner)|string||
 |[policies[]](#specdefinitionauthorizationsettingspoliciespolicies)|string||
+|[resourceType](#specdefinitionauthorizationsettingspoliciesresourcetype)|string||
 |[resources[]](#specdefinitionauthorizationsettingspoliciesresources)|string||
 |[resourcesData[]](#specdefinitionauthorizationsettingspoliciesresourcesdata)|object||
 |[scopes[]](#specdefinitionauthorizationsettingspoliciesscopes)|string||
@@ -534,6 +562,14 @@ Type: string
 ---
 
 ### spec.definition.authorizationSettings.policies[].policies[]
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.authorizationSettings.policies[].resourceType
 
 Type: string
 
@@ -1123,6 +1159,7 @@ Type: object
 |[name](#specdefinitionauthorizationsettingsresourcesscopespoliciesname)|string||
 |[owner](#specdefinitionauthorizationsettingsresourcesscopespoliciesowner)|string||
 |[policies[]](#specdefinitionauthorizationsettingsresourcesscopespoliciespolicies)|string||
+|[resourceType](#specdefinitionauthorizationsettingsresourcesscopespoliciesresourcetype)|string||
 |[resources[]](#specdefinitionauthorizationsettingsresourcesscopespoliciesresources)|string||
 |[scopes[]](#specdefinitionauthorizationsettingsresourcesscopespoliciesscopes)|string||
 |[type](#specdefinitionauthorizationsettingsresourcesscopespoliciestype)|string||
@@ -1188,6 +1225,14 @@ Type: string
 ---
 
 ### spec.definition.authorizationSettings.resources[].scopes[].policies[].policies[]
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.authorizationSettings.resources[].scopes[].policies[].resourceType
 
 Type: string
 
@@ -1281,6 +1326,7 @@ Type: object
 |[name](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesname)|string||
 |[owner](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesowner)|string||
 |[policies[]](#specdefinitionauthorizationsettingsresourcesscopesumapoliciespolicies)|string||
+|[resourceType](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesresourcetype)|string||
 |[resources[]](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesresources)|string||
 |[scopes[]](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesscopes)|string||
 |[type](#specdefinitionauthorizationsettingsresourcesscopesumapoliciestype)|string||
@@ -1346,6 +1392,14 @@ Type: string
 ---
 
 ### spec.definition.authorizationSettings.resources[].scopesUma[].policies[].policies[]
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.authorizationSettings.resources[].scopesUma[].policies[].resourceType
 
 Type: string
 
@@ -1464,6 +1518,7 @@ Type: object
 |[name](#specdefinitionauthorizationsettingsscopespoliciesname)|string||
 |[owner](#specdefinitionauthorizationsettingsscopespoliciesowner)|string||
 |[policies[]](#specdefinitionauthorizationsettingsscopespoliciespolicies)|string||
+|[resourceType](#specdefinitionauthorizationsettingsscopespoliciesresourcetype)|string||
 |[resources[]](#specdefinitionauthorizationsettingsscopespoliciesresources)|string||
 |[resourcesData[]](#specdefinitionauthorizationsettingsscopespoliciesresourcesdata)|object||
 |[scopes[]](#specdefinitionauthorizationsettingsscopespoliciesscopes)|string||
@@ -1530,6 +1585,14 @@ Type: string
 ---
 
 ### spec.definition.authorizationSettings.scopes[].policies[].policies[]
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.authorizationSettings.scopes[].policies[].resourceType
 
 Type: string
 
