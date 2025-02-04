@@ -1,4 +1,5 @@
 use super::super::controller_runner::LifecycleController;
+use super::should_handle_prudent;
 use crate::app_id;
 use crate::crd::{KeycloakInstanceCredentialReference, KeycloakInstanceSpec};
 use crate::error::Error;
@@ -14,13 +15,29 @@ use kube::{
 use kube::{Resource, ResourceExt};
 use std::sync::Arc;
 
-#[derive(Debug, Default)]
-pub struct LegacyInstanceController {}
+#[derive(Debug)]
+pub struct LegacyInstanceController {
+    prudent: bool,
+}
+
+impl LegacyInstanceController {
+    pub fn new(prudent: bool) -> Self {
+        Self { prudent }
+    }
+}
 
 #[async_trait]
 impl LifecycleController for LegacyInstanceController {
     type Resource = LegacyInstance;
     const MODULE_PATH: &'static str = module_path!();
+
+    async fn before_finalizer(
+        &self,
+        _client: &kube::Client,
+        resource: Arc<Self::Resource>,
+    ) -> Result<bool> {
+        Ok(should_handle_prudent(resource.meta(), self.prudent))
+    }
 
     fn prepare(
         &self,

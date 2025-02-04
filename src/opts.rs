@@ -36,6 +36,17 @@ pub enum ControllerOpt {
     LegacyClient,
 }
 
+#[derive(ValueEnum, Clone, Debug, PartialEq, Eq)]
+pub enum LegacyMode {
+    /// Do not run legacy controllers
+    Disabled,
+    /// Run legacy controllers on all resources
+    All,
+    /// Run legacy controllers on resources that have the rustcloak.k8s.eboland.de/handle: "true"
+    /// annotation
+    Prudent,
+}
+
 /// Keycloak Operator
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
@@ -48,6 +59,6 @@ pub struct Opts {
     /// e.g. --metrics-addr 0.0.0.0:8080
     pub metrics_addr: Option<SocketAddr>,
     /// Enables the legacy controllers: legacy-instance, legacy-realm, legacy-user, legacy-client
-    #[clap(long)]
-    pub legacy: bool,
+    #[clap(long, default_value = "disabled")]
+    pub legacy: LegacyMode,
 }

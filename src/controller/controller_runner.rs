@@ -43,8 +43,8 @@ pub trait LifecycleController {
         &self,
         _client: &kube::Client,
         _resource: Arc<Self::Resource>,
-    ) -> Result<()> {
-        Ok(())
+    ) -> Result<bool> {
+        Ok(true)
     }
 
     async fn apply(
@@ -161,7 +161,24 @@ where
             .before_finalizer(&client, resource.clone())
             .await
         {
-            Ok(()) => (),
+            Ok(should_handle) => {
+                if should_handle {
+                    debug!(
+                        kind = kind,
+                        namespace = ns,
+                        name = name;
+                        "handling resource, before_finalizer returned true"
+                    )
+                } else {
+                    debug!(
+                        kind = kind,
+                        namespace = ns,
+                        name = name;
+                        "skipping resource, before_finalizer returned false"
+                    );
+                    return Ok(Action::await_change());
+                }
+            }
             Err(e) => {
                 Self::handle_error(ctx.clone(), &resource, &e).await?;
                 return Err(e);

@@ -35,8 +35,12 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
-          {{- if .Values.application.legacy }}
-            - --legacy
+          {{- with .Values.application.legacy }}
+          {{- if typeOf . | eq "bool" | and . }}
+            - --legacy=all
+          {{- else }}
+            - --legacy={{ . }}
+          {{- end }}
           {{- end }}
             - --metrics-addr
             - 0.0.0.0:8080

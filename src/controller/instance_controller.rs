@@ -104,7 +104,7 @@ impl LifecycleController for KeycloakInstanceController {
         &self,
         client: &kube::Client,
         resource: Arc<Self::Resource>,
-    ) -> Result<()> {
+    ) -> Result<bool> {
         match self
             .manager
             .schedule_refresh(&resource, client.clone())
@@ -120,7 +120,7 @@ impl LifecycleController for KeycloakInstanceController {
             x => x?,
         };
 
-        Ok(())
+        Ok(true)
     }
 
     async fn apply(

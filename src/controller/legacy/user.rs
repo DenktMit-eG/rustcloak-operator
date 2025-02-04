@@ -1,5 +1,5 @@
 use super::super::controller_runner::LifecycleController;
-use super::find_name;
+use super::{find_name, should_handle_prudent};
 use crate::app_id;
 use crate::crd::{KeycloakUserSecretReference, KeycloakUserSpec};
 use crate::error::Error;
@@ -17,8 +17,16 @@ use kube::{
 use kube::{Resource, ResourceExt};
 use std::sync::Arc;
 
-#[derive(Debug, Default)]
-pub struct LegacyUserController {}
+#[derive(Debug)]
+pub struct LegacyUserController {
+    prudent: bool,
+}
+
+impl LegacyUserController {
+    pub fn new(prudent: bool) -> Self {
+        Self { prudent }
+    }
+}
 
 async fn make_secret(
     client: &kube::Client,
@@ -84,6 +92,14 @@ async fn make_secret(
 impl LifecycleController for LegacyUserController {
     type Resource = LegacyUser;
     const MODULE_PATH: &'static str = module_path!();
+
+    async fn before_finalizer(
+        &self,
+        _client: &kube::Client,
+        resource: Arc<Self::Resource>,
+    ) -> Result<bool> {
+        Ok(should_handle_prudent(resource.meta(), self.prudent))
+    }
 
     fn prepare(
         &self,

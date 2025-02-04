@@ -11,6 +11,15 @@ use serde::de::DeserializeOwned;
 
 use crate::error::Result;
 
+pub fn should_handle_prudent(meta: &ObjectMeta, prudent: bool) -> bool {
+    if prudent == false {
+        true
+    } else if let Some(annotations) = &meta.annotations {
+        annotations.contains_key(app_id!("handle"))
+    } else {
+        false
+    }
+}
 pub async fn find_name<T>(
     client: &kube::Client,
     namespace: &str,
