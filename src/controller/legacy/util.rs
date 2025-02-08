@@ -1,5 +1,8 @@
+use std::collections::BTreeMap;
+
 use crate::app_id;
 use crate::error::Error;
+use case_style::CaseStyle;
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::LabelSelector;
 use k8s_openapi::NamespaceResourceScope;
 use kube::api::ListParams;
@@ -20,6 +23,20 @@ pub fn should_handle_prudent(meta: &ObjectMeta, prudent: bool) -> bool {
         false
     }
 }
+
+fn find_variants(
+    annotations: &BTreeMap<String, String>,
+    snake_case: &str,
+) -> Option<String> {
+    let style = CaseStyle::from_snakecase(snake_case);
+    let variants = [snake_case, &style.to_camelcase()]
+        .map(|x| app_id!("").to_string() + x);
+
+    annotations
+        .iter()
+        .find_map(|(k, v)| variants.contains(k).then(|| v.clone()))
+}
+
 pub async fn find_name<T>(
     client: &kube::Client,
     namespace: &str,
@@ -36,7 +53,7 @@ where
     if let Some(name) = meta
         .annotations
         .as_ref()
-        .and_then(|x| x.get(&format!(app_id!("{}"), parent_ref_ident)))
+        .and_then(|x| find_variants(x, parent_ref_ident))
     {
         return Ok(name.clone());
     }
