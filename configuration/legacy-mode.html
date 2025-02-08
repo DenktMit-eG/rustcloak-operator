@@ -165,8 +165,70 @@ the CRDs of the <a href="https://github.com/keycloak/keycloak-realm-operator">ke
 keycloak-realm-operator. It is a good idea to remove all objects
 managed by the old controller before starting Rustcloak and redeploying
 it for rustcloak to take over.</p>
-<p>To enable legacy mode, enabled the <code>legacy: true</code> option in the rustcloak
+<p>To enable legacy mode, enabled the <code>legacy: &lt;mode&gt;</code> option in the rustcloak
 helm chart.</p>
+<p>Rustcloak supports two legacy mode modes it can operate in:</p>
+<ul>
+<li><code>all</code> mode: Rustcloak will manage all legacy keycloak objects</li>
+<li><code>prudent</code> mode: Rustcloak will manage only the keycloak objects that have the
+<code>rustcloak.k8s.eboland.de/handle: "true"</code> annotation.</li>
+</ul>
+<p>With <code>disabled</code> mode, rustcloak will not manage any legacy keycloak objects. This is the default.</p>
+<h2 id="managing-legacy-objects"><a class="header" href="#managing-legacy-objects">Managing legacy objects</a></h2>
+<p>Rustcloak can handle whole trees of legacy objects. The discovery of parent objects is
+done by selectors, using the <a href="https://github.com/keycloak/keycloak-realm-operator/blob/main/deploy/examples/external-keycloak.yaml"><code>ExternalKeycloak</code></a> resource as a root object.</p>
+<p>But most of the time you actually want to use the rustcloak resources instead and just
+use the legacy mode while migrating larger setups to Rustcloak. For that, rustcloak
+allows you to overwrite define the <code>rustcloak.k8s.eboland.de/*Ref</code> annotations on the legacy objects
+that point to the rustcloak parent resources.</p>
+<p>Example:</p>
+<p>Given that you have a <code>KeycloakRealm</code> resource in rustcloak:</p>
+<pre><code class="language-yaml">apiVersion: rustcloak.k8s.eboland.de/v1
+kind: KeycloakRealm
+metadata:
+  name: example-keycloakrealm
+spec:
+  instanceRef: keycloak-instance
+  definition:
+    realm: an-example-realm
+    displayName: An Example Realm
+</code></pre>
+<p>You can now create a legacy <code>KeycloakLient</code> resource:</p>
+<pre><code class="language-yaml">apiVersion: legacy.k8s.keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  annotations:
+    rustcloak.k8s.eboland.de/realmRef: example-keycloakrealm
+  name: example-keycloakclient
+spec:
+  client:
+    clientId: example-client
+    name: example-client
+  realmSelector:
+    matchLabels: {}
+</code></pre>
+<p>rustloak will now manage the <code>KeycloakClient</code> resource as if it was a child of
+the <code>KeycloakRealm</code> resource. Note that if you run rustcloak in <code>prudent</code> mode,
+you need to add the <code>rustcloak.k8s.eboland.de/handle: "true"</code> annotation to
+the <code>KeycloakClient</code> resource.</p>
+<p>The following annotations are supported:</p>
+<ul>
+<li>for legacy <code>KeycloakRealm</code>:
+<ul>
+<li><code>rustcloak.k8s.eboland.de/instanceRef</code>: The name of the <code>KeycloakInstance</code> resources</li>
+</ul>
+</li>
+<li>for legacy <code>KeycloakClient</code>:
+<ul>
+<li><code>rustcloak.k8s.eboland.de/realmRef</code>: The name of the <code>KeycloakRealm</code> resources</li>
+</ul>
+</li>
+<li>for legacy <code>KeycloakUser</code>:
+<ul>
+<li><code>rustcloak.k8s.eboland.de/realmRef</code>: The name of the <code>KeycloakRealm</code> resources</li>
+</ul>
+</li>
+</ul>
 
                     </main>
 
