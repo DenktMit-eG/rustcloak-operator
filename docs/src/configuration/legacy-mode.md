@@ -56,7 +56,7 @@ spec:
     displayName: An Example Realm
 ```
 
-You can now create a [legacy-`KeycloakLient`][3] resource:
+You can now create a [legacy-`KeycloakClient`][3] resource:
 
 ```yaml
 apiVersion: legacy.k8s.keycloak.org/v1alpha1
