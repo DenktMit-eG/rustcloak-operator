@@ -76,18 +76,21 @@ spec:
 rustloak will now manage the [legacy-`KeycloakClient`][3] resource as if it was a child of
 the [`KeycloakRealm`](../crds/keycloakrealm.md) resource. Note that if you run rustcloak in `prudent` mode,
 you need to add the `rustcloak.k8s.eboland.de/handle: "true"` annotation to
-the `KeycloakClient` resource.
+the [legacy-`KeycloakClient`][3] resource.
+
+If the `realmRef` annotation is not set, rustcloak will try to discover the parent object using the `realmSelector` field.
+This only works if the parent object is a legacy resource.
 
 The following annotations are supported:
 
 - for [legacy-`KeycloakRealm`][5]:
-  - `rustcloak.k8s.eboland.de/instanceRef`: The name of the `KeycloakInstance` resources
+  - `rustcloak.k8s.eboland.de/instanceRef`: The name of the [`KeycloakInstance`](../crds/keycloakinstance.md) resources
   - `rustcloak.k8s.eboland.de/handle`: If set to `true`, rustcloak will manage the object in `prudent` mode
 - for [legacy-`KeycloakClient`][3]:
-  - `rustcloak.k8s.eboland.de/realmRef`: The name of the `KeycloakRealm` resources
+  - `rustcloak.k8s.eboland.de/realmRef`: The name of the [`KeycloakRealm`](../crds/keycloakrealm.md) resources
   - `rustcloak.k8s.eboland.de/handle`: If set to `true`, rustcloak will manage the object in `prudent` mode
 - for [legacy-`KeycloakUser`][4]:
-  - `rustcloak.k8s.eboland.de/realmRef`: The name of the `KeycloakRealm` resources
+  - `rustcloak.k8s.eboland.de/realmRef`: The name of the [`KeycloakRealm`](../crds/keycloakrealm.md) resources
   - `rustcloak.k8s.eboland.de/handle`: If set to `true`, rustcloak will manage the object in `prudent` mode
 - for [legacy-`ExternalKeycloak`][2]:
   - `rustcloak.k8s.eboland.de/handle`: If set to `true`, rustcloak will manage the object in `prudent` mode
