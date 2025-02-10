@@ -19,10 +19,21 @@ Rustcloak supports two legacy mode modes it can operate in:
 
 With `disabled` mode, rustcloak will not manage any legacy keycloak objects. This is the default.
 
+rustcloak will manage the following legacy keycloak objects:
+
+- [legacy-`ExternalKeycloak`][2]: a shim for [KeycloakInstance](../crds/keycloakinstance.md)
+- [legacy-`KeycloakRealm`][5]: a shim for [KeycloakRealm](../crds/keycloakrealm.md)
+- [legacy-`KeycloakClient`][3]: a shim for [KeycloakClient](../crds/keycloakclient.md)
+- [legacy-`KeycloakUser`][4]: a shim for [KeycloakUser](../crds/keycloakuser.md)
+
+<div class=warning>
+rustcloak will not roll out legacy CRDs. You need to create them manually.
+</div>
+
 ## Managing legacy objects
 
 Rustcloak can handle whole trees of legacy objects. The discovery of parent objects is
-done by selectors, using the [`ExternalKeycloak`][2] resource as a root object.
+done by selectors, using the [legacy-`ExternalKeycloak`][2] resource as a root object.
 
 But most of the time you actually want to use the rustcloak resources instead and just
 use the legacy mode while migrating larger setups to Rustcloak. For that, rustcloak
@@ -31,7 +42,7 @@ that point to the rustcloak parent resources.
 
 Example:
 
-Given that you have a `KeycloakRealm` resource in rustcloak:
+Given that you have a [legacy-`KeycloakRealm`][5] resource in rustcloak:
 
 ```yaml
 apiVersion: rustcloak.k8s.eboland.de/v1
@@ -45,7 +56,7 @@ spec:
     displayName: An Example Realm
 ```
 
-You can now create a legacy `KeycloakLient` resource:
+You can now create a [legacy-`KeycloakLient`][3] resource:
 
 ```yaml
 apiVersion: legacy.k8s.keycloak.org/v1alpha1
@@ -62,19 +73,27 @@ spec:
     matchLabels: {}
 ```
 
-rustloak will now manage the `KeycloakClient` resource as if it was a child of
-the `KeycloakRealm` resource. Note that if you run rustcloak in `prudent` mode,
+rustloak will now manage the [legacy-`KeycloakClient`][3] resource as if it was a child of
+the [`KeycloakRealm`](../crds/keycloakrealm.md) resource. Note that if you run rustcloak in `prudent` mode,
 you need to add the `rustcloak.k8s.eboland.de/handle: "true"` annotation to
 the `KeycloakClient` resource.
 
 The following annotations are supported:
 
-- for legacy `KeycloakRealm`:
+- for [legacy-`KeycloakRealm`][5]:
   - `rustcloak.k8s.eboland.de/instanceRef`: The name of the `KeycloakInstance` resources
-- for legacy `KeycloakClient`:
+  - `rustcloak.k8s.eboland.de/handle`: If set to `true`, rustcloak will manage the object in `prudent` mode
+- for [legacy-`KeycloakClient`][3]:
   - `rustcloak.k8s.eboland.de/realmRef`: The name of the `KeycloakRealm` resources
-- for legacy `KeycloakUser`:
+  - `rustcloak.k8s.eboland.de/handle`: If set to `true`, rustcloak will manage the object in `prudent` mode
+- for [legacy-`KeycloakUser`][4]:
   - `rustcloak.k8s.eboland.de/realmRef`: The name of the `KeycloakRealm` resources
+  - `rustcloak.k8s.eboland.de/handle`: If set to `true`, rustcloak will manage the object in `prudent` mode
+- for [legacy-`ExternalKeycloak`][2]:
+  - `rustcloak.k8s.eboland.de/handle`: If set to `true`, rustcloak will manage the object in `prudent` mode
 
 [1]: https://github.com/keycloak/keycloak-realm-operator
 [2]: https://github.com/keycloak/keycloak-realm-operator/blob/main/deploy/examples/external-keycloak.yaml
+[3]: https://github.com/keycloak/keycloak-realm-operator/blob/main/deploy/examples/example-client.yaml
+[4]: https://github.com/keycloak/keycloak-realm-operator/blob/main/deploy/examples/example-user.yaml
+[5]: https://github.com/keycloak/keycloak-realm-operator/blob/main/deploy/examples/realm-legacy/example-realm.yaml
