@@ -400,24 +400,26 @@ spec:
 <p>rustloak will now manage the <a href="https://github.com/keycloak/keycloak-realm-operator/blob/main/deploy/examples/example-client.yaml">legacy-<code>KeycloakClient</code></a> resource as if it was a child of
 the <a href="configuration/../crds/keycloakrealm.html"><code>KeycloakRealm</code></a> resource. Note that if you run rustcloak in <code>prudent</code> mode,
 you need to add the <code>rustcloak.k8s.eboland.de/handle: "true"</code> annotation to
-the <code>KeycloakClient</code> resource.</p>
+the <a href="https://github.com/keycloak/keycloak-realm-operator/blob/main/deploy/examples/example-client.yaml">legacy-<code>KeycloakClient</code></a> resource.</p>
+<p>If the <code>realmRef</code> annotation is not set, rustcloak will try to discover the parent object using the <code>realmSelector</code> field.
+This only works if the parent object is a legacy resource.</p>
 <p>The following annotations are supported:</p>
 <ul>
 <li>for <a href="https://github.com/keycloak/keycloak-realm-operator/blob/main/deploy/examples/realm-legacy/example-realm.yaml">legacy-<code>KeycloakRealm</code></a>:
 <ul>
-<li><code>rustcloak.k8s.eboland.de/instanceRef</code>: The name of the <code>KeycloakInstance</code> resources</li>
+<li><code>rustcloak.k8s.eboland.de/instanceRef</code>: The name of the <a href="configuration/../crds/keycloakinstance.html"><code>KeycloakInstance</code></a> resources</li>
 <li><code>rustcloak.k8s.eboland.de/handle</code>: If set to <code>true</code>, rustcloak will manage the object in <code>prudent</code> mode</li>
 </ul>
 </li>
 <li>for <a href="https://github.com/keycloak/keycloak-realm-operator/blob/main/deploy/examples/example-client.yaml">legacy-<code>KeycloakClient</code></a>:
 <ul>
-<li><code>rustcloak.k8s.eboland.de/realmRef</code>: The name of the <code>KeycloakRealm</code> resources</li>
+<li><code>rustcloak.k8s.eboland.de/realmRef</code>: The name of the <a href="configuration/../crds/keycloakrealm.html"><code>KeycloakRealm</code></a> resources</li>
 <li><code>rustcloak.k8s.eboland.de/handle</code>: If set to <code>true</code>, rustcloak will manage the object in <code>prudent</code> mode</li>
 </ul>
 </li>
 <li>for <a href="https://github.com/keycloak/keycloak-realm-operator/blob/main/deploy/examples/example-user.yaml">legacy-<code>KeycloakUser</code></a>:
 <ul>
-<li><code>rustcloak.k8s.eboland.de/realmRef</code>: The name of the <code>KeycloakRealm</code> resources</li>
+<li><code>rustcloak.k8s.eboland.de/realmRef</code>: The name of the <a href="configuration/../crds/keycloakrealm.html"><code>KeycloakRealm</code></a> resources</li>
 <li><code>rustcloak.k8s.eboland.de/handle</code>: If set to <code>true</code>, rustcloak will manage the object in <code>prudent</code> mode</li>
 </ul>
 </li>
