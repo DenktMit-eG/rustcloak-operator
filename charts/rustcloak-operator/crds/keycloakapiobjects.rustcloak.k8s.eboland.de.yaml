@@ -201,6 +201,9 @@ spec:
                   type: object
                 nullable: true
                 type: array
+              instanceRef:
+                nullable: true
+                type: string
               message:
                 type: string
               ready:

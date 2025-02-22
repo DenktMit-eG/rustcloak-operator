@@ -1,3 +1,4 @@
 env:
-  RUST_LOG: rustcloak_operator=trace,reqwest=trace,debug
+  RUST_LOG: rustcloak_operator=debug,reqwest=debug,warn
+  #RUST_LOG: warn
   RUST_BACKTRACE: "1"

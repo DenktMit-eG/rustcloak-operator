@@ -34,6 +34,11 @@ spec:
         description: resource to define a Group within a [KeycloakRealm](./keycloakrealm.md)
         properties:
           spec:
+            anyOf:
+            - required:
+              - realmRef
+            - required:
+              - parentGroupRef
             description: the KeycloakGroup resource
             properties:
               definition:
@@ -89,6 +94,8 @@ spec:
                 description: Options for the request to the Keycloak Admin API.
                 nullable: true
                 type: object
+              parentGroupRef:
+                type: string
               patchFrom:
                 additionalProperties:
                   description: EnvVarSource represents a source for the value of an EnvVar.
@@ -166,11 +173,9 @@ spec:
                 description: Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
                 type: object
               realmRef:
-                description: the name of the kubernetes object that created the realm.
                 type: string
             required:
             - definition
-            - realmRef
             type: object
           status:
             nullable: true
@@ -204,6 +209,9 @@ spec:
                   type: object
                 nullable: true
                 type: array
+              instanceRef:
+                nullable: true
+                type: string
               message:
                 type: string
               ready:

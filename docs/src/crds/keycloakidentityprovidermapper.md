@@ -24,6 +24,7 @@ resource to define a identity provider mapper within a [KeyclaokIdentityProvider
 |[status.conditions[].reason](#statusconditionsreason)|string||
 |[status.conditions[].status](#statusconditionsstatus)|string|✅|
 |[status.conditions[].type](#statusconditionstype)|string|✅|
+|[status.instanceRef](#statusinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
 |[status.resourcePath](#statusresourcepath)|string||
@@ -143,6 +144,7 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[conditions[]](#statusconditions)|object||
+|[instanceRef](#statusinstanceref)|string||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
 |[resourcePath](#statusresourcepath)|string||
@@ -210,6 +212,14 @@ Type: string
 ---
 
 ### status.conditions[].type
+
+Type: string
+
+*missing*
+
+---
+
+### status.instanceRef
 
 Type: string
 

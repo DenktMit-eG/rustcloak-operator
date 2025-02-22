@@ -3186,9 +3186,6 @@ spec:
               instanceRef:
                 description: The name of the instance to which this realm belongs
                 type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
               options:
                 description: Options for the request to the Keycloak Admin API.
                 nullable: true
@@ -3305,6 +3302,9 @@ spec:
                   type: object
                 nullable: true
                 type: array
+              instanceRef:
+                nullable: true
+                type: string
               message:
                 type: string
               ready:
