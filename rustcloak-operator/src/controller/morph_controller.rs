@@ -80,10 +80,10 @@ where
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
-        let resource = ResourceShim::new(&resource, &client);
+        let resource = ResourceShim::new(&resource, client);
         let ns = resource.namespace()?;
         let admin_api: Api<KeycloakApiObject> =
-            Api::namespaced(client.clone(), &ns);
+            Api::namespaced(client.clone(), ns);
         let kind = Self::Resource::kind(&());
         let name = resource.api_name()?;
         let owner_ref = resource.owner_ref(&()).unwrap();
@@ -168,7 +168,7 @@ where
         if let Some(api_status) =
             admin_api.get_status(&name).await?.status.clone()
         {
-            let api = Api::<Self::Resource>::namespaced(client.clone(), &ns);
+            let api = Api::<Self::Resource>::namespaced(client.clone(), ns);
             api.patch_status(
                 &resource.name_unchecked(),
                 &PatchParams::apply(app_id!()),

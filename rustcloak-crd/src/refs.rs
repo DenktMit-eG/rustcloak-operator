@@ -13,9 +13,9 @@ macro_rules! ref_type {
                 val.$field
             }
         }
-        impl Into<$type> for String {
-            fn into(self) -> $type {
-                $type { $field: self }
+        impl From<String> for $type {
+            fn from(val: String) -> $type {
+                $type { $field: val }
             }
         }
         impl AsRef<str> for $type {

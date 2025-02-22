@@ -79,8 +79,7 @@ impl LifecycleController for LegacyRealmController {
                     &resource.metadata,
                     "instance_ref",
                 )
-                .await?
-                .into(),
+                .await?,
                 definition: serde_json::from_value(definition)?,
                 patches: None,
             },

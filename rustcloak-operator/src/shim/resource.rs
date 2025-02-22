@@ -32,7 +32,7 @@ where
     R: Resource,
 {
     pub fn name(&self) -> Result<&str> {
-        Ok(self.resource.meta().name.as_deref().ok_or(Error::NoName)?)
+        self.resource.meta().name.as_deref().ok_or(Error::NoName)
     }
 
     pub fn namespace(&self) -> Result<&str> {
@@ -87,9 +87,9 @@ where
     async fn parent(&self) -> Result<Self::Parent> {
         let api = Api::<Self::Parent>::namespaced(
             self.client.clone(),
-            &self.namespace()?,
+            self.namespace()?,
         );
-        Ok(api.get(&self.parent_ref().as_ref()).await?)
+        Ok(api.get(self.parent_ref().as_ref()).await?)
     }
 }
 
@@ -120,14 +120,14 @@ where
             Either::Left(l) => {
                 let api = Api::<RP>::namespaced(
                     self.client.clone(),
-                    &self.namespace()?,
+                    self.namespace()?,
                 );
                 Ok(Either::Left(api.get(l.as_ref()).await?))
             }
             Either::Right(r) => {
                 let api = Api::<LP>::namespaced(
                     self.client.clone(),
-                    &self.namespace()?,
+                    self.namespace()?,
                 );
                 Ok(Either::Right(api.get(r.as_ref()).await?))
             }
@@ -160,7 +160,7 @@ where
     async fn instance(&self) -> Result<KeycloakInstance> {
         let api = Api::<KeycloakInstance>::namespaced(
             self.client.clone(),
-            &self.namespace()?,
+            self.namespace()?,
         );
         Ok(api.get(self.instance_ref()?).await?)
     }

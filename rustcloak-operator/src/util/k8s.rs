@@ -21,6 +21,6 @@ impl ToPatch for KeycloakApiStatus {
 
 impl ToPatch for Error {
     fn to_patch(&self) -> Patch<Value> {
-        KeycloakApiStatus::from_error(&self).to_patch()
+        KeycloakApiStatus::from_error(self).to_patch()
     }
 }
