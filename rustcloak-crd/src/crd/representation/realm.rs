@@ -1,6 +1,7 @@
 use crate::{
-    impl_object, schema_patch, traits::InstanceRef, KeycloakApiObjectOptions,
-    KeycloakApiPatchList, KeycloakApiStatus, KeycloakInstance,
+    impl_object, schema_patch, traits::Endpoint, KeycloakApiObjectOptions,
+    KeycloakApiPatchList, KeycloakApiStatus, KeycloakApiStatusEndpoint,
+    KeycloakInstance,
 };
 use keycloak::types::RealmRepresentation;
 use kube::CustomResource;
@@ -52,14 +53,15 @@ pub struct KeycloakRealmSpec {
 
 impl_object!("realm" <instance_ref: String => KeycloakInstance> / |_d| {"admin/realms"} / realm for KeycloakRealm => RealmRepresentation);
 
-impl InstanceRef for KeycloakRealm {
+impl Endpoint for KeycloakRealm {
+    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
+        self.status.as_ref().and_then(|s| s.endpoint.as_ref())
+    }
     fn instance_ref(&self) -> Option<&str> {
         Some(self.spec.instance_ref.as_str())
     }
     fn resource_path(&self) -> Option<&str> {
-        self.status
-            .as_ref()
-            .and_then(|status| status.resource_path.as_deref())
+        self.endpoint().map(|e| e.resource_path.as_str())
     }
 }
 

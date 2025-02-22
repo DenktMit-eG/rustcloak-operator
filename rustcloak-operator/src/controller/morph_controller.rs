@@ -20,7 +20,7 @@ use kube::{
 };
 use log::debug;
 use rustcloak_crd::{
-    traits::InstanceRef, KeycloakApiEndpoint, KeycloakApiEndpointPath,
+    traits::Endpoint, KeycloakApiEndpoint, KeycloakApiEndpointPath,
     KeycloakApiObject, KeycloakApiObjectSpec, KeycloakApiStatus,
     KeycloakRestObject,
 };
@@ -52,14 +52,13 @@ where
         + HasStatus<Status = KeycloakApiStatus>
         + KeycloakRestObject
         + Clone
-        + InstanceRef
+        + Endpoint
         + 'static,
     R::Definition: Send + Sync + Serialize + DeserializeOwned,
     R::ParentRef: AsRef<str>,
-    R::ParentObject:
-        Send + Sync + Clone + Debug + DeserializeOwned + InstanceRef,
+    R::ParentObject: Send + Sync + Clone + Debug + DeserializeOwned + Endpoint,
     ResourceShim<R>: ParentShim<M>,
-    <ResourceShim<R> as ParentShim<M>>::Parent: InstanceRef + Send + Sync,
+    <ResourceShim<R> as ParentShim<M>>::Parent: Endpoint + Send + Sync,
     M: Send + Sync,
 {
     type Resource = R;

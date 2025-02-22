@@ -15,11 +15,16 @@ pub struct KeycloakApiCondition {
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
+pub struct KeycloakApiStatusEndpoint {
+    pub resource_path: String,
+    pub instance_ref: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakApiStatus {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub resource_path: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub instance_ref: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none", flatten)]
+    pub endpoint: Option<KeycloakApiStatusEndpoint>,
     pub ready: bool,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub status: String,
@@ -36,8 +41,7 @@ impl KeycloakApiStatus {
             ready: true,
             status,
             message: "ok".to_string(),
-            instance_ref: None,
-            resource_path: None,
+            endpoint: None,
             conditions: None,
         }
     }

@@ -1,11 +1,8 @@
 use crate::error::{Error, Result};
 use either::Either;
 use k8s_openapi::NamespaceResourceScope;
-use kube::{core::object::HasStatus, Api, Resource};
-use rustcloak_crd::{
-    traits::InstanceRef, KeycloakApiStatus, KeycloakInstance,
-    KeycloakRestObject,
-};
+use kube::{Api, Resource};
+use rustcloak_crd::{traits::Endpoint, KeycloakInstance, KeycloakRestObject};
 use serde::{de::DeserializeOwned, Serialize};
 use serde_json::Value;
 use std::{fmt::Debug, ops::Deref, sync::Arc};
@@ -139,43 +136,6 @@ where
 }
 
 #[async_trait::async_trait]
-pub trait StatusShim {
-    fn status_instance_ref(&self) -> Result<&str>;
-    fn status_resource_path(&self) -> Result<&str>;
-    async fn status_instance(&self) -> Result<KeycloakInstance>;
-}
-
-#[async_trait::async_trait]
-impl<R> StatusShim for ResourceShim<R>
-where
-    R: KeycloakRestObject + Resource + HasStatus<Status = KeycloakApiStatus>,
-    R::ParentRef: AsRef<str>,
-    Self: Send + Sync,
-{
-    fn status_instance_ref(&self) -> Result<&str> {
-        self.status().and_then(|x| x.instance_ref.as_deref()).ok_or(
-            Error::NoInstanceRef(
-                self.namespace()?.to_string(),
-                self.name()?.to_string(),
-            ),
-        )
-    }
-
-    fn status_resource_path(&self) -> Result<&str> {
-        self.status()
-            .and_then(|x| x.resource_path.as_deref())
-            .ok_or(Error::NoResourcePath)
-    }
-
-    async fn status_instance(&self) -> Result<KeycloakInstance> {
-        let api = Api::<KeycloakInstance>::namespaced(
-            self.client.clone(),
-            &self.namespace()?,
-        );
-        Ok(api.get(self.status_instance_ref()?).await?)
-    }
-}
-
 #[async_trait::async_trait]
 pub trait InstanceShim {
     fn instance_ref(&self) -> Result<&str>;
@@ -186,7 +146,7 @@ pub trait InstanceShim {
 #[async_trait::async_trait]
 impl<R> InstanceShim for ResourceShim<R>
 where
-    R: InstanceRef + Resource<DynamicType = (), Scope = NamespaceResourceScope>,
+    R: Endpoint + Resource<DynamicType = (), Scope = NamespaceResourceScope>,
     Self: Send + Sync,
 {
     fn instance_ref(&self) -> Result<&str> {

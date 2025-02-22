@@ -1,7 +1,7 @@
 use std::{sync::Arc, time::Duration};
 
 use crate::error::*;
-use crate::shim::resource::{ResourceShim, StatusShim};
+use crate::shim::resource::{InstanceShim, ResourceShim};
 use crate::util::{RefWatcher, SecretUtils, ToPatch};
 use crate::{
     app_id,
@@ -99,7 +99,7 @@ impl KeycloakUserSecretController {
         ctx: Arc<Self>,
     ) -> Result<Action> {
         let resource = ResourceShim::new(&resource, &ctx.client);
-        let Ok(resource_path) = resource.status_resource_path() else {
+        let Ok(resource_path) = resource.resource_path() else {
             return Ok(Action::await_change());
         };
         let Some(secret_ref) = resource.spec.user_secret.clone() else {
@@ -112,7 +112,7 @@ impl KeycloakUserSecretController {
         let [username_key, password_key] = resource.secret_key_names();
 
         let secret_name = &secret_ref.secret_name;
-        let instance = resource.status_instance().await?;
+        let instance = resource.instance().await?;
         let keycloak = K8sKeycloakBuilder::new(&instance, client)
             .with_token()
             .await?;

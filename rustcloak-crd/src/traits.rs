@@ -1,3 +1,4 @@
+use crate::KeycloakApiStatusEndpoint;
 use std::iter;
 
 pub trait SecretKeyNames<const N: usize> {
@@ -15,23 +16,23 @@ pub trait SecretKeyNames<const N: usize> {
     }
 }
 
-pub trait InstanceRef {
+pub trait Endpoint {
+    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint>;
     fn instance_ref(&self) -> Option<&str>;
     fn resource_path(&self) -> Option<&str>;
 }
 
 macro_rules! impl_instance_ref {
     ($type:ident) => {
-        impl $crate::traits::InstanceRef for $type {
+        impl $crate::traits::Endpoint for $type {
+            fn endpoint(&self) -> Option<&$crate::KeycloakApiStatusEndpoint> {
+                self.status.as_ref().and_then(|s| s.endpoint.as_ref())
+            }
             fn instance_ref(&self) -> Option<&str> {
-                self.status
-                    .as_ref()
-                    .and_then(|status| status.instance_ref.as_deref())
+                self.endpoint().map(|e| e.instance_ref.as_str())
             }
             fn resource_path(&self) -> Option<&str> {
-                self.status
-                    .as_ref()
-                    .and_then(|status| status.resource_path.as_deref())
+                self.endpoint().map(|e| e.resource_path.as_str())
             }
         }
     };

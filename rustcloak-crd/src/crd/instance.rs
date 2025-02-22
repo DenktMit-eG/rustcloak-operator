@@ -1,7 +1,8 @@
-use crate::traits::InstanceRef;
+use crate::traits::Endpoint;
 use crate::traits::SecretKeyNames;
 
 use super::KeycloakApiStatus;
+use super::KeycloakApiStatusEndpoint;
 use kube::CustomResource;
 use kube::ResourceExt;
 use schemars::JsonSchema;
@@ -101,7 +102,10 @@ impl KeycloakInstance {
     }
 }
 
-impl InstanceRef for KeycloakInstance {
+impl Endpoint for KeycloakInstance {
+    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
+        self.status.as_ref().and_then(|s| s.endpoint.as_ref())
+    }
     fn instance_ref(&self) -> Option<&str> {
         self.metadata.name.as_deref()
     }

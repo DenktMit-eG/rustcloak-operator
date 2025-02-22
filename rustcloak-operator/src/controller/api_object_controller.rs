@@ -22,7 +22,7 @@ use log::warn;
 use reqwest::StatusCode;
 use rustcloak_crd::{
     KeycloakApiEndpointPath, KeycloakApiObject, KeycloakApiStatus,
-    KeycloakInstance,
+    KeycloakApiStatusEndpoint, KeycloakInstance,
 };
 use serde_json::Value;
 use std::sync::Arc;
@@ -56,14 +56,14 @@ impl KeycloakApiObjectController {
             .get_opt(parent_ref)
             .await?
             .ok_or(Error::NoParent(ns.to_string(), parent_ref.to_string()))?;
-        let parent_resource_path = parent
+        let parent_endpoint = parent
             .status
             .as_ref()
-            .and_then(|x| x.resource_path.as_ref())
+            .and_then(|x| x.endpoint.as_ref())
             .ok_or(Error::NoResourcePath)?;
         Ok(format!(
             "{}/{}",
-            parent_resource_path.trim_end_matches('/'),
+            parent_endpoint.resource_path.trim_end_matches('/'),
             sub_path.trim_start_matches('/')
         ))
     }
@@ -136,12 +136,10 @@ impl LifecycleController for KeycloakApiObjectController {
         let mut success = false;
         let kind = KeycloakApiObject::kind(&());
 
-        if let Some(path) = resource
-            .status
-            .as_ref()
-            .and_then(|x| x.resource_path.as_ref())
+        if let Some(endpoint) =
+            resource.status.as_ref().and_then(|s| s.endpoint.as_ref())
         {
-            match keycloak.put(path, &payload).await {
+            match keycloak.put(&endpoint.resource_path, &payload).await {
                 Ok(_) => {
                     success = true;
                     api.patch_status(
@@ -156,7 +154,7 @@ impl LifecycleController for KeycloakApiObjectController {
                         kind = kind,
                         name = name,
                         namespace = ns,
-                        path = path;
+                        path = endpoint.resource_path;
                         "Failed to update resource at path, try recreating. (Message: {})",
                         m
                     );
@@ -174,9 +172,10 @@ impl LifecycleController for KeycloakApiObjectController {
             warn!("path: {}", path);
             let resource_path = keycloak.post_location(&path, &payload).await?;
             let mut status = resource.status.clone().unwrap_or_default();
-            status.resource_path = Some(resource_path);
-            status.instance_ref =
-                Some(resource.spec.endpoint.instance_ref.0.clone());
+            status.endpoint = Some(KeycloakApiStatusEndpoint {
+                resource_path,
+                instance_ref: resource.spec.endpoint.instance_ref.0.clone(),
+            });
 
             api.patch_status(
                 &name,
@@ -210,10 +209,8 @@ impl LifecycleController for KeycloakApiObjectController {
         let kind = KeycloakApiObject::kind(&());
         let name = resource.name_unchecked();
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let Some(path) = resource
-            .status
-            .as_ref()
-            .and_then(|x| x.clone().resource_path)
+        let Some(endpoint) =
+            resource.status.as_ref().and_then(|s| s.endpoint.as_ref())
         else {
             // If the resource has no resource URL we expect that it never got created, so it's
             // safe to delete the resource.
@@ -226,20 +223,20 @@ impl LifecycleController for KeycloakApiObjectController {
                     kind = kind,
                     name = name,
                     namespace = ns,
-                    path = path;
+                    path = endpoint.resource_path;
                     "Keycloak instance not found, assuming you want to unmanage the whole keycloak instance."
                 );
                 return Ok(Action::await_change());
             }
             Err(e) => Err(e)?,
         };
-        match keycloak.delete(&path).await {
+        match keycloak.delete(&endpoint.resource_path).await {
             Err(Error::KeycloakError(StatusCode::NOT_FOUND, m)) => {
                 warn!(
                     kind = kind,
                     name = name,
                     namespace = ns,
-                    path = path;
+                    path = endpoint.resource_path;
                     "Resource not found, assuming it's already deleted. Message: {}", m);
             }
             x => x?,

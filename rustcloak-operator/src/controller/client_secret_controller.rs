@@ -1,7 +1,7 @@
 use std::{sync::Arc, time::Duration};
 
 use crate::error::*;
-use crate::shim::resource::{InstanceShim, ResourceShim, StatusShim};
+use crate::shim::resource::{InstanceShim, ResourceShim};
 use crate::util::ToPatch;
 use crate::{
     app_id,
@@ -110,7 +110,7 @@ impl KeycloakClientSecretController {
 
         let path = format!("{}/client-secret", resource_path);
 
-        let instance = &resource.status_instance().await?;
+        let instance = &resource.instance().await?;
         let keycloak = K8sKeycloakBuilder::new(instance, client)
             .with_token()
             .await?;
