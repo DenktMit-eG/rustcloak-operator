@@ -12,9 +12,6 @@ use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-type Parents = Either<KeycloakClient, KeycloakClientScope>;
-type ParentRef = Either<ClientRef, ClientScopeRef>;
-
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
     kind = "KeycloakProtocolMapper",
@@ -58,6 +55,9 @@ pub struct KeycloakProtocolMapperSpec {
     #[serde(default, flatten)]
     pub patches: Option<KeycloakApiPatchList>,
 }
+
+type Parents = Either<KeycloakClient, KeycloakClientScope>;
+type ParentRef = Either<ClientRef, ClientScopeRef>;
 
 impl_object!("pm" <parent_ref: ParentRef => Parents> / |_d| {"protocol-mappers/models"} / id for KeycloakProtocolMapper => ProtocolMapperRepresentation);
 

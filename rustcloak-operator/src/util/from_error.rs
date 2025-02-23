@@ -47,8 +47,7 @@ impl FromError for rustcloak_crd::KeycloakApiStatus {
             ready: false,
             status: "Error".to_string(),
             message: err.to_string(),
-            endpoint: None,
-            conditions: None,
+            ..Default::default()
         }
     }
 }

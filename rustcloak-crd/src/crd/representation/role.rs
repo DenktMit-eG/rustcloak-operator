@@ -13,8 +13,6 @@ use serde::{Deserialize, Serialize};
 
 use super::{KeycloakClient, KeycloakRealm};
 
-type ParentRef = Either<RealmRef, ClientRef>;
-type Parents = Either<KeycloakRealm, KeycloakClient>;
 #[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[kube(
     kind = "KeycloakRole",
@@ -58,7 +56,10 @@ pub struct KeycloakRoleSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("roles" <parent_ref: ParentRef => Parents> / |_d| {"roles"} / id for KeycloakRole => RoleRepresentation);
+type ParentRef = Either<RealmRef, ClientRef>;
+type Parents = Either<KeycloakRealm, KeycloakClient>;
+
+impl_object!("role" <parent_ref: ParentRef => Parents> / |_d| {"roles"} / name for KeycloakRole => RoleRepresentation);
 
 impl_instance_ref!(KeycloakRole);
 

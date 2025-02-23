@@ -16,7 +16,7 @@ replacement for the
 
 ## TODO:
 
-* [ ] Support Subgroups
+* [x] Support Subgroups
 * [ ] Send Kubernetes Events
 * [ ] Update state transitions in .status.conditions
 * [ ] Update phase in .status.phase

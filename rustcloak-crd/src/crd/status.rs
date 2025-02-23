@@ -6,7 +6,6 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakApiCondition {
     pub last_transition_time: Option<Time>,
-    pub last_update_time: Option<Time>,
     pub message: Option<String>,
     pub reason: Option<String>,
     pub status: String,
@@ -30,8 +29,8 @@ pub struct KeycloakApiStatus {
     pub status: String,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub message: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub conditions: Option<Vec<KeycloakApiCondition>>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub conditions: Vec<KeycloakApiCondition>,
 }
 
 impl KeycloakApiStatus {
@@ -41,8 +40,7 @@ impl KeycloakApiStatus {
             ready: true,
             status,
             message: "ok".to_string(),
-            endpoint: None,
-            conditions: None,
+            ..Default::default()
         }
     }
 }

@@ -31,7 +31,6 @@ resource to define a identity provider in a [KeyclaokRealm](./keycloakrealm.md)
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
-|[status.conditions[].lastUpdateTime](#statusconditionslastupdatetime)|string||
 |[status.conditions[].message](#statusconditionsmessage)|string||
 |[status.conditions[].reason](#statusconditionsreason)|string||
 |[status.conditions[].status](#statusconditionsstatus)|string|✅|
@@ -285,7 +284,6 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[lastTransitionTime](#statusconditionslasttransitiontime)|string||
-|[lastUpdateTime](#statusconditionslastupdatetime)|string||
 |[message](#statusconditionsmessage)|string||
 |[reason](#statusconditionsreason)|string||
 |[status](#statusconditionsstatus)|string|✅|
@@ -296,14 +294,6 @@ Type: object
 ---
 
 ### status.conditions[].lastTransitionTime
-
-Type: string
-
-Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-
----
-
-### status.conditions[].lastUpdateTime
 
 Type: string
 

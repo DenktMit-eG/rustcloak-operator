@@ -51,7 +51,7 @@ pub struct KeycloakComponentSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("component" <realm_ref: String => KeycloakRealm> / |_d| {"component"} / id for KeycloakComponent => ComponentRepresentation);
+impl_object!("component" <realm_ref: String => KeycloakRealm> / |_d| {"components"} / id for KeycloakComponent => ComponentRepresentation);
 
 impl_instance_ref!(KeycloakComponent);
 
