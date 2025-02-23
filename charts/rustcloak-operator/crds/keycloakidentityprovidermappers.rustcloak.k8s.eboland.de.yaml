@@ -65,6 +65,9 @@ spec:
               identityProviderRef:
                 description: the name of the kubernetes object that created the identity provider.
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               options:
                 description: Options for the request to the Keycloak Admin API.
                 nullable: true
@@ -182,14 +185,12 @@ spec:
                 nullable: true
                 type: array
               instanceRef:
-                nullable: true
                 type: string
               message:
                 type: string
               ready:
                 type: boolean
               resourcePath:
-                nullable: true
                 type: string
               status:
                 type: string

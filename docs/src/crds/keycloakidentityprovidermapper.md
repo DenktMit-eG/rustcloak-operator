@@ -117,6 +117,10 @@ Type: string
 
 Type: string
 
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
 the name of the kubernetes object that created the identity provider.
 
 ---

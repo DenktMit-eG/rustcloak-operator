@@ -181,6 +181,9 @@ spec:
               realmRef:
                 description: the name of the kubernetes object that created the realm.
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
             required:
             - definition
             - realmRef
@@ -218,14 +221,12 @@ spec:
                 nullable: true
                 type: array
               instanceRef:
-                nullable: true
                 type: string
               message:
                 type: string
               ready:
                 type: boolean
               resourcePath:
-                nullable: true
                 type: string
               status:
                 type: string

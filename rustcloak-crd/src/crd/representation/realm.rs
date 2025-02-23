@@ -1,7 +1,7 @@
 use crate::{
-    impl_object, schema_patch, traits::Endpoint, KeycloakApiObjectOptions,
-    KeycloakApiPatchList, KeycloakApiStatus, KeycloakApiStatusEndpoint,
-    KeycloakInstance,
+    impl_object, schema_patch, traits::Endpoint, ImmutableString,
+    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+    KeycloakApiStatusEndpoint, KeycloakInstance,
 };
 use keycloak::types::RealmRepresentation;
 use kube::CustomResource;
@@ -44,7 +44,7 @@ pub struct KeycloakRealmSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     /// The name of the instance to which this realm belongs
-    pub instance_ref: String,
+    pub instance_ref: ImmutableString,
     #[schemars(schema_with = "schema")]
     pub definition: RealmRepresentation,
     #[serde(default, flatten)]

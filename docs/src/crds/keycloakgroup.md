@@ -167,6 +167,10 @@ Options for the request to the Keycloak Admin API.
 
 Type: string
 
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
 *missing*
 
 ---
@@ -182,6 +186,10 @@ Defines additional values that can be loaded from secrets or configmaps. Field s
 ### spec.realmRef
 
 Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
 
 *missing*
 

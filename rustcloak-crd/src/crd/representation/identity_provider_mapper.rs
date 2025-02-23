@@ -1,5 +1,5 @@
 use crate::{
-    impl_object, schema_patch, traits::impl_instance_ref,
+    impl_object, schema_patch, traits::impl_instance_ref, ImmutableString,
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
     KeycloakIdentityProvider,
 };
@@ -44,7 +44,7 @@ pub struct KeycloakIdentityProviderMapperSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     /// the name of the kubernetes object that created the identity provider.
-    pub identity_provider_ref: String,
+    pub identity_provider_ref: ImmutableString,
     #[schemars(schema_with = "schema")]
     pub definition: IdentityProviderMapperRepresentation,
     #[serde(default, flatten)]

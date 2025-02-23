@@ -1,5 +1,5 @@
 use crate::{
-    impl_object, schema_patch, traits::impl_instance_ref,
+    impl_object, schema_patch, traits::impl_instance_ref, ImmutableString,
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
     KeycloakRealm,
 };
@@ -44,7 +44,7 @@ pub struct KeycloakIdentityProviderSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     /// the name of the kubernetes object that created the realm.
-    pub realm_ref: String,
+    pub realm_ref: ImmutableString,
     #[schemars(schema_with = "schema")]
     pub definition: IdentityProviderRepresentation,
     #[serde(default, flatten)]

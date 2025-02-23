@@ -80,7 +80,8 @@ impl LifecycleController for LegacyClientController {
                     &resource.metadata,
                     "realm_ref",
                 )
-                .await?,
+                .await?
+                .into(),
                 definition: serde_json::from_value(definition)?,
                 client_secret: Some(KeycloakClientSecretReference {
                     secret_name: format!("keycloak-client-secret-{}", name),

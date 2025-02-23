@@ -39,6 +39,9 @@ spec:
               clientRef:
                 description: the name of the kubernetes object that created the client.
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               definition:
                 properties:
                   _id:
@@ -361,14 +364,12 @@ spec:
                 nullable: true
                 type: array
               instanceRef:
-                nullable: true
                 type: string
               message:
                 type: string
               ready:
                 type: boolean
               resourcePath:
-                nullable: true
                 type: string
               status:
                 type: string

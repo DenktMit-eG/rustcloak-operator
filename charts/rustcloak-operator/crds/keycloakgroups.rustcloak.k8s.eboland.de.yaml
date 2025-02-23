@@ -96,6 +96,9 @@ spec:
                 type: object
               parentGroupRef:
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               patchFrom:
                 additionalProperties:
                   description: EnvVarSource represents a source for the value of an EnvVar.
@@ -174,6 +177,9 @@ spec:
                 type: object
               realmRef:
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
             required:
             - definition
             type: object
@@ -210,14 +216,12 @@ spec:
                 nullable: true
                 type: array
               instanceRef:
-                nullable: true
                 type: string
               message:
                 type: string
               ready:
                 type: boolean
               resourcePath:
-                nullable: true
                 type: string
               status:
                 type: string

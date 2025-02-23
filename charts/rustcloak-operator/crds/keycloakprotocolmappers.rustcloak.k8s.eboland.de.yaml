@@ -43,8 +43,14 @@ spec:
             properties:
               clientRef:
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               clientScopeRef:
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               definition:
                 properties:
                   config:
@@ -193,14 +199,12 @@ spec:
                 nullable: true
                 type: array
               instanceRef:
-                nullable: true
                 type: string
               message:
                 type: string
               ready:
                 type: boolean
               resourcePath:
-                nullable: true
                 type: string
               status:
                 type: string

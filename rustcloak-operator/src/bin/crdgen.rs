@@ -5,10 +5,10 @@ use crd2md::ToMarkdown;
 use kube::{CustomResourceExt, ResourceExt};
 use rustcloak_operator::crd::*;
 
-static MD_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/docs/src/crds");
+static MD_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../docs/src/crds");
 static CRD_DIR: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
-    "/charts/",
+    "/../charts/",
     env!("CARGO_PKG_NAME"),
     "/crds"
 );

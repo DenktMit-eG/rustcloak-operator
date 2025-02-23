@@ -107,16 +107,15 @@ macro_rules! schema_patch {
     };
     ($name:ty: $schema:expr) => {
         use schemars::{gen::SchemaGenerator, schema::Schema};
+        use $crate::object::KeycloakRestObject;
 
         pub(crate) fn schema(generator: &mut SchemaGenerator) -> Schema {
             use $crate::schema::SchemaUtil;
-            let mut s = {
-                generator
+            let mut s = generator
                     .clone()
-                    .subschema_for::<<$name as $crate::object::KeycloakRestObject>::Definition>()
-                    .immutable_prop(<$name as $crate::object::KeycloakRestObject>::ID_FIELD)
-                    .to_owned()
-            };
+                    .subschema_for::<<$name as KeycloakRestObject>::Definition>()
+                    .immutable_prop(<$name as KeycloakRestObject>::ID_FIELD)
+                    .to_owned();
 
             let func: fn(&mut Schema) -> () = $schema;
             func(&mut s);

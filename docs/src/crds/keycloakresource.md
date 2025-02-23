@@ -94,6 +94,10 @@ the KeycloakResource resource
 
 Type: string
 
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
 the name of the kubernetes object that created the client.
 
 ---

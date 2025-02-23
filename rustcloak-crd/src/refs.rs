@@ -1,3 +1,4 @@
+use crate::ImmutableString;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -6,21 +7,21 @@ macro_rules! ref_type {
         #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
         #[serde(rename_all = "camelCase")]
         pub struct $type {
-            pub $field: String,
+            pub $field: ImmutableString,
         }
         impl From<$type> for String {
             fn from(val: $type) -> Self {
-                val.$field
+                val.$field.into()
             }
         }
         impl From<String> for $type {
             fn from(val: String) -> $type {
-                $type { $field: val }
+                $type { $field: val.into() }
             }
         }
         impl AsRef<str> for $type {
             fn as_ref(&self) -> &str {
-                &self.$field
+                self.$field.as_str()
             }
         }
     };

@@ -143,7 +143,8 @@ impl LifecycleController for LegacyUserController {
                     &resource.metadata,
                     "realm_ref",
                 )
-                .await?,
+                .await?
+                .into(),
                 definition: serde_json::from_value(definition)?,
                 patches: None,
                 user_secret,

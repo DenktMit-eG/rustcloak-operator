@@ -55,6 +55,10 @@ the KeycloakProtocolMapper resource
 
 Type: string
 
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
 *missing*
 
 ---
@@ -62,6 +66,10 @@ Type: string
 ### spec.clientScopeRef
 
 Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
 
 *missing*
 

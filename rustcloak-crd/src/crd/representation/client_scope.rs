@@ -1,5 +1,5 @@
 use crate::{
-    impl_object, schema_patch, traits::impl_instance_ref,
+    impl_object, schema_patch, traits::impl_instance_ref, ImmutableString,
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
     KeycloakRealm,
 };
@@ -44,7 +44,7 @@ pub struct KeycloakClientScopeSpec {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub options: Option<KeycloakApiObjectOptions>,
     /// the name of the kubernetes object that created the realm.
-    pub realm_ref: String,
+    pub realm_ref: ImmutableString,
     // TODO: is_template should be immutable. We can't do immutable options yet.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub is_template: Option<bool>,

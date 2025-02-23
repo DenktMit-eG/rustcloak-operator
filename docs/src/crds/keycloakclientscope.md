@@ -226,6 +226,10 @@ Defines additional values that can be loaded from secrets or configmaps. Field s
 
 Type: string
 
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
 the name of the kubernetes object that created the realm.
 
 ---
