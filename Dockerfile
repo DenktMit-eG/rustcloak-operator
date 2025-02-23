@@ -10,7 +10,7 @@ RUN \
 	CARGO_HOME=/cargo/cargo \
 	CARGO_TARGET_DIR=/cargo/target \
 	cargo install \
-		--path . \
+		--path rustcloak-operator \
 		--root /app \
 		--bin rustcloak
 

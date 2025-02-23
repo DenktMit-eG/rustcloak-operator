@@ -180,11 +180,6 @@ spec:
                       format: date-time
                       nullable: true
                       type: string
-                    lastUpdateTime:
-                      description: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-                      format: date-time
-                      nullable: true
-                      type: string
                     message:
                       nullable: true
                       type: string
@@ -199,14 +194,14 @@ spec:
                   - status
                   - type
                   type: object
-                nullable: true
                 type: array
+              instanceRef:
+                type: string
               message:
                 type: string
               ready:
                 type: boolean
               resourcePath:
-                nullable: true
                 type: string
               status:
                 type: string

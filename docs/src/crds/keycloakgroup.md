@@ -18,16 +18,17 @@ resource to define a Group within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.definition.realmRoles[]](#specdefinitionrealmroles)|string||
 |[spec.definition.subGroupCount](#specdefinitionsubgroupcount)|integer||
 |[spec.options](#specoptions)|object||
+|[spec.parentGroupRef](#specparentgroupref)|string||
 |[spec.patchFrom](#specpatchfrom)|object||
-|[spec.realmRef](#specrealmref)|string|✅|
+|[spec.realmRef](#specrealmref)|string||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
-|[status.conditions[].lastUpdateTime](#statusconditionslastupdatetime)|string||
 |[status.conditions[].message](#statusconditionsmessage)|string||
 |[status.conditions[].reason](#statusconditionsreason)|string||
 |[status.conditions[].status](#statusconditionsstatus)|string|✅|
 |[status.conditions[].type](#statusconditionstype)|string|✅|
+|[status.instanceRef](#statusinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
 |[status.resourcePath](#statusresourcepath)|string||
@@ -43,8 +44,9 @@ Type: object
 |:-------|:---|:------:|
 |[definition](#specdefinition)|object|✅|
 |[options](#specoptions)|object||
+|[parentGroupRef](#specparentgroupref)|string||
 |[patchFrom](#specpatchfrom)|object||
-|[realmRef](#specrealmref)|string|✅|
+|[realmRef](#specrealmref)|string||
 
 the KeycloakGroup resource
 
@@ -160,6 +162,18 @@ Options for the request to the Keycloak Admin API.
 
 ---
 
+### spec.parentGroupRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+*missing*
+
+---
+
 ### spec.patchFrom
 
 Type: object
@@ -172,7 +186,11 @@ Defines additional values that can be loaded from secrets or configmaps. Field s
 
 Type: string
 
-the name of the kubernetes object that created the realm.
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+*missing*
 
 ---
 
@@ -183,6 +201,7 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[conditions[]](#statusconditions)|object||
+|[instanceRef](#statusinstanceref)|string||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
 |[resourcePath](#statusresourcepath)|string||
@@ -199,7 +218,6 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[lastTransitionTime](#statusconditionslasttransitiontime)|string||
-|[lastUpdateTime](#statusconditionslastupdatetime)|string||
 |[message](#statusconditionsmessage)|string||
 |[reason](#statusconditionsreason)|string||
 |[status](#statusconditionsstatus)|string|✅|
@@ -210,14 +228,6 @@ Type: object
 ---
 
 ### status.conditions[].lastTransitionTime
-
-Type: string
-
-Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-
----
-
-### status.conditions[].lastUpdateTime
 
 Type: string
 
@@ -250,6 +260,14 @@ Type: string
 ---
 
 ### status.conditions[].type
+
+Type: string
+
+*missing*
+
+---
+
+### status.instanceRef
 
 Type: string
 

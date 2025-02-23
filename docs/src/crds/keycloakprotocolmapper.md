@@ -22,11 +22,11 @@ resource to define a Protocol Mapper within either a [KeycloakClient](./keycloak
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
-|[status.conditions[].lastUpdateTime](#statusconditionslastupdatetime)|string||
 |[status.conditions[].message](#statusconditionsmessage)|string||
 |[status.conditions[].reason](#statusconditionsreason)|string||
 |[status.conditions[].status](#statusconditionsstatus)|string|✅|
 |[status.conditions[].type](#statusconditionstype)|string|✅|
+|[status.instanceRef](#statusinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
 |[status.resourcePath](#statusresourcepath)|string||
@@ -54,6 +54,10 @@ the KeycloakProtocolMapper resource
 
 Type: string
 
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
 *missing*
 
 ---
@@ -61,6 +65,10 @@ Type: string
 ### spec.clientScopeRef
 
 Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
 
 *missing*
 
@@ -173,6 +181,7 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[conditions[]](#statusconditions)|object||
+|[instanceRef](#statusinstanceref)|string||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
 |[resourcePath](#statusresourcepath)|string||
@@ -189,7 +198,6 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[lastTransitionTime](#statusconditionslasttransitiontime)|string||
-|[lastUpdateTime](#statusconditionslastupdatetime)|string||
 |[message](#statusconditionsmessage)|string||
 |[reason](#statusconditionsreason)|string||
 |[status](#statusconditionsstatus)|string|✅|
@@ -200,14 +208,6 @@ Type: object
 ---
 
 ### status.conditions[].lastTransitionTime
-
-Type: string
-
-Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-
----
-
-### status.conditions[].lastUpdateTime
 
 Type: string
 
@@ -240,6 +240,14 @@ Type: string
 ---
 
 ### status.conditions[].type
+
+Type: string
+
+*missing*
+
+---
+
+### status.instanceRef
 
 Type: string
 
