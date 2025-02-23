@@ -183,11 +183,11 @@
 <tr><td style="text-align: left"><a href="#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#statusconditionslastupdatetime">status.conditions[].lastUpdateTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionsmessage">status.conditions[].message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionsreason">status.conditions[].reason</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionsstatus">status.conditions[].status</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionstype">status.conditions[].type</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#statusinstanceref">status.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -209,6 +209,10 @@
 <hr />
 <h3 id="specclientref"><a class="header" href="#specclientref">spec.clientRef</a></h3>
 <p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
 <p><em>missing</em></p>
 <hr />
 <h3 id="specdefinition"><a class="header" href="#specdefinition">spec.definition</a></h3>
@@ -227,7 +231,7 @@
 </div>
 <p> </p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
-<tr><td style="text-align: left">has(self.id) == has(oldSelf.id)</td><td style="text-align: left">Value is immutable</td></tr>
+<tr><td style="text-align: left">has(self.name) == has(oldSelf.name)</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -276,14 +280,14 @@
 <hr />
 <h3 id="specdefinitionid"><a class="header" href="#specdefinitionid">spec.definition.id</a></h3>
 <p>Type: string</p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
-<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
-</tbody></table>
-</div>
 <p><em>missing</em></p>
 <hr />
 <h3 id="specdefinitionname"><a class="header" href="#specdefinitionname">spec.definition.name</a></h3>
 <p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
 <p><em>missing</em></p>
 <hr />
 <h3 id="specdefinitionscopeparamrequired"><a class="header" href="#specdefinitionscopeparamrequired">spec.definition.scopeParamRequired</a></h3>
@@ -300,12 +304,17 @@
 <hr />
 <h3 id="specrealmref"><a class="header" href="#specrealmref">spec.realmRef</a></h3>
 <p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
 <p><em>missing</em></p>
 <hr />
 <h3 id="status"><a class="header" href="#status">status</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="#statusconditions">conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -318,7 +327,6 @@
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="#statusconditionslasttransitiontime">lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#statusconditionslastupdatetime">lastUpdateTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionsmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionsreason">reason</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionsstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
@@ -328,10 +336,6 @@
 <p><em>missing</em></p>
 <hr />
 <h3 id="statusconditionslasttransitiontime"><a class="header" href="#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></h3>
-<p>Type: string</p>
-<p>Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.</p>
-<hr />
-<h3 id="statusconditionslastupdatetime"><a class="header" href="#statusconditionslastupdatetime">status.conditions[].lastUpdateTime</a></h3>
 <p>Type: string</p>
 <p>Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.</p>
 <hr />
@@ -348,6 +352,10 @@
 <p><em>missing</em></p>
 <hr />
 <h3 id="statusconditionstype"><a class="header" href="#statusconditionstype">status.conditions[].type</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusinstanceref"><a class="header" href="#statusinstanceref">status.instanceRef</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
 <hr />
