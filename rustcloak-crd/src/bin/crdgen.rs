@@ -3,14 +3,12 @@ use std::path::PathBuf;
 use clap::Parser;
 use crd2md::ToMarkdown;
 use kube::{CustomResourceExt, ResourceExt};
-use rustcloak_operator::crd::*;
+use rustcloak_crd::*;
 
 static MD_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../docs/src/crds");
 static CRD_DIR: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
-    "/../charts/",
-    env!("CARGO_PKG_NAME"),
-    "/crds"
+    "/../charts/rustcloak-operator/crds"
 );
 
 #[derive(Debug, Parser)]

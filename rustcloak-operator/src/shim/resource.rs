@@ -136,7 +136,6 @@ where
 }
 
 #[async_trait::async_trait]
-#[async_trait::async_trait]
 pub trait InstanceShim {
     fn instance_ref(&self) -> Result<&str>;
     fn resource_path(&self) -> Result<&str>;

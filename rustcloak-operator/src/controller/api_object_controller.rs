@@ -5,8 +5,8 @@ use crate::{
     error::{Error, Result},
     util::{ApiResolver, K8sKeycloakBuilder, RefWatcher, ToPatch},
 };
-use async_stream::stream;
 use async_trait::async_trait;
+use futures::{stream, StreamExt};
 use k8s_openapi::{
     api::core::v1::{ConfigMap, Secret},
     DeepMerge,
@@ -98,18 +98,18 @@ impl LifecycleController for KeycloakApiObjectController {
         controller: Controller<Self::Resource>,
         client: &kube::Client,
     ) -> Controller<Self::Resource> {
-        let notify = self.reconcile_notify.clone();
         let secret_refs = self.secret_refs.clone();
         let config_map_refs = self.config_map_refs.clone();
         let secret_api = Api::<Secret>::all(client.clone());
         let config_map_api = Api::<ConfigMap>::all(client.clone());
+        let notify = self.reconcile_notify.clone();
         controller
-            .reconcile_all_on(stream! {
-                loop {
+            .reconcile_all_on(stream::repeat(()).then(move |()| {
+                let notify = notify.clone();
+                async move {
                     notify.notified().await;
-                    yield;
                 }
-            })
+            }))
             .watches(secret_api, watcher::Config::default(), move |secret| {
                 secret_refs.watch(&secret)
             })
