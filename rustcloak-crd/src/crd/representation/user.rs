@@ -61,14 +61,11 @@ pub struct KeycloakUserSpec {
     pub user_secret: Option<KeycloakUserSecretReference>,
 }
 
-impl SecretKeyNames<2> for KeycloakUser {
+impl SecretKeyNames<2> for Option<KeycloakUserSecretReference> {
     const DEFAULTS: [&'static str; 2] = ["username", "password"];
 
     fn secret_key_names_opts(&self) -> Option<[&Option<String>; 2]> {
-        self.spec
-            .user_secret
-            .as_ref()
-            .map(|s| [&s.username_key, &s.password_key])
+        self.as_ref().map(|s| [&s.username_key, &s.password_key])
     }
 }
 

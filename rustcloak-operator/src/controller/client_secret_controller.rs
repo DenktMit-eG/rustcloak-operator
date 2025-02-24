@@ -106,7 +106,8 @@ impl KeycloakClientSecretController {
         let ns = resource.namespace()?;
 
         let secret_api: Api<Secret> = Api::namespaced(client.clone(), ns);
-        let [client_id_key, client_secret_key] = resource.secret_key_names();
+        let [client_id_key, client_secret_key] =
+            resource.spec.client_secret.secret_key_names();
 
         let path = format!("{}/client-secret", resource_path);
 

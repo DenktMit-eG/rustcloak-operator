@@ -1,7 +1,13 @@
+use std::collections::BTreeMap;
 use std::str::FromStr;
 
 use crate::error::{Error, Result};
+use crate::util::SecretUtils;
 use derive_builder::Builder;
+use k8s_openapi::api::core::v1::Secret;
+use k8s_openapi::ByteString;
+use kube::api::ObjectMeta;
+use kube::{Resource, ResourceExt};
 use log::debug;
 use oauth2::basic::BasicClient;
 use oauth2::{
@@ -12,6 +18,8 @@ use oauth2::{
 use oauth2::{ClientSecret, TokenResponse};
 use reqwest::header::LOCATION;
 use reqwest::{Method, Url};
+use rustcloak_crd::traits::SecretKeyNames;
+use rustcloak_crd::KeycloakInstance;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
@@ -53,6 +61,46 @@ impl OAuth2Token {
 
     pub fn refresh_token(&self) -> Option<&oauth2::RefreshToken> {
         self.token.refresh_token()
+    }
+
+    pub fn into_secret(self, instance: &KeycloakInstance) -> Secret {
+        let token = ByteString(
+            serde_yaml::to_string(&self.token).unwrap().into_bytes(),
+        );
+        let expires = self
+            .expires
+            .map(|x| ByteString(x.to_rfc3339().into_bytes()));
+        let name = instance.token_secret_name();
+        let [token_key, expires_key] = instance.spec.token.secret_key_names();
+        let namespace = instance.namespace().unwrap();
+        let owner_ref = instance.owner_ref(&()).unwrap();
+        let mut data: BTreeMap<String, ByteString> =
+            [(token_key.to_string(), token)].into();
+        if let Some(expires) = expires {
+            data.insert(expires_key.to_string(), expires);
+        }
+        Secret {
+            metadata: ObjectMeta {
+                name: Some(name),
+                namespace: Some(namespace),
+                owner_references: Some(vec![owner_ref]),
+                ..Default::default()
+            },
+            data: Some(data),
+            ..Default::default()
+        }
+    }
+
+    pub fn from_secret(
+        secret: Secret,
+        instance: &KeycloakInstance,
+    ) -> Result<OAuth2Token> {
+        let [token, expires] = secret.extract_opt(&instance.spec.token)?;
+        let token = serde_yaml::from_str(&token.ok_or(Error::NoToken)?)?;
+        let expires = expires
+            .and_then(|e| chrono::DateTime::parse_from_rfc3339(&e).ok())
+            .map(|e| e.with_timezone(&chrono::Utc));
+        Ok(OAuth2Token { token, expires })
     }
 }
 

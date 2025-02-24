@@ -37,7 +37,8 @@ impl KeycloakInstanceController {
         let secret_name = &resource.spec.credentials.secret_name;
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let secret_api = Api::<Secret>::namespaced(client.clone(), &ns);
-        let [username_key, password_key] = resource.secret_key_names();
+        let [username_key, password_key] =
+            resource.spec.credentials.secret_key_names();
 
         let username = "rustcloak-admin".to_string();
         let password = randstr()

@@ -62,13 +62,11 @@ pub struct KeycloakClientSpec {
     pub client_secret: Option<KeycloakClientSecretReference>,
 }
 
-impl SecretKeyNames<2> for KeycloakClient {
+impl SecretKeyNames<2> for Option<KeycloakClientSecretReference> {
     const DEFAULTS: [&'static str; 2] = ["client_id", "client_secret"];
 
     fn secret_key_names_opts(&self) -> Option<[&Option<String>; 2]> {
-        self.spec
-            .client_secret
-            .as_ref()
+        self.as_ref()
             .map(|s| [&s.client_id_key, &s.client_secret_key])
     }
 }

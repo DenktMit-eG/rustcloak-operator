@@ -75,7 +75,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
             .get_opt(&credential_secret_name)
             .await?
             .ok_or(Error::NoCredentialSecret(ns, credential_secret_name))?
-            .extract(self.instance)?;
+            .extract(&self.instance.spec.token)?;
 
         self.auth.login_with_credentials(&user, &password).await
     }
@@ -92,13 +92,13 @@ impl<'a> K8sKeycloakBuilder<'a> {
             "Using keycloak with token secret {token_secret_name}"
         );
 
-        let token = secret_api
+        let secret = secret_api
             .get_opt(&token_secret_name)
             .await?
-            .ok_or(Error::NoTokenSecret(ns, token_secret_name))?
-            .token(self.instance)?;
+            .ok_or(Error::NoTokenSecret(ns, token_secret_name))?;
+        let token = OAuth2Token::from_secret(secret, &self.instance);
 
-        Ok(self.auth.into_client(token))
+        Ok(self.auth.into_client(token?))
     }
 }
 
@@ -129,8 +129,7 @@ impl K8sKeycloakRefreshJob {
     pub async fn update_token_secret(&self, token: &OAuth2Token) -> Result<()> {
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
         let api = Api::<Secret>::namespaced(self.client.clone(), &ns);
-        let token_secret = Secret::from_token(token, &self.instance);
-
+        let token_secret = token.clone().into_secret(&self.instance);
         api.patch(
             &token_secret.name_unchecked(),
             &PatchParams::apply(app_id!()),
