@@ -2249,7 +2249,6 @@ name = "rustcloak-operator"
 version = "0.1.10"
 dependencies = [
  "actix-web",
- "async-stream",
  "async-trait",
  "case_style",
  "chrono",
