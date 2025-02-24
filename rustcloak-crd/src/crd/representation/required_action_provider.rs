@@ -51,7 +51,7 @@ pub struct KeycloakRequiredActionProviderSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("rap" <realm_ref: String => KeycloakRealm> / |_d| {"authentication/required-actions"} / alias for KeycloakRequiredActionProvider => RequiredActionProviderRepresentation);
+impl_object!("rap" <realm_ref: String => KeycloakRealm> / |_d| {"authentication/required-actions"} / alias for KeycloakRequiredActionProviderSpec => RequiredActionProviderRepresentation);
 
 impl_instance_ref!(KeycloakRequiredActionProvider);
 

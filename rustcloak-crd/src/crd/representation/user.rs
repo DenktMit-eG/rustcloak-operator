@@ -69,7 +69,7 @@ impl SecretKeyNames<2> for Option<KeycloakUserSecretReference> {
     }
 }
 
-impl_object!("user" <realm_ref: String => KeycloakRealm> / |_d| {"users"} / id for KeycloakUser => UserRepresentation);
+impl_object!("user" <realm_ref: String => KeycloakRealm> / |_d| {"users"} / id for KeycloakUserSpec => UserRepresentation);
 
 impl_instance_ref!(KeycloakUser);
 

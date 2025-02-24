@@ -107,14 +107,16 @@ macro_rules! schema_patch {
     };
     ($name:ty: $schema:expr) => {
         use schemars::{gen::SchemaGenerator, schema::Schema};
+        use kube::core::object::HasSpec;
         use $crate::object::KeycloakRestObject;
+        use $crate::schema::SchemaUtil;
 
         pub(crate) fn schema(generator: &mut SchemaGenerator) -> Schema {
-            use $crate::schema::SchemaUtil;
+            type Spec = <$name as HasSpec>::Spec;
             let mut s = generator
                     .clone()
-                    .subschema_for::<<$name as KeycloakRestObject>::Definition>()
-                    .immutable_prop(<$name as KeycloakRestObject>::ID_FIELD)
+                    .subschema_for::<<Spec as KeycloakRestObject>::Definition>()
+                    .immutable_prop(<Spec as KeycloakRestObject>::ID_FIELD)
                     .to_owned();
 
             let func: fn(&mut Schema) -> () = $schema;

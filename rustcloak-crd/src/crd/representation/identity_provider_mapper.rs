@@ -51,7 +51,7 @@ pub struct KeycloakIdentityProviderMapperSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("ipm" <identity_provider_ref: String => KeycloakIdentityProvider> / |_d| {"mappers"} / id for KeycloakIdentityProviderMapper => IdentityProviderMapperRepresentation);
+impl_object!("ipm" <identity_provider_ref: String => KeycloakIdentityProvider> / |_d| {"mappers"} / id for KeycloakIdentityProviderMapperSpec => IdentityProviderMapperRepresentation);
 
 impl_instance_ref!(KeycloakIdentityProviderMapper);
 

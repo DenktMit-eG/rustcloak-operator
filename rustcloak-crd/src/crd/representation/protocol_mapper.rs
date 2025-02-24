@@ -59,7 +59,7 @@ pub struct KeycloakProtocolMapperSpec {
 type Parents = Either<KeycloakClient, KeycloakClientScope>;
 type ParentRef = Either<ClientRef, ClientScopeRef>;
 
-impl_object!("pm" <parent_ref: ParentRef => Parents> / |_d| {"protocol-mappers/models"} / id for KeycloakProtocolMapper => ProtocolMapperRepresentation);
+impl_object!("pm" <parent_ref: ParentRef => Parents> / |_d| {"protocol-mappers/models"} / id for KeycloakProtocolMapperSpec => ProtocolMapperRepresentation);
 
 impl_instance_ref!(KeycloakProtocolMapper);
 

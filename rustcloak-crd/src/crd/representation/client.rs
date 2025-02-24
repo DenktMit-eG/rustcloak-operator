@@ -71,7 +71,7 @@ impl SecretKeyNames<2> for Option<KeycloakClientSecretReference> {
     }
 }
 
-impl_object!("client" <realm_ref: String => KeycloakRealm> / |_d| {"clients"} / id for KeycloakClient => ClientRepresentation);
+impl_object!("client" <realm_ref: String => KeycloakRealm> / |_d| {"clients"} / id for KeycloakClientSpec => ClientRepresentation);
 
 impl_instance_ref!(KeycloakClient);
 

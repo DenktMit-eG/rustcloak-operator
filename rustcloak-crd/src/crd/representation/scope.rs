@@ -51,7 +51,7 @@ pub struct KeycloakScopeSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("scope" <client_ref: String => KeycloakClient> / |_d| {"authz/resource-server/scope"} / id for KeycloakScope => ScopeRepresentation);
+impl_object!("scope" <client_ref: String => KeycloakClient> / |_d| {"authz/resource-server/scope"} / id for KeycloakScopeSpec => ScopeRepresentation);
 
 impl_instance_ref!(KeycloakScope);
 

@@ -51,7 +51,7 @@ pub struct KeycloakRealmSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("realm" <instance_ref: String => KeycloakInstance> / |_d| {"admin/realms"} / realm for KeycloakRealm => RealmRepresentation);
+impl_object!("realm" <instance_ref: String => KeycloakInstance> / |_d| {"admin/realms"} / realm for KeycloakRealmSpec => RealmRepresentation);
 
 impl Endpoint for KeycloakRealm {
     fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {

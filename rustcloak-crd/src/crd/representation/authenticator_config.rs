@@ -52,7 +52,7 @@ pub struct KeycloakAuthenticatorConfigSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("authconfig" <realm_ref: String => KeycloakRealm> / |_d| {"authentication/config"} / id for KeycloakAuthenticatorConfig => AuthenticatorConfigRepresentation);
+impl_object!("authconfig" <realm_ref: String => KeycloakRealm> / |_d| {"authentication/config"} / id for KeycloakAuthenticatorConfigSpec => AuthenticatorConfigRepresentation);
 
 impl_instance_ref!(KeycloakAuthenticatorConfig);
 

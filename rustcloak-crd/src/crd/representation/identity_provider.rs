@@ -51,7 +51,7 @@ pub struct KeycloakIdentityProviderSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("idp" <realm_ref: String => KeycloakRealm> / |_d| {"identity-provider/instances"} / alias for KeycloakIdentityProvider => IdentityProviderRepresentation);
+impl_object!("idp" <realm_ref: String => KeycloakRealm> / |_d| {"identity-provider/instances"} / alias for KeycloakIdentityProviderSpec => IdentityProviderRepresentation);
 
 impl_instance_ref!(KeycloakIdentityProvider);
 

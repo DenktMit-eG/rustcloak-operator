@@ -96,7 +96,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
             .get_opt(&token_secret_name)
             .await?
             .ok_or(Error::NoTokenSecret(ns, token_secret_name))?;
-        let token = OAuth2Token::from_secret(secret, &self.instance);
+        let token = OAuth2Token::from_secret(secret, self.instance);
 
         Ok(self.auth.into_client(token?))
     }

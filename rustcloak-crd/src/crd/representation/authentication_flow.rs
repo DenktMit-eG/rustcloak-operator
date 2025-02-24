@@ -51,7 +51,7 @@ pub struct KeycloakAuthenticationFlowSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("authflow" <realm_ref: String => KeycloakRealm> / |_d| {"authentication/flows"} / id for KeycloakAuthenticationFlow => AuthenticationFlowRepresentation);
+impl_object!("authflow" <realm_ref: String => KeycloakRealm> / |_d| {"authentication/flows"} / id for KeycloakAuthenticationFlowSpec => AuthenticationFlowRepresentation);
 
 impl_instance_ref!(KeycloakAuthenticationFlow);
 

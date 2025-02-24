@@ -59,7 +59,7 @@ pub struct KeycloakRoleSpec {
 type ParentRef = Either<RealmRef, ClientRef>;
 type Parents = Either<KeycloakRealm, KeycloakClient>;
 
-impl_object!("role" <parent_ref: ParentRef => Parents> / |_d| {"roles"} / name for KeycloakRole => RoleRepresentation);
+impl_object!("role" <parent_ref: ParentRef => Parents> / |_d| {"roles"} / name for KeycloakRoleSpec => RoleRepresentation);
 
 impl_instance_ref!(KeycloakRole);
 

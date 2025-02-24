@@ -66,7 +66,7 @@ impl_object!("group" <parent_ref: ParentRef => Parent> / |d| {
     } else {
         "children"
     }
-} / id for KeycloakGroup => GroupRepresentation);
+} / id for KeycloakGroupSpec => GroupRepresentation);
 
 impl_instance_ref!(KeycloakGroup);
 

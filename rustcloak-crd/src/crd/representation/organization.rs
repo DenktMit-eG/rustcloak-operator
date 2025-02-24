@@ -51,7 +51,7 @@ pub struct KeycloakOrganizationSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("org" <realm_ref: String => KeycloakRealm> / |_d| {"organizations"} / id for KeycloakOrganization => OrganizationRepresentation);
+impl_object!("org" <realm_ref: String => KeycloakRealm> / |_d| {"organizations"} / id for KeycloakOrganizationSpec => OrganizationRepresentation);
 
 impl_instance_ref!(KeycloakOrganization);
 

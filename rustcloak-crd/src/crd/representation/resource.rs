@@ -51,7 +51,7 @@ pub struct KeycloakResourceSpec {
     pub patches: Option<KeycloakApiPatchList>,
 }
 
-impl_object!("resource" <client_ref: String => KeycloakClient> / |_d| {"authz/resource-server/resource"} / (id => "_id") for KeycloakResource => ResourceRepresentation);
+impl_object!("resource" <client_ref: String => KeycloakClient> / |_d| {"authz/resource-server/resource"} / (id => "_id") for KeycloakResourceSpec => ResourceRepresentation);
 
 impl_instance_ref!(KeycloakResource);
 

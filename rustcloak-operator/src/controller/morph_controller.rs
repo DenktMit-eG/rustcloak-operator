@@ -4,7 +4,7 @@ use crate::{
     app_id,
     controller::controller_runner::LifecycleController,
     error::{Error, Result},
-    morph::Patcher,
+    morph::{Morph, Patcher},
     shim::resource::{
         InstanceShim, ParentShim, ResourceMarker, ResourceShim, RestShim,
     },
@@ -14,7 +14,7 @@ use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{
     api::{ObjectMeta, Patch, PatchParams},
-    core::object::HasStatus,
+    core::object::{HasSpec, HasStatus},
     runtime::{controller::Action, watcher, Controller},
     Api, Resource, ResourceExt,
 };
@@ -50,13 +50,16 @@ where
         + Debug
         + Resource<DynamicType = (), Scope = NamespaceResourceScope>
         + HasStatus<Status = KeycloakApiStatus>
-        + KeycloakRestObject
+        + HasSpec
         + Clone
         + Endpoint
         + 'static,
-    R::Definition: Send + Sync + Serialize + DeserializeOwned,
-    R::ParentRef: AsRef<str>,
-    R::ParentObject: Send + Sync + Clone + Debug + DeserializeOwned + Endpoint,
+    R::Spec: KeycloakRestObject + Morph,
+    <<R as HasSpec>::Spec as KeycloakRestObject>::Definition:
+        Send + Sync + Serialize + DeserializeOwned,
+    <<R as HasSpec>::Spec as KeycloakRestObject>::ParentRef: AsRef<str>,
+    <<R as HasSpec>::Spec as KeycloakRestObject>::ParentObject:
+        Send + Sync + Clone + Debug + DeserializeOwned + Endpoint,
     ResourceShim<R>: ParentShim<M>,
     <ResourceShim<R> as ParentShim<M>>::Parent: Endpoint + Send + Sync,
     M: Send + Sync,
@@ -88,20 +91,22 @@ where
         let name = resource.api_name()?;
         let owner_ref = resource.owner_ref(&()).unwrap();
 
-        let primary_key = R::ID_FIELD;
-        let mut payload = resource.payload()?;
+        let primary_key =
+            <<R as HasSpec>::Spec as KeycloakRestObject>::ID_FIELD;
+        let mut payload = resource.spec().payload()?;
         payload
             .as_object_mut()
             .as_mut()
             .unwrap()
             .remove(primary_key);
-        let primary_key_value = resource.id();
+        let primary_key_value = resource.spec().id();
         let immutable_payload = serde_yaml::to_string(&json!({
             primary_key: primary_key_value,
         }))?
         .into();
         let mut patcher = Patcher::new(payload);
         for (path, patch) in resource
+            .spec()
             .patches()
             .map(|x| x.patch_from.iter())
             .unwrap_or_default()
@@ -120,7 +125,7 @@ where
         let resource_path = format!(
             "{}/{}",
             parent.resource_path().ok_or(Error::NoData)?,
-            resource.mount_path()
+            resource.spec().mount_path()
         );
 
         let endpoint = KeycloakApiEndpoint {
@@ -149,7 +154,7 @@ where
             },
             spec: KeycloakApiObjectSpec {
                 endpoint,
-                options: resource.options().cloned(),
+                options: resource.spec().options().cloned(),
                 immutable_payload,
                 payload,
                 vars,
