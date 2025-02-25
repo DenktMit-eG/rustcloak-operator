@@ -89,7 +89,7 @@ impl Resolver<'_> {
         r: &ConfigMapKeySelector,
     ) -> Result<String> {
         let ns = self.namespace.as_ref().ok_or(Error::NoNamespace)?;
-        let api = Api::<ConfigMap>::namespaced(self.client.clone(), &ns);
+        let api = Api::<ConfigMap>::namespaced(self.client.clone(), ns);
         let config_map =
             if let Some(config_map) = self.config_map_cache.get(&r.name) {
                 config_map
@@ -112,7 +112,7 @@ impl Resolver<'_> {
         r: &k8s_openapi::api::core::v1::SecretKeySelector,
     ) -> Result<String> {
         let ns = self.namespace.as_ref().ok_or(Error::NoNamespace)?;
-        let api = Api::<Secret>::namespaced(self.client.clone(), &ns);
+        let api = Api::<Secret>::namespaced(self.client.clone(), ns);
         let secret = if let Some(secret) = self.secret_cache.get(&r.name) {
             secret
         } else if let Some(secret) = api.get_opt(&r.name).await? {

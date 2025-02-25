@@ -11,6 +11,6 @@ where
 {
     type InnerSpec = <R::Spec as HasInnerSpec>::InnerSpec;
     fn inner_spec(&self) -> &Self::InnerSpec {
-        &self.spec().inner_spec()
+        self.spec().inner_spec()
     }
 }
