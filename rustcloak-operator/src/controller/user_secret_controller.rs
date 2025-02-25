@@ -109,7 +109,8 @@ impl KeycloakUserSecretController {
         let ns = resource.namespace()?;
 
         let secret_api: Api<Secret> = Api::namespaced(client.clone(), ns);
-        let [username_key, password_key] = resource.secret_key_names();
+        let [username_key, password_key] =
+            resource.spec.user_secret.secret_key_names();
 
         let secret_name = &secret_ref.secret_name;
         let instance = resource.instance().await?;
@@ -118,10 +119,10 @@ impl KeycloakUserSecretController {
             .await?;
 
         ctx.secret_refs.add(&resource, [&secret_name]);
-        let (secret, create_secret) = if let Some(secret) =
+        let secret = if let Some(secret) =
             secret_api.get_opt(secret_name).await?
         {
-            (secret, false)
+            secret
         } else {
             let username = resource
                 .spec
@@ -156,10 +157,10 @@ impl KeycloakUserSecretController {
                 ..Default::default()
             };
 
-            (secret, true)
+            secret_api.create(&PostParams::default(), &secret).await?
         };
 
-        let [_, password] = secret.extract(&*resource)?;
+        let [_, password] = secret.extract(&resource.spec.user_secret)?;
 
         let path = format!("{}/reset-password", resource_path);
         let credential = CredentialRepresentation {
@@ -170,10 +171,6 @@ impl KeycloakUserSecretController {
         };
 
         keycloak.put(&path, &credential).await?;
-
-        if create_secret {
-            secret_api.create(&PostParams::default(), &secret).await?;
-        }
 
         Ok(Action::await_change())
     }

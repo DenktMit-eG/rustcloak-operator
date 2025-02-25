@@ -1,0 +1,2423 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: clusterkeycloakrealms.rustcloak.k8s.eboland.de
+spec:
+  group: rustcloak.k8s.eboland.de
+  names:
+    categories:
+    - keycloak
+    - all
+    kind: ClusterKeycloakRealm
+    plural: clusterkeycloakrealms
+    shortNames:
+    - ckcrm
+    singular: clusterkeycloakrealm
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - description: true if the realm is ready
+      jsonPath: .status.ready
+      name: Ready
+      type: boolean
+    - description: Status String of the resource
+      jsonPath: .status.status
+      name: Status
+      type: string
+    - description: time since the realm was created
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
+        properties:
+          spec:
+            description: the KeycloakRealm resource
+            properties:
+              definition:
+                properties:
+                  accessCodeLifespan:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  accessCodeLifespanLogin:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  accessCodeLifespanUserAction:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  accessTokenLifespan:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  accessTokenLifespanForImplicitFlow:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  accountTheme:
+                    nullable: true
+                    type: string
+                  actionTokenGeneratedByAdminLifespan:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  actionTokenGeneratedByUserLifespan:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  adminEventsDetailsEnabled:
+                    nullable: true
+                    type: boolean
+                  adminEventsEnabled:
+                    nullable: true
+                    type: boolean
+                  adminPermissionsEnabled:
+                    nullable: true
+                    type: boolean
+                  adminTheme:
+                    nullable: true
+                    type: string
+                  applicationScopeMappings:
+                    additionalProperties:
+                      items:
+                        properties:
+                          client:
+                            nullable: true
+                            type: string
+                          clientScope:
+                            nullable: true
+                            type: string
+                          clientTemplate:
+                            nullable: true
+                            type: string
+                          roles:
+                            items:
+                              type: string
+                            nullable: true
+                            type: array
+                          self:
+                            nullable: true
+                            type: string
+                        type: object
+                      type: array
+                    nullable: true
+                    type: object
+                  attributes:
+                    additionalProperties:
+                      type: string
+                    nullable: true
+                    type: object
+                  authenticationFlows:
+                    items:
+                      properties:
+                        alias:
+                          nullable: true
+                          type: string
+                        authenticationExecutions:
+                          items:
+                            properties:
+                              authenticator:
+                                nullable: true
+                                type: string
+                              authenticatorConfig:
+                                nullable: true
+                                type: string
+                              authenticatorFlow:
+                                nullable: true
+                                type: boolean
+                              autheticatorFlow:
+                                nullable: true
+                                type: boolean
+                              flowAlias:
+                                nullable: true
+                                type: string
+                              priority:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              requirement:
+                                nullable: true
+                                type: string
+                              userSetupAllowed:
+                                nullable: true
+                                type: boolean
+                            type: object
+                          nullable: true
+                          type: array
+                        builtIn:
+                          nullable: true
+                          type: boolean
+                        description:
+                          nullable: true
+                          type: string
+                        id:
+                          nullable: true
+                          type: string
+                        providerId:
+                          nullable: true
+                          type: string
+                        topLevel:
+                          nullable: true
+                          type: boolean
+                      type: object
+                    nullable: true
+                    type: array
+                  authenticatorConfig:
+                    items:
+                      properties:
+                        alias:
+                          nullable: true
+                          type: string
+                        config:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        id:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  browserFlow:
+                    nullable: true
+                    type: string
+                  browserSecurityHeaders:
+                    additionalProperties:
+                      type: string
+                    nullable: true
+                    type: object
+                  bruteForceProtected:
+                    nullable: true
+                    type: boolean
+                  bruteForceStrategy:
+                    enum:
+                    - LINEAR
+                    - MULTIPLE
+                    nullable: true
+                    type: string
+                  certificate:
+                    nullable: true
+                    type: string
+                  clientAuthenticationFlow:
+                    nullable: true
+                    type: string
+                  clientOfflineSessionIdleTimeout:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  clientOfflineSessionMaxLifespan:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  clientPolicies:
+                    nullable: true
+                    properties:
+                      globalPolicies:
+                        items:
+                          properties:
+                            conditions:
+                              items:
+                                properties:
+                                  condition:
+                                    nullable: true
+                                    type: string
+                                  configuration:
+                                    additionalProperties: true
+                                    nullable: true
+                                    type: object
+                                type: object
+                              nullable: true
+                              type: array
+                            description:
+                              nullable: true
+                              type: string
+                            enabled:
+                              nullable: true
+                              type: boolean
+                            name:
+                              nullable: true
+                              type: string
+                            profiles:
+                              items:
+                                type: string
+                              nullable: true
+                              type: array
+                          type: object
+                        nullable: true
+                        type: array
+                      policies:
+                        items:
+                          properties:
+                            conditions:
+                              items:
+                                properties:
+                                  condition:
+                                    nullable: true
+                                    type: string
+                                  configuration:
+                                    additionalProperties: true
+                                    nullable: true
+                                    type: object
+                                type: object
+                              nullable: true
+                              type: array
+                            description:
+                              nullable: true
+                              type: string
+                            enabled:
+                              nullable: true
+                              type: boolean
+                            name:
+                              nullable: true
+                              type: string
+                            profiles:
+                              items:
+                                type: string
+                              nullable: true
+                              type: array
+                          type: object
+                        nullable: true
+                        type: array
+                    type: object
+                  clientProfiles:
+                    nullable: true
+                    properties:
+                      globalProfiles:
+                        items:
+                          properties:
+                            description:
+                              nullable: true
+                              type: string
+                            executors:
+                              items:
+                                properties:
+                                  configuration:
+                                    additionalProperties: true
+                                    nullable: true
+                                    type: object
+                                  executor:
+                                    nullable: true
+                                    type: string
+                                type: object
+                              nullable: true
+                              type: array
+                            name:
+                              nullable: true
+                              type: string
+                          type: object
+                        nullable: true
+                        type: array
+                      profiles:
+                        items:
+                          properties:
+                            description:
+                              nullable: true
+                              type: string
+                            executors:
+                              items:
+                                properties:
+                                  configuration:
+                                    additionalProperties: true
+                                    nullable: true
+                                    type: object
+                                  executor:
+                                    nullable: true
+                                    type: string
+                                type: object
+                              nullable: true
+                              type: array
+                            name:
+                              nullable: true
+                              type: string
+                          type: object
+                        nullable: true
+                        type: array
+                    type: object
+                  clientScopeMappings:
+                    additionalProperties:
+                      items:
+                        properties:
+                          client:
+                            nullable: true
+                            type: string
+                          clientScope:
+                            nullable: true
+                            type: string
+                          clientTemplate:
+                            nullable: true
+                            type: string
+                          roles:
+                            items:
+                              type: string
+                            nullable: true
+                            type: array
+                          self:
+                            nullable: true
+                            type: string
+                        type: object
+                      type: array
+                    nullable: true
+                    type: object
+                  clientScopes:
+                    items:
+                      properties:
+                        attributes:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        description:
+                          nullable: true
+                          type: string
+                        id:
+                          nullable: true
+                          type: string
+                        name:
+                          nullable: true
+                          type: string
+                        protocol:
+                          nullable: true
+                          type: string
+                        protocolMappers:
+                          items:
+                            properties:
+                              config:
+                                additionalProperties:
+                                  type: string
+                                nullable: true
+                                type: object
+                              consentRequired:
+                                nullable: true
+                                type: boolean
+                              consentText:
+                                nullable: true
+                                type: string
+                              id:
+                                nullable: true
+                                type: string
+                              name:
+                                nullable: true
+                                type: string
+                              protocol:
+                                nullable: true
+                                type: string
+                              protocolMapper:
+                                nullable: true
+                                type: string
+                            type: object
+                          nullable: true
+                          type: array
+                      type: object
+                    nullable: true
+                    type: array
+                  clientSessionIdleTimeout:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  clientSessionMaxLifespan:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  clientTemplates:
+                    items:
+                      properties:
+                        attributes:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        bearerOnly:
+                          nullable: true
+                          type: boolean
+                        consentRequired:
+                          nullable: true
+                          type: boolean
+                        description:
+                          nullable: true
+                          type: string
+                        directAccessGrantsEnabled:
+                          nullable: true
+                          type: boolean
+                        frontchannelLogout:
+                          nullable: true
+                          type: boolean
+                        fullScopeAllowed:
+                          nullable: true
+                          type: boolean
+                        id:
+                          nullable: true
+                          type: string
+                        implicitFlowEnabled:
+                          nullable: true
+                          type: boolean
+                        name:
+                          nullable: true
+                          type: string
+                        protocol:
+                          nullable: true
+                          type: string
+                        protocolMappers:
+                          items:
+                            properties:
+                              config:
+                                additionalProperties:
+                                  type: string
+                                nullable: true
+                                type: object
+                              consentRequired:
+                                nullable: true
+                                type: boolean
+                              consentText:
+                                nullable: true
+                                type: string
+                              id:
+                                nullable: true
+                                type: string
+                              name:
+                                nullable: true
+                                type: string
+                              protocol:
+                                nullable: true
+                                type: string
+                              protocolMapper:
+                                nullable: true
+                                type: string
+                            type: object
+                          nullable: true
+                          type: array
+                        publicClient:
+                          nullable: true
+                          type: boolean
+                        serviceAccountsEnabled:
+                          nullable: true
+                          type: boolean
+                        standardFlowEnabled:
+                          nullable: true
+                          type: boolean
+                      type: object
+                    nullable: true
+                    type: array
+                  codeSecret:
+                    nullable: true
+                    type: string
+                  defaultDefaultClientScopes:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  defaultGroups:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  defaultLocale:
+                    nullable: true
+                    type: string
+                  defaultOptionalClientScopes:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  defaultRole:
+                    nullable: true
+                    properties:
+                      attributes:
+                        additionalProperties:
+                          items:
+                            type: string
+                          type: array
+                        nullable: true
+                        type: object
+                      clientRole:
+                        nullable: true
+                        type: boolean
+                      composite:
+                        nullable: true
+                        type: boolean
+                      composites:
+                        nullable: true
+                        properties:
+                          application:
+                            additionalProperties:
+                              items:
+                                type: string
+                              type: array
+                            nullable: true
+                            type: object
+                          client:
+                            additionalProperties:
+                              items:
+                                type: string
+                              type: array
+                            nullable: true
+                            type: object
+                          realm:
+                            items:
+                              type: string
+                            nullable: true
+                            type: array
+                        type: object
+                      containerId:
+                        nullable: true
+                        type: string
+                      description:
+                        nullable: true
+                        type: string
+                      id:
+                        nullable: true
+                        type: string
+                      name:
+                        nullable: true
+                        type: string
+                      scopeParamRequired:
+                        nullable: true
+                        type: boolean
+                    type: object
+                  defaultRoles:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  defaultSignatureAlgorithm:
+                    nullable: true
+                    type: string
+                  directGrantFlow:
+                    nullable: true
+                    type: string
+                  displayName:
+                    nullable: true
+                    type: string
+                  displayNameHtml:
+                    nullable: true
+                    type: string
+                  dockerAuthenticationFlow:
+                    nullable: true
+                    type: string
+                  duplicateEmailsAllowed:
+                    nullable: true
+                    type: boolean
+                  editUsernameAllowed:
+                    nullable: true
+                    type: boolean
+                  emailTheme:
+                    nullable: true
+                    type: string
+                  enabled:
+                    nullable: true
+                    type: boolean
+                  enabledEventTypes:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  eventsEnabled:
+                    nullable: true
+                    type: boolean
+                  eventsExpiration:
+                    format: int64
+                    nullable: true
+                    type: integer
+                  eventsListeners:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  failureFactor:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  federatedUsers:
+                    items:
+                      properties:
+                        access:
+                          additionalProperties:
+                            type: boolean
+                          nullable: true
+                          type: object
+                        applicationRoles:
+                          additionalProperties:
+                            items:
+                              type: string
+                            type: array
+                          nullable: true
+                          type: object
+                        attributes:
+                          additionalProperties:
+                            items:
+                              type: string
+                            type: array
+                          nullable: true
+                          type: object
+                        clientConsents:
+                          items:
+                            properties:
+                              clientId:
+                                nullable: true
+                                type: string
+                              createdDate:
+                                format: int64
+                                nullable: true
+                                type: integer
+                              grantedClientScopes:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              grantedRealmRoles:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              lastUpdatedDate:
+                                format: int64
+                                nullable: true
+                                type: integer
+                            type: object
+                          nullable: true
+                          type: array
+                        clientRoles:
+                          additionalProperties:
+                            items:
+                              type: string
+                            type: array
+                          nullable: true
+                          type: object
+                        createdTimestamp:
+                          format: int64
+                          nullable: true
+                          type: integer
+                        credentials:
+                          items:
+                            properties:
+                              algorithm:
+                                nullable: true
+                                type: string
+                              config:
+                                additionalProperties:
+                                  items:
+                                    type: string
+                                  type: array
+                                nullable: true
+                                type: object
+                              counter:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              createdDate:
+                                format: int64
+                                nullable: true
+                                type: integer
+                              credentialData:
+                                nullable: true
+                                type: string
+                              device:
+                                nullable: true
+                                type: string
+                              digits:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              hashIterations:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              hashedSaltedValue:
+                                nullable: true
+                                type: string
+                              id:
+                                nullable: true
+                                type: string
+                              period:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              priority:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              salt:
+                                nullable: true
+                                type: string
+                              secretData:
+                                nullable: true
+                                type: string
+                              temporary:
+                                nullable: true
+                                type: boolean
+                              type:
+                                nullable: true
+                                type: string
+                              userLabel:
+                                nullable: true
+                                type: string
+                              value:
+                                nullable: true
+                                type: string
+                            type: object
+                          nullable: true
+                          type: array
+                        disableableCredentialTypes:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        email:
+                          nullable: true
+                          type: string
+                        emailVerified:
+                          nullable: true
+                          type: boolean
+                        enabled:
+                          nullable: true
+                          type: boolean
+                        federatedIdentities:
+                          items:
+                            properties:
+                              identityProvider:
+                                nullable: true
+                                type: string
+                              userId:
+                                nullable: true
+                                type: string
+                              userName:
+                                nullable: true
+                                type: string
+                            type: object
+                          nullable: true
+                          type: array
+                        federationLink:
+                          nullable: true
+                          type: string
+                        firstName:
+                          nullable: true
+                          type: string
+                        groups:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        id:
+                          nullable: true
+                          type: string
+                        lastName:
+                          nullable: true
+                          type: string
+                        notBefore:
+                          format: int32
+                          nullable: true
+                          type: integer
+                        origin:
+                          nullable: true
+                          type: string
+                        realmRoles:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        requiredActions:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        self:
+                          nullable: true
+                          type: string
+                        serviceAccountClientId:
+                          nullable: true
+                          type: string
+                        socialLinks:
+                          items:
+                            properties:
+                              socialProvider:
+                                nullable: true
+                                type: string
+                              socialUserId:
+                                nullable: true
+                                type: string
+                              socialUsername:
+                                nullable: true
+                                type: string
+                            type: object
+                          nullable: true
+                          type: array
+                        totp:
+                          nullable: true
+                          type: boolean
+                        userProfileMetadata:
+                          nullable: true
+                          properties:
+                            attributes:
+                              items:
+                                properties:
+                                  annotations:
+                                    additionalProperties: true
+                                    nullable: true
+                                    type: object
+                                  displayName:
+                                    nullable: true
+                                    type: string
+                                  group:
+                                    nullable: true
+                                    type: string
+                                  multivalued:
+                                    nullable: true
+                                    type: boolean
+                                  name:
+                                    nullable: true
+                                    type: string
+                                  readOnly:
+                                    nullable: true
+                                    type: boolean
+                                  required:
+                                    nullable: true
+                                    type: boolean
+                                  validators:
+                                    additionalProperties:
+                                      additionalProperties: true
+                                      type: object
+                                    nullable: true
+                                    type: object
+                                type: object
+                              nullable: true
+                              type: array
+                            groups:
+                              items:
+                                properties:
+                                  annotations:
+                                    additionalProperties: true
+                                    nullable: true
+                                    type: object
+                                  displayDescription:
+                                    nullable: true
+                                    type: string
+                                  displayHeader:
+                                    nullable: true
+                                    type: string
+                                  name:
+                                    nullable: true
+                                    type: string
+                                type: object
+                              nullable: true
+                              type: array
+                          type: object
+                        username:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  firstBrokerLoginFlow:
+                    nullable: true
+                    type: string
+                  id:
+                    nullable: true
+                    type: string
+                  identityProviderMappers:
+                    items:
+                      properties:
+                        config:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        id:
+                          nullable: true
+                          type: string
+                        identityProviderAlias:
+                          nullable: true
+                          type: string
+                        identityProviderMapper:
+                          nullable: true
+                          type: string
+                        name:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  identityProviders:
+                    items:
+                      properties:
+                        addReadTokenRoleOnCreate:
+                          nullable: true
+                          type: boolean
+                        alias:
+                          nullable: true
+                          type: string
+                        authenticateByDefault:
+                          nullable: true
+                          type: boolean
+                        config:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        displayName:
+                          nullable: true
+                          type: string
+                        enabled:
+                          nullable: true
+                          type: boolean
+                        firstBrokerLoginFlowAlias:
+                          nullable: true
+                          type: string
+                        hideOnLogin:
+                          nullable: true
+                          type: boolean
+                        internalId:
+                          nullable: true
+                          type: string
+                        linkOnly:
+                          nullable: true
+                          type: boolean
+                        organizationId:
+                          nullable: true
+                          type: string
+                        postBrokerLoginFlowAlias:
+                          nullable: true
+                          type: string
+                        providerId:
+                          nullable: true
+                          type: string
+                        storeToken:
+                          nullable: true
+                          type: boolean
+                        trustEmail:
+                          nullable: true
+                          type: boolean
+                        updateProfileFirstLogin:
+                          nullable: true
+                          type: boolean
+                        updateProfileFirstLoginMode:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  internationalizationEnabled:
+                    nullable: true
+                    type: boolean
+                  keycloakVersion:
+                    nullable: true
+                    type: string
+                  localizationTexts:
+                    additionalProperties:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    nullable: true
+                    type: object
+                  loginTheme:
+                    nullable: true
+                    type: string
+                  loginWithEmailAllowed:
+                    nullable: true
+                    type: boolean
+                  maxDeltaTimeSeconds:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  maxFailureWaitSeconds:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  maxTemporaryLockouts:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  minimumQuickLoginWaitSeconds:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  notBefore:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  oAuth2DeviceCodeLifespan:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  oAuth2DevicePollingInterval:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  oauth2DeviceCodeLifespan:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  oauth2DevicePollingInterval:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  offlineSessionIdleTimeout:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  offlineSessionMaxLifespan:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  offlineSessionMaxLifespanEnabled:
+                    nullable: true
+                    type: boolean
+                  organizations:
+                    items:
+                      properties:
+                        alias:
+                          nullable: true
+                          type: string
+                        attributes:
+                          additionalProperties:
+                            items:
+                              type: string
+                            type: array
+                          nullable: true
+                          type: object
+                        description:
+                          nullable: true
+                          type: string
+                        domains:
+                          items:
+                            properties:
+                              name:
+                                nullable: true
+                                type: string
+                              verified:
+                                nullable: true
+                                type: boolean
+                            type: object
+                          nullable: true
+                          type: array
+                        enabled:
+                          nullable: true
+                          type: boolean
+                        id:
+                          nullable: true
+                          type: string
+                        identityProviders:
+                          items:
+                            properties:
+                              addReadTokenRoleOnCreate:
+                                nullable: true
+                                type: boolean
+                              alias:
+                                nullable: true
+                                type: string
+                              authenticateByDefault:
+                                nullable: true
+                                type: boolean
+                              config:
+                                additionalProperties:
+                                  type: string
+                                nullable: true
+                                type: object
+                              displayName:
+                                nullable: true
+                                type: string
+                              enabled:
+                                nullable: true
+                                type: boolean
+                              firstBrokerLoginFlowAlias:
+                                nullable: true
+                                type: string
+                              hideOnLogin:
+                                nullable: true
+                                type: boolean
+                              internalId:
+                                nullable: true
+                                type: string
+                              linkOnly:
+                                nullable: true
+                                type: boolean
+                              organizationId:
+                                nullable: true
+                                type: string
+                              postBrokerLoginFlowAlias:
+                                nullable: true
+                                type: string
+                              providerId:
+                                nullable: true
+                                type: string
+                              storeToken:
+                                nullable: true
+                                type: boolean
+                              trustEmail:
+                                nullable: true
+                                type: boolean
+                              updateProfileFirstLogin:
+                                nullable: true
+                                type: boolean
+                              updateProfileFirstLoginMode:
+                                nullable: true
+                                type: string
+                            type: object
+                          nullable: true
+                          type: array
+                        members:
+                          items:
+                            properties:
+                              access:
+                                additionalProperties:
+                                  type: boolean
+                                nullable: true
+                                type: object
+                              applicationRoles:
+                                additionalProperties:
+                                  items:
+                                    type: string
+                                  type: array
+                                nullable: true
+                                type: object
+                              attributes:
+                                additionalProperties:
+                                  items:
+                                    type: string
+                                  type: array
+                                nullable: true
+                                type: object
+                              clientConsents:
+                                items:
+                                  properties:
+                                    clientId:
+                                      nullable: true
+                                      type: string
+                                    createdDate:
+                                      format: int64
+                                      nullable: true
+                                      type: integer
+                                    grantedClientScopes:
+                                      items:
+                                        type: string
+                                      nullable: true
+                                      type: array
+                                    grantedRealmRoles:
+                                      items:
+                                        type: string
+                                      nullable: true
+                                      type: array
+                                    lastUpdatedDate:
+                                      format: int64
+                                      nullable: true
+                                      type: integer
+                                  type: object
+                                nullable: true
+                                type: array
+                              clientRoles:
+                                additionalProperties:
+                                  items:
+                                    type: string
+                                  type: array
+                                nullable: true
+                                type: object
+                              createdTimestamp:
+                                format: int64
+                                nullable: true
+                                type: integer
+                              credentials:
+                                items:
+                                  properties:
+                                    algorithm:
+                                      nullable: true
+                                      type: string
+                                    config:
+                                      additionalProperties:
+                                        items:
+                                          type: string
+                                        type: array
+                                      nullable: true
+                                      type: object
+                                    counter:
+                                      format: int32
+                                      nullable: true
+                                      type: integer
+                                    createdDate:
+                                      format: int64
+                                      nullable: true
+                                      type: integer
+                                    credentialData:
+                                      nullable: true
+                                      type: string
+                                    device:
+                                      nullable: true
+                                      type: string
+                                    digits:
+                                      format: int32
+                                      nullable: true
+                                      type: integer
+                                    hashIterations:
+                                      format: int32
+                                      nullable: true
+                                      type: integer
+                                    hashedSaltedValue:
+                                      nullable: true
+                                      type: string
+                                    id:
+                                      nullable: true
+                                      type: string
+                                    period:
+                                      format: int32
+                                      nullable: true
+                                      type: integer
+                                    priority:
+                                      format: int32
+                                      nullable: true
+                                      type: integer
+                                    salt:
+                                      nullable: true
+                                      type: string
+                                    secretData:
+                                      nullable: true
+                                      type: string
+                                    temporary:
+                                      nullable: true
+                                      type: boolean
+                                    type:
+                                      nullable: true
+                                      type: string
+                                    userLabel:
+                                      nullable: true
+                                      type: string
+                                    value:
+                                      nullable: true
+                                      type: string
+                                  type: object
+                                nullable: true
+                                type: array
+                              disableableCredentialTypes:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              email:
+                                nullable: true
+                                type: string
+                              emailVerified:
+                                nullable: true
+                                type: boolean
+                              enabled:
+                                nullable: true
+                                type: boolean
+                              federatedIdentities:
+                                items:
+                                  properties:
+                                    identityProvider:
+                                      nullable: true
+                                      type: string
+                                    userId:
+                                      nullable: true
+                                      type: string
+                                    userName:
+                                      nullable: true
+                                      type: string
+                                  type: object
+                                nullable: true
+                                type: array
+                              federationLink:
+                                nullable: true
+                                type: string
+                              firstName:
+                                nullable: true
+                                type: string
+                              groups:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              id:
+                                nullable: true
+                                type: string
+                              lastName:
+                                nullable: true
+                                type: string
+                              membershipType:
+                                enum:
+                                - UNMANAGED
+                                - MANAGED
+                                nullable: true
+                                type: string
+                              notBefore:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              origin:
+                                nullable: true
+                                type: string
+                              realmRoles:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              requiredActions:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              self:
+                                nullable: true
+                                type: string
+                              serviceAccountClientId:
+                                nullable: true
+                                type: string
+                              socialLinks:
+                                items:
+                                  properties:
+                                    socialProvider:
+                                      nullable: true
+                                      type: string
+                                    socialUserId:
+                                      nullable: true
+                                      type: string
+                                    socialUsername:
+                                      nullable: true
+                                      type: string
+                                  type: object
+                                nullable: true
+                                type: array
+                              totp:
+                                nullable: true
+                                type: boolean
+                              userProfileMetadata:
+                                nullable: true
+                                properties:
+                                  attributes:
+                                    items:
+                                      properties:
+                                        annotations:
+                                          additionalProperties: true
+                                          nullable: true
+                                          type: object
+                                        displayName:
+                                          nullable: true
+                                          type: string
+                                        group:
+                                          nullable: true
+                                          type: string
+                                        multivalued:
+                                          nullable: true
+                                          type: boolean
+                                        name:
+                                          nullable: true
+                                          type: string
+                                        readOnly:
+                                          nullable: true
+                                          type: boolean
+                                        required:
+                                          nullable: true
+                                          type: boolean
+                                        validators:
+                                          additionalProperties:
+                                            additionalProperties: true
+                                            type: object
+                                          nullable: true
+                                          type: object
+                                      type: object
+                                    nullable: true
+                                    type: array
+                                  groups:
+                                    items:
+                                      properties:
+                                        annotations:
+                                          additionalProperties: true
+                                          nullable: true
+                                          type: object
+                                        displayDescription:
+                                          nullable: true
+                                          type: string
+                                        displayHeader:
+                                          nullable: true
+                                          type: string
+                                        name:
+                                          nullable: true
+                                          type: string
+                                      type: object
+                                    nullable: true
+                                    type: array
+                                type: object
+                              username:
+                                nullable: true
+                                type: string
+                            type: object
+                          nullable: true
+                          type: array
+                        name:
+                          nullable: true
+                          type: string
+                        redirectUrl:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  organizationsEnabled:
+                    nullable: true
+                    type: boolean
+                  otpPolicyAlgorithm:
+                    nullable: true
+                    type: string
+                  otpPolicyCodeReusable:
+                    nullable: true
+                    type: boolean
+                  otpPolicyDigits:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  otpPolicyInitialCounter:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  otpPolicyLookAheadWindow:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  otpPolicyPeriod:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  otpPolicyType:
+                    nullable: true
+                    type: string
+                  otpSupportedApplications:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  passwordCredentialGrantAllowed:
+                    nullable: true
+                    type: boolean
+                  passwordPolicy:
+                    nullable: true
+                    type: string
+                  permanentLockout:
+                    nullable: true
+                    type: boolean
+                  privateKey:
+                    nullable: true
+                    type: string
+                  protocolMappers:
+                    items:
+                      properties:
+                        config:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        consentRequired:
+                          nullable: true
+                          type: boolean
+                        consentText:
+                          nullable: true
+                          type: string
+                        id:
+                          nullable: true
+                          type: string
+                        name:
+                          nullable: true
+                          type: string
+                        protocol:
+                          nullable: true
+                          type: string
+                        protocolMapper:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  publicKey:
+                    nullable: true
+                    type: string
+                  quickLoginCheckMilliSeconds:
+                    format: int64
+                    nullable: true
+                    type: integer
+                  realm:
+                    nullable: true
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  realmCacheEnabled:
+                    nullable: true
+                    type: boolean
+                  refreshTokenMaxReuse:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  registrationAllowed:
+                    nullable: true
+                    type: boolean
+                  registrationEmailAsUsername:
+                    nullable: true
+                    type: boolean
+                  registrationFlow:
+                    nullable: true
+                    type: string
+                  rememberMe:
+                    nullable: true
+                    type: boolean
+                  requiredActions:
+                    items:
+                      properties:
+                        alias:
+                          nullable: true
+                          type: string
+                        config:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        defaultAction:
+                          nullable: true
+                          type: boolean
+                        enabled:
+                          nullable: true
+                          type: boolean
+                        name:
+                          nullable: true
+                          type: string
+                        priority:
+                          format: int32
+                          nullable: true
+                          type: integer
+                        providerId:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  requiredCredentials:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  resetCredentialsFlow:
+                    nullable: true
+                    type: string
+                  resetPasswordAllowed:
+                    nullable: true
+                    type: boolean
+                  revokeRefreshToken:
+                    nullable: true
+                    type: boolean
+                  roles:
+                    nullable: true
+                    properties:
+                      application:
+                        additionalProperties:
+                          items:
+                            properties:
+                              attributes:
+                                additionalProperties:
+                                  items:
+                                    type: string
+                                  type: array
+                                nullable: true
+                                type: object
+                              clientRole:
+                                nullable: true
+                                type: boolean
+                              composite:
+                                nullable: true
+                                type: boolean
+                              composites:
+                                nullable: true
+                                properties:
+                                  application:
+                                    additionalProperties:
+                                      items:
+                                        type: string
+                                      type: array
+                                    nullable: true
+                                    type: object
+                                  client:
+                                    additionalProperties:
+                                      items:
+                                        type: string
+                                      type: array
+                                    nullable: true
+                                    type: object
+                                  realm:
+                                    items:
+                                      type: string
+                                    nullable: true
+                                    type: array
+                                type: object
+                              containerId:
+                                nullable: true
+                                type: string
+                              description:
+                                nullable: true
+                                type: string
+                              id:
+                                nullable: true
+                                type: string
+                              name:
+                                nullable: true
+                                type: string
+                              scopeParamRequired:
+                                nullable: true
+                                type: boolean
+                            type: object
+                          type: array
+                        nullable: true
+                        type: object
+                      client:
+                        additionalProperties:
+                          items:
+                            properties:
+                              attributes:
+                                additionalProperties:
+                                  items:
+                                    type: string
+                                  type: array
+                                nullable: true
+                                type: object
+                              clientRole:
+                                nullable: true
+                                type: boolean
+                              composite:
+                                nullable: true
+                                type: boolean
+                              composites:
+                                nullable: true
+                                properties:
+                                  application:
+                                    additionalProperties:
+                                      items:
+                                        type: string
+                                      type: array
+                                    nullable: true
+                                    type: object
+                                  client:
+                                    additionalProperties:
+                                      items:
+                                        type: string
+                                      type: array
+                                    nullable: true
+                                    type: object
+                                  realm:
+                                    items:
+                                      type: string
+                                    nullable: true
+                                    type: array
+                                type: object
+                              containerId:
+                                nullable: true
+                                type: string
+                              description:
+                                nullable: true
+                                type: string
+                              id:
+                                nullable: true
+                                type: string
+                              name:
+                                nullable: true
+                                type: string
+                              scopeParamRequired:
+                                nullable: true
+                                type: boolean
+                            type: object
+                          type: array
+                        nullable: true
+                        type: object
+                      realm:
+                        items:
+                          properties:
+                            attributes:
+                              additionalProperties:
+                                items:
+                                  type: string
+                                type: array
+                              nullable: true
+                              type: object
+                            clientRole:
+                              nullable: true
+                              type: boolean
+                            composite:
+                              nullable: true
+                              type: boolean
+                            composites:
+                              nullable: true
+                              properties:
+                                application:
+                                  additionalProperties:
+                                    items:
+                                      type: string
+                                    type: array
+                                  nullable: true
+                                  type: object
+                                client:
+                                  additionalProperties:
+                                    items:
+                                      type: string
+                                    type: array
+                                  nullable: true
+                                  type: object
+                                realm:
+                                  items:
+                                    type: string
+                                  nullable: true
+                                  type: array
+                              type: object
+                            containerId:
+                              nullable: true
+                              type: string
+                            description:
+                              nullable: true
+                              type: string
+                            id:
+                              nullable: true
+                              type: string
+                            name:
+                              nullable: true
+                              type: string
+                            scopeParamRequired:
+                              nullable: true
+                              type: boolean
+                          type: object
+                        nullable: true
+                        type: array
+                    type: object
+                  scopeMappings:
+                    items:
+                      properties:
+                        client:
+                          nullable: true
+                          type: string
+                        clientScope:
+                          nullable: true
+                          type: string
+                        clientTemplate:
+                          nullable: true
+                          type: string
+                        roles:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        self:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  smtpServer:
+                    additionalProperties:
+                      type: string
+                    nullable: true
+                    type: object
+                  social:
+                    nullable: true
+                    type: boolean
+                  socialProviders:
+                    additionalProperties:
+                      type: string
+                    nullable: true
+                    type: object
+                  sslRequired:
+                    nullable: true
+                    type: string
+                  ssoSessionIdleTimeout:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  ssoSessionIdleTimeoutRememberMe:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  ssoSessionMaxLifespan:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  ssoSessionMaxLifespanRememberMe:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  supportedLocales:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  updateProfileOnInitialSocialLogin:
+                    nullable: true
+                    type: boolean
+                  userCacheEnabled:
+                    nullable: true
+                    type: boolean
+                  userFederationMappers:
+                    items:
+                      properties:
+                        config:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        federationMapperType:
+                          nullable: true
+                          type: string
+                        federationProviderDisplayName:
+                          nullable: true
+                          type: string
+                        id:
+                          nullable: true
+                          type: string
+                        name:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  userFederationProviders:
+                    items:
+                      properties:
+                        changedSyncPeriod:
+                          format: int32
+                          nullable: true
+                          type: integer
+                        config:
+                          additionalProperties:
+                            type: string
+                          nullable: true
+                          type: object
+                        displayName:
+                          nullable: true
+                          type: string
+                        fullSyncPeriod:
+                          format: int32
+                          nullable: true
+                          type: integer
+                        id:
+                          nullable: true
+                          type: string
+                        lastSync:
+                          format: int32
+                          nullable: true
+                          type: integer
+                        priority:
+                          format: int32
+                          nullable: true
+                          type: integer
+                        providerName:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  userManagedAccessAllowed:
+                    nullable: true
+                    type: boolean
+                  users:
+                    items:
+                      properties:
+                        access:
+                          additionalProperties:
+                            type: boolean
+                          nullable: true
+                          type: object
+                        applicationRoles:
+                          additionalProperties:
+                            items:
+                              type: string
+                            type: array
+                          nullable: true
+                          type: object
+                        attributes:
+                          additionalProperties:
+                            items:
+                              type: string
+                            type: array
+                          nullable: true
+                          type: object
+                        clientConsents:
+                          items:
+                            properties:
+                              clientId:
+                                nullable: true
+                                type: string
+                              createdDate:
+                                format: int64
+                                nullable: true
+                                type: integer
+                              grantedClientScopes:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              grantedRealmRoles:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              lastUpdatedDate:
+                                format: int64
+                                nullable: true
+                                type: integer
+                            type: object
+                          nullable: true
+                          type: array
+                        clientRoles:
+                          additionalProperties:
+                            items:
+                              type: string
+                            type: array
+                          nullable: true
+                          type: object
+                        createdTimestamp:
+                          format: int64
+                          nullable: true
+                          type: integer
+                        credentials:
+                          items:
+                            properties:
+                              algorithm:
+                                nullable: true
+                                type: string
+                              config:
+                                additionalProperties:
+                                  items:
+                                    type: string
+                                  type: array
+                                nullable: true
+                                type: object
+                              counter:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              createdDate:
+                                format: int64
+                                nullable: true
+                                type: integer
+                              credentialData:
+                                nullable: true
+                                type: string
+                              device:
+                                nullable: true
+                                type: string
+                              digits:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              hashIterations:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              hashedSaltedValue:
+                                nullable: true
+                                type: string
+                              id:
+                                nullable: true
+                                type: string
+                              period:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              priority:
+                                format: int32
+                                nullable: true
+                                type: integer
+                              salt:
+                                nullable: true
+                                type: string
+                              secretData:
+                                nullable: true
+                                type: string
+                              temporary:
+                                nullable: true
+                                type: boolean
+                              type:
+                                nullable: true
+                                type: string
+                              userLabel:
+                                nullable: true
+                                type: string
+                              value:
+                                nullable: true
+                                type: string
+                            type: object
+                          nullable: true
+                          type: array
+                        disableableCredentialTypes:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        email:
+                          nullable: true
+                          type: string
+                        emailVerified:
+                          nullable: true
+                          type: boolean
+                        enabled:
+                          nullable: true
+                          type: boolean
+                        federatedIdentities:
+                          items:
+                            properties:
+                              identityProvider:
+                                nullable: true
+                                type: string
+                              userId:
+                                nullable: true
+                                type: string
+                              userName:
+                                nullable: true
+                                type: string
+                            type: object
+                          nullable: true
+                          type: array
+                        federationLink:
+                          nullable: true
+                          type: string
+                        firstName:
+                          nullable: true
+                          type: string
+                        groups:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        id:
+                          nullable: true
+                          type: string
+                        lastName:
+                          nullable: true
+                          type: string
+                        notBefore:
+                          format: int32
+                          nullable: true
+                          type: integer
+                        origin:
+                          nullable: true
+                          type: string
+                        realmRoles:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        requiredActions:
+                          items:
+                            type: string
+                          nullable: true
+                          type: array
+                        self:
+                          nullable: true
+                          type: string
+                        serviceAccountClientId:
+                          nullable: true
+                          type: string
+                        socialLinks:
+                          items:
+                            properties:
+                              socialProvider:
+                                nullable: true
+                                type: string
+                              socialUserId:
+                                nullable: true
+                                type: string
+                              socialUsername:
+                                nullable: true
+                                type: string
+                            type: object
+                          nullable: true
+                          type: array
+                        totp:
+                          nullable: true
+                          type: boolean
+                        userProfileMetadata:
+                          nullable: true
+                          properties:
+                            attributes:
+                              items:
+                                properties:
+                                  annotations:
+                                    additionalProperties: true
+                                    nullable: true
+                                    type: object
+                                  displayName:
+                                    nullable: true
+                                    type: string
+                                  group:
+                                    nullable: true
+                                    type: string
+                                  multivalued:
+                                    nullable: true
+                                    type: boolean
+                                  name:
+                                    nullable: true
+                                    type: string
+                                  readOnly:
+                                    nullable: true
+                                    type: boolean
+                                  required:
+                                    nullable: true
+                                    type: boolean
+                                  validators:
+                                    additionalProperties:
+                                      additionalProperties: true
+                                      type: object
+                                    nullable: true
+                                    type: object
+                                type: object
+                              nullable: true
+                              type: array
+                            groups:
+                              items:
+                                properties:
+                                  annotations:
+                                    additionalProperties: true
+                                    nullable: true
+                                    type: object
+                                  displayDescription:
+                                    nullable: true
+                                    type: string
+                                  displayHeader:
+                                    nullable: true
+                                    type: string
+                                  name:
+                                    nullable: true
+                                    type: string
+                                type: object
+                              nullable: true
+                              type: array
+                          type: object
+                        username:
+                          nullable: true
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  verifiableCredentialsEnabled:
+                    nullable: true
+                    type: boolean
+                  verifyEmail:
+                    nullable: true
+                    type: boolean
+                  waitIncrementSeconds:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  webAuthnPolicyAcceptableAaguids:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  webAuthnPolicyAttestationConveyancePreference:
+                    nullable: true
+                    type: string
+                  webAuthnPolicyAuthenticatorAttachment:
+                    nullable: true
+                    type: string
+                  webAuthnPolicyAvoidSameAuthenticatorRegister:
+                    nullable: true
+                    type: boolean
+                  webAuthnPolicyCreateTimeout:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  webAuthnPolicyExtraOrigins:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  webAuthnPolicyPasswordlessAcceptableAaguids:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  webAuthnPolicyPasswordlessAttestationConveyancePreference:
+                    nullable: true
+                    type: string
+                  webAuthnPolicyPasswordlessAuthenticatorAttachment:
+                    nullable: true
+                    type: string
+                  webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister:
+                    nullable: true
+                    type: boolean
+                  webAuthnPolicyPasswordlessCreateTimeout:
+                    format: int32
+                    nullable: true
+                    type: integer
+                  webAuthnPolicyPasswordlessExtraOrigins:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  webAuthnPolicyPasswordlessRequireResidentKey:
+                    nullable: true
+                    type: string
+                  webAuthnPolicyPasswordlessRpEntityName:
+                    nullable: true
+                    type: string
+                  webAuthnPolicyPasswordlessRpId:
+                    nullable: true
+                    type: string
+                  webAuthnPolicyPasswordlessSignatureAlgorithms:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  webAuthnPolicyPasswordlessUserVerificationRequirement:
+                    nullable: true
+                    type: string
+                  webAuthnPolicyRequireResidentKey:
+                    nullable: true
+                    type: string
+                  webAuthnPolicyRpEntityName:
+                    nullable: true
+                    type: string
+                  webAuthnPolicyRpId:
+                    nullable: true
+                    type: string
+                  webAuthnPolicySignatureAlgorithms:
+                    items:
+                      type: string
+                    nullable: true
+                    type: array
+                  webAuthnPolicyUserVerificationRequirement:
+                    nullable: true
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: has(self.realm) == has(oldSelf.realm)
+              instanceRef:
+                description: The name of the instance to which this realm belongs
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              options:
+                description: Options for the request to the Keycloak Admin API.
+                nullable: true
+                type: object
+              patchFrom:
+                additionalProperties:
+                  description: EnvVarSource represents a source for the value of an EnvVar.
+                  properties:
+                    configMapKeyRef:
+                      description: Selects a key of a ConfigMap.
+                      properties:
+                        key:
+                          description: The key to select.
+                          type: string
+                        name:
+                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        optional:
+                          description: Specify whether the ConfigMap or its key must be defined
+                          type: boolean
+                      required:
+                      - key
+                      - name
+                      type: object
+                    fieldRef:
+                      description: 'Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels[''<KEY>'']`, `metadata.annotations[''<KEY>'']`, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.'
+                      properties:
+                        apiVersion:
+                          description: Version of the schema the FieldPath is written in terms of, defaults to "v1".
+                          type: string
+                        fieldPath:
+                          description: Path of the field to select in the specified API version.
+                          type: string
+                      required:
+                      - fieldPath
+                      type: object
+                    resourceFieldRef:
+                      description: 'Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.'
+                      properties:
+                        containerName:
+                          description: 'Container name: required for volumes, optional for env vars'
+                          type: string
+                        divisor:
+                          description: Specifies the output format of the exposed resources, defaults to "1"
+                          type: string
+                        resource:
+                          description: 'Required: resource to select'
+                          type: string
+                      required:
+                      - resource
+                      type: object
+                    secretKeyRef:
+                      description: Selects a key of a secret in the pod's namespace
+                      properties:
+                        key:
+                          description: The key of the secret to select from.  Must be a valid secret key.
+                          type: string
+                        name:
+                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        optional:
+                          description: Specify whether the Secret or its key must be defined
+                          type: boolean
+                      required:
+                      - key
+                      - name
+                      type: object
+                    valueAs:
+                      enum:
+                      - auto
+                      - string
+                      - number
+                      - yaml
+                      - json
+                      - bool
+                      nullable: true
+                      type: string
+                  type: object
+                description: Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
+                type: object
+            required:
+            - definition
+            - instanceRef
+            type: object
+          status:
+            nullable: true
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
+                      format: date-time
+                      nullable: true
+                      type: string
+                    message:
+                      nullable: true
+                      type: string
+                    reason:
+                      nullable: true
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              instanceRef:
+                type: string
+              message:
+                type: string
+              ready:
+                type: boolean
+              resourcePath:
+                type: string
+              status:
+                type: string
+            required:
+            - ready
+            type: object
+        required:
+        - spec
+        title: ClusterKeycloakRealm
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

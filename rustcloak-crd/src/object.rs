@@ -29,28 +29,28 @@ macro_rules! impl_object {
             const API_PREFIX: &'static str = $api_prefix;
 
             fn id(&self) -> Option<&str> {
-                self.spec.definition.$id_ident.as_deref()
+                self.definition.$id_ident.as_deref()
             }
 
             fn mount_path(&self) -> &str {
-                let $def_v = &self.spec;
+                let $def_v = self;
                 $mount_path
             }
 
             fn definition(&self) -> &Self::Definition {
-                &self.spec.definition
+                &self.definition
             }
 
             fn parent_ref(&self) -> &Self::ParentRef {
-                &self.spec.$parent_ref
+                &self.$parent_ref
             }
 
             fn patches(&self) -> Option<&$crate::KeycloakApiPatchList> {
-                self.spec.patches.as_ref()
+                self.patches.as_ref()
             }
 
             fn options(&self) -> Option<&$crate::KeycloakApiObjectOptions> {
-                self.spec.options.as_ref()
+                self.options.as_ref()
             }
         }
     };

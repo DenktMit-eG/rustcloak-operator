@@ -4,14 +4,16 @@ use crate::error::{Error, Result};
 use k8s_openapi::api::core::v1::{
     ConfigMap, ConfigMapKeySelector, EnvVarSource, Secret,
 };
-use kube::ResourceExt;
 use kube::{Api, Client};
-use rustcloak_crd::KeycloakApiObject;
+use kube::{Resource, ResourceExt};
+use rustcloak_crd::inner_spec::HasInnerSpec;
+use rustcloak_crd::KeycloakApiObjectSpec;
 use serde_json::Value;
 
 struct Resolver<'a> {
+    namespace: Option<String>,
     client: Client,
-    resource: &'a KeycloakApiObject,
+    spec: &'a KeycloakApiObjectSpec,
     resolved_vars: HashMap<String, String>,
     secret_cache: HashMap<String, Secret>,
     config_map_cache: HashMap<String, ConfigMap>,
@@ -86,8 +88,8 @@ impl Resolver<'_> {
         &mut self,
         r: &ConfigMapKeySelector,
     ) -> Result<String> {
-        let ns = self.resource.namespace().ok_or(Error::NoNamespace)?;
-        let api = Api::<ConfigMap>::namespaced(self.client.clone(), &ns);
+        let ns = self.namespace.as_ref().ok_or(Error::NoNamespace)?;
+        let api = Api::<ConfigMap>::namespaced(self.client.clone(), ns);
         let config_map =
             if let Some(config_map) = self.config_map_cache.get(&r.name) {
                 config_map
@@ -95,7 +97,7 @@ impl Resolver<'_> {
                 self.config_map_cache.insert(r.name.clone(), config_map);
                 self.config_map_cache.get(&r.name).unwrap()
             } else {
-                return Err(Error::NoConfigMap(ns, r.name.clone()));
+                return Err(Error::NoConfigMap(ns.to_string(), r.name.clone()));
             };
         Ok(config_map
             .data
@@ -109,15 +111,15 @@ impl Resolver<'_> {
         &mut self,
         r: &k8s_openapi::api::core::v1::SecretKeySelector,
     ) -> Result<String> {
-        let ns = self.resource.namespace().ok_or(Error::NoNamespace)?;
-        let api = Api::<Secret>::namespaced(self.client.clone(), &ns);
+        let ns = self.namespace.as_ref().ok_or(Error::NoNamespace)?;
+        let api = Api::<Secret>::namespaced(self.client.clone(), ns);
         let secret = if let Some(secret) = self.secret_cache.get(&r.name) {
             secret
         } else if let Some(secret) = api.get_opt(&r.name).await? {
             self.secret_cache.insert(r.name.clone(), secret);
             self.secret_cache.get(&r.name).unwrap()
         } else {
-            return Err(Error::NoConfigMap(ns, r.name.clone()));
+            return Err(Error::NoConfigMap(ns.to_string(), r.name.clone()));
         };
         Ok(secret
             .data
@@ -129,7 +131,7 @@ impl Resolver<'_> {
     }
 
     async fn resolve(&mut self) -> Result<Value> {
-        for r in self.resource.spec.vars.iter() {
+        for r in self.spec.vars.iter() {
             let value = if let Some(value) = &r.value {
                 value.clone()
             } else if let Some(ref value_from) = r.value_from.clone() {
@@ -140,7 +142,7 @@ impl Resolver<'_> {
             self.resolved_vars.insert(r.name.clone(), value);
         }
 
-        let payload = serde_yaml::from_str(&self.resource.spec.payload)?;
+        let payload = serde_yaml::from_str(&self.spec.payload)?;
         self.visit(payload)
     }
 }
@@ -151,11 +153,15 @@ pub trait ApiResolver {
 }
 
 #[async_trait::async_trait]
-impl ApiResolver for KeycloakApiObject {
+impl<R> ApiResolver for R
+where
+    R: Resource + HasInnerSpec<InnerSpec = KeycloakApiObjectSpec> + Send + Sync,
+{
     async fn resolve(&self, client: &Client) -> Result<Value> {
         let mut resolver = Resolver {
+            namespace: self.namespace(),
             client: client.clone(),
-            resource: self,
+            spec: self.inner_spec(),
             resolved_vars: HashMap::new(),
             secret_cache: HashMap::new(),
             config_map_cache: HashMap::new(),

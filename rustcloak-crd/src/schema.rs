@@ -108,9 +108,9 @@ macro_rules! schema_patch {
     ($name:ty: $schema:expr) => {
         use schemars::{gen::SchemaGenerator, schema::Schema};
         use $crate::object::KeycloakRestObject;
+        use $crate::schema::SchemaUtil;
 
         pub(crate) fn schema(generator: &mut SchemaGenerator) -> Schema {
-            use $crate::schema::SchemaUtil;
             let mut s = generator
                     .clone()
                     .subschema_for::<<$name as KeycloakRestObject>::Definition>()

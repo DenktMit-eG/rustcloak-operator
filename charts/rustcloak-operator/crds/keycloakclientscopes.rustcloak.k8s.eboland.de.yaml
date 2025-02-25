@@ -11,7 +11,7 @@ spec:
     kind: KeycloakClientScope
     plural: keycloakclientscopes
     shortNames:
-    - kcss
+    - kccs
     singular: keycloakclientscope
   scope: Namespaced
   versions:

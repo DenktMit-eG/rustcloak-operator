@@ -1,6 +1,5 @@
 use crate::error::Result;
 use k8s_openapi::api::core::v1::EnvVar;
-use kube::Resource;
 use rustcloak_crd::KeycloakRestObject;
 use serde::Serialize;
 use serde_json::Value;
@@ -12,7 +11,7 @@ pub trait Morph {
 
 impl<T> Morph for T
 where
-    T: Resource + KeycloakRestObject,
+    T: KeycloakRestObject,
     T::Definition: Serialize,
 {
     fn payload(&self) -> Result<Value> {

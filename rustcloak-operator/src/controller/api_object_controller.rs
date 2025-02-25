@@ -9,8 +9,9 @@ use async_trait::async_trait;
 use futures::{stream, StreamExt};
 use k8s_openapi::{
     api::core::v1::{ConfigMap, Secret},
-    DeepMerge,
+    DeepMerge, NamespaceResourceScope,
 };
+use kube::core::object::HasStatus;
 use kube::runtime::watcher;
 use kube::Resource;
 use kube::{
@@ -21,43 +22,72 @@ use kube::{
 use log::warn;
 use reqwest::StatusCode;
 use rustcloak_crd::{
-    KeycloakApiEndpointPath, KeycloakApiObject, KeycloakApiStatus,
-    KeycloakApiStatusEndpoint, KeycloakInstance,
+    inner_spec::HasInnerSpec, KeycloakApiEndpointPath, KeycloakApiObjectSpec,
+    KeycloakApiStatus, KeycloakApiStatusEndpoint, KeycloakInstance,
 };
+use serde::de::DeserializeOwned;
 use serde_json::Value;
+use std::fmt::Debug;
 use std::sync::Arc;
 use tokio::sync::Notify;
 
 /// This controller is responsible for applying the desired keycloak state in kubernetes to a
 /// keycloak instance.
-#[derive(Debug, Default)]
-pub struct KeycloakApiObjectController {
+#[derive(Debug)]
+pub struct KeycloakApiObjectController<R>
+where
+    R: Resource<DynamicType = ()>,
+{
     reconcile_notify: Arc<Notify>,
-    secret_refs: Arc<RefWatcher<KeycloakApiObject, Secret>>,
-    config_map_refs: Arc<RefWatcher<KeycloakApiObject, ConfigMap>>,
+    secret_refs: Arc<RefWatcher<R, Secret>>,
+    config_map_refs: Arc<RefWatcher<R, ConfigMap>>,
 }
 
-impl KeycloakApiObjectController {
+impl<R> Default for KeycloakApiObjectController<R>
+where
+    R: Resource<DynamicType = ()>,
+{
+    fn default() -> Self {
+        Self {
+            reconcile_notify: Default::default(),
+            secret_refs: Default::default(),
+            config_map_refs: Default::default(),
+        }
+    }
+}
+
+impl<R> KeycloakApiObjectController<R>
+where
+    R: Resource<DynamicType = (), Scope = NamespaceResourceScope>
+        + HasInnerSpec<InnerSpec = KeycloakApiObjectSpec>
+        + Clone
+        + Debug
+        + HasStatus<Status = KeycloakApiStatus>
+        + DeserializeOwned,
+{
     async fn resolve_path(
         &self,
         client: &kube::Client,
         ns: &str,
-        resource: &KeycloakApiObject,
+        resource: &R,
     ) -> Result<String> {
-        let (parent_ref, sub_path) = match &resource.spec.endpoint.path_def {
-            KeycloakApiEndpointPath::Path(path) => return Ok(path.to_string()),
-            KeycloakApiEndpointPath::Parent {
-                parent_ref,
-                sub_path,
-            } => (parent_ref, sub_path),
-        };
-        let api = Api::<KeycloakApiObject>::namespaced(client.clone(), ns);
+        let (parent_ref, sub_path) =
+            match &resource.inner_spec().endpoint.path_def {
+                KeycloakApiEndpointPath::Path(path) => {
+                    return Ok(path.to_string())
+                }
+                KeycloakApiEndpointPath::Parent {
+                    parent_ref,
+                    sub_path,
+                } => (parent_ref, sub_path),
+            };
+        let api = Api::<R>::namespaced(client.clone(), ns);
         let parent = api
             .get_opt(parent_ref)
             .await?
             .ok_or(Error::NoParent(ns.to_string(), parent_ref.to_string()))?;
         let parent_endpoint = parent
-            .status
+            .status()
             .as_ref()
             .and_then(|x| x.endpoint.as_ref())
             .ok_or(Error::NoResourcePath)?;
@@ -70,13 +100,13 @@ impl KeycloakApiObjectController {
 
     async fn keycloak(
         client: &kube::Client,
-        resource: &KeycloakApiObject,
+        resource: &R,
     ) -> Result<KeycloakApiClient> {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let instance_api =
             Api::<KeycloakInstance>::namespaced(client.clone(), &ns);
 
-        let instance_ref = &resource.spec.endpoint.instance_ref;
+        let instance_ref = &resource.inner_spec().endpoint.instance_ref;
         let instance = instance_api
             .get_opt(instance_ref)
             .await?
@@ -89,8 +119,19 @@ impl KeycloakApiObjectController {
 }
 
 #[async_trait]
-impl LifecycleController for KeycloakApiObjectController {
-    type Resource = KeycloakApiObject;
+impl<R> LifecycleController for KeycloakApiObjectController<R>
+where
+    R: Resource<DynamicType = (), Scope = NamespaceResourceScope>
+        + HasInnerSpec<InnerSpec = KeycloakApiObjectSpec>
+        + HasStatus<Status = KeycloakApiStatus>
+        + Send
+        + Sync
+        + Clone
+        + Debug
+        + DeserializeOwned
+        + 'static,
+{
+    type Resource = R;
     const MODULE_PATH: &'static str = module_path!();
 
     fn prepare(
@@ -127,17 +168,17 @@ impl LifecycleController for KeycloakApiObjectController {
     ) -> Result<Action> {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let name = resource.name_unchecked();
-        let api = Api::<KeycloakApiObject>::namespaced(client.clone(), &ns);
+        let api = Api::<R>::namespaced(client.clone(), &ns);
         let keycloak = Self::keycloak(client, &resource).await?;
         let mut payload = resource.resolve(client).await?;
         let immutable_payload: Value =
-            serde_yaml::from_str(&resource.spec.immutable_payload.0)?;
+            serde_yaml::from_str(&resource.inner_spec().immutable_payload.0)?;
         payload.merge_from(immutable_payload.clone());
         let mut success = false;
-        let kind = KeycloakApiObject::kind(&());
+        let kind = R::kind(&());
 
         if let Some(endpoint) =
-            resource.status.as_ref().and_then(|s| s.endpoint.as_ref())
+            resource.status().as_ref().and_then(|s| s.endpoint.as_ref())
         {
             match keycloak.put(&endpoint.resource_path, &payload).await {
                 Ok(_) => {
@@ -171,10 +212,15 @@ impl LifecycleController for KeycloakApiObjectController {
             let path = self.resolve_path(client, &ns, &resource).await?;
             warn!("path: {}", path);
             let resource_path = keycloak.post_location(&path, &payload).await?;
-            let mut status = resource.status.clone().unwrap_or_default();
+            let mut status = resource.status().cloned().unwrap_or_default();
             status.endpoint = Some(KeycloakApiStatusEndpoint {
                 resource_path,
-                instance_ref: resource.spec.endpoint.instance_ref.0.clone(),
+                instance_ref: resource
+                    .inner_spec()
+                    .endpoint
+                    .instance_ref
+                    .0
+                    .clone(),
             });
 
             api.patch_status(
@@ -186,7 +232,7 @@ impl LifecycleController for KeycloakApiObjectController {
         }
 
         let ref_iter = resource
-            .spec
+            .inner_spec()
             .vars
             .iter()
             .filter_map(|v| v.value_from.as_ref());
@@ -206,11 +252,11 @@ impl LifecycleController for KeycloakApiObjectController {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
-        let kind = KeycloakApiObject::kind(&());
+        let kind = R::kind(&());
         let name = resource.name_unchecked();
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let Some(endpoint) =
-            resource.status.as_ref().and_then(|s| s.endpoint.as_ref())
+            resource.status().as_ref().and_then(|s| s.endpoint.as_ref())
         else {
             // If the resource has no resource URL we expect that it never got created, so it's
             // safe to delete the resource.

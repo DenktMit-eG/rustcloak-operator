@@ -1,5 +1,7 @@
 use crate::{
-    impl_object, schema_patch,
+    impl_object,
+    macros::namespace_scope,
+    schema_patch,
     traits::{impl_instance_ref, SecretKeyNames},
     ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
     KeycloakApiStatus, KeycloakRealm,
@@ -18,66 +20,63 @@ pub struct KeycloakClientSecretReference {
     pub client_secret_key: Option<String>,
 }
 
-#[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
-#[kube(
-    kind = "KeycloakClient",
-    shortname = "kcc",
-    doc = "resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)",
-    group = "rustcloak.k8s.eboland.de",
-    version = "v1",
-    status = "KeycloakApiStatus",
-    category = "keycloak",
-    category = "all",
-    namespaced,
-    printcolumn = r#"{
-            "name":"Ready",
-            "type":"boolean",
-            "description":"true if the realm is ready",
-            "jsonPath":".status.ready"
-        }"#,
-    printcolumn = r#"{
-            "name":"Status",
-            "type":"string",
-            "description":"Status String of the resource",
-            "jsonPath":".status.status"
-        }"#,
-    printcolumn = r#"{
-            "name":"Age",
-            "type":"date",
-            "description":"time since the realm was created",
-            "jsonPath":".metadata.creationTimestamp"
-        }"#
-)]
-#[serde(rename_all = "camelCase")]
-/// the KeycloakClient resource
-pub struct KeycloakClientSpec {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub options: Option<KeycloakApiObjectOptions>,
-    /// the name of the kubernetes object that created the realm.
-    pub realm_ref: ImmutableString,
-    #[schemars(schema_with = "schema")]
-    pub definition: ClientRepresentation,
-    #[serde(default, flatten)]
-    pub patches: Option<KeycloakApiPatchList>,
-    pub client_secret: Option<KeycloakClientSecretReference>,
+namespace_scope! {
+    "KeycloakClient", "kcc" {
+        #[kube(
+            doc = "resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)",
+            group = "rustcloak.k8s.eboland.de",
+            version = "v1",
+            status = "KeycloakApiStatus",
+            category = "keycloak",
+            category = "all",
+            printcolumn = r#"{
+                    "name":"Ready",
+                    "type":"boolean",
+                    "description":"true if the realm is ready",
+                    "jsonPath":".status.ready"
+                }"#,
+            printcolumn = r#"{
+                    "name":"Status",
+                    "type":"string",
+                    "description":"Status String of the resource",
+                    "jsonPath":".status.status"
+                }"#,
+            printcolumn = r#"{
+                    "name":"Age",
+                    "type":"date",
+                    "description":"time since the realm was created",
+                    "jsonPath":".metadata.creationTimestamp"
+                }"#
+        )]
+        /// the KeycloakClient resource
+        pub struct KeycloakClientSpec {
+            #[serde(default, skip_serializing_if = "Option::is_none")]
+            pub options: Option<KeycloakApiObjectOptions>,
+            /// the name of the kubernetes object that created the realm.
+            pub realm_ref: ImmutableString,
+            #[schemars(schema_with = "schema")]
+            pub definition: ClientRepresentation,
+            #[serde(default, flatten)]
+            pub patches: Option<KeycloakApiPatchList>,
+            pub client_secret: Option<KeycloakClientSecretReference>,
+        }
+    }
 }
 
-impl SecretKeyNames<2> for KeycloakClient {
+impl SecretKeyNames<2> for Option<KeycloakClientSecretReference> {
     const DEFAULTS: [&'static str; 2] = ["client_id", "client_secret"];
 
     fn secret_key_names_opts(&self) -> Option<[&Option<String>; 2]> {
-        self.spec
-            .client_secret
-            .as_ref()
+        self.as_ref()
             .map(|s| [&s.client_id_key, &s.client_secret_key])
     }
 }
 
-impl_object!("client" <realm_ref: String => KeycloakRealm> / |_d| {"clients"} / id for KeycloakClient => ClientRepresentation);
+impl_object!("client" <realm_ref: String => KeycloakRealm> / |_d| {"clients"} / id for KeycloakClientSpec => ClientRepresentation);
 
 impl_instance_ref!(KeycloakClient);
 
-schema_patch!(KeycloakClient: |s| {
+schema_patch!(KeycloakClientSpec: |s| {
     s.prop("authorizationSettings")
         .prop("policies")
         .array_item()

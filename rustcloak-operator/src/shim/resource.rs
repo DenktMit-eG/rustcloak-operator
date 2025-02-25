@@ -2,7 +2,10 @@ use crate::error::{Error, Result};
 use either::Either;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{Api, Resource};
-use rustcloak_crd::{traits::Endpoint, KeycloakInstance, KeycloakRestObject};
+use rustcloak_crd::{
+    inner_spec::HasInnerSpec, traits::Endpoint, KeycloakInstance,
+    KeycloakRestObject,
+};
 use serde::{de::DeserializeOwned, Serialize};
 use serde_json::Value;
 use std::{fmt::Debug, ops::Deref, sync::Arc};
@@ -51,16 +54,21 @@ pub trait RestShim {
 
 impl<R> RestShim for ResourceShim<R>
 where
-    R: KeycloakRestObject + Resource,
-    R::Definition: Serialize,
+    R: HasInnerSpec + Resource,
+    R::InnerSpec: KeycloakRestObject,
+    <R::InnerSpec as KeycloakRestObject>::Definition: Serialize,
     Self: Send + Sync,
 {
     fn api_name(&self) -> Result<String> {
-        Ok(format!("{}-{}", R::API_PREFIX, self.name()?))
+        Ok(format!(
+            "{}-{}",
+            <R::InnerSpec as KeycloakRestObject>::API_PREFIX,
+            self.name()?
+        ))
     }
 
     fn payload(&self) -> Result<Value> {
-        Ok(serde_json::to_value(self.definition())?)
+        Ok(serde_json::to_value(self.inner_spec().definition())?)
     }
 }
 
@@ -74,22 +82,23 @@ pub struct ResourceMarker;
 #[async_trait::async_trait]
 impl<R> ParentShim<ResourceMarker> for ResourceShim<R>
 where
-    R: KeycloakRestObject + Resource,
-    R::ParentObject: Resource<Scope = NamespaceResourceScope, DynamicType = ()>
+    R: Resource + HasInnerSpec,
+    R::InnerSpec: KeycloakRestObject,
+    <R::InnerSpec as KeycloakRestObject>::ParentObject: Resource<Scope = NamespaceResourceScope, DynamicType = ()>
         + Clone
         + Debug
         + DeserializeOwned,
-    R::ParentRef: AsRef<str>,
+    <R::InnerSpec as KeycloakRestObject>::ParentRef: AsRef<str>,
     Self: Send + Sync,
 {
-    type Parent = R::ParentObject;
+    type Parent = <R::InnerSpec as KeycloakRestObject>::ParentObject;
 
     async fn parent(&self) -> Result<Self::Parent> {
         let api = Api::<Self::Parent>::namespaced(
             self.client.clone(),
             self.namespace()?,
         );
-        Ok(api.get(self.parent_ref().as_ref()).await?)
+        Ok(api.get(self.inner_spec().parent_ref().as_ref()).await?)
     }
 }
 
@@ -97,10 +106,11 @@ pub struct EitherMarker;
 #[async_trait::async_trait]
 impl<R, RP, LP, RR, LR> ParentShim<EitherMarker> for ResourceShim<R>
 where
-    R: KeycloakRestObject<
-            ParentObject = Either<RP, LP>,
-            ParentRef = Either<LR, RR>,
-        > + Resource,
+    R: Resource + HasInnerSpec,
+    R::InnerSpec: KeycloakRestObject<
+        ParentObject = Either<RP, LP>,
+        ParentRef = Either<LR, RR>,
+    >,
     LP: Resource<Scope = NamespaceResourceScope, DynamicType = ()>
         + Clone
         + Debug
@@ -116,7 +126,7 @@ where
     type Parent = Either<RP, LP>;
 
     async fn parent(&self) -> Result<Self::Parent> {
-        match self.parent_ref() {
+        match self.inner_spec().parent_ref() {
             Either::Left(l) => {
                 let api = Api::<RP>::namespaced(
                     self.client.clone(),
