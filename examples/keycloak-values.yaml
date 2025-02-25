@@ -1,0 +1,12 @@
+command:
+  - "/opt/keycloak/bin/kc.sh"
+  - "start-dev"
+  - "--http-port=8080"
+  - "--hostname-strict=false"
+extraEnv: |
+  - name: JAVA_OPTS_APPEND
+    value: >-
+      -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+extraEnvFrom: |
+  - secretRef:
+      name: keycloak-admin

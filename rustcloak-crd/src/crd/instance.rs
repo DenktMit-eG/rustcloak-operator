@@ -1,5 +1,5 @@
-use crate::traits::Endpoint;
-use crate::traits::SecretKeyNames;
+use crate::macros::both_scopes;
+use crate::traits::{Endpoint, SecretKeyNames};
 
 use super::KeycloakApiStatus;
 use super::KeycloakApiStatusEndpoint;
@@ -48,43 +48,42 @@ pub struct KeycloakInstanceClient {
     pub secret: Option<String>,
 }
 
-#[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
-#[kube(
-    kind = "KeycloakInstance",
-    shortname = "kci",
-    doc = "This resource makes a Keycloak instance known to the operator",
-    group = "rustcloak.k8s.eboland.de",
-    version = "v1",
-    status = "KeycloakApiStatus",
-    category = "keycloak",
-    category = "all",
-    namespaced,
-    printcolumn = r#"{
-            "name":"Base URL",
-            "type":"string",
-            "description":"The base URL of the Keycloak instance",
-            "jsonPath":".spec.baseUrl"
-        }"#,
-    printcolumn = r#"{
-            "name":"Ready",
-            "type":"boolean",
-            "description":"true if the realm is ready",
-            "jsonPath":".status.ready"
-        }"#,
-    printcolumn = r#"{
-            "name":"Status",
-            "type":"string",
-            "description":"Status String of the resource",
-            "jsonPath":".status.status"
-        }"#
-)]
-#[serde(rename_all = "camelCase")]
-pub struct KeycloakInstanceSpec {
-    pub base_url: String,
-    pub realm: Option<String>,
-    pub credentials: KeycloakInstanceCredentialReference,
-    pub token: Option<KeycloakInstanceTokenReference>,
-    pub client: Option<KeycloakInstanceClient>,
+both_scopes! {
+    "KeycloakInstance", "kci", "ClusterKeycloakInstance", "ckci", ClusterKeycloakInstanceSpec {
+        #[kube(
+            doc = "This resource makes a Keycloak instance known to the operator",
+            group = "rustcloak.k8s.eboland.de",
+            version = "v1",
+            status = "KeycloakApiStatus",
+            category = "keycloak",
+            category = "all",
+            printcolumn = r#"{
+                    "name":"Base URL",
+                    "type":"string",
+                    "description":"The base URL of the Keycloak instance",
+                    "jsonPath":".spec.baseUrl"
+                }"#,
+            printcolumn = r#"{
+                    "name":"Ready",
+                    "type":"boolean",
+                    "description":"true if the realm is ready",
+                    "jsonPath":".status.ready"
+                }"#,
+            printcolumn = r#"{
+                    "name":"Status",
+                    "type":"string",
+                    "description":"Status String of the resource",
+                    "jsonPath":".status.status"
+                }"#
+        )]
+        pub struct KeycloakInstanceSpec {
+            pub base_url: String,
+            pub realm: Option<String>,
+            pub credentials: KeycloakInstanceCredentialReference,
+            pub token: Option<KeycloakInstanceTokenReference>,
+            pub client: Option<KeycloakInstanceClient>,
+        }
+    }
 }
 
 impl KeycloakInstance {

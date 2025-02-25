@@ -63,7 +63,7 @@ async fn main() -> Result<()> {
     if controllers_str.contains(&ControllerOpt::Api) {
         controllers.push(
             ControllerRunner::new(
-                KeycloakApiObjectController::default(),
+                KeycloakApiObjectController::<KeycloakApiObject>::default(),
                 &client,
             )
             .run()

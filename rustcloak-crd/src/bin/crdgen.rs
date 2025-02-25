@@ -23,6 +23,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let opts = Opts::parse();
 
     let crds = [
+        ClusterKeycloakInstance::crd(),
         KeycloakInstance::crd(),
         KeycloakApiObject::crd(),
         KeycloakAuthenticationFlow::crd(),
@@ -35,6 +36,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         KeycloakIdentityProviderMapper::crd(),
         KeycloakOrganization::crd(),
         KeycloakProtocolMapper::crd(),
+        ClusterKeycloakRealm::crd(),
         KeycloakRealm::crd(),
         KeycloakRequiredActionProvider::crd(),
         KeycloakResource::crd(),

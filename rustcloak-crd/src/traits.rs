@@ -23,6 +23,10 @@ pub trait Endpoint {
 }
 
 macro_rules! impl_instance_ref {
+    ($type:ident, $cluster_type:ident) => {
+        impl_instance_ref!($type);
+        impl_instance_ref!($cluster_type);
+    };
     ($type:ident) => {
         impl $crate::traits::Endpoint for $type {
             fn endpoint(&self) -> Option<&$crate::KeycloakApiStatusEndpoint> {

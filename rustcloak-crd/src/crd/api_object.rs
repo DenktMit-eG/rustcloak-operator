@@ -1,55 +1,54 @@
-use crate::{ImmutableString, KeycloakApiStatus};
+use crate::{macros::both_scopes, ImmutableString, KeycloakApiStatus};
 use k8s_openapi::api::core::v1::EnvVar;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema)]
-#[kube(
-    kind = "KeycloakApiObject",
-    shortname = "kcapi",
-    doc = "Custom Resource for Keycloak API requests. The user should not use this resource directly.",
-    group = "rustcloak.k8s.eboland.de",
-    version = "v1",
-    namespaced,
-    status = "KeycloakApiStatus",
-    category = "keycloak",
-    category = "all",
-    printcolumn = r#"{
-            "name":"Instance",
-            "type":"string",
-            "description":"Instance that API request is sent to",
-            "jsonPath":".spec.endpoint.instanceRef"
-        }"#,
-    printcolumn = r#"{
-            "name":"Ready",
-            "type":"boolean",
-            "description":"true if the realm is ready",
-            "jsonPath":".status.ready"
-        }"#,
-    printcolumn = r#"{
-            "name":"Status",
-            "type":"string",
-            "description":"Status String of the resource",
-            "jsonPath":".status.status"
-        }"#,
-    printcolumn = r#"{
-            "name":"Age",
-            "type":"date",
-            "description":"time since the realm was created",
-            "jsonPath":".metadata.creationTimestamp"
-        }"#
-)]
-#[serde(rename_all = "camelCase")]
-/// defines an API request to the Keycloak Admin API.
-pub struct KeycloakApiObjectSpec {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub options: Option<KeycloakApiObjectOptions>,
-    pub endpoint: KeycloakApiEndpoint,
-    pub immutable_payload: ImmutableString,
-    pub payload: String,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub vars: Vec<EnvVar>,
+both_scopes! {
+    "KeycloakApiObject", "kcapi", "ClusterKeycloakApiObject", "ckcapi", ClusterKeycloakApiObjectSpec {
+        #[kube(
+            doc = "Custom Resource for Keycloak API requests. The user should not use this resource directly.",
+            group = "rustcloak.k8s.eboland.de",
+            version = "v1",
+            status = "KeycloakApiStatus",
+            category = "keycloak",
+            category = "all",
+            printcolumn = r#"{
+                    "name":"Instance",
+                    "type":"string",
+                    "description":"Instance that API request is sent to",
+                    "jsonPath":".spec.endpoint.instanceRef"
+                }"#,
+            printcolumn = r#"{
+                    "name":"Ready",
+                    "type":"boolean",
+                    "description":"true if the realm is ready",
+                    "jsonPath":".status.ready"
+                }"#,
+            printcolumn = r#"{
+                    "name":"Status",
+                    "type":"string",
+                    "description":"Status String of the resource",
+                    "jsonPath":".status.status"
+                }"#,
+            printcolumn = r#"{
+                    "name":"Age",
+                    "type":"date",
+                    "description":"time since the realm was created",
+                    "jsonPath":".metadata.creationTimestamp"
+                }"#
+        )]
+        /// defines an API request to the Keycloak Admin API.
+        pub struct KeycloakApiObjectSpec {
+            #[serde(default, skip_serializing_if = "Option::is_none")]
+            pub options: Option<KeycloakApiObjectOptions>,
+            pub endpoint: KeycloakApiEndpoint,
+            pub immutable_payload: ImmutableString,
+            pub payload: String,
+            #[serde(default, skip_serializing_if = "Vec::is_empty")]
+            pub vars: Vec<EnvVar>,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]

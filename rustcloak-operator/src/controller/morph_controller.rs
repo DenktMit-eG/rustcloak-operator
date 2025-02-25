@@ -14,15 +14,15 @@ use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{
     api::{ObjectMeta, Patch, PatchParams},
-    core::object::{HasSpec, HasStatus},
+    core::object::HasStatus,
     runtime::{controller::Action, watcher, Controller},
     Api, Resource, ResourceExt,
 };
 use log::debug;
 use rustcloak_crd::{
-    traits::Endpoint, KeycloakApiEndpoint, KeycloakApiEndpointPath,
-    KeycloakApiObject, KeycloakApiObjectSpec, KeycloakApiStatus,
-    KeycloakRestObject,
+    inner_spec::HasInnerSpec, traits::Endpoint, KeycloakApiEndpoint,
+    KeycloakApiEndpointPath, KeycloakApiObject, KeycloakApiObjectSpec,
+    KeycloakApiStatus, KeycloakRestObject,
 };
 use serde::{de::DeserializeOwned, Serialize};
 use serde_json::json;
@@ -50,15 +50,16 @@ where
         + Debug
         + Resource<DynamicType = (), Scope = NamespaceResourceScope>
         + HasStatus<Status = KeycloakApiStatus>
-        + HasSpec
+        + HasInnerSpec
         + Clone
         + Endpoint
         + 'static,
-    R::Spec: KeycloakRestObject + Morph,
-    <<R as HasSpec>::Spec as KeycloakRestObject>::Definition:
+    R::InnerSpec: KeycloakRestObject + Morph,
+    <<R as HasInnerSpec>::InnerSpec as KeycloakRestObject>::Definition:
         Send + Sync + Serialize + DeserializeOwned,
-    <<R as HasSpec>::Spec as KeycloakRestObject>::ParentRef: AsRef<str>,
-    <<R as HasSpec>::Spec as KeycloakRestObject>::ParentObject:
+    <<R as HasInnerSpec>::InnerSpec as KeycloakRestObject>::ParentRef:
+        AsRef<str>,
+    <<R as HasInnerSpec>::InnerSpec as KeycloakRestObject>::ParentObject:
         Send + Sync + Clone + Debug + DeserializeOwned + Endpoint,
     ResourceShim<R>: ParentShim<M>,
     <ResourceShim<R> as ParentShim<M>>::Parent: Endpoint + Send + Sync,
@@ -92,21 +93,21 @@ where
         let owner_ref = resource.owner_ref(&()).unwrap();
 
         let primary_key =
-            <<R as HasSpec>::Spec as KeycloakRestObject>::ID_FIELD;
-        let mut payload = resource.spec().payload()?;
+            <<R as HasInnerSpec>::InnerSpec as KeycloakRestObject>::ID_FIELD;
+        let mut payload = resource.inner_spec().payload()?;
         payload
             .as_object_mut()
             .as_mut()
             .unwrap()
             .remove(primary_key);
-        let primary_key_value = resource.spec().id();
+        let primary_key_value = resource.inner_spec().id();
         let immutable_payload = serde_yaml::to_string(&json!({
             primary_key: primary_key_value,
         }))?
         .into();
         let mut patcher = Patcher::new(payload);
         for (path, patch) in resource
-            .spec()
+            .inner_spec()
             .patches()
             .map(|x| x.patch_from.iter())
             .unwrap_or_default()
@@ -125,7 +126,7 @@ where
         let resource_path = format!(
             "{}/{}",
             parent.resource_path().ok_or(Error::NoData)?,
-            resource.spec().mount_path()
+            resource.inner_spec().mount_path()
         );
 
         let endpoint = KeycloakApiEndpoint {
@@ -154,7 +155,7 @@ where
             },
             spec: KeycloakApiObjectSpec {
                 endpoint,
-                options: resource.spec().options().cloned(),
+                options: resource.inner_spec().options().cloned(),
                 immutable_payload,
                 payload,
                 vars,
