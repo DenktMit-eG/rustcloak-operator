@@ -1,4 +1,4 @@
-FROM clux/muslrust:1.82.0-stable-2024-10-24 AS build
+FROM clux/muslrust:1.85.0-stable-2025-02-25 AS build
 
 WORKDIR /src
 
