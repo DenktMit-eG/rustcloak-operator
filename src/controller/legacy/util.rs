@@ -20,6 +20,7 @@ pub fn should_handle_prudent(meta: &ObjectMeta, prudent: bool) -> bool {
         false
     }
 }
+
 pub async fn find_name<T>(
     client: &kube::Client,
     namespace: &str,
@@ -40,9 +41,9 @@ where
     {
         return Ok(name.clone());
     }
+
     let api = Api::<T>::namespaced(client.clone(), namespace);
     let selector = selector.clone().try_into()?;
-
     let list = api
         .list_metadata(
             &ListParams::default().match_any().labels_from(&selector),

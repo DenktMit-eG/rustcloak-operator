@@ -1,13 +1,15 @@
 use super::super::controller_runner::LifecycleController;
 use super::{find_name, should_handle_prudent};
 use crate::app_id;
-use crate::crd::{KeycloakUserSecretReference, KeycloakUserSpec};
+use crate::crd::{
+    KeycloakRealm, KeycloakUserSecretReference, KeycloakUserSpec,
+};
 use crate::error::Error;
 use crate::{crd::KeycloakUser, error::Result};
 use async_trait::async_trait;
 use k8s_openapi::api::core::v1::Secret;
 use k8s_openapi::ByteString;
-use keycloak_crd::{KeycloakRealm as LegacyRealm, KeycloakUser as LegacyUser};
+use keycloak_crd::KeycloakUser as LegacyUser;
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;
 use kube::{
@@ -130,11 +132,13 @@ impl LifecycleController for LegacyUserController {
                 name: Some(name.clone()),
                 namespace: Some(namespace.clone()),
                 owner_references: Some(vec![owner_ref]),
+                labels: resource.meta().labels.clone(),
+                annotations: resource.meta().annotations.clone(),
                 ..Default::default()
             },
             spec: KeycloakUserSpec {
                 options: None,
-                realm_ref: find_name::<LegacyRealm>(
+                realm_ref: find_name::<KeycloakRealm>(
                     client,
                     &namespace,
                     &resource.spec.realm_selector,
