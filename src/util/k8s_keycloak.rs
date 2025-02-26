@@ -226,7 +226,7 @@ impl K8sKeycloakRefreshJob {
         let timeout = if expires > now {
             let timeout = (expires - now) * 5 / 6;
             timeout.to_std().unwrap()
-        } else if self.instance.status().map_or(true, |s| s.ready) {
+        } else if self.instance.status().is_none_or(|s| s.ready) {
             debug!(
                 name = name,
                 namespace = ns,
