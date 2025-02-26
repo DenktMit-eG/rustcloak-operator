@@ -68,6 +68,8 @@ impl LifecycleController for LegacyInstanceController {
                 name: Some(name.clone()),
                 namespace: Some(namespace),
                 owner_references: Some(vec![owner_ref]),
+                labels: resource.meta().labels.clone(),
+                annotations: resource.meta().annotations.clone(),
                 ..Default::default()
             },
             spec: KeycloakInstanceSpec {
