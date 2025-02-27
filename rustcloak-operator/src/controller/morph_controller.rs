@@ -100,11 +100,15 @@ where
             .as_mut()
             .unwrap()
             .remove(primary_key);
-        let primary_key_value = resource.inner_spec().id();
-        let immutable_payload = serde_yaml::to_string(&json!({
-            primary_key: primary_key_value,
-        }))?
-        .into();
+        let immutable_payload =
+            if let Some(primary_key_value) = resource.inner_spec().id() {
+                serde_yaml::to_string(&json!({
+                    primary_key: primary_key_value,
+                }))?
+            } else {
+                "{}".to_string()
+            }
+            .into();
         let mut patcher = Patcher::new(payload);
         for (path, patch) in resource
             .inner_spec()

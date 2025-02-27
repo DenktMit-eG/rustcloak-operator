@@ -5,9 +5,7 @@ use crate::{
     error::{Error, Result},
 };
 use async_trait::async_trait;
-use keycloak_crd::{
-    ExternalKeycloak as LegacyInstance, KeycloakRealm as LegacyRealm,
-};
+use keycloak_crd::KeycloakRealm as LegacyRealm;
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;
 use kube::{
@@ -15,7 +13,7 @@ use kube::{
     Api,
 };
 use kube::{Resource, ResourceExt};
-use rustcloak_crd::{KeycloakRealm, KeycloakRealmSpec};
+use rustcloak_crd::{KeycloakInstance, KeycloakRealm, KeycloakRealmSpec};
 use std::sync::Arc;
 
 #[derive(Debug)]
@@ -68,11 +66,13 @@ impl LifecycleController for LegacyRealmController {
                 name: Some(name.clone()),
                 namespace: Some(namespace.clone()),
                 owner_references: Some(vec![owner_ref]),
+                labels: resource.meta().labels.clone(),
+                annotations: resource.meta().annotations.clone(),
                 ..Default::default()
             },
             spec: KeycloakRealmSpec {
                 options: None,
-                instance_ref: find_name::<LegacyInstance>(
+                instance_ref: find_name::<KeycloakInstance>(
                     client,
                     &namespace,
                     &resource.spec.instance_selector,
