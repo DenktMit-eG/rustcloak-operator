@@ -1,9 +1,9 @@
+use crate::keycloak_types::ComponentRepresentation;
 use crate::{
     impl_object, macros::namespace_scope, schema_patch,
     traits::impl_instance_ref, ImmutableString, KeycloakApiObjectOptions,
     KeycloakApiPatchList, KeycloakApiStatus, KeycloakRealm,
 };
-use keycloak::types::ComponentRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};

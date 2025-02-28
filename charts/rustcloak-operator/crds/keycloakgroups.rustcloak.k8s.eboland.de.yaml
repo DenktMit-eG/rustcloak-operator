@@ -42,25 +42,29 @@ spec:
             description: the KeycloakGroup resource
             properties:
               definition:
+                additionalProperties: false
+                description: |-
+                  GroupRepresentation
+
+                  <details><summary>JSON schema</summary>
+
+                  ```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "id": { "type": "string" }, "name": { "type": "string" }, "parentId": { "type": "string" }, "path": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "subGroupCount": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "subGroups": { "type": "array", "items": { "$ref": "#/$defs/GroupRepresentation" } } }, "additionalProperties": false } ``` </details>
                 properties:
                   access:
                     additionalProperties:
                       type: boolean
-                    nullable: true
                     type: object
                   attributes:
                     additionalProperties:
                       items:
                         type: string
                       type: array
-                    nullable: true
                     type: object
                   clientRoles:
                     additionalProperties:
                       items:
                         type: string
                       type: array
-                    nullable: true
                     type: object
                   id:
                     nullable: true
@@ -80,7 +84,6 @@ spec:
                   realmRoles:
                     items:
                       type: string
-                    nullable: true
                     type: array
                   subGroupCount:
                     format: int64

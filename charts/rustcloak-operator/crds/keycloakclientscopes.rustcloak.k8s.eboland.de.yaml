@@ -37,11 +37,17 @@ spec:
             description: the KeycloakClientScope resource
             properties:
               definition:
+                additionalProperties: false
+                description: |-
+                  ClientScopeRepresentation
+
+                  <details><summary>JSON schema</summary>
+
+                  ```json { "type": "object", "properties": { "attributes": { "type": "object", "additionalProperties": { "type": "string" } }, "description": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMappers": { "type": "array", "items": { "$ref": "#/$defs/ProtocolMapperRepresentation" } } }, "additionalProperties": false } ``` </details>
                 properties:
                   attributes:
                     additionalProperties:
                       type: string
-                    nullable: true
                     type: object
                   description:
                     nullable: true
@@ -56,15 +62,30 @@ spec:
                     nullable: true
                     type: string
                   protocol:
+                    description: |-
+                      ClientScopeRepresentationProtocol
+
+                      <details><summary>JSON schema</summary>
+
+                      ```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
+                    enum:
+                    - openid-connect
+                    - saml
                     nullable: true
                     type: string
                   protocolMappers:
                     items:
+                      additionalProperties: false
+                      description: |-
+                        ProtocolMapperRepresentation
+
+                        <details><summary>JSON schema</summary>
+
+                        ```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } ``` </details>
                       properties:
                         config:
                           additionalProperties:
                             type: string
-                          nullable: true
                           type: object
                         consentRequired:
                           nullable: true
@@ -79,13 +100,21 @@ spec:
                           nullable: true
                           type: string
                         protocol:
+                          description: |-
+                            ProtocolMapperRepresentationProtocol
+
+                            <details><summary>JSON schema</summary>
+
+                            ```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
+                          enum:
+                          - openid-connect
+                          - saml
                           nullable: true
                           type: string
                         protocolMapper:
                           nullable: true
                           type: string
                       type: object
-                    nullable: true
                     type: array
                 type: object
                 x-kubernetes-validations:

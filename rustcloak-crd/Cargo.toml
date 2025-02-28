@@ -9,5 +9,5 @@ k8s-openapi = { version = "0.24.0", features = ["latest", "schemars"] }
 serde = { version = "1.0.218", features = ["derive"], default-features = false }
 schemars = { version = "0.8.21", features = ["chrono", "either"], default-features = false }
 serde_json = "1.0.139"
-keycloak = { version = "26.1.0", features = ["schemars"], default-features = false }
+keycloak-types = { git = "https://github.com/Gottox/keycloak-client.rs" }
 either = { version = "1.14.0", features = ["serde"], default-features = false }

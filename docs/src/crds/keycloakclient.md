@@ -16,7 +16,42 @@ resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.definition.adminUrl](#specdefinitionadminurl)|string||
 |[spec.definition.alwaysDisplayInConsole](#specdefinitionalwaysdisplayinconsole)|boolean||
 |[spec.definition.attributes](#specdefinitionattributes)|object||
+|[spec.definition.attributes.access.token.lifespan](#specdefinitionattributesaccesstokenlifespan)|string||
+|[spec.definition.attributes.access.token.signed.response.alg](#specdefinitionattributesaccesstokensignedresponsealg)|string||
+|[spec.definition.attributes.authorization.encrypted.response.alg](#specdefinitionattributesauthorizationencryptedresponsealg)|string||
+|[spec.definition.attributes.authorization.encrypted.response.enc](#specdefinitionattributesauthorizationencryptedresponseenc)|string||
+|[spec.definition.attributes.authorization.signed.response.alg](#specdefinitionattributesauthorizationsignedresponsealg)|string||
+|[spec.definition.attributes.client.offline.session.idle.timeout](#specdefinitionattributesclientofflinesessionidletimeout)|string||
+|[spec.definition.attributes.client.offline.session.max.lifespan](#specdefinitionattributesclientofflinesessionmaxlifespan)|string||
+|[spec.definition.attributes.client.session.idle.timeout](#specdefinitionattributesclientsessionidletimeout)|string||
+|[spec.definition.attributes.client.session.max.lifespan](#specdefinitionattributesclientsessionmaxlifespan)|string||
+|[spec.definition.attributes.client_credentials.use_refresh_token](#specdefinitionattributesclientcredentialsuserefreshtoken)|string||
+|[spec.definition.attributes.exclude.session.state.from.auth.response](#specdefinitionattributesexcludesessionstatefromauthresponse)|string||
+|[spec.definition.attributes.id.token.encrypted.response.alg](#specdefinitionattributesidtokenencryptedresponsealg)|string||
+|[spec.definition.attributes.id.token.encrypted.response.enc](#specdefinitionattributesidtokenencryptedresponseenc)|string||
+|[spec.definition.attributes.id.token.signed.response.alg](#specdefinitionattributesidtokensignedresponsealg)|string||
+|[spec.definition.attributes.logoUri](#specdefinitionattributeslogouri)|string||
+|[spec.definition.attributes.pkce.code.challenge.method](#specdefinitionattributespkcecodechallengemethod)|string||
+|[spec.definition.attributes.policyUri](#specdefinitionattributespolicyuri)|string||
+|[spec.definition.attributes.post.logout.redirect.uris](#specdefinitionattributespostlogoutredirecturis)|string||
+|[spec.definition.attributes.request.object.encryption.alg](#specdefinitionattributesrequestobjectencryptionalg)|string||
+|[spec.definition.attributes.request.object.encryption.enc](#specdefinitionattributesrequestobjectencryptionenc)|string||
+|[spec.definition.attributes.request.object.required](#specdefinitionattributesrequestobjectrequired)|string||
+|[spec.definition.attributes.request.object.signature.alg](#specdefinitionattributesrequestobjectsignaturealg)|string||
+|[spec.definition.attributes.require.pushed.authorization.requests](#specdefinitionattributesrequirepushedauthorizationrequests)|string||
+|[spec.definition.attributes.tls.client.certificate.bound.access.tokens](#specdefinitionattributestlsclientcertificateboundaccesstokens)|string||
+|[spec.definition.attributes.token.endpoint.auth.signing.alg](#specdefinitionattributestokenendpointauthsigningalg)|string||
+|[spec.definition.attributes.token.response.type.bearer.lower-case](#specdefinitionattributestokenresponsetypebearerlowercase)|string||
+|[spec.definition.attributes.tosUri](#specdefinitionattributestosuri)|string||
+|[spec.definition.attributes.use.refresh.tokens](#specdefinitionattributesuserefreshtokens)|string||
+|[spec.definition.attributes.user.info.encrypted.response.alg](#specdefinitionattributesuserinfoencryptedresponsealg)|string||
+|[spec.definition.attributes.user.info.encrypted.response.enc](#specdefinitionattributesuserinfoencryptedresponseenc)|string||
+|[spec.definition.attributes.user.info.response.signature.alg](#specdefinitionattributesuserinforesponsesignaturealg)|string||
+|[spec.definition.attributes.x509.allow.regex.pattern.comparison](#specdefinitionattributesx509allowregexpatterncomparison)|string||
+|[spec.definition.attributes.x509.subjectdn](#specdefinitionattributesx509subjectdn)|string||
 |[spec.definition.authenticationFlowBindingOverrides](#specdefinitionauthenticationflowbindingoverrides)|object||
+|[spec.definition.authenticationFlowBindingOverrides.browser](#specdefinitionauthenticationflowbindingoverridesbrowser)|string||
+|[spec.definition.authenticationFlowBindingOverrides.direct_grant](#specdefinitionauthenticationflowbindingoverridesdirectgrant)|string||
 |[spec.definition.authorizationServicesEnabled](#specdefinitionauthorizationservicesenabled)|boolean||
 |[spec.definition.authorizationSettings](#specdefinitionauthorizationsettings)|object||
 |[spec.definition.authorizationSettings.allowRemoteResourceManagement](#specdefinitionauthorizationsettingsallowremoteresourcemanagement)|boolean||
@@ -347,7 +382,11 @@ Type: object
 |:--------------|:------------|
 |has(self.id) == has(oldSelf.id)|Value is immutable|
 
-*missing*
+ClientRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "adminUrl": { "title": "Admin URL", "description": "URL to the admin interface of the client. Set this if the client supports the adapter REST API. This REST API allows the auth server to push revocation policies and other administrative tasks. Usually this is set to the base URL of the client.", "type": "string" }, "alwaysDisplayInConsole": { "title": "Always display in UI", "description": "Always list this client in the Account UI, even if the user does not have an active session.", "type": "boolean" }, "attributes": { "type": "object", "properties": { "access.token.lifespan": { "title": "Access Token Lifespan", "description": "Max time before an access token is expired. This value is recommended to be short relative to the SSO timeout.", "type": "string", "pattern": "^[0-9]*$" }, "access.token.signed.response.alg": { "title": "Access token signature algorithm", "description": "JWA algorithm used for signing access tokens.", "type": "string" }, "authorization.encrypted.response.alg": { "title": "Authorization response encryption key management algorithm", "description": "JWA Algorithm used for key management in encrypting the authorization response when the response mode is jwt. This option is needed if you want encrypted authorization response. If left empty, the authorization response is just signed, but not encrypted.", "type": "string" }, "authorization.encrypted.response.enc": { "title": "Authorization response encryption content encryption algorithm", "description": "JWA Algorithm used for content encryption in encrypting the authorization response when the response mode is jwt. This option is needed if you want encrypted authorization response. If left empty, the authorization response is just signed, but not encrypted.", "type": "string" }, "authorization.signed.response.alg": { "title": "Authorization response signature algorithm", "description": "JWA algorithm used for signing authorization response tokens when the response mode is jwt.", "type": "string" }, "client.offline.session.idle.timeout": { "title": "Client Offline Session Idle", "description": "Time a client offline session is allowed to be idle before it expires. Offline tokens are invalidated when a client offline session is expired. The option does not affect the global user SSO session. If not set, it uses the realm Offline Session Idle value.", "type": "string", "pattern": "^[0-9]*$" }, "client.offline.session.max.lifespan": { "title": "Client Offline Session Max", "description": "Max time before a client offline session is expired. If Offline Session Max Limited is enabled at realm level, offline tokens are invalidated when a client offline session is expired. The option does not affect the global user SSO session. If not set, it uses the realm Offline Session Max value.", "type": "string", "pattern": "^[0-9]*$" }, "client.session.idle.timeout": { "title": "Client Session Idle", "description": "Time a client session is allowed to be idle before it expires. Tokens are invalidated when a client session is expired. The option does not affect the global user SSO session. If not set, it uses the standard SSO Session Idle value.", "type": "string", "pattern": "^[0-9]*$" }, "client.session.max.lifespan": { "title": "Client Session Max", "description": "Max time before a client session is expired. Tokens are invalidated when a session is expired. The option does not affect the global user SSO session. If not set, it uses the standard SSO Session Max value.", "type": "string", "pattern": "^[0-9]*$" }, "client_credentials.use_refresh_token": { "title": "Use refresh tokens for client credentials grant", "description": "If this is on, a refresh_token will be created and added to the token response if the client_credentials grant is used. The OAuth 2.0 RFC6749 Section 4.4.3 states that a refresh_token should not be generated when client_credentials grant is used. If this is off then no refresh_token will be generated and the associated user session will be removed.", "type": "string", "enum": [ "true", "false", "" ] }, "exclude.session.state.from.auth.response": { "title": "Exclude Session State From Authentication Response", "description": "If this is on, the parameter 'session_state' will not be included in OpenID Connect Authentication Response. It is useful if the client uses an older OIDC / OAuth2 adapter, which does not support the 'session_state' parameter.", "type": "string", "enum": [ "true", "false", "" ] }, "id.token.encrypted.response.alg": { "title": "ID token encryption key management algorithm", "description": "JWA Algorithm used for key management in encrypting ID tokens. This option is needed if you want encrypted ID tokens. If left empty, ID Tokens are just signed, but not encrypted.", "type": "string" }, "id.token.encrypted.response.enc": { "title": "ID token encryption content encryption algorithm", "description": "JWA Algorithm used for content encryption in encrypting ID tokens. This option is needed just if you want encrypted ID tokens. If left empty, ID Tokens are just signed, but not encrypted.", "type": "string" }, "id.token.signed.response.alg": { "title": "ID token signature algorithm", "description": "JWA algorithm used for signing ID tokens.", "type": "string" }, "logoUri": { "title": "Logo URL", "description": "URL that references a logo for the Client application", "type": "string" }, "pkce.code.challenge.method": { "title": "Proof Key for Code Exchange Code Challenge Method", "description": "Choose which code challenge method for PKCE is used. If not specified, keycloak does not applies PKCE to a client unless the client sends an authorization request with appropriate code challenge and code exchange method.", "type": "string" }, "policyUri": { "title": "Policy URL", "description": "URL that the Relying Party Client provides to the End-User to read about the how the profile data will be used", "type": "string" }, "post.logout.redirect.uris": { "title": "Valid post logout redirect URIs", "description": "Valid URI pattern a browser can redirect to after a successful login. Simple wildcards are allowed such as 'http://example.com/*'. Relative path can be specified too such as /my/relative/path/*. Relative paths are relative to the client root URL, or if none is specified the auth server root URL is used. For SAML, you must set valid URI patterns if you are relying on the consumer service URL embedded with the login request.", "type": "string" }, "request.object.encryption.alg": { "title": "Request object encryption algorithm", "description": "JWE algorithm, which client needs to use when sending OIDC request object specified by 'request' or 'request_uri' parameters. If set to 'any', encryption is optional and any algorithm is allowed.", "type": "string" }, "request.object.encryption.enc": { "title": "Request object content encryption algorithm", "description": "JWE algorithm, which client needs to use when encrypting the content of the OIDC request object specified by 'request' or 'request_uri' parameters. If set to 'any', any algorithm is allowed.", "type": "string" }, "request.object.required": { "title": "Request object required", "description": "Specifies if the client needs to provide a request object with their authorization requests, and what method they can use for this. If set to \"not required\", providing a request object is optional. In all other cases, providing a request object is mandatory. If set to \"request\", the request object must be provided by value. If set to \"request_uri\", the request object must be provided by reference. If set to \"request or request_uri\", either method can be used.", "type": "string" }, "request.object.signature.alg": { "title": "Request object signature algorithm", "description": "JWA algorithm, which client needs to use when sending OIDC request object specified by 'request' or 'request_uri' parameters. If set to 'any', Request object can be signed by any algorithm (including 'none' ).", "type": "string" }, "require.pushed.authorization.requests": { "title": "Pushed authorization request required", "description": "Boolean parameter indicating whether the authorization server accepts authorization request data only via the pushed authorization request method.", "type": "string", "enum": [ "true", "false", "" ] }, "tls.client.certificate.bound.access.tokens": { "title": "OAuth 2.0 Mutual TLS Certificate Bound Access Tokens Enabled", "description": "This enables support for OAuth 2.0 Mutual TLS Certificate Bound Access Tokens, which means that keycloak bind an access token and a refresh token with a X.509 certificate of a token requesting client exchanged in mutual TLS between keycloak's Token Endpoint and this client. These tokens can be treated as Holder-of-Key tokens instead of bearer tokens.", "type": "string", "enum": [ "true", "false", "" ] }, "token.endpoint.auth.signing.alg": { "title": "Signature algorithm", "description": "The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.", "type": "string" }, "token.response.type.bearer.lower-case": { "title": "Use lower-case bearer type in token responses", "description": "If this is on, token responses will be set the with the type \"bearer\" in lower-case. By default, the server sets the type as \"Bearer\" as defined by RFC6750.", "type": "string", "enum": [ "true", "false", "" ] }, "tosUri": { "title": "Terms of service URL", "description": "URL that the Relying Party Client provides to the End-User to read about the Relying Party's terms of service", "type": "string" }, "use.refresh.tokens": { "title": "Use refresh tokens", "description": "If this is on, a refresh_token will be created and added to the token response. If this is off then no refresh_token will be generated.", "type": "string", "enum": [ "true", "false", "" ] }, "user.info.encrypted.response.alg": { "title": "User info response encryption key management algorithm", "description": "JWA Algorithm used for key management in encrypting User Info Endpoint responses. This option is needed if you want encrypted User Info Endpoint responses. If left empty, User Info Endpoint responses are not encrypted.", "type": "string" }, "user.info.encrypted.response.enc": { "title": "User info response encryption content encryption algorithm", "description": "JWA Algorithm used for content encryption in encrypting User Info Endpoint responses. If User Info response encryption key management algorithm is specified, the default for this value is A128CBC-HS256.", "type": "string" }, "user.info.response.signature.alg": { "title": "User info signed response algorithm", "description": "JWA algorithm used for signed User Info Endpoint response. If set to 'unsigned', User Info Response won't be signed and will be returned in application/json format.", "type": "string" }, "x509.allow.regex.pattern.comparison": { "title": "Allow regex pattern comparison", "description": "If OFF, then the Subject DN from given client certificate must exactly match the given DN from the 'Subject DN' property as described in the RFC8705 specification. The Subject DN can be in the RFC4514 or RFC1779 format. If ON, then the Subject DN from given client certificate should match regex specified by 'Subject DN' property.", "type": "string", "enum": [ "true", "false", "" ] }, "x509.subjectdn": { "title": "Subject DN", "description": "A regular expression for validating Subject DN in the Client Certificate. Use \"(.*?)(?:$)\" to match all kind of expressions.", "type": "string" } }, "additionalProperties": { "type": "string" } }, "authenticationFlowBindingOverrides": { "title": "Authentication flow overrides", "type": "object", "properties": { "browser": { "title": "Browser Flow", "description": "Select the flow you want to use for browser authentication.", "type": "string" }, "direct_grant": { "title": "Direct Grant Flow", "description": "Select the flow you want to use for direct grant authentication.", "type": "string" } }, "additionalProperties": { "type": "string" } }, "authorizationServicesEnabled": { "title": "Authorization", "description": "Enable/Disable fine-grained authorization support for a client.", "type": "boolean" }, "authorizationSettings": { "$ref": "#/$defs/ResourceServerRepresentation" }, "baseUrl": { "title": "Home URL", "description": "Default URL to use when the auth server needs to redirect or link back to the client.", "type": "string" }, "bearerOnly": { "description": "This is a special OIDC type. This client only allows bearer token requests and cannot participate in browser logins.", "type": "boolean" }, "clientAuthenticatorType": { "title": "Client Authenticator", "description": "Client Authenticator used for authentication of this client against Keycloak server", "type": "string", "enum": [ "client-jwt", "client-secret", "client-secret-jwt", "client-x509" ] }, "clientId": { "title": "Client ID", "description": "The client identifier registered with the identity provider.", "type": "string" }, "clientTemplate": { "type": "string" }, "consentRequired": { "title": "Consent required", "description": "If enabled, users have to consent to client access.", "type": "boolean" }, "defaultClientScopes": { "type": "array", "items": { "type": "string" } }, "defaultRoles": { "type": "array", "items": { "type": "string" } }, "description": { "title": "Description", "description": "Help text for the description of the new flow", "type": "string" }, "directAccessGrantsEnabled": { "title": "Direct access grants", "description": "This enables support for Direct Access Grants, which means that client has access to username/password of user and exchange it directly with Keycloak server for access token. In terms of OAuth2 specification, this enables support of 'Resource Owner Password Credentials Grant' for this client.", "type": "boolean" }, "directGrantsOnly": { "type": "boolean" }, "enabled": { "title": "Enabled", "description": "Disabled clients cannot initiate a login or have obtained access tokens.", "type": "boolean" }, "frontchannelLogout": { "title": "Front channel logout", "description": "When true, logout requires a browser redirect to client. When false, server performs a background invocation for logout.", "type": "boolean" }, "fullScopeAllowed": { "title": "Full scope allowed", "description": "Allows you to disable all restrictions.", "type": "boolean" }, "id": { "type": "string" }, "implicitFlowEnabled": { "title": "Implicit flow", "description": "This enables support for OpenID Connect redirect based authentication without authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Implicit Flow' for this client.", "type": "boolean" }, "name": { "title": "Name", "description": "Specifies display name of the client. For example 'My Client'. Supports keys for localized values as well. For example: ${my_client}.", "type": "string" }, "nodeReRegistrationTimeout": { "title": "Node Re-registration timeout", "description": "Interval to specify max time for registered clients cluster nodes to re-register. If cluster node will not send re-registration request to Keycloak within this time, it will be unregistered from Keycloak.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "optionalClientScopes": { "type": "array", "items": { "type": "string" } }, "origin": { "type": "string" }, "protocol": { "title": "Protocol", "type": "string" }, "protocolMappers": { "type": "array", "items": { "$ref": "#/$defs/ProtocolMapperRepresentation" } }, "publicClient": { "title": "Client authentication", "description": "This defines the type of the OIDC client. When it's ON, the OIDC type is set to confidential access type. When it's OFF, it is set to public access type.", "type": "boolean" }, "redirectUris": { "title": "Valid redirect URIs", "description": "Valid URI pattern a browser can redirect to after a successful login. Simple wildcards are allowed such as 'http://example.com/*'. Relative path can be specified too such as /my/relative/path/*. Relative paths are relative to the client root URL, or if none is specified the auth server root URL is used. For SAML, you must set valid URI patterns if you are relying on the consumer service URL embedded with the login request.", "type": "array", "items": { "type": "string" } }, "registeredNodes": { "type": "object", "additionalProperties": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 } }, "registrationAccessToken": { "title": "Registration access token", "description": "The registration access token provides access for clients to the client registration service.", "type": "string" }, "rootUrl": { "title": "Root URL", "description": "Root URL appended to relative URLs", "type": "string" }, "secret": { "title": "Client Secret", "type": "string" }, "serviceAccountsEnabled": { "title": "Service accounts roles", "description": "Allows you to authenticate this client to Keycloak and retrieve access token dedicated to this client. In terms of OAuth2 specification, this enables support of 'Client Credentials Grant' for this client.", "type": "boolean" }, "standardFlowEnabled": { "title": "Standard flow", "description": "This enables standard OpenID Connect redirect based authentication with authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Authorization Code Flow' for this client.", "type": "boolean" }, "surrogateAuthRequired": { "type": "boolean" }, "type": { "type": "string" }, "useTemplateConfig": { "type": "boolean" }, "useTemplateMappers": { "type": "boolean" }, "useTemplateScope": { "type": "boolean" }, "webOrigins": { "title": "Web origins", "description": "Allowed CORS origins. To permit all origins of Valid Redirect URIs, add '+'. This does not include the '*' wildcard though. To permit all origins, explicitly add '*'.", "type": "array", "items": { "type": "string" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -363,7 +402,7 @@ Type: object
 
 Type: string
 
-*missing*
+URL to the admin interface of the client. Set this if the client supports the adapter REST API. This REST API allows the auth server to push revocation policies and other administrative tasks. Usually this is set to the base URL of the client.
 
 ---
 
@@ -371,7 +410,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Always list this client in the Account UI, even if the user does not have an active session.
 
 ---
 
@@ -379,7 +418,311 @@ Type: boolean
 
 Type: object
 
-*missing*
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[access.token.lifespan](#specdefinitionattributesaccesstokenlifespan)|string||
+|[access.token.signed.response.alg](#specdefinitionattributesaccesstokensignedresponsealg)|string||
+|[authorization.encrypted.response.alg](#specdefinitionattributesauthorizationencryptedresponsealg)|string||
+|[authorization.encrypted.response.enc](#specdefinitionattributesauthorizationencryptedresponseenc)|string||
+|[authorization.signed.response.alg](#specdefinitionattributesauthorizationsignedresponsealg)|string||
+|[client.offline.session.idle.timeout](#specdefinitionattributesclientofflinesessionidletimeout)|string||
+|[client.offline.session.max.lifespan](#specdefinitionattributesclientofflinesessionmaxlifespan)|string||
+|[client.session.idle.timeout](#specdefinitionattributesclientsessionidletimeout)|string||
+|[client.session.max.lifespan](#specdefinitionattributesclientsessionmaxlifespan)|string||
+|[client_credentials.use_refresh_token](#specdefinitionattributesclientcredentialsuserefreshtoken)|string||
+|[exclude.session.state.from.auth.response](#specdefinitionattributesexcludesessionstatefromauthresponse)|string||
+|[id.token.encrypted.response.alg](#specdefinitionattributesidtokenencryptedresponsealg)|string||
+|[id.token.encrypted.response.enc](#specdefinitionattributesidtokenencryptedresponseenc)|string||
+|[id.token.signed.response.alg](#specdefinitionattributesidtokensignedresponsealg)|string||
+|[logoUri](#specdefinitionattributeslogouri)|string||
+|[pkce.code.challenge.method](#specdefinitionattributespkcecodechallengemethod)|string||
+|[policyUri](#specdefinitionattributespolicyuri)|string||
+|[post.logout.redirect.uris](#specdefinitionattributespostlogoutredirecturis)|string||
+|[request.object.encryption.alg](#specdefinitionattributesrequestobjectencryptionalg)|string||
+|[request.object.encryption.enc](#specdefinitionattributesrequestobjectencryptionenc)|string||
+|[request.object.required](#specdefinitionattributesrequestobjectrequired)|string||
+|[request.object.signature.alg](#specdefinitionattributesrequestobjectsignaturealg)|string||
+|[require.pushed.authorization.requests](#specdefinitionattributesrequirepushedauthorizationrequests)|string||
+|[tls.client.certificate.bound.access.tokens](#specdefinitionattributestlsclientcertificateboundaccesstokens)|string||
+|[token.endpoint.auth.signing.alg](#specdefinitionattributestokenendpointauthsigningalg)|string||
+|[token.response.type.bearer.lower-case](#specdefinitionattributestokenresponsetypebearerlowercase)|string||
+|[tosUri](#specdefinitionattributestosuri)|string||
+|[use.refresh.tokens](#specdefinitionattributesuserefreshtokens)|string||
+|[user.info.encrypted.response.alg](#specdefinitionattributesuserinfoencryptedresponsealg)|string||
+|[user.info.encrypted.response.enc](#specdefinitionattributesuserinfoencryptedresponseenc)|string||
+|[user.info.response.signature.alg](#specdefinitionattributesuserinforesponsesignaturealg)|string||
+|[x509.allow.regex.pattern.comparison](#specdefinitionattributesx509allowregexpatterncomparison)|string||
+|[x509.subjectdn](#specdefinitionattributesx509subjectdn)|string||
+
+ClientRepresentationAttributes
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "access.token.lifespan": { "title": "Access Token Lifespan", "description": "Max time before an access token is expired. This value is recommended to be short relative to the SSO timeout.", "type": "string", "pattern": "^[0-9]*$" }, "access.token.signed.response.alg": { "title": "Access token signature algorithm", "description": "JWA algorithm used for signing access tokens.", "type": "string" }, "authorization.encrypted.response.alg": { "title": "Authorization response encryption key management algorithm", "description": "JWA Algorithm used for key management in encrypting the authorization response when the response mode is jwt. This option is needed if you want encrypted authorization response. If left empty, the authorization response is just signed, but not encrypted.", "type": "string" }, "authorization.encrypted.response.enc": { "title": "Authorization response encryption content encryption algorithm", "description": "JWA Algorithm used for content encryption in encrypting the authorization response when the response mode is jwt. This option is needed if you want encrypted authorization response. If left empty, the authorization response is just signed, but not encrypted.", "type": "string" }, "authorization.signed.response.alg": { "title": "Authorization response signature algorithm", "description": "JWA algorithm used for signing authorization response tokens when the response mode is jwt.", "type": "string" }, "client.offline.session.idle.timeout": { "title": "Client Offline Session Idle", "description": "Time a client offline session is allowed to be idle before it expires. Offline tokens are invalidated when a client offline session is expired. The option does not affect the global user SSO session. If not set, it uses the realm Offline Session Idle value.", "type": "string", "pattern": "^[0-9]*$" }, "client.offline.session.max.lifespan": { "title": "Client Offline Session Max", "description": "Max time before a client offline session is expired. If Offline Session Max Limited is enabled at realm level, offline tokens are invalidated when a client offline session is expired. The option does not affect the global user SSO session. If not set, it uses the realm Offline Session Max value.", "type": "string", "pattern": "^[0-9]*$" }, "client.session.idle.timeout": { "title": "Client Session Idle", "description": "Time a client session is allowed to be idle before it expires. Tokens are invalidated when a client session is expired. The option does not affect the global user SSO session. If not set, it uses the standard SSO Session Idle value.", "type": "string", "pattern": "^[0-9]*$" }, "client.session.max.lifespan": { "title": "Client Session Max", "description": "Max time before a client session is expired. Tokens are invalidated when a session is expired. The option does not affect the global user SSO session. If not set, it uses the standard SSO Session Max value.", "type": "string", "pattern": "^[0-9]*$" }, "client_credentials.use_refresh_token": { "title": "Use refresh tokens for client credentials grant", "description": "If this is on, a refresh_token will be created and added to the token response if the client_credentials grant is used. The OAuth 2.0 RFC6749 Section 4.4.3 states that a refresh_token should not be generated when client_credentials grant is used. If this is off then no refresh_token will be generated and the associated user session will be removed.", "type": "string", "enum": [ "true", "false", "" ] }, "exclude.session.state.from.auth.response": { "title": "Exclude Session State From Authentication Response", "description": "If this is on, the parameter 'session_state' will not be included in OpenID Connect Authentication Response. It is useful if the client uses an older OIDC / OAuth2 adapter, which does not support the 'session_state' parameter.", "type": "string", "enum": [ "true", "false", "" ] }, "id.token.encrypted.response.alg": { "title": "ID token encryption key management algorithm", "description": "JWA Algorithm used for key management in encrypting ID tokens. This option is needed if you want encrypted ID tokens. If left empty, ID Tokens are just signed, but not encrypted.", "type": "string" }, "id.token.encrypted.response.enc": { "title": "ID token encryption content encryption algorithm", "description": "JWA Algorithm used for content encryption in encrypting ID tokens. This option is needed just if you want encrypted ID tokens. If left empty, ID Tokens are just signed, but not encrypted.", "type": "string" }, "id.token.signed.response.alg": { "title": "ID token signature algorithm", "description": "JWA algorithm used for signing ID tokens.", "type": "string" }, "logoUri": { "title": "Logo URL", "description": "URL that references a logo for the Client application", "type": "string" }, "pkce.code.challenge.method": { "title": "Proof Key for Code Exchange Code Challenge Method", "description": "Choose which code challenge method for PKCE is used. If not specified, keycloak does not applies PKCE to a client unless the client sends an authorization request with appropriate code challenge and code exchange method.", "type": "string" }, "policyUri": { "title": "Policy URL", "description": "URL that the Relying Party Client provides to the End-User to read about the how the profile data will be used", "type": "string" }, "post.logout.redirect.uris": { "title": "Valid post logout redirect URIs", "description": "Valid URI pattern a browser can redirect to after a successful login. Simple wildcards are allowed such as 'http://example.com/*'. Relative path can be specified too such as /my/relative/path/*. Relative paths are relative to the client root URL, or if none is specified the auth server root URL is used. For SAML, you must set valid URI patterns if you are relying on the consumer service URL embedded with the login request.", "type": "string" }, "request.object.encryption.alg": { "title": "Request object encryption algorithm", "description": "JWE algorithm, which client needs to use when sending OIDC request object specified by 'request' or 'request_uri' parameters. If set to 'any', encryption is optional and any algorithm is allowed.", "type": "string" }, "request.object.encryption.enc": { "title": "Request object content encryption algorithm", "description": "JWE algorithm, which client needs to use when encrypting the content of the OIDC request object specified by 'request' or 'request_uri' parameters. If set to 'any', any algorithm is allowed.", "type": "string" }, "request.object.required": { "title": "Request object required", "description": "Specifies if the client needs to provide a request object with their authorization requests, and what method they can use for this. If set to \"not required\", providing a request object is optional. In all other cases, providing a request object is mandatory. If set to \"request\", the request object must be provided by value. If set to \"request_uri\", the request object must be provided by reference. If set to \"request or request_uri\", either method can be used.", "type": "string" }, "request.object.signature.alg": { "title": "Request object signature algorithm", "description": "JWA algorithm, which client needs to use when sending OIDC request object specified by 'request' or 'request_uri' parameters. If set to 'any', Request object can be signed by any algorithm (including 'none' ).", "type": "string" }, "require.pushed.authorization.requests": { "title": "Pushed authorization request required", "description": "Boolean parameter indicating whether the authorization server accepts authorization request data only via the pushed authorization request method.", "type": "string", "enum": [ "true", "false", "" ] }, "tls.client.certificate.bound.access.tokens": { "title": "OAuth 2.0 Mutual TLS Certificate Bound Access Tokens Enabled", "description": "This enables support for OAuth 2.0 Mutual TLS Certificate Bound Access Tokens, which means that keycloak bind an access token and a refresh token with a X.509 certificate of a token requesting client exchanged in mutual TLS between keycloak's Token Endpoint and this client. These tokens can be treated as Holder-of-Key tokens instead of bearer tokens.", "type": "string", "enum": [ "true", "false", "" ] }, "token.endpoint.auth.signing.alg": { "title": "Signature algorithm", "description": "The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.", "type": "string" }, "token.response.type.bearer.lower-case": { "title": "Use lower-case bearer type in token responses", "description": "If this is on, token responses will be set the with the type \"bearer\" in lower-case. By default, the server sets the type as \"Bearer\" as defined by RFC6750.", "type": "string", "enum": [ "true", "false", "" ] }, "tosUri": { "title": "Terms of service URL", "description": "URL that the Relying Party Client provides to the End-User to read about the Relying Party's terms of service", "type": "string" }, "use.refresh.tokens": { "title": "Use refresh tokens", "description": "If this is on, a refresh_token will be created and added to the token response. If this is off then no refresh_token will be generated.", "type": "string", "enum": [ "true", "false", "" ] }, "user.info.encrypted.response.alg": { "title": "User info response encryption key management algorithm", "description": "JWA Algorithm used for key management in encrypting User Info Endpoint responses. This option is needed if you want encrypted User Info Endpoint responses. If left empty, User Info Endpoint responses are not encrypted.", "type": "string" }, "user.info.encrypted.response.enc": { "title": "User info response encryption content encryption algorithm", "description": "JWA Algorithm used for content encryption in encrypting User Info Endpoint responses. If User Info response encryption key management algorithm is specified, the default for this value is A128CBC-HS256.", "type": "string" }, "user.info.response.signature.alg": { "title": "User info signed response algorithm", "description": "JWA algorithm used for signed User Info Endpoint response. If set to 'unsigned', User Info Response won't be signed and will be returned in application/json format.", "type": "string" }, "x509.allow.regex.pattern.comparison": { "title": "Allow regex pattern comparison", "description": "If OFF, then the Subject DN from given client certificate must exactly match the given DN from the 'Subject DN' property as described in the RFC8705 specification. The Subject DN can be in the RFC4514 or RFC1779 format. If ON, then the Subject DN from given client certificate should match regex specified by 'Subject DN' property.", "type": "string", "enum": [ "true", "false", "" ] }, "x509.subjectdn": { "title": "Subject DN", "description": "A regular expression for validating Subject DN in the Client Certificate. Use \"(.*?)(?:$)\" to match all kind of expressions.", "type": "string" } }, "additionalProperties": { "type": "string" } } ``` </details>
+
+---
+
+### spec.definition.attributes.access.token.lifespan
+
+Type: string
+
+Max time before an access token is expired. This value is recommended to be short relative to the SSO timeout.
+
+---
+
+### spec.definition.attributes.access.token.signed.response.alg
+
+Type: string
+
+JWA algorithm used for signing access tokens.
+
+---
+
+### spec.definition.attributes.authorization.encrypted.response.alg
+
+Type: string
+
+JWA Algorithm used for key management in encrypting the authorization response when the response mode is jwt. This option is needed if you want encrypted authorization response. If left empty, the authorization response is just signed, but not encrypted.
+
+---
+
+### spec.definition.attributes.authorization.encrypted.response.enc
+
+Type: string
+
+JWA Algorithm used for content encryption in encrypting the authorization response when the response mode is jwt. This option is needed if you want encrypted authorization response. If left empty, the authorization response is just signed, but not encrypted.
+
+---
+
+### spec.definition.attributes.authorization.signed.response.alg
+
+Type: string
+
+JWA algorithm used for signing authorization response tokens when the response mode is jwt.
+
+---
+
+### spec.definition.attributes.client.offline.session.idle.timeout
+
+Type: string
+
+Time a client offline session is allowed to be idle before it expires. Offline tokens are invalidated when a client offline session is expired. The option does not affect the global user SSO session. If not set, it uses the realm Offline Session Idle value.
+
+---
+
+### spec.definition.attributes.client.offline.session.max.lifespan
+
+Type: string
+
+Max time before a client offline session is expired. If Offline Session Max Limited is enabled at realm level, offline tokens are invalidated when a client offline session is expired. The option does not affect the global user SSO session. If not set, it uses the realm Offline Session Max value.
+
+---
+
+### spec.definition.attributes.client.session.idle.timeout
+
+Type: string
+
+Time a client session is allowed to be idle before it expires. Tokens are invalidated when a client session is expired. The option does not affect the global user SSO session. If not set, it uses the standard SSO Session Idle value.
+
+---
+
+### spec.definition.attributes.client.session.max.lifespan
+
+Type: string
+
+Max time before a client session is expired. Tokens are invalidated when a session is expired. The option does not affect the global user SSO session. If not set, it uses the standard SSO Session Max value.
+
+---
+
+### spec.definition.attributes.client_credentials.use_refresh_token
+
+Type: string
+
+If this is on, a refresh_token will be created and added to the token response if the client_credentials grant is used. The OAuth 2.0 RFC6749 Section 4.4.3 states that a refresh_token should not be generated when client_credentials grant is used. If this is off then no refresh_token will be generated and the associated user session will be removed.
+
+---
+
+### spec.definition.attributes.exclude.session.state.from.auth.response
+
+Type: string
+
+If this is on, the parameter 'session_state' will not be included in OpenID Connect Authentication Response. It is useful if the client uses an older OIDC / OAuth2 adapter, which does not support the 'session_state' parameter.
+
+---
+
+### spec.definition.attributes.id.token.encrypted.response.alg
+
+Type: string
+
+JWA Algorithm used for key management in encrypting ID tokens. This option is needed if you want encrypted ID tokens. If left empty, ID Tokens are just signed, but not encrypted.
+
+---
+
+### spec.definition.attributes.id.token.encrypted.response.enc
+
+Type: string
+
+JWA Algorithm used for content encryption in encrypting ID tokens. This option is needed just if you want encrypted ID tokens. If left empty, ID Tokens are just signed, but not encrypted.
+
+---
+
+### spec.definition.attributes.id.token.signed.response.alg
+
+Type: string
+
+JWA algorithm used for signing ID tokens.
+
+---
+
+### spec.definition.attributes.logoUri
+
+Type: string
+
+URL that references a logo for the Client application
+
+---
+
+### spec.definition.attributes.pkce.code.challenge.method
+
+Type: string
+
+Choose which code challenge method for PKCE is used. If not specified, keycloak does not applies PKCE to a client unless the client sends an authorization request with appropriate code challenge and code exchange method.
+
+---
+
+### spec.definition.attributes.policyUri
+
+Type: string
+
+URL that the Relying Party Client provides to the End-User to read about the how the profile data will be used
+
+---
+
+### spec.definition.attributes.post.logout.redirect.uris
+
+Type: string
+
+Valid URI pattern a browser can redirect to after a successful login. Simple wildcards are allowed such as 'http://example.com/*'. Relative path can be specified too such as /my/relative/path/*. Relative paths are relative to the client root URL, or if none is specified the auth server root URL is used. For SAML, you must set valid URI patterns if you are relying on the consumer service URL embedded with the login request.
+
+---
+
+### spec.definition.attributes.request.object.encryption.alg
+
+Type: string
+
+JWE algorithm, which client needs to use when sending OIDC request object specified by 'request' or 'request_uri' parameters. If set to 'any', encryption is optional and any algorithm is allowed.
+
+---
+
+### spec.definition.attributes.request.object.encryption.enc
+
+Type: string
+
+JWE algorithm, which client needs to use when encrypting the content of the OIDC request object specified by 'request' or 'request_uri' parameters. If set to 'any', any algorithm is allowed.
+
+---
+
+### spec.definition.attributes.request.object.required
+
+Type: string
+
+Specifies if the client needs to provide a request object with their authorization requests, and what method they can use for this. If set to "not required", providing a request object is optional. In all other cases, providing a request object is mandatory. If set to "request", the request object must be provided by value. If set to "request_uri", the request object must be provided by reference. If set to "request or request_uri", either method can be used.
+
+---
+
+### spec.definition.attributes.request.object.signature.alg
+
+Type: string
+
+JWA algorithm, which client needs to use when sending OIDC request object specified by 'request' or 'request_uri' parameters. If set to 'any', Request object can be signed by any algorithm (including 'none' ).
+
+---
+
+### spec.definition.attributes.require.pushed.authorization.requests
+
+Type: string
+
+Boolean parameter indicating whether the authorization server accepts authorization request data only via the pushed authorization request method.
+
+---
+
+### spec.definition.attributes.tls.client.certificate.bound.access.tokens
+
+Type: string
+
+This enables support for OAuth 2.0 Mutual TLS Certificate Bound Access Tokens, which means that keycloak bind an access token and a refresh token with a X.509 certificate of a token requesting client exchanged in mutual TLS between keycloak's Token Endpoint and this client. These tokens can be treated as Holder-of-Key tokens instead of bearer tokens.
+
+---
+
+### spec.definition.attributes.token.endpoint.auth.signing.alg
+
+Type: string
+
+The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.
+
+---
+
+### spec.definition.attributes.token.response.type.bearer.lower-case
+
+Type: string
+
+If this is on, token responses will be set the with the type "bearer" in lower-case. By default, the server sets the type as "Bearer" as defined by RFC6750.
+
+---
+
+### spec.definition.attributes.tosUri
+
+Type: string
+
+URL that the Relying Party Client provides to the End-User to read about the Relying Party's terms of service
+
+---
+
+### spec.definition.attributes.use.refresh.tokens
+
+Type: string
+
+If this is on, a refresh_token will be created and added to the token response. If this is off then no refresh_token will be generated.
+
+---
+
+### spec.definition.attributes.user.info.encrypted.response.alg
+
+Type: string
+
+JWA Algorithm used for key management in encrypting User Info Endpoint responses. This option is needed if you want encrypted User Info Endpoint responses. If left empty, User Info Endpoint responses are not encrypted.
+
+---
+
+### spec.definition.attributes.user.info.encrypted.response.enc
+
+Type: string
+
+JWA Algorithm used for content encryption in encrypting User Info Endpoint responses. If User Info response encryption key management algorithm is specified, the default for this value is A128CBC-HS256.
+
+---
+
+### spec.definition.attributes.user.info.response.signature.alg
+
+Type: string
+
+JWA algorithm used for signed User Info Endpoint response. If set to 'unsigned', User Info Response won't be signed and will be returned in application/json format.
+
+---
+
+### spec.definition.attributes.x509.allow.regex.pattern.comparison
+
+Type: string
+
+If OFF, then the Subject DN from given client certificate must exactly match the given DN from the 'Subject DN' property as described in the RFC8705 specification. The Subject DN can be in the RFC4514 or RFC1779 format. If ON, then the Subject DN from given client certificate should match regex specified by 'Subject DN' property.
+
+---
+
+### spec.definition.attributes.x509.subjectdn
+
+Type: string
+
+A regular expression for validating Subject DN in the Client Certificate. Use "(.*?)(?:$)" to match all kind of expressions.
 
 ---
 
@@ -387,7 +730,32 @@ Type: object
 
 Type: object
 
-*missing*
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[browser](#specdefinitionauthenticationflowbindingoverridesbrowser)|string||
+|[direct_grant](#specdefinitionauthenticationflowbindingoverridesdirectgrant)|string||
+
+AuthenticationFlowOverrides
+
+<details><summary>JSON schema</summary>
+
+```json { "title": "Authentication flow overrides", "type": "object", "properties": { "browser": { "title": "Browser Flow", "description": "Select the flow you want to use for browser authentication.", "type": "string" }, "direct_grant": { "title": "Direct Grant Flow", "description": "Select the flow you want to use for direct grant authentication.", "type": "string" } }, "additionalProperties": { "type": "string" } } ``` </details>
+
+---
+
+### spec.definition.authenticationFlowBindingOverrides.browser
+
+Type: string
+
+Select the flow you want to use for browser authentication.
+
+---
+
+### spec.definition.authenticationFlowBindingOverrides.direct_grant
+
+Type: string
+
+Select the flow you want to use for direct grant authentication.
 
 ---
 
@@ -395,7 +763,7 @@ Type: object
 
 Type: boolean
 
-*missing*
+Enable/Disable fine-grained authorization support for a client.
 
 ---
 
@@ -416,7 +784,11 @@ Type: object
 |[resources[]](#specdefinitionauthorizationsettingsresources)|object||
 |[scopes[]](#specdefinitionauthorizationsettingsscopes)|object||
 
-*missing*
+ResourceServerRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "allowRemoteResourceManagement": { "type": "boolean" }, "authorizationSchema": { "$ref": "#/$defs/AuthorizationSchema" }, "clientId": { "type": "string" }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "policyEnforcementMode": { "$ref": "#/$defs/PolicyEnforcementMode" }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -436,7 +808,11 @@ Type: object
 |:-------|:---|:------:|
 |[resourceTypes](#specdefinitionauthorizationsettingsauthorizationschemaresourcetypes)|object||
 
-*missing*
+AuthorizationSchema
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "resourceTypes": { "type": "object", "additionalProperties": { "$ref": "#/$defs/ResourceType" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -460,7 +836,11 @@ Type: string
 
 Type: string
 
-*missing*
+DecisionStrategy
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
 
 ---
 
@@ -501,7 +881,11 @@ Type: object
 |[scopesData[]](#specdefinitionauthorizationsettingspoliciesscopesdata)|object||
 |[type](#specdefinitionauthorizationsettingspoliciestype)|string||
 
-*missing*
+PolicyRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -517,7 +901,11 @@ Type: object
 
 Type: string
 
-*missing*
+DecisionStrategy
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
 
 ---
 
@@ -541,7 +929,11 @@ Type: string
 
 Type: string
 
-*missing*
+Logic
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
 
 ---
 
@@ -604,7 +996,11 @@ Type: object
 |[uri](#specdefinitionauthorizationsettingspoliciesresourcesdatauri)|string||
 |[uris[]](#specdefinitionauthorizationsettingspoliciesresourcesdatauris)|string||
 
-*missing*
+ResourceRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -657,7 +1053,11 @@ Type: object
 |[id](#specdefinitionauthorizationsettingspoliciesresourcesdataownerid)|string||
 |[name](#specdefinitionauthorizationsettingspoliciesresourcesdataownername)|string||
 
-*missing*
+ResourceOwnerRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -696,7 +1096,11 @@ Type: object
 |[id](#specdefinitionauthorizationsettingspoliciesresourcesdatascopesid)|string||
 |[name](#specdefinitionauthorizationsettingspoliciesresourcesdatascopesname)|string||
 
-*missing*
+ScopeRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -743,7 +1147,11 @@ Type: object
 |[id](#specdefinitionauthorizationsettingspoliciesresourcesdatascopesumaid)|string||
 |[name](#specdefinitionauthorizationsettingspoliciesresourcesdatascopesumaname)|string||
 
-*missing*
+ScopeRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -823,7 +1231,11 @@ Type: object
 |[name](#specdefinitionauthorizationsettingspoliciesscopesdataname)|string||
 |[resources[]](#specdefinitionauthorizationsettingspoliciesscopesdataresources)|object||
 
-*missing*
+ScopeRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -876,7 +1288,11 @@ Type: object
 |[uri](#specdefinitionauthorizationsettingspoliciesscopesdataresourcesuri)|string||
 |[uris[]](#specdefinitionauthorizationsettingspoliciesscopesdataresourcesuris)|string||
 
-*missing*
+ResourceRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -929,7 +1345,11 @@ Type: object
 |[id](#specdefinitionauthorizationsettingspoliciesscopesdataresourcesownerid)|string||
 |[name](#specdefinitionauthorizationsettingspoliciesscopesdataresourcesownername)|string||
 
-*missing*
+ResourceOwnerRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -993,7 +1413,11 @@ Type: string
 
 Type: string
 
-*missing*
+PolicyEnforcementMode
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "ENFORCING", "PERMISSIVE", "DISABLED" ] } ``` </details>
 
 ---
 
@@ -1016,7 +1440,11 @@ Type: object
 |[uri](#specdefinitionauthorizationsettingsresourcesuri)|string||
 |[uris[]](#specdefinitionauthorizationsettingsresourcesuris)|string||
 
-*missing*
+ResourceRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1069,7 +1497,11 @@ Type: object
 |[id](#specdefinitionauthorizationsettingsresourcesownerid)|string||
 |[name](#specdefinitionauthorizationsettingsresourcesownername)|string||
 
-*missing*
+ResourceOwnerRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1109,7 +1541,11 @@ Type: object
 |[name](#specdefinitionauthorizationsettingsresourcesscopesname)|string||
 |[policies[]](#specdefinitionauthorizationsettingsresourcesscopespolicies)|object||
 
-*missing*
+ScopeRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1164,7 +1600,11 @@ Type: object
 |[scopes[]](#specdefinitionauthorizationsettingsresourcesscopespoliciesscopes)|string||
 |[type](#specdefinitionauthorizationsettingsresourcesscopespoliciestype)|string||
 
-*missing*
+PolicyRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1180,7 +1620,11 @@ Type: object
 
 Type: string
 
-*missing*
+DecisionStrategy
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
 
 ---
 
@@ -1204,7 +1648,11 @@ Type: string
 
 Type: string
 
-*missing*
+Logic
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
 
 ---
 
@@ -1276,7 +1724,11 @@ Type: object
 |[name](#specdefinitionauthorizationsettingsresourcesscopesumaname)|string||
 |[policies[]](#specdefinitionauthorizationsettingsresourcesscopesumapolicies)|object||
 
-*missing*
+ScopeRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1331,7 +1783,11 @@ Type: object
 |[scopes[]](#specdefinitionauthorizationsettingsresourcesscopesumapoliciesscopes)|string||
 |[type](#specdefinitionauthorizationsettingsresourcesscopesumapoliciestype)|string||
 
-*missing*
+PolicyRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1347,7 +1803,11 @@ Type: object
 
 Type: string
 
-*missing*
+DecisionStrategy
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
 
 ---
 
@@ -1371,7 +1831,11 @@ Type: string
 
 Type: string
 
-*missing*
+Logic
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
 
 ---
 
@@ -1468,7 +1932,11 @@ Type: object
 |[policies[]](#specdefinitionauthorizationsettingsscopespolicies)|object||
 |[resources[]](#specdefinitionauthorizationsettingsscopesresources)|object||
 
-*missing*
+ScopeRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1524,7 +1992,11 @@ Type: object
 |[scopes[]](#specdefinitionauthorizationsettingsscopespoliciesscopes)|string||
 |[type](#specdefinitionauthorizationsettingsscopespoliciestype)|string||
 
-*missing*
+PolicyRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1540,7 +2012,11 @@ Type: object
 
 Type: string
 
-*missing*
+DecisionStrategy
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
 
 ---
 
@@ -1564,7 +2040,11 @@ Type: string
 
 Type: string
 
-*missing*
+Logic
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
 
 ---
 
@@ -1625,7 +2105,11 @@ Type: object
 |[uri](#specdefinitionauthorizationsettingsscopespoliciesresourcesdatauri)|string||
 |[uris[]](#specdefinitionauthorizationsettingsscopespoliciesresourcesdatauris)|string||
 
-*missing*
+ResourceRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1678,7 +2162,11 @@ Type: object
 |[id](#specdefinitionauthorizationsettingsscopespoliciesresourcesdataownerid)|string||
 |[name](#specdefinitionauthorizationsettingsscopespoliciesresourcesdataownername)|string||
 
-*missing*
+ResourceOwnerRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1763,7 +2251,11 @@ Type: object
 |[uri](#specdefinitionauthorizationsettingsscopesresourcesuri)|string||
 |[uris[]](#specdefinitionauthorizationsettingsscopesresourcesuris)|string||
 
-*missing*
+ResourceRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1816,7 +2308,11 @@ Type: object
 |[id](#specdefinitionauthorizationsettingsscopesresourcesownerid)|string||
 |[name](#specdefinitionauthorizationsettingsscopesresourcesownername)|string||
 
-*missing*
+ResourceOwnerRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1872,7 +2368,7 @@ Type: string
 
 Type: string
 
-*missing*
+Default URL to use when the auth server needs to redirect or link back to the client.
 
 ---
 
@@ -1880,7 +2376,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+This is a special OIDC type. This client only allows bearer token requests and cannot participate in browser logins.
 
 ---
 
@@ -1888,7 +2384,7 @@ Type: boolean
 
 Type: string
 
-*missing*
+Client Authenticator used for authentication of this client against Keycloak server
 
 ---
 
@@ -1896,7 +2392,7 @@ Type: string
 
 Type: string
 
-*missing*
+The client identifier registered with the identity provider.
 
 ---
 
@@ -1912,7 +2408,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+If enabled, users have to consent to client access.
 
 ---
 
@@ -1936,7 +2432,7 @@ Type: string
 
 Type: string
 
-*missing*
+Help text for the description of the new flow
 
 ---
 
@@ -1944,7 +2440,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+This enables support for Direct Access Grants, which means that client has access to username/password of user and exchange it directly with Keycloak server for access token. In terms of OAuth2 specification, this enables support of 'Resource Owner Password Credentials Grant' for this client.
 
 ---
 
@@ -1960,7 +2456,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+Disabled clients cannot initiate a login or have obtained access tokens.
 
 ---
 
@@ -1968,7 +2464,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+When true, logout requires a browser redirect to client. When false, server performs a background invocation for logout.
 
 ---
 
@@ -1976,7 +2472,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+Allows you to disable all restrictions.
 
 ---
 
@@ -1996,7 +2492,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+This enables support for OpenID Connect redirect based authentication without authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Implicit Flow' for this client.
 
 ---
 
@@ -2004,7 +2500,7 @@ Type: boolean
 
 Type: string
 
-*missing*
+Specifies display name of the client. For example 'My Client'. Supports keys for localized values as well. For example: ${my_client}.
 
 ---
 
@@ -2012,7 +2508,7 @@ Type: string
 
 Type: integer
 
-*missing*
+Interval to specify max time for registered clients cluster nodes to re-register. If cluster node will not send re-registration request to Keycloak within this time, it will be unregistered from Keycloak.
 
 ---
 
@@ -2062,7 +2558,11 @@ Type: object
 |[protocol](#specdefinitionprotocolmappersprotocol)|string||
 |[protocolMapper](#specdefinitionprotocolmappersprotocolmapper)|string||
 
-*missing*
+ProtocolMapperRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2110,7 +2610,11 @@ Type: string
 
 Type: string
 
-*missing*
+ProtocolMapperRepresentationProtocol
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
 
 ---
 
@@ -2126,7 +2630,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+This defines the type of the OIDC client. When it's ON, the OIDC type is set to confidential access type. When it's OFF, it is set to public access type.
 
 ---
 
@@ -2150,7 +2654,7 @@ Type: object
 
 Type: string
 
-*missing*
+The registration access token provides access for clients to the client registration service.
 
 ---
 
@@ -2158,7 +2662,7 @@ Type: string
 
 Type: string
 
-*missing*
+Root URL appended to relative URLs
 
 ---
 
@@ -2174,7 +2678,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Allows you to authenticate this client to Keycloak and retrieve access token dedicated to this client. In terms of OAuth2 specification, this enables support of 'Client Credentials Grant' for this client.
 
 ---
 
@@ -2182,7 +2686,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+This enables standard OpenID Connect redirect based authentication with authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Authorization Code Flow' for this client.
 
 ---
 

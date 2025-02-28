@@ -1,9 +1,9 @@
+use crate::keycloak_types::IdentityProviderMapperRepresentation;
 use crate::{
     impl_object, macros::namespace_scope, schema_patch,
     traits::impl_instance_ref, ImmutableString, KeycloakApiObjectOptions,
     KeycloakApiPatchList, KeycloakApiStatus, KeycloakIdentityProvider,
 };
-use keycloak::types::IdentityProviderMapperRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};

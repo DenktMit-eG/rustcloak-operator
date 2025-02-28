@@ -20,7 +20,7 @@ use kube::{
 };
 use log::{info, warn};
 use randstr::randstr;
-use rustcloak_crd::keycloak::CredentialRepresentation;
+use rustcloak_crd::keycloak_types::CredentialRepresentation;
 use rustcloak_crd::traits::SecretKeyNames;
 use rustcloak_crd::KeycloakUser;
 

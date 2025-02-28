@@ -94,7 +94,11 @@ Type: object
 |:--------------|:------------|
 |has(self.id) == has(oldSelf.id)|Value is immutable|
 
-*missing*
+ProtocolMapperRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -146,7 +150,11 @@ Type: string
 
 Type: string
 
-*missing*
+ProtocolMapperRepresentationProtocol
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
 
 ---
 

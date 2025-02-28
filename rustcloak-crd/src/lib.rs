@@ -10,5 +10,5 @@ pub mod traits;
 
 pub use crd::*;
 pub use immutable::*;
-pub use keycloak::types as keycloak;
+pub use keycloak_types;
 pub use object::*;

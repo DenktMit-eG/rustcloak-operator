@@ -126,7 +126,11 @@ Type: object
 |:--------------|:------------|
 |has(self._id) == has(oldSelf._id)|Value is immutable|
 
-*missing*
+ResourceRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -183,7 +187,11 @@ Type: object
 |[id](#specdefinitionownerid)|string||
 |[name](#specdefinitionownername)|string||
 
-*missing*
+ResourceOwnerRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -223,7 +231,11 @@ Type: object
 |[name](#specdefinitionscopesname)|string||
 |[policies[]](#specdefinitionscopespolicies)|object||
 
-*missing*
+ScopeRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -278,7 +290,11 @@ Type: object
 |[scopes[]](#specdefinitionscopespoliciesscopes)|string||
 |[type](#specdefinitionscopespoliciestype)|string||
 
-*missing*
+PolicyRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -294,7 +310,11 @@ Type: object
 
 Type: string
 
-*missing*
+DecisionStrategy
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
 
 ---
 
@@ -318,7 +338,11 @@ Type: string
 
 Type: string
 
-*missing*
+Logic
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
 
 ---
 
@@ -390,7 +414,11 @@ Type: object
 |[name](#specdefinitionscopesumaname)|string||
 |[policies[]](#specdefinitionscopesumapolicies)|object||
 
-*missing*
+ScopeRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -445,7 +473,11 @@ Type: object
 |[scopes[]](#specdefinitionscopesumapoliciesscopes)|string||
 |[type](#specdefinitionscopesumapoliciestype)|string||
 
-*missing*
+PolicyRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -461,7 +493,11 @@ Type: object
 
 Type: string
 
-*missing*
+DecisionStrategy
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
 
 ---
 
@@ -485,7 +521,11 @@ Type: string
 
 Type: string
 
-*missing*
+Logic
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
 
 ---
 

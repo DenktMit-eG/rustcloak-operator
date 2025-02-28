@@ -1,8 +1,6 @@
 use k8s_openapi::api::core::v1::{ConfigMapKeySelector, SecretKeySelector};
 use thiserror::Error;
 
-use crate::api::KeycloakApiAuthBuilderError;
-
 type OAuth2TokenError = oauth2::RequestTokenError<
     oauth2::HttpClientError<reqwest::Error>,
     oauth2::StandardErrorResponse<oauth2::basic::BasicErrorResponseType>,
@@ -12,8 +10,8 @@ type OAuth2TokenError = oauth2::RequestTokenError<
 pub enum Error {
     #[error("An error occurred")]
     GenericError,
-    #[error("Keycloak instance not found: {0}")]
-    KeycloakInstanceNotFound(String),
+    #[error("Keycloak Error: {0}")]
+    KeycloakClient(#[from] keycloak_client::Error),
     #[error("No Parent: {0}/{1}")]
     NoParent(String, String),
     #[error("Recursive Parent: {0}/{1}")]
@@ -60,8 +58,6 @@ pub enum Error {
     OauthParseError(#[from] oauth2::url::ParseError),
     #[error("Oauth Token Request error: {0}")]
     OAuth2TokenError(#[from] OAuth2TokenError),
-    #[error("KeycloakApiAuthBuilderError: {0}")]
-    KeycloakAuthBuilderError(#[from] KeycloakApiAuthBuilderError),
     #[error("Borrow error: {0}")]
     BorrowError(#[from] std::cell::BorrowError),
     #[error("Send error: {0}")]

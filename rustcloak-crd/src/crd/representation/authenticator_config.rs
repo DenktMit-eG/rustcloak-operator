@@ -4,7 +4,7 @@ use crate::{
     KeycloakApiPatchList, KeycloakApiStatus, KeycloakRealm,
 };
 
-use keycloak::types::AuthenticatorConfigRepresentation;
+use crate::keycloak_types::AuthenticatorConfigRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};

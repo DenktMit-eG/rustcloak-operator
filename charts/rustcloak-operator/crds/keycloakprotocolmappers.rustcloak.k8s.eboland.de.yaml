@@ -52,11 +52,17 @@ spec:
                 - message: Value is immutable
                   rule: self == oldSelf
               definition:
+                additionalProperties: false
+                description: |-
+                  ProtocolMapperRepresentation
+
+                  <details><summary>JSON schema</summary>
+
+                  ```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } ``` </details>
                 properties:
                   config:
                     additionalProperties:
                       type: string
-                    nullable: true
                     type: object
                   consentRequired:
                     nullable: true
@@ -74,6 +80,15 @@ spec:
                     nullable: true
                     type: string
                   protocol:
+                    description: |-
+                      ProtocolMapperRepresentationProtocol
+
+                      <details><summary>JSON schema</summary>
+
+                      ```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
+                    enum:
+                    - openid-connect
+                    - saml
                     nullable: true
                     type: string
                   protocolMapper:

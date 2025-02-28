@@ -75,7 +75,11 @@ Type: object
 |:--------------|:------------|
 |has(self.id) == has(oldSelf.id)|Value is immutable|
 
-*missing*
+ClientScopeRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attributes": { "type": "object", "additionalProperties": { "type": "string" } }, "description": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMappers": { "type": "array", "items": { "$ref": "#/$defs/ProtocolMapperRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -119,7 +123,11 @@ Type: string
 
 Type: string
 
-*missing*
+ClientScopeRepresentationProtocol
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
 
 ---
 
@@ -137,7 +145,11 @@ Type: object
 |[protocol](#specdefinitionprotocolmappersprotocol)|string||
 |[protocolMapper](#specdefinitionprotocolmappersprotocolmapper)|string||
 
-*missing*
+ProtocolMapperRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -185,7 +197,11 @@ Type: string
 
 Type: string
 
-*missing*
+ProtocolMapperRepresentationProtocol
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
 
 ---
 

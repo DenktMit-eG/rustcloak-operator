@@ -1,5 +1,4 @@
 use crate::{
-    api::KeycloakApiClient,
     app_id,
     controller::controller_runner::LifecycleController,
     error::{Error, Result},
@@ -11,6 +10,7 @@ use k8s_openapi::{
     api::core::v1::{ConfigMap, Secret},
     DeepMerge, NamespaceResourceScope,
 };
+use keycloak_client::ApiClient;
 use kube::core::object::HasStatus;
 use kube::runtime::watcher;
 use kube::Resource;
@@ -101,7 +101,7 @@ where
     async fn keycloak(
         client: &kube::Client,
         resource: &R,
-    ) -> Result<KeycloakApiClient> {
+    ) -> Result<ApiClient> {
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let instance_api =
             Api::<KeycloakInstance>::namespaced(client.clone(), &ns);
@@ -190,7 +190,10 @@ where
                     )
                     .await?;
                 }
-                Err(Error::KeycloakError(StatusCode::NOT_FOUND, m)) => {
+                Err(keycloak_client::Error::ResponseError(
+                    StatusCode::NOT_FOUND,
+                    m,
+                )) => {
                     warn!(
                         kind = kind,
                         name = name,
@@ -277,7 +280,10 @@ where
             Err(e) => Err(e)?,
         };
         match keycloak.delete(&endpoint.resource_path).await {
-            Err(Error::KeycloakError(StatusCode::NOT_FOUND, m)) => {
+            Err(keycloak_client::Error::ResponseError(
+                StatusCode::NOT_FOUND,
+                m,
+            )) => {
                 warn!(
                     kind = kind,
                     name = name,

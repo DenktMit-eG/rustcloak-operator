@@ -9,6 +9,10 @@ resource to define a identity provider mapper within a [KeyclaokIdentityProvider
 |[spec](#spec)|object|✅|
 |[spec.definition](#specdefinition)|object|✅|
 |[spec.definition.config](#specdefinitionconfig)|object||
+|[spec.definition.config.attribute.friendly.name](#specdefinitionconfigattributefriendlyname)|string||
+|[spec.definition.config.attribute.name.format](#specdefinitionconfigattributenameformat)|string||
+|[spec.definition.config.syncMode](#specdefinitionconfigsyncmode)|string||
+|[spec.definition.config.user.attribute](#specdefinitionconfiguserattribute)|string||
 |[spec.definition.id](#specdefinitionid)|string||
 |[spec.definition.identityProviderAlias](#specdefinitionidentityprovideralias)|string||
 |[spec.definition.identityProviderMapper](#specdefinitionidentityprovidermapper)|string||
@@ -64,7 +68,11 @@ Type: object
 |:--------------|:------------|
 |has(self.id) == has(oldSelf.id)|Value is immutable|
 
-*missing*
+IdentityProviderMapperRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "properties": { "attribute.friendly.name": { "title": "Friendly name", "description": "Friendly name of attribute to search for in assertion. You can leave this blank and specify a name instead.", "type": "string" }, "attribute.name.format": { "type": "string", "enum": [ "ATTRIBUTE_FORMAT_BASIC", "ATTRIBUTE_FORMAT_URI", "ATTRIBUTE_FORMAT_UNSPECIFIED" ] }, "syncMode": { "title": "Sync mode override", "description": "Overrides the default sync mode of the IDP for this mapper. Values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider and 'inherit' to use the sync mode defined in the identity provider for this mapper.", "type": "string", "enum": [ "INHERIT", "IMPORT", "LEGACY", "FORCE" ] }, "user.attribute": { "title": "User Attribute Name", "description": "Name of user attribute you want to hardcode", "type": "string" } }, "additionalProperties": { "type": "string" } }, "id": { "type": "string" }, "identityProviderAlias": { "type": "string" }, "identityProviderMapper": { "type": "string" }, "name": { "title": "Name", "description": "Name of the mapper.", "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -72,7 +80,54 @@ Type: object
 
 Type: object
 
-*missing*
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[attribute.friendly.name](#specdefinitionconfigattributefriendlyname)|string||
+|[attribute.name.format](#specdefinitionconfigattributenameformat)|string||
+|[syncMode](#specdefinitionconfigsyncmode)|string||
+|[user.attribute](#specdefinitionconfiguserattribute)|string||
+
+IdentityProviderMapperRepresentationConfig
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attribute.friendly.name": { "title": "Friendly name", "description": "Friendly name of attribute to search for in assertion. You can leave this blank and specify a name instead.", "type": "string" }, "attribute.name.format": { "type": "string", "enum": [ "ATTRIBUTE_FORMAT_BASIC", "ATTRIBUTE_FORMAT_URI", "ATTRIBUTE_FORMAT_UNSPECIFIED" ] }, "syncMode": { "title": "Sync mode override", "description": "Overrides the default sync mode of the IDP for this mapper. Values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider and 'inherit' to use the sync mode defined in the identity provider for this mapper.", "type": "string", "enum": [ "INHERIT", "IMPORT", "LEGACY", "FORCE" ] }, "user.attribute": { "title": "User Attribute Name", "description": "Name of user attribute you want to hardcode", "type": "string" } }, "additionalProperties": { "type": "string" } } ``` </details>
+
+---
+
+### spec.definition.config.attribute.friendly.name
+
+Type: string
+
+Friendly name of attribute to search for in assertion. You can leave this blank and specify a name instead.
+
+---
+
+### spec.definition.config.attribute.name.format
+
+Type: string
+
+IdentityProviderMapperRepresentationConfigAttributeNameFormat
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "ATTRIBUTE_FORMAT_BASIC", "ATTRIBUTE_FORMAT_URI", "ATTRIBUTE_FORMAT_UNSPECIFIED" ] } ``` </details>
+
+---
+
+### spec.definition.config.syncMode
+
+Type: string
+
+Overrides the default sync mode of the IDP for this mapper. Values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider and 'inherit' to use the sync mode defined in the identity provider for this mapper.
+
+---
+
+### spec.definition.config.user.attribute
+
+Type: string
+
+Name of user attribute you want to hardcode
 
 ---
 
@@ -108,7 +163,7 @@ Type: string
 
 Type: string
 
-*missing*
+Name of the mapper.
 
 ---
 

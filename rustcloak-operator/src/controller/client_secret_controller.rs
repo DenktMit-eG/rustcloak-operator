@@ -19,7 +19,7 @@ use kube::{
     Api, Resource as KubeResource, ResourceExt,
 };
 use log::{debug, info, warn};
-use rustcloak_crd::keycloak::CredentialRepresentation;
+use rustcloak_crd::keycloak_types::CredentialRepresentation;
 use rustcloak_crd::traits::SecretKeyNames;
 use rustcloak_crd::KeycloakClient;
 

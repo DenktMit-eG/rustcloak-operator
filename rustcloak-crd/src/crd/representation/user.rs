@@ -1,3 +1,4 @@
+use crate::keycloak_types::UserRepresentation;
 use crate::{
     impl_object,
     macros::namespace_scope,
@@ -6,7 +7,6 @@ use crate::{
     ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
     KeycloakApiStatus, KeycloakRealm,
 };
-use keycloak::types::UserRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};

@@ -89,7 +89,11 @@ Type: object
 |:--------------|:------------|
 |has(self.name) == has(oldSelf.name)|Value is immutable|
 
-*missing*
+RoleRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientRole": { "type": "boolean" }, "composite": { "type": "boolean" }, "composites": { "$ref": "#/$defs/Composites" }, "containerId": { "type": "string" }, "description": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "scopeParamRequired": { "type": "boolean" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -127,7 +131,11 @@ Type: object
 |[client](#specdefinitioncompositesclient)|object||
 |[realm[]](#specdefinitioncompositesrealm)|string||
 
-*missing*
+Composites
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "application": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "client": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "realm": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "additionalProperties": false } ``` </details>
 
 ---
 
