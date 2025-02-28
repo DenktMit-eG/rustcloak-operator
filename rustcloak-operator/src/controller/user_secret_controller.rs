@@ -10,7 +10,6 @@ use crate::{
 };
 use futures::StreamExt;
 use k8s_openapi::{api::core::v1::Secret, ByteString};
-use keycloak::types::CredentialRepresentation;
 use kube::{
     api::{ObjectMeta, PatchParams, PostParams},
     runtime::{
@@ -21,6 +20,7 @@ use kube::{
 };
 use log::{info, warn};
 use randstr::randstr;
+use rustcloak_crd::keycloak::CredentialRepresentation;
 use rustcloak_crd::traits::SecretKeyNames;
 use rustcloak_crd::KeycloakUser;
 

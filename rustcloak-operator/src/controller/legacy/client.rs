@@ -13,7 +13,8 @@ use kube::{
 };
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::{
-    KeycloakClient, KeycloakClientSecretReference, KeycloakClientSpec, KeycloakRealm,
+    KeycloakClient, KeycloakClientSecretReference, KeycloakClientSpec,
+    KeycloakRealm,
 };
 use std::sync::Arc;
 

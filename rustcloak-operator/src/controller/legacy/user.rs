@@ -6,7 +6,7 @@ use crate::{
 };
 use async_trait::async_trait;
 use k8s_openapi::{api::core::v1::Secret, ByteString};
-use keycloak_crd::{KeycloakUser as LegacyUser};
+use keycloak_crd::KeycloakUser as LegacyUser;
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;
 use kube::{
