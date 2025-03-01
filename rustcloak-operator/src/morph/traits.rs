@@ -1,8 +1,8 @@
 use crate::error::Result;
 use k8s_openapi::api::core::v1::EnvVar;
+use k8s_openapi::serde_json::{self, Value};
 use rustcloak_crd::KeycloakRestObject;
 use serde::Serialize;
-use serde_json::Value;
 
 pub trait Morph {
     fn payload(&self) -> Result<Value>;

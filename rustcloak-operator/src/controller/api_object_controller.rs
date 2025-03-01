@@ -6,11 +6,12 @@ use crate::{
 };
 use async_trait::async_trait;
 use futures::{StreamExt, stream};
+use k8s_openapi::serde_json::Value;
 use k8s_openapi::{
     DeepMerge, NamespaceResourceScope,
     api::core::v1::{ConfigMap, Secret},
 };
-use keycloak_client::ApiClient;
+use keycloak_client::{ApiClient, StatusCode};
 use kube::Resource;
 use kube::core::object::HasStatus;
 use kube::runtime::watcher;
@@ -20,13 +21,11 @@ use kube::{
     runtime::{Controller, controller::Action},
 };
 use log::warn;
-use reqwest::StatusCode;
 use rustcloak_crd::{
     KeycloakApiEndpointPath, KeycloakApiObjectSpec, KeycloakApiStatus,
     KeycloakApiStatusEndpoint, KeycloakInstance, inner_spec::HasInnerSpec,
 };
 use serde::de::DeserializeOwned;
-use serde_json::Value;
 use std::fmt::Debug;
 use std::sync::Arc;
 use tokio::sync::Notify;

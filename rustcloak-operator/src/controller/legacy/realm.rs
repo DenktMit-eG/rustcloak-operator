@@ -5,6 +5,7 @@ use crate::{
     error::{Error, Result},
 };
 use async_trait::async_trait;
+use k8s_openapi::serde_json;
 use keycloak_crd::KeycloakRealm as LegacyRealm;
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;

@@ -1,13 +1,13 @@
 use crate::error::{Error, Result};
 use either::Either;
 use k8s_openapi::NamespaceResourceScope;
+use k8s_openapi::serde_json::{self, Value};
 use kube::{Api, Resource};
 use rustcloak_crd::{
     KeycloakInstance, KeycloakRestObject, inner_spec::HasInnerSpec,
     traits::Endpoint,
 };
 use serde::{Serialize, de::DeserializeOwned};
-use serde_json::Value;
 use std::{fmt::Debug, ops::Deref, sync::Arc};
 
 pub struct ResourceShim<R> {

@@ -1,14 +1,14 @@
 use std::collections::HashMap;
 
 use crate::error::{Error, Result};
-use k8s_openapi::api::core::v1::{
-    ConfigMap, ConfigMapKeySelector, EnvVarSource, Secret,
+use k8s_openapi::{
+    api::core::v1::{ConfigMap, ConfigMapKeySelector, EnvVarSource, Secret},
+    serde_json::{self, Value},
 };
 use kube::{Api, Client};
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::KeycloakApiObjectSpec;
 use rustcloak_crd::inner_spec::HasInnerSpec;
-use serde_json::Value;
 
 struct Resolver<'a> {
     namespace: Option<String>,
