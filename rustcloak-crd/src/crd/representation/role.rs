@@ -1,3 +1,4 @@
+use crate::keycloak_types::RoleRepresentation;
 use crate::{
     impl_object,
     macros::namespace_scope,
@@ -7,7 +8,6 @@ use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
 };
 use either::Either;
-use keycloak::types::RoleRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};

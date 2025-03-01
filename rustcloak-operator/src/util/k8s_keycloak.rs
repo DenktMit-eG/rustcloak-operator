@@ -1,24 +1,27 @@
 use crate::{
-    api::{
-        KeycloakApiAuth, KeycloakApiAuthBuilder, KeycloakApiClient, OAuth2Token,
-    },
     app_id,
     error::{Error, Result},
     util::ToPatch,
 };
 use chrono::{DateTime, Utc};
-use k8s_openapi::api::core::v1::Secret;
+use k8s_openapi::{api::core::v1::Secret, ByteString};
+use keycloak_client::{ApiAuth, ApiAuthBuilder, ApiClient, OAuth2Token};
 use kube::{
-    api::{Patch, PatchParams},
+    api::{ObjectMeta, Patch, PatchParams},
     core::object::HasStatus,
     runtime::reflector::ObjectRef,
     Api, Resource, ResourceExt,
 };
 use log::{debug, warn};
 use oauth2::{ClientId, ClientSecret};
-use rustcloak_crd::KeycloakInstance;
+use rustcloak_crd::{traits::SecretKeyNames, KeycloakInstance};
 use serde_json::Value;
-use std::{collections::HashMap, ops::Deref, sync::Arc, time::Duration};
+use std::{
+    collections::{BTreeMap, HashMap},
+    ops::Deref,
+    sync::Arc,
+    time::Duration,
+};
 use tokio::{
     sync::{Mutex, MutexGuard, Notify},
     task::JoinHandle,
@@ -27,8 +30,53 @@ use tokio::{
 
 use super::SecretUtils;
 
+fn token_into_secret(
+    oauth2_token: &OAuth2Token,
+    instance: &KeycloakInstance,
+) -> Secret {
+    let token = ByteString(
+        serde_yaml::to_string(&oauth2_token.token)
+            .unwrap()
+            .into_bytes(),
+    );
+    let expires = oauth2_token
+        .expires
+        .map(|x| ByteString(x.to_rfc3339().into_bytes()));
+    let name = instance.token_secret_name();
+    let [token_key, expires_key] = instance.spec.token.secret_key_names();
+    let namespace = instance.namespace().unwrap();
+    let owner_ref = instance.owner_ref(&()).unwrap();
+    let mut data: BTreeMap<String, ByteString> =
+        [(token_key.to_string(), token)].into();
+    if let Some(expires) = expires {
+        data.insert(expires_key.to_string(), expires);
+    }
+    Secret {
+        metadata: ObjectMeta {
+            name: Some(name),
+            namespace: Some(namespace),
+            owner_references: Some(vec![owner_ref]),
+            ..Default::default()
+        },
+        data: Some(data),
+        ..Default::default()
+    }
+}
+
+fn secret_into_token(
+    secret: Secret,
+    instance: &KeycloakInstance,
+) -> Result<OAuth2Token> {
+    let [token, expires] = secret.extract_opt(&instance.spec.token)?;
+    let token = serde_yaml::from_str(&token.ok_or(Error::NoToken)?)?;
+    let expires = expires
+        .and_then(|e| chrono::DateTime::parse_from_rfc3339(&e).ok())
+        .map(|e| e.with_timezone(&chrono::Utc));
+    Ok(OAuth2Token { token, expires })
+}
+
 pub struct K8sKeycloakBuilder<'a> {
-    auth: KeycloakApiAuth,
+    auth: ApiAuth,
     instance: &'a KeycloakInstance,
     client: &'a kube::Client,
 }
@@ -38,7 +86,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
         instance: &'a KeycloakInstance,
         client: &'a kube::Client,
     ) -> Self {
-        let mut builder = KeycloakApiAuthBuilder::default();
+        let mut builder = ApiAuthBuilder::default();
         builder.url(instance.spec.base_url.clone());
         if let Some(realm) = &instance.spec.realm {
             builder.realm(realm.clone());
@@ -58,7 +106,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
         }
     }
 
-    pub async fn with_credentials(self) -> Result<KeycloakApiClient> {
+    pub async fn with_credentials(self) -> Result<ApiClient> {
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
         let kind = KeycloakInstance::kind(&());
         let secret_api = Api::<Secret>::namespaced(self.client.clone(), &ns);
@@ -77,10 +125,10 @@ impl<'a> K8sKeycloakBuilder<'a> {
             .ok_or(Error::NoCredentialSecret(ns, credential_secret_name))?
             .extract(&self.instance.spec.token)?;
 
-        self.auth.login_with_credentials(&user, &password).await
+        Ok(self.auth.login_with_credentials(&user, &password).await?)
     }
 
-    pub async fn with_token(self) -> Result<KeycloakApiClient> {
+    pub async fn with_token(self) -> Result<ApiClient> {
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
         let kind = KeycloakInstance::kind(&());
         let secret_api = Api::<Secret>::namespaced(self.client.clone(), &ns);
@@ -96,7 +144,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
             .get_opt(&token_secret_name)
             .await?
             .ok_or(Error::NoTokenSecret(ns, token_secret_name))?;
-        let token = OAuth2Token::from_secret(secret, self.instance);
+        let token = secret_into_token(secret, self.instance);
 
         Ok(self.auth.into_client(token?))
     }
@@ -129,7 +177,7 @@ impl K8sKeycloakRefreshJob {
     pub async fn update_token_secret(&self, token: &OAuth2Token) -> Result<()> {
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
         let api = Api::<Secret>::namespaced(self.client.clone(), &ns);
-        let token_secret = token.clone().into_secret(&self.instance);
+        let token_secret = token_into_secret(token, &self.instance);
         api.patch(
             &token_secret.name_unchecked(),
             &PatchParams::apply(app_id!()),
@@ -140,7 +188,7 @@ impl K8sKeycloakRefreshJob {
         Ok(())
     }
 
-    pub async fn keycloak_with_credentials(&self) -> Result<KeycloakApiClient> {
+    pub async fn keycloak_with_credentials(&self) -> Result<ApiClient> {
         let keycloak = self.keycloak_builder().with_credentials().await?;
 
         self.update_token_secret(keycloak.token()).await?;
@@ -148,10 +196,7 @@ impl K8sKeycloakRefreshJob {
         Ok(keycloak)
     }
 
-    pub async fn refresh(
-        &self,
-        keycloak: &mut KeycloakApiClient,
-    ) -> Result<()> {
+    pub async fn refresh(&self, keycloak: &mut ApiClient) -> Result<()> {
         keycloak.refresh().await?;
 
         self.update_token_secret(keycloak.token()).await?;
@@ -159,7 +204,7 @@ impl K8sKeycloakRefreshJob {
         Ok(())
     }
 
-    pub async fn keycloak_with_token(&self) -> Result<KeycloakApiClient> {
+    pub async fn keycloak_with_token(&self) -> Result<ApiClient> {
         let mut keycloak = self.keycloak_builder().with_token().await?;
         let now = chrono::Utc::now();
 
@@ -173,7 +218,7 @@ impl K8sKeycloakRefreshJob {
         Ok(keycloak)
     }
 
-    pub async fn keycloak_from_somewhere(&self) -> Result<KeycloakApiClient> {
+    pub async fn keycloak_from_somewhere(&self) -> Result<ApiClient> {
         let name = self.instance.name_unchecked();
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
         let kind = KeycloakInstance::kind(&());

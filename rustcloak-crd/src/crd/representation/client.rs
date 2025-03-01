@@ -7,7 +7,7 @@ use crate::{
     KeycloakApiStatus, KeycloakRealm,
 };
 
-use keycloak::types::ClientRepresentation;
+use crate::keycloak_types::ClientRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};

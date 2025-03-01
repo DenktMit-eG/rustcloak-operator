@@ -1,3 +1,4 @@
+use crate::keycloak_types::ProtocolMapperRepresentation;
 use crate::{
     impl_object,
     macros::namespace_scope,
@@ -8,7 +9,6 @@ use crate::{
     KeycloakClient, KeycloakClientScope,
 };
 use either::Either;
-use keycloak::types::ProtocolMapperRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};

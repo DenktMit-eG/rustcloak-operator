@@ -1,10 +1,10 @@
+use crate::keycloak_types::RealmRepresentation;
 use crate::{
     impl_object, inner_spec::HasInnerSpec, macros::both_scopes, schema_patch,
     traits::Endpoint, ImmutableString, KeycloakApiObjectOptions,
     KeycloakApiPatchList, KeycloakApiStatus, KeycloakApiStatusEndpoint,
     KeycloakInstance,
 };
-use keycloak::types::RealmRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};

@@ -4,11 +4,10 @@ version = "0.1.10"
 edition = "2021"
 
 [dependencies]
-keycloak = { version = "26.1.0", features = ["schemars"] }
 kube = { version = "0.98.0", features = ["runtime", "derive"] }
 k8s-openapi = { version = "0.24.0", features = ["latest", "schemars"] }
 serde_json = { version = "1.0.139", features = ["preserve_order"] }
-tokio = { version = "1.43.0", features = ["full"] }
+tokio = { version = "1.43.0", features = ["macros", "rt-multi-thread", "sync"] }
 clap = { version = "4.5.30", features = ["derive", "help", "std"], default-features = false }
 schemars = { version = "0.8.21", features = ["chrono", "either"] }
 serde = "1.0.218"
@@ -29,6 +28,7 @@ randstr = "0.2.1"
 structured-logger = "1.0.3"
 case_style = "0.2.1"
 rustcloak-crd = { path = "../rustcloak-crd" }
+keycloak-client = { git = "https://github.com/Gottox/keycloak-client.rs" }
 
 [profile.release]
 strip = true

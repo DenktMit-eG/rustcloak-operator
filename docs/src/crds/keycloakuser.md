@@ -156,7 +156,11 @@ Type: object
 |:--------------|:------------|
 |has(self.id) == has(oldSelf.id)|Value is immutable|
 
-*missing*
+UserRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "applicationRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientConsents": { "type": "array", "items": { "$ref": "#/$defs/UserConsentRepresentation" } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "createdTimestamp": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentials": { "type": "array", "items": { "$ref": "#/$defs/CredentialRepresentation" } }, "disableableCredentialTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "email": { "type": "string" }, "emailVerified": { "type": "boolean" }, "enabled": { "type": "boolean" }, "federatedIdentities": { "type": "array", "items": { "$ref": "#/$defs/FederatedIdentityRepresentation" } }, "federationLink": { "type": "string" }, "firstName": { "type": "string" }, "groups": { "type": "array", "items": { "type": "string" } }, "id": { "type": "string" }, "lastName": { "type": "string" }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "origin": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "requiredActions": { "type": "array", "items": { "type": "string" } }, "self": { "type": "string" }, "serviceAccountClientId": { "type": "string" }, "socialLinks": { "type": "array", "items": { "$ref": "#/$defs/SocialLinkRepresentation" } }, "totp": { "type": "boolean" }, "userProfileMetadata": { "$ref": "#/$defs/UserProfileMetadata" }, "username": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -196,7 +200,11 @@ Type: object
 |[grantedRealmRoles[]](#specdefinitionclientconsentsgrantedrealmroles)|string||
 |[lastUpdatedDate](#specdefinitionclientconsentslastupdateddate)|integer||
 
-*missing*
+UserConsentRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "clientId": { "type": "string" }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "grantedClientScopes": { "type": "array", "items": { "type": "string" } }, "grantedRealmRoles": { "type": "array", "items": { "type": "string" } }, "lastUpdatedDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -281,7 +289,11 @@ Type: object
 |[userLabel](#specdefinitioncredentialsuserlabel)|string||
 |[value](#specdefinitioncredentialsvalue)|string||
 
-*missing*
+CredentialRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -471,7 +483,11 @@ Type: object
 |[userId](#specdefinitionfederatedidentitiesuserid)|string||
 |[userName](#specdefinitionfederatedidentitiesusername)|string||
 
-*missing*
+FederatedIdentityRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "identityProvider": { "type": "string" }, "userId": { "type": "string" }, "userName": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -601,7 +617,11 @@ Type: object
 |[socialUserId](#specdefinitionsociallinkssocialuserid)|string||
 |[socialUsername](#specdefinitionsociallinkssocialusername)|string||
 
-*missing*
+SocialLinkRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "socialProvider": { "type": "string" }, "socialUserId": { "type": "string" }, "socialUsername": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -646,7 +666,11 @@ Type: object
 |[attributes[]](#specdefinitionuserprofilemetadataattributes)|object||
 |[groups[]](#specdefinitionuserprofilemetadatagroups)|object||
 
-*missing*
+UserProfileMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attributes": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeMetadata" } }, "groups": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeGroupMetadata" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -665,7 +689,11 @@ Type: object
 |[required](#specdefinitionuserprofilemetadataattributesrequired)|boolean||
 |[validators](#specdefinitionuserprofilemetadataattributesvalidators)|object||
 
-*missing*
+UserProfileAttributeMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayName": { "type": "string" }, "group": { "type": "string" }, "multivalued": { "type": "boolean" }, "name": { "type": "string" }, "readOnly": { "type": "boolean" }, "required": { "type": "boolean" }, "validators": { "type": "object", "additionalProperties": { "type": "object", "additionalProperties": {} } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -744,7 +772,11 @@ Type: object
 |[displayHeader](#specdefinitionuserprofilemetadatagroupsdisplayheader)|string||
 |[name](#specdefinitionuserprofilemetadatagroupsname)|string||
 
-*missing*
+UserProfileAttributeGroupMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayDescription": { "type": "string" }, "displayHeader": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 

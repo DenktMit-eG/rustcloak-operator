@@ -22,6 +22,12 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.adminTheme](#specdefinitionadmintheme)|string||
 |[spec.definition.applicationScopeMappings](#specdefinitionapplicationscopemappings)|object||
 |[spec.definition.attributes](#specdefinitionattributes)|object||
+|[spec.definition.attributes.adminEventsExpiration](#specdefinitionattributesadmineventsexpiration)|string||
+|[spec.definition.attributes.cibaAuthRequestedUserHint](#specdefinitionattributescibaauthrequesteduserhint)|string||
+|[spec.definition.attributes.cibaBackchannelTokenDeliveryMode](#specdefinitionattributescibabackchanneltokendeliverymode)|string||
+|[spec.definition.attributes.cibaExpiresIn](#specdefinitionattributescibaexpiresin)|string||
+|[spec.definition.attributes.cibaInterval](#specdefinitionattributescibainterval)|string||
+|[spec.definition.attributes.frontendUrl](#specdefinitionattributesfrontendurl)|string||
 |[spec.definition.authenticationFlows[]](#specdefinitionauthenticationflows)|object||
 |[spec.definition.authenticationFlows[].alias](#specdefinitionauthenticationflowsalias)|string||
 |[spec.definition.authenticationFlows[].authenticationExecutions[]](#specdefinitionauthenticationflowsauthenticationexecutions)|object||
@@ -44,6 +50,14 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.authenticatorConfig[].id](#specdefinitionauthenticatorconfigid)|string||
 |[spec.definition.browserFlow](#specdefinitionbrowserflow)|string||
 |[spec.definition.browserSecurityHeaders](#specdefinitionbrowsersecurityheaders)|object||
+|[spec.definition.browserSecurityHeaders.contentSecurityPolicy](#specdefinitionbrowsersecurityheaderscontentsecuritypolicy)|string||
+|[spec.definition.browserSecurityHeaders.contentSecurityPolicyReportOnly](#specdefinitionbrowsersecurityheaderscontentsecuritypolicyreportonly)|string||
+|[spec.definition.browserSecurityHeaders.strictTransportSecurity](#specdefinitionbrowsersecurityheadersstricttransportsecurity)|string||
+|[spec.definition.browserSecurityHeaders.xContentTypeOptions](#specdefinitionbrowsersecurityheadersxcontenttypeoptions)|string||
+|[spec.definition.browserSecurityHeaders.xFrameOptions](#specdefinitionbrowsersecurityheadersxframeoptions)|string||
+|[spec.definition.browserSecurityHeaders.xRobotsTag](#specdefinitionbrowsersecurityheadersxrobotstag)|string||
+|[spec.definition.browserSecurityHeaders.xXSSProtection](#specdefinitionbrowsersecurityheadersxxssprotection)|string||
+|[spec.definition.bruteForceDetection](#specdefinitionbruteforcedetection)|object||
 |[spec.definition.bruteForceProtected](#specdefinitionbruteforceprotected)|boolean||
 |[spec.definition.bruteForceStrategy](#specdefinitionbruteforcestrategy)|string||
 |[spec.definition.certificate](#specdefinitioncertificate)|string||
@@ -228,6 +242,10 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.id](#specdefinitionid)|string||
 |[spec.definition.identityProviderMappers[]](#specdefinitionidentityprovidermappers)|object||
 |[spec.definition.identityProviderMappers[].config](#specdefinitionidentityprovidermappersconfig)|object||
+|[spec.definition.identityProviderMappers[].config.attribute.friendly.name](#specdefinitionidentityprovidermappersconfigattributefriendlyname)|string||
+|[spec.definition.identityProviderMappers[].config.attribute.name.format](#specdefinitionidentityprovidermappersconfigattributenameformat)|string||
+|[spec.definition.identityProviderMappers[].config.syncMode](#specdefinitionidentityprovidermappersconfigsyncmode)|string||
+|[spec.definition.identityProviderMappers[].config.user.attribute](#specdefinitionidentityprovidermappersconfiguserattribute)|string||
 |[spec.definition.identityProviderMappers[].id](#specdefinitionidentityprovidermappersid)|string||
 |[spec.definition.identityProviderMappers[].identityProviderAlias](#specdefinitionidentityprovidermappersidentityprovideralias)|string||
 |[spec.definition.identityProviderMappers[].identityProviderMapper](#specdefinitionidentityprovidermappersidentityprovidermapper)|string||
@@ -237,6 +255,35 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.identityProviders[].alias](#specdefinitionidentityprovidersalias)|string||
 |[spec.definition.identityProviders[].authenticateByDefault](#specdefinitionidentityprovidersauthenticatebydefault)|boolean||
 |[spec.definition.identityProviders[].config](#specdefinitionidentityprovidersconfig)|object||
+|[spec.definition.identityProviders[].config.allowCreate](#specdefinitionidentityprovidersconfigallowcreate)|string||
+|[spec.definition.identityProviders[].config.allowedClockSkew](#specdefinitionidentityprovidersconfigallowedclockskew)|string||
+|[spec.definition.identityProviders[].config.attributeConsumingServiceIndex](#specdefinitionidentityprovidersconfigattributeconsumingserviceindex)|string||
+|[spec.definition.identityProviders[].config.authnContextClassRefs](#specdefinitionidentityprovidersconfigauthncontextclassrefs)|string||
+|[spec.definition.identityProviders[].config.authnContextComparisonType](#specdefinitionidentityprovidersconfigauthncontextcomparisontype)|string||
+|[spec.definition.identityProviders[].config.authnContextDeclRefs](#specdefinitionidentityprovidersconfigauthncontextdeclrefs)|string||
+|[spec.definition.identityProviders[].config.backchannelSupported](#specdefinitionidentityprovidersconfigbackchannelsupported)|string||
+|[spec.definition.identityProviders[].config.encryptionAlgorithm](#specdefinitionidentityprovidersconfigencryptionalgorithm)|string||
+|[spec.definition.identityProviders[].config.entityId](#specdefinitionidentityprovidersconfigentityid)|string||
+|[spec.definition.identityProviders[].config.forceAuthn](#specdefinitionidentityprovidersconfigforceauthn)|string||
+|[spec.definition.identityProviders[].config.hideOnLoginPage](#specdefinitionidentityprovidersconfighideonloginpage)|string||
+|[spec.definition.identityProviders[].config.idpEntityId](#specdefinitionidentityprovidersconfigidpentityid)|string||
+|[spec.definition.identityProviders[].config.loginHint](#specdefinitionidentityprovidersconfigloginhint)|string||
+|[spec.definition.identityProviders[].config.nameIDPolicyFormat](#specdefinitionidentityprovidersconfignameidpolicyformat)|string||
+|[spec.definition.identityProviders[].config.postBindingAuthnRequest](#specdefinitionidentityprovidersconfigpostbindingauthnrequest)|string||
+|[spec.definition.identityProviders[].config.postBindingLogout](#specdefinitionidentityprovidersconfigpostbindinglogout)|string||
+|[spec.definition.identityProviders[].config.postBindingResponse](#specdefinitionidentityprovidersconfigpostbindingresponse)|string||
+|[spec.definition.identityProviders[].config.principalAttribute](#specdefinitionidentityprovidersconfigprincipalattribute)|string||
+|[spec.definition.identityProviders[].config.principalType](#specdefinitionidentityprovidersconfigprincipaltype)|string||
+|[spec.definition.identityProviders[].config.signSpMetadata](#specdefinitionidentityprovidersconfigsignspmetadata)|string||
+|[spec.definition.identityProviders[].config.signatureAlgorithm](#specdefinitionidentityprovidersconfigsignaturealgorithm)|string||
+|[spec.definition.identityProviders[].config.signingCertificate](#specdefinitionidentityprovidersconfigsigningcertificate)|string||
+|[spec.definition.identityProviders[].config.singleSignOnServiceUrl](#specdefinitionidentityprovidersconfigsinglesignonserviceurl)|string||
+|[spec.definition.identityProviders[].config.syncMode](#specdefinitionidentityprovidersconfigsyncmode)|string||
+|[spec.definition.identityProviders[].config.validateSignature](#specdefinitionidentityprovidersconfigvalidatesignature)|string||
+|[spec.definition.identityProviders[].config.wantAssertionsEncrypted](#specdefinitionidentityprovidersconfigwantassertionsencrypted)|string||
+|[spec.definition.identityProviders[].config.wantAssertionsSigned](#specdefinitionidentityprovidersconfigwantassertionssigned)|string||
+|[spec.definition.identityProviders[].config.wantAuthnRequestsSigned](#specdefinitionidentityprovidersconfigwantauthnrequestssigned)|string||
+|[spec.definition.identityProviders[].config.xmlSigKeyInfoKeyNameTransformer](#specdefinitionidentityprovidersconfigxmlsigkeyinfokeynametransformer)|string||
 |[spec.definition.identityProviders[].displayName](#specdefinitionidentityprovidersdisplayname)|string||
 |[spec.definition.identityProviders[].enabled](#specdefinitionidentityprovidersenabled)|boolean||
 |[spec.definition.identityProviders[].firstBrokerLoginFlowAlias](#specdefinitionidentityprovidersfirstbrokerloginflowalias)|string||
@@ -281,6 +328,35 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.organizations[].identityProviders[].alias](#specdefinitionorganizationsidentityprovidersalias)|string||
 |[spec.definition.organizations[].identityProviders[].authenticateByDefault](#specdefinitionorganizationsidentityprovidersauthenticatebydefault)|boolean||
 |[spec.definition.organizations[].identityProviders[].config](#specdefinitionorganizationsidentityprovidersconfig)|object||
+|[spec.definition.organizations[].identityProviders[].config.allowCreate](#specdefinitionorganizationsidentityprovidersconfigallowcreate)|string||
+|[spec.definition.organizations[].identityProviders[].config.allowedClockSkew](#specdefinitionorganizationsidentityprovidersconfigallowedclockskew)|string||
+|[spec.definition.organizations[].identityProviders[].config.attributeConsumingServiceIndex](#specdefinitionorganizationsidentityprovidersconfigattributeconsumingserviceindex)|string||
+|[spec.definition.organizations[].identityProviders[].config.authnContextClassRefs](#specdefinitionorganizationsidentityprovidersconfigauthncontextclassrefs)|string||
+|[spec.definition.organizations[].identityProviders[].config.authnContextComparisonType](#specdefinitionorganizationsidentityprovidersconfigauthncontextcomparisontype)|string||
+|[spec.definition.organizations[].identityProviders[].config.authnContextDeclRefs](#specdefinitionorganizationsidentityprovidersconfigauthncontextdeclrefs)|string||
+|[spec.definition.organizations[].identityProviders[].config.backchannelSupported](#specdefinitionorganizationsidentityprovidersconfigbackchannelsupported)|string||
+|[spec.definition.organizations[].identityProviders[].config.encryptionAlgorithm](#specdefinitionorganizationsidentityprovidersconfigencryptionalgorithm)|string||
+|[spec.definition.organizations[].identityProviders[].config.entityId](#specdefinitionorganizationsidentityprovidersconfigentityid)|string||
+|[spec.definition.organizations[].identityProviders[].config.forceAuthn](#specdefinitionorganizationsidentityprovidersconfigforceauthn)|string||
+|[spec.definition.organizations[].identityProviders[].config.hideOnLoginPage](#specdefinitionorganizationsidentityprovidersconfighideonloginpage)|string||
+|[spec.definition.organizations[].identityProviders[].config.idpEntityId](#specdefinitionorganizationsidentityprovidersconfigidpentityid)|string||
+|[spec.definition.organizations[].identityProviders[].config.loginHint](#specdefinitionorganizationsidentityprovidersconfigloginhint)|string||
+|[spec.definition.organizations[].identityProviders[].config.nameIDPolicyFormat](#specdefinitionorganizationsidentityprovidersconfignameidpolicyformat)|string||
+|[spec.definition.organizations[].identityProviders[].config.postBindingAuthnRequest](#specdefinitionorganizationsidentityprovidersconfigpostbindingauthnrequest)|string||
+|[spec.definition.organizations[].identityProviders[].config.postBindingLogout](#specdefinitionorganizationsidentityprovidersconfigpostbindinglogout)|string||
+|[spec.definition.organizations[].identityProviders[].config.postBindingResponse](#specdefinitionorganizationsidentityprovidersconfigpostbindingresponse)|string||
+|[spec.definition.organizations[].identityProviders[].config.principalAttribute](#specdefinitionorganizationsidentityprovidersconfigprincipalattribute)|string||
+|[spec.definition.organizations[].identityProviders[].config.principalType](#specdefinitionorganizationsidentityprovidersconfigprincipaltype)|string||
+|[spec.definition.organizations[].identityProviders[].config.signSpMetadata](#specdefinitionorganizationsidentityprovidersconfigsignspmetadata)|string||
+|[spec.definition.organizations[].identityProviders[].config.signatureAlgorithm](#specdefinitionorganizationsidentityprovidersconfigsignaturealgorithm)|string||
+|[spec.definition.organizations[].identityProviders[].config.signingCertificate](#specdefinitionorganizationsidentityprovidersconfigsigningcertificate)|string||
+|[spec.definition.organizations[].identityProviders[].config.singleSignOnServiceUrl](#specdefinitionorganizationsidentityprovidersconfigsinglesignonserviceurl)|string||
+|[spec.definition.organizations[].identityProviders[].config.syncMode](#specdefinitionorganizationsidentityprovidersconfigsyncmode)|string||
+|[spec.definition.organizations[].identityProviders[].config.validateSignature](#specdefinitionorganizationsidentityprovidersconfigvalidatesignature)|string||
+|[spec.definition.organizations[].identityProviders[].config.wantAssertionsEncrypted](#specdefinitionorganizationsidentityprovidersconfigwantassertionsencrypted)|string||
+|[spec.definition.organizations[].identityProviders[].config.wantAssertionsSigned](#specdefinitionorganizationsidentityprovidersconfigwantassertionssigned)|string||
+|[spec.definition.organizations[].identityProviders[].config.wantAuthnRequestsSigned](#specdefinitionorganizationsidentityprovidersconfigwantauthnrequestssigned)|string||
+|[spec.definition.organizations[].identityProviders[].config.xmlSigKeyInfoKeyNameTransformer](#specdefinitionorganizationsidentityprovidersconfigxmlsigkeyinfokeynametransformer)|string||
 |[spec.definition.organizations[].identityProviders[].displayName](#specdefinitionorganizationsidentityprovidersdisplayname)|string||
 |[spec.definition.organizations[].identityProviders[].enabled](#specdefinitionorganizationsidentityprovidersenabled)|boolean||
 |[spec.definition.organizations[].identityProviders[].firstBrokerLoginFlowAlias](#specdefinitionorganizationsidentityprovidersfirstbrokerloginflowalias)|string||
@@ -433,6 +509,18 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.scopeMappings[].roles[]](#specdefinitionscopemappingsroles)|string||
 |[spec.definition.scopeMappings[].self](#specdefinitionscopemappingsself)|string||
 |[spec.definition.smtpServer](#specdefinitionsmtpserver)|object||
+|[spec.definition.smtpServer.auth](#specdefinitionsmtpserverauth)|string||
+|[spec.definition.smtpServer.envelopeFrom](#specdefinitionsmtpserverenvelopefrom)|string||
+|[spec.definition.smtpServer.from](#specdefinitionsmtpserverfrom)|string||
+|[spec.definition.smtpServer.fromDisplayName](#specdefinitionsmtpserverfromdisplayname)|string||
+|[spec.definition.smtpServer.host](#specdefinitionsmtpserverhost)|string||
+|[spec.definition.smtpServer.password](#specdefinitionsmtpserverpassword)|string||
+|[spec.definition.smtpServer.port](#specdefinitionsmtpserverport)|string||
+|[spec.definition.smtpServer.replyTo](#specdefinitionsmtpserverreplyto)|string||
+|[spec.definition.smtpServer.replyToDisplayName](#specdefinitionsmtpserverreplytodisplayname)|string||
+|[spec.definition.smtpServer.ssl](#specdefinitionsmtpserverssl)|string||
+|[spec.definition.smtpServer.starttls](#specdefinitionsmtpserverstarttls)|string||
+|[spec.definition.smtpServer.user](#specdefinitionsmtpserveruser)|string||
 |[spec.definition.social](#specdefinitionsocial)|boolean||
 |[spec.definition.socialProviders](#specdefinitionsocialproviders)|object||
 |[spec.definition.sslRequired](#specdefinitionsslrequired)|string||
@@ -612,6 +700,7 @@ Type: object
 |[authenticatorConfig[]](#specdefinitionauthenticatorconfig)|object||
 |[browserFlow](#specdefinitionbrowserflow)|string||
 |[browserSecurityHeaders](#specdefinitionbrowsersecurityheaders)|object||
+|[bruteForceDetection](#specdefinitionbruteforcedetection)|object||
 |[bruteForceProtected](#specdefinitionbruteforceprotected)|boolean||
 |[bruteForceStrategy](#specdefinitionbruteforcestrategy)|string||
 |[certificate](#specdefinitioncertificate)|string||
@@ -746,7 +835,11 @@ Type: object
 |:--------------|:------------|
 |has(self.realm) == has(oldSelf.realm)|Value is immutable|
 
-*missing*
+RealmRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "accessCodeLifespan": { "title": "Client Login Timeout", "description": "Max time a client has to finish the access token protocol. This should normally be 1 minute.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "accessCodeLifespanLogin": { "title": "Login timeout", "description": "Max time a user has to complete a login. This is recommended to be relatively long, such as 30 minutes or more.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "accessCodeLifespanUserAction": { "title": "Login action timeout", "description": "Max time a user has to complete login related actions like update password or configure totp. This is recommended to be relatively long, such as 5 minutes or more.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "accessTokenLifespan": { "title": "Access Token Lifespan", "description": "Max time before an access token is expired. This value is recommended to be short relative to the SSO timeout.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "accessTokenLifespanForImplicitFlow": { "title": "Access Token Lifespan For Implicit Flow", "description": "Max time before an access token issued during OpenID Connect Implicit Flow is expired. This value is recommended to be shorter than the SSO timeout. There is no possibility to refresh token during implicit flow, that's why there is a separate timeout different to 'Access Token Lifespan'.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "accountTheme": { "title": "Account theme", "description": "Select theme for login, OTP, grant, registration and forgot password pages.", "type": "string" }, "actionTokenGeneratedByAdminLifespan": { "title": "Default Admin-Initiated Action Lifespan", "description": "Maximum time before an action permit sent to a user by administrator is expired. This value is recommended to be long to allow administrators to send e-mails for users that are currently offline. The default timeout can be overridden immediately before issuing the token.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "actionTokenGeneratedByUserLifespan": { "title": "User-Initiated Action Lifespan", "description": "Maximum time before an action permit sent by a user (such as a forgot password e-mail) is expired. This value is recommended to be short because it's expected that the user would react to self-created action quickly.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "adminEventsDetailsEnabled": { "title": "Include representation", "description": "Include JSON representation for create and update requests.", "type": "boolean" }, "adminEventsEnabled": { "title": "Save events", "description": "If enabled, admin events are saved to the database, which makes events available to the Admin UI.", "type": "boolean" }, "adminPermissionsClient": { "$ref": "#/$defs/ClientRepresentation" }, "adminPermissionsEnabled": { "type": "boolean" }, "adminTheme": { "title": "Admin theme", "type": "string" }, "applicationScopeMappings": { "type": "object", "additionalProperties": { "type": "array", "items": { "$ref": "#/$defs/ScopeMappingRepresentation" } } }, "applications": { "type": "array", "items": { "$ref": "#/$defs/ApplicationRepresentation" } }, "attributes": { "type": "object", "properties": { "adminEventsExpiration": { "title": "Expiration", "description": "Sets the expiration for events. Expired events are periodically deleted from the database.", "type": "string", "pattern": "^[0-9]*$" }, "cibaAuthRequestedUserHint": { "title": "Authentication Requested User Hint", "description": "The way of identifying the end-user for whom authentication is being requested. Currently only \"login_hint\" is supported.", "type": "string", "enum": [ "login_hint" ] }, "cibaBackchannelTokenDeliveryMode": { "title": "Backchannel Token Delivery Mode", "description": "Specifies how the CD (Consumption Device) gets the authentication result and related tokens. This mode will be used by default for the CIBA clients, which do not have other mode explicitly set.", "type": "string", "enum": [ "ping", "poll" ] }, "cibaExpiresIn": { "title": "Expires In", "description": "The expiration time of the \"auth_req_id\" in seconds since the authentication request was received.", "type": "string", "pattern": "^[0-9]*$" }, "cibaInterval": { "title": "Interval", "description": "The minimum amount of time in seconds that the CD (Consumption Device) must wait between polling requests to the token endpoint. If set to 0, the CD must use 5 as the default value according to the CIBA specification.", "type": "string", "pattern": "^[0-9]*$" }, "frontendUrl": { "title": "Frontend URL", "description": "Set the frontend URL for the realm. Use in combination with the default hostname provider to override the base URL for frontend requests for a specific realm.", "type": "string" } }, "additionalProperties": { "type": "string" } }, "authenticationFlows": { "type": "array", "items": { "$ref": "#/$defs/AuthenticationFlowRepresentation" } }, "authenticatorConfig": { "type": "array", "items": { "$ref": "#/$defs/AuthenticatorConfigRepresentation" } }, "browserFlow": { "type": "string" }, "browserSecurityHeaders": { "type": "object", "properties": { "contentSecurityPolicy": { "title": "Content-Security-Policy", "description": "Default value prevents pages from being included by non-origin iframes. <1>Learn more</1>", "type": "string" }, "contentSecurityPolicyReportOnly": { "title": "Content-Security-Policy-Report-Only", "description": "For testing Content Security Policies <1>Learn more</1>", "type": "string" }, "strictTransportSecurity": { "title": "HTTP Strict Transport Security (HSTS)", "description": "The Strict-Transport-Security HTTP header tells browsers to always use HTTPS. Once a browser sees this header, it will only visit the site over HTTPS for the time specified (1 year) at max-age, including the subdomains. <1>Learn more</1>", "type": "string" }, "xContentTypeOptions": { "title": "X-Content-Type-Options", "description": "The default value prevents Internet Explorer and Google Chrome from MIME-sniffing a response away from the declared content-type. <1>Learn more</1>", "type": "string" }, "xFrameOptions": { "title": "X-Frame-Options", "description": "Default value prevents pages from being included by non-origin iframes. <1>Learn more</1>", "type": "string" }, "xRobotsTag": { "title": "X-Robots-Tag", "description": "Prevent pages from appearing in search engines. <1>Learn more</1>", "type": "string" }, "xXSSProtection": { "title": "X-XSS-Protection", "description": "This header configures the Cross-site scripting (XSS) filter in your browser. Using the default behaviour, the browser will prevent rendering of the page when a XSS attack is detected. <1>Learn more</1>", "type": "string" } }, "additionalProperties": false }, "bruteForceDetection": { "title": "Brute force detection" }, "bruteForceProtected": { "type": "boolean" }, "bruteForceStrategy": { "title": "Strategy to increase wait time", "description": "Multiple means wait time will be increased only when number of failures are multiples of '{{failureFactor}}'. Linear means each new failure starting at '{{failureFactor}}' will increase wait time.", "$ref": "#/$defs/BruteForceStrategy" }, "certificate": { "type": "string" }, "clientAuthenticationFlow": { "type": "string" }, "clientOfflineSessionIdleTimeout": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "clientOfflineSessionMaxLifespan": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "clientPolicies": { "$ref": "#/$defs/ClientPoliciesRepresentation" }, "clientProfiles": { "$ref": "#/$defs/ClientProfilesRepresentation" }, "clientScopeMappings": { "type": "object", "additionalProperties": { "type": "array", "items": { "$ref": "#/$defs/ScopeMappingRepresentation" } } }, "clientScopes": { "type": "array", "items": { "$ref": "#/$defs/ClientScopeRepresentation" } }, "clientSessionIdleTimeout": { "title": "Client Session Idle", "description": "Time a client session is allowed to be idle before it expires. Tokens are invalidated when a client session is expired. The option does not affect the global user SSO session. If not set, it uses the standard SSO Session Idle value.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "clientSessionMaxLifespan": { "title": "Client Session Max", "description": "Max time before a client session is expired. Tokens are invalidated when a session is expired. The option does not affect the global user SSO session. If not set, it uses the standard SSO Session Max value.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "clientTemplates": { "type": "array", "items": { "$ref": "#/$defs/ClientTemplateRepresentation" } }, "clients": { "type": "array", "items": { "$ref": "#/$defs/ClientRepresentation" } }, "codeSecret": { "type": "string" }, "components": { "$ref": "#/$defs/MultivaluedHashMapStringComponentExportRepresentation" }, "defaultDefaultClientScopes": { "type": "array", "items": { "type": "string" } }, "defaultGroups": { "type": "array", "items": { "type": "string" } }, "defaultLocale": { "title": "Default locale", "type": "string" }, "defaultOptionalClientScopes": { "type": "array", "items": { "type": "string" } }, "defaultRole": { "$ref": "#/$defs/RoleRepresentation" }, "defaultRoles": { "type": "array", "items": { "type": "string" } }, "defaultSignatureAlgorithm": { "title": "Default Signature Algorithm", "description": "Default algorithm used to sign tokens for the realm", "type": "string", "enum": [ "EdDSA", "ES256", "ES384", "ES512", "HS256", "HS384", "HS512", "PS256", "PS384", "PS512", "RS256", "RS384", "RS512" ] }, "directGrantFlow": { "type": "string" }, "displayName": { "title": "Display name", "type": "string" }, "displayNameHtml": { "title": "HTML Display name", "type": "string" }, "dockerAuthenticationFlow": { "type": "string" }, "duplicateEmailsAllowed": { "title": "Duplicate emails", "description": "Allow multiple users to have the same email address. Changing this setting will also clear the user's cache. It is recommended to manually update email constraints of existing users in the database after switching off support for duplicate email addresses.", "type": "boolean" }, "editUsernameAllowed": { "title": "Edit username", "description": "If enabled, the username field is editable, readonly otherwise.", "type": "boolean" }, "emailTheme": { "title": "Email theme", "description": "Select a theme for emails that are sent by the server.", "type": "string" }, "enabled": { "type": "boolean" }, "enabledEventTypes": { "type": "array", "items": { "type": "string" } }, "eventsEnabled": { "title": "Save events", "description": "If enabled, user events are saved to the database, which makes events available to the admin and account management UIs.", "type": "boolean" }, "eventsExpiration": { "title": "Expiration", "description": "Sets the expiration for events. Expired events are periodically deleted from the database.", "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "eventsListeners": { "title": "Event listeners", "description": "Configure what listeners receive events for the realm.", "type": "array", "items": { "type": "string" } }, "failureFactor": { "title": "Max login failures", "description": "Max login failures", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "federatedUsers": { "type": "array", "items": { "$ref": "#/$defs/UserRepresentation" } }, "firstBrokerLoginFlow": { "type": "string" }, "groups": { "type": "array", "items": { "$ref": "#/$defs/GroupRepresentation" } }, "id": { "type": "string" }, "identityProviderMappers": { "type": "array", "items": { "$ref": "#/$defs/IdentityProviderMapperRepresentation" } }, "identityProviders": { "type": "array", "items": { "$ref": "#/$defs/IdentityProviderRepresentation" } }, "internationalizationEnabled": { "title": "Internationalization", "description": "If enabled, you can choose which locales you support for this realm and which locale is the default.", "type": "boolean" }, "keycloakVersion": { "type": "string" }, "localizationTexts": { "type": "object", "additionalProperties": { "type": "object", "additionalProperties": { "type": "string" } } }, "loginTheme": { "title": "Login theme", "description": "Select theme for login, OTP, grant, registration and forgot password pages.", "type": "string" }, "loginWithEmailAllowed": { "title": "Login with email", "description": "Allow users to log in with their email address.", "type": "boolean" }, "maxDeltaTimeSeconds": { "title": "Failure reset time", "description": "When will failure count be reset?", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "maxFailureWaitSeconds": { "title": "Max wait", "description": "Max time a user will be locked out.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "maxTemporaryLockouts": { "title": "Maximum temporary lockouts", "description": "The number of temporary lockouts permitted before the user is permanently locked out.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "minimumQuickLoginWaitSeconds": { "title": "Minimum quick login wait", "description": "How long to wait after a quick login failure.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "oAuth2DeviceCodeLifespan": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "oAuth2DevicePollingInterval": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "oauth2DeviceCodeLifespan": { "title": "OAuth 2.0 Device Code Lifespan", "description": "Max time before the device code and user code are expired. This value needs to be a long enough lifetime to be usable (allowing the user to retrieve their secondary device, navigate to the verification URI, login, etc.), but should be sufficiently short to limit the usability of a code obtained for phishing.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "oauth2DevicePollingInterval": { "title": "OAuth 2.0 Device Polling Interval", "description": "The minimum amount of time in seconds that the client should wait between polling requests to the token endpoint.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "oauthClients": { "type": "array", "items": { "$ref": "#/$defs/OAuthClientRepresentation" } }, "offlineSessionIdleTimeout": { "title": "Offline Session Idle", "description": "Time an offline session is allowed to be idle before it expires. You need to use offline token to refresh at least once within this period; otherwise offline session will expire.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "offlineSessionMaxLifespan": { "title": "Offline Session Max", "description": "Max time before an offline session is expired regardless of activity.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "offlineSessionMaxLifespanEnabled": { "title": "Offline Session Max Limited", "description": "Enable offline session maximum lifetime", "type": "boolean" }, "organizations": { "type": "array", "items": { "$ref": "#/$defs/OrganizationRepresentation" } }, "organizationsEnabled": { "type": "boolean" }, "otpPolicyAlgorithm": { "title": "OTP hash algorithm", "description": "What hashing algorithm should be used to generate the OTP.", "type": "string" }, "otpPolicyCodeReusable": { "title": "Reusable token", "description": "Possibility to use the same OTP code again after successful authentication.", "type": "boolean" }, "otpPolicyDigits": { "title": "Number of digits", "description": "How many digits should the OTP have?", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "otpPolicyInitialCounter": { "title": "Initial counter", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "otpPolicyLookAheadWindow": { "title": "Look around window", "description": "How far around (extra token periods or counts) should the server look just in case the token generator and server are out of time sync or counter sync?", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "otpPolicyPeriod": { "title": "OTP Token period", "description": "How many seconds should an OTP token be valid? Defaults to 30 seconds.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "otpPolicyType": { "title": "OTP type", "description": "totp is Time-Based One Time Password. 'hotp' is a counter base one time password in which the server keeps a counter to hash against.", "type": "string", "enum": [ "totp", "hotp" ] }, "otpSupportedApplications": { "type": "array", "items": { "type": "string" } }, "passwordCredentialGrantAllowed": { "type": "boolean" }, "passwordPolicy": { "type": "string" }, "permanentLockout": { "title": "Permanent lockout", "type": "boolean" }, "privateKey": { "type": "string" }, "protocolMappers": { "type": "array", "items": { "$ref": "#/$defs/ProtocolMapperRepresentation" } }, "publicKey": { "type": "string" }, "quickLoginCheckMilliSeconds": { "title": "Quick login check milliseconds", "description": "If a failure happens concurrently too quickly, lock out the user.", "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "realm": { "title": "Realm ID", "type": "string" }, "realmCacheEnabled": { "type": "boolean" }, "refreshTokenMaxReuse": { "title": "Refresh Token Max Reuse", "description": "Maximum number of times a refresh token can be reused. When a different token is used, revocation is immediate.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "registrationAllowed": { "title": "User registration", "description": "Enable/disable the registration page. A link for registration will show on login page too.", "type": "boolean" }, "registrationEmailAsUsername": { "title": "Email as username", "description": "Allow users to set email as username.", "type": "boolean" }, "registrationFlow": { "type": "string" }, "rememberMe": { "title": "Remember me", "description": "Show checkbox on login page to allow user to remain logged in between browser restarts until session expires.", "type": "boolean" }, "requiredActions": { "type": "array", "items": { "$ref": "#/$defs/RequiredActionProviderRepresentation" } }, "requiredCredentials": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resetCredentialsFlow": { "type": "string" }, "resetPasswordAllowed": { "title": "Specifies independent timeout for forgot password.", "description": "Show a link on login page for user to click when they have forgotten their credentials.", "type": "boolean" }, "revokeRefreshToken": { "title": "Revoke Refresh Token", "description": "If enabled a refresh token can only be used up to 'Refresh Token Max Reuse' and is revoked when a different token is used. Otherwise refresh tokens are not revoked when used and can be used multiple times.", "type": "boolean" }, "roles": { "$ref": "#/$defs/RolesRepresentation" }, "scopeMappings": { "type": "array", "items": { "$ref": "#/$defs/ScopeMappingRepresentation" } }, "smtpServer": { "type": "object", "properties": { "auth": { "title": "Authentication", "type": "string", "enum": [ "true", "false", "" ] }, "envelopeFrom": { "title": "Envelope from", "description": "An email address used for bounces (optional).", "type": "string" }, "from": { "title": "From", "type": "string" }, "fromDisplayName": { "title": "From display name", "description": "A user-friendly name for the 'From' address (optional).", "type": "string" }, "host": { "title": "Host", "type": "string" }, "password": { "title": "Password", "description": "SMTP password. This field is able to obtain its value from vault, use ${vault.ID} format.", "type": "string" }, "port": { "title": "Port", "type": "string" }, "replyTo": { "title": "Reply to", "type": "string" }, "replyToDisplayName": { "title": "Reply to display name", "description": "A user-friendly name for the 'Reply-To' address (optional).", "type": "string" }, "ssl": { "title": "Enable SSL", "type": "string", "enum": [ "true", "false", "" ] }, "starttls": { "title": "Enable StartTLS", "type": "string", "enum": [ "true", "false", "" ] }, "user": { "title": "Username", "type": "string" } }, "additionalProperties": false }, "social": { "type": "boolean" }, "socialProviders": { "type": "object", "additionalProperties": { "type": "string" } }, "sslRequired": { "title": "Require SSL", "description": "Is HTTPS required? 'None' means HTTPS is not required for any client IP address. 'External requests' means localhost and private IP addresses can access without HTTPS. 'All requests' means HTTPS is required for all IP addresses.", "type": "string", "enum": [ "all", "external", "none" ] }, "ssoSessionIdleTimeout": { "title": "SSO Session Idle", "description": "Time a session is allowed to be idle before it expires. Tokens and browser sessions are invalidated when a session is expired.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "ssoSessionIdleTimeoutRememberMe": { "title": "SSO Session Idle Remember Me", "description": "Time a remember me session is allowed to be idle before it expires. Tokens and browser sessions are invalidated when a session is expired. If not set it uses the standard SSO Session Idle value.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "ssoSessionMaxLifespan": { "title": "SSO Session Max", "description": "Max time before a session is expired. Tokens and browser sessions are invalidated when a session is expired.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "ssoSessionMaxLifespanRememberMe": { "title": "SSO Session Max Remember Me", "description": "Max time before a session is expired when a user has set the remember me option. Tokens and browser sessions are invalidated when a session is expired. If not set it uses the standard SSO Session Max value.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "supportedLocales": { "title": "Supported locales", "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "updateProfileOnInitialSocialLogin": { "type": "boolean" }, "userCacheEnabled": { "type": "boolean" }, "userFederationMappers": { "type": "array", "items": { "$ref": "#/$defs/UserFederationMapperRepresentation" } }, "userFederationProviders": { "type": "array", "items": { "$ref": "#/$defs/UserFederationProviderRepresentation" } }, "userManagedAccessAllowed": { "title": "User-managed access", "description": "If enabled, users are allowed to manage their resources and permissions using the Account Management UI.", "type": "boolean" }, "users": { "type": "array", "items": { "$ref": "#/$defs/UserRepresentation" } }, "verifiableCredentialsEnabled": { "type": "boolean" }, "verifyEmail": { "title": "Verify email", "description": "Require user to verify their email address after initial login or after address changes are submitted.", "type": "boolean" }, "waitIncrementSeconds": { "title": "Wait increment", "description": "When failure threshold has been met, how much time should the user be locked out?", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "webAuthnPolicyAcceptableAaguids": { "title": "Acceptable AAGUIDs", "description": "The list of allowed AAGUIDs of which an authenticator can be registered. An AAGUID is a 128-bit identifier indicating the authenticator's type (e.g., make and model).", "type": "array", "items": { "type": "string" } }, "webAuthnPolicyAttestationConveyancePreference": { "title": "Attestation conveyance preference", "description": "Communicates to an authenticator the preference of how to generate an attestation statement.", "type": "string", "enum": [ "not specified", "none", "indirect", "direct" ] }, "webAuthnPolicyAuthenticatorAttachment": { "title": "Authenticator Attachment", "description": "Communicates to an authenticator an acceptable attachment pattern.", "type": "string", "enum": [ "not specified", "platform", "cross-platform" ] }, "webAuthnPolicyAvoidSameAuthenticatorRegister": { "title": "Avoid same authenticator registration", "description": "Avoid registering an authenticator that has already been registered.", "type": "boolean" }, "webAuthnPolicyCreateTimeout": { "title": "Timeout", "description": "The timeout value for creating the user's public key credential in seconds. If set to 0, this timeout option is not adapted.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "webAuthnPolicyExtraOrigins": { "type": "array", "items": { "type": "string" } }, "webAuthnPolicyPasswordlessAcceptableAaguids": { "title": "Acceptable AAGUIDs", "description": "The list of allowed AAGUIDs of which an authenticator can be registered. An AAGUID is a 128-bit identifier indicating the authenticator's type (e.g., make and model).", "type": "array", "items": { "type": "string" } }, "webAuthnPolicyPasswordlessAttestationConveyancePreference": { "title": "Attestation conveyance preference", "description": "Communicates to an authenticator the preference of how to generate an attestation statement.", "type": "string", "enum": [ "not specified", "none", "indirect", "direct" ] }, "webAuthnPolicyPasswordlessAuthenticatorAttachment": { "title": "Authenticator Attachment", "description": "Communicates to an authenticator an acceptable attachment pattern.", "type": "string", "enum": [ "not specified", "platform", "cross-platform" ] }, "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": { "title": "Avoid same authenticator registration", "description": "Avoid registering an authenticator that has already been registered.", "type": "boolean" }, "webAuthnPolicyPasswordlessCreateTimeout": { "title": "Timeout", "description": "The timeout value for creating the user's public key credential in seconds. If set to 0, this timeout option is not adapted.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "webAuthnPolicyPasswordlessExtraOrigins": { "type": "array", "items": { "type": "string" } }, "webAuthnPolicyPasswordlessRequireResidentKey": { "title": "Require discoverable credential", "description": "It tells an authenticator whether to create a public key credential as a Discoverable Credential.", "type": "string", "enum": [ "not specified", "Yes", "No" ] }, "webAuthnPolicyPasswordlessRpEntityName": { "title": "Relying party entity name", "description": "Human-readable server name as WebAuthn Relying Party", "type": "string" }, "webAuthnPolicyPasswordlessRpId": { "title": "Relying party ID", "description": "The WebAuthn Relying Party ID (RpID). It must be the origin's effective domain, e.g. 'company.com' or 'auth.company.com'.", "type": "string" }, "webAuthnPolicyPasswordlessSignatureAlgorithms": { "title": "Signature algorithms", "description": "The signature algorithms that should be used for the Authentication Assertion.", "type": "array", "items": { "type": "string", "enum": [ "Ed25519", "ES256", "ES384", "ES512", "RS256", "RS384", "RS512", "RS1" ] } }, "webAuthnPolicyPasswordlessUserVerificationRequirement": { "title": "User verification requirement", "description": "Communicates to an authenticator whether to require to verify a user.", "type": "string", "enum": [ "not specified", "required", "preferred", "discouraged" ] }, "webAuthnPolicyRequireResidentKey": { "title": "Require discoverable credential", "description": "It tells an authenticator whether to create a public key credential as a Discoverable Credential.", "type": "string", "enum": [ "not specified", "Yes", "No" ] }, "webAuthnPolicyRpEntityName": { "title": "Relying party entity name", "description": "Human-readable server name as WebAuthn Relying Party", "type": "string" }, "webAuthnPolicyRpId": { "title": "Relying party ID", "description": "The WebAuthn Relying Party ID (RpID). It must be the origin's effective domain, e.g. 'company.com' or 'auth.company.com'.", "type": "string" }, "webAuthnPolicySignatureAlgorithms": { "title": "Signature algorithms", "description": "The signature algorithms that should be used for the Authentication Assertion.", "type": "array", "items": { "type": "string", "enum": [ "Ed25519", "ES256", "ES384", "ES512", "RS256", "RS384", "RS512", "RS1" ] } }, "webAuthnPolicyUserVerificationRequirement": { "title": "User verification requirement", "description": "Communicates to an authenticator whether to require to verify a user.", "type": "string", "enum": [ "not specified", "required", "preferred", "discouraged" ] } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -754,7 +847,7 @@ Type: object
 
 Type: integer
 
-*missing*
+Max time a client has to finish the access token protocol. This should normally be 1 minute.
 
 ---
 
@@ -762,7 +855,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Max time a user has to complete a login. This is recommended to be relatively long, such as 30 minutes or more.
 
 ---
 
@@ -770,7 +863,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Max time a user has to complete login related actions like update password or configure totp. This is recommended to be relatively long, such as 5 minutes or more.
 
 ---
 
@@ -778,7 +871,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Max time before an access token is expired. This value is recommended to be short relative to the SSO timeout.
 
 ---
 
@@ -786,7 +879,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Max time before an access token issued during OpenID Connect Implicit Flow is expired. This value is recommended to be shorter than the SSO timeout. There is no possibility to refresh token during implicit flow, that's why there is a separate timeout different to 'Access Token Lifespan'.
 
 ---
 
@@ -794,7 +887,7 @@ Type: integer
 
 Type: string
 
-*missing*
+Select theme for login, OTP, grant, registration and forgot password pages.
 
 ---
 
@@ -802,7 +895,7 @@ Type: string
 
 Type: integer
 
-*missing*
+Maximum time before an action permit sent to a user by administrator is expired. This value is recommended to be long to allow administrators to send e-mails for users that are currently offline. The default timeout can be overridden immediately before issuing the token.
 
 ---
 
@@ -810,7 +903,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Maximum time before an action permit sent by a user (such as a forgot password e-mail) is expired. This value is recommended to be short because it's expected that the user would react to self-created action quickly.
 
 ---
 
@@ -818,7 +911,7 @@ Type: integer
 
 Type: boolean
 
-*missing*
+Include JSON representation for create and update requests.
 
 ---
 
@@ -826,7 +919,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+If enabled, admin events are saved to the database, which makes events available to the Admin UI.
 
 ---
 
@@ -858,7 +951,68 @@ Type: object
 
 Type: object
 
-*missing*
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[adminEventsExpiration](#specdefinitionattributesadmineventsexpiration)|string||
+|[cibaAuthRequestedUserHint](#specdefinitionattributescibaauthrequesteduserhint)|string||
+|[cibaBackchannelTokenDeliveryMode](#specdefinitionattributescibabackchanneltokendeliverymode)|string||
+|[cibaExpiresIn](#specdefinitionattributescibaexpiresin)|string||
+|[cibaInterval](#specdefinitionattributescibainterval)|string||
+|[frontendUrl](#specdefinitionattributesfrontendurl)|string||
+
+RealmRepresentationAttributes
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "adminEventsExpiration": { "title": "Expiration", "description": "Sets the expiration for events. Expired events are periodically deleted from the database.", "type": "string", "pattern": "^[0-9]*$" }, "cibaAuthRequestedUserHint": { "title": "Authentication Requested User Hint", "description": "The way of identifying the end-user for whom authentication is being requested. Currently only \"login_hint\" is supported.", "type": "string", "enum": [ "login_hint" ] }, "cibaBackchannelTokenDeliveryMode": { "title": "Backchannel Token Delivery Mode", "description": "Specifies how the CD (Consumption Device) gets the authentication result and related tokens. This mode will be used by default for the CIBA clients, which do not have other mode explicitly set.", "type": "string", "enum": [ "ping", "poll" ] }, "cibaExpiresIn": { "title": "Expires In", "description": "The expiration time of the \"auth_req_id\" in seconds since the authentication request was received.", "type": "string", "pattern": "^[0-9]*$" }, "cibaInterval": { "title": "Interval", "description": "The minimum amount of time in seconds that the CD (Consumption Device) must wait between polling requests to the token endpoint. If set to 0, the CD must use 5 as the default value according to the CIBA specification.", "type": "string", "pattern": "^[0-9]*$" }, "frontendUrl": { "title": "Frontend URL", "description": "Set the frontend URL for the realm. Use in combination with the default hostname provider to override the base URL for frontend requests for a specific realm.", "type": "string" } }, "additionalProperties": { "type": "string" } } ``` </details>
+
+---
+
+### spec.definition.attributes.adminEventsExpiration
+
+Type: string
+
+Sets the expiration for events. Expired events are periodically deleted from the database.
+
+---
+
+### spec.definition.attributes.cibaAuthRequestedUserHint
+
+Type: string
+
+The way of identifying the end-user for whom authentication is being requested. Currently only "login_hint" is supported.
+
+---
+
+### spec.definition.attributes.cibaBackchannelTokenDeliveryMode
+
+Type: string
+
+Specifies how the CD (Consumption Device) gets the authentication result and related tokens. This mode will be used by default for the CIBA clients, which do not have other mode explicitly set.
+
+---
+
+### spec.definition.attributes.cibaExpiresIn
+
+Type: string
+
+The expiration time of the "auth_req_id" in seconds since the authentication request was received.
+
+---
+
+### spec.definition.attributes.cibaInterval
+
+Type: string
+
+The minimum amount of time in seconds that the CD (Consumption Device) must wait between polling requests to the token endpoint. If set to 0, the CD must use 5 as the default value according to the CIBA specification.
+
+---
+
+### spec.definition.attributes.frontendUrl
+
+Type: string
+
+Set the frontend URL for the realm. Use in combination with the default hostname provider to override the base URL for frontend requests for a specific realm.
 
 ---
 
@@ -876,7 +1030,11 @@ Type: object
 |[providerId](#specdefinitionauthenticationflowsproviderid)|string||
 |[topLevel](#specdefinitionauthenticationflowstoplevel)|boolean||
 
-*missing*
+AuthenticationFlowRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "alias": { "type": "string" }, "authenticationExecutions": { "type": "array", "items": { "$ref": "#/$defs/AuthenticationExecutionExportRepresentation" } }, "builtIn": { "type": "boolean" }, "description": { "type": "string" }, "id": { "type": "string" }, "providerId": { "type": "string" }, "topLevel": { "type": "boolean" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -903,7 +1061,11 @@ Type: object
 |[requirement](#specdefinitionauthenticationflowsauthenticationexecutionsrequirement)|string||
 |[userSetupAllowed](#specdefinitionauthenticationflowsauthenticationexecutionsusersetupallowed)|boolean||
 
-*missing*
+AuthenticationExecutionExportRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "authenticator": { "type": "string" }, "authenticatorConfig": { "type": "string" }, "authenticatorFlow": { "type": "boolean" }, "autheticatorFlow": { "type": "boolean" }, "flowAlias": { "type": "string" }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "requirement": { "type": "string", "enum": [ "ALTERNATIVE", "CONDITIONAL", "DISABLED", "REQUIRED" ] }, "userSetupAllowed": { "type": "boolean" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -959,7 +1121,11 @@ Type: integer
 
 Type: string
 
-*missing*
+AuthenticationExecutionExportRepresentationRequirement
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "ALTERNATIVE", "CONDITIONAL", "DISABLED", "REQUIRED" ] } ``` </details>
 
 ---
 
@@ -1021,7 +1187,11 @@ Type: object
 |[config](#specdefinitionauthenticatorconfigconfig)|object||
 |[id](#specdefinitionauthenticatorconfigid)|string||
 
-*missing*
+AuthenticatorConfigRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "alias": { "type": "string" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "id": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1061,6 +1231,84 @@ Type: string
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[contentSecurityPolicy](#specdefinitionbrowsersecurityheaderscontentsecuritypolicy)|string||
+|[contentSecurityPolicyReportOnly](#specdefinitionbrowsersecurityheaderscontentsecuritypolicyreportonly)|string||
+|[strictTransportSecurity](#specdefinitionbrowsersecurityheadersstricttransportsecurity)|string||
+|[xContentTypeOptions](#specdefinitionbrowsersecurityheadersxcontenttypeoptions)|string||
+|[xFrameOptions](#specdefinitionbrowsersecurityheadersxframeoptions)|string||
+|[xRobotsTag](#specdefinitionbrowsersecurityheadersxrobotstag)|string||
+|[xXSSProtection](#specdefinitionbrowsersecurityheadersxxssprotection)|string||
+
+RealmRepresentationBrowserSecurityHeaders
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "contentSecurityPolicy": { "title": "Content-Security-Policy", "description": "Default value prevents pages from being included by non-origin iframes. <1>Learn more</1>", "type": "string" }, "contentSecurityPolicyReportOnly": { "title": "Content-Security-Policy-Report-Only", "description": "For testing Content Security Policies <1>Learn more</1>", "type": "string" }, "strictTransportSecurity": { "title": "HTTP Strict Transport Security (HSTS)", "description": "The Strict-Transport-Security HTTP header tells browsers to always use HTTPS. Once a browser sees this header, it will only visit the site over HTTPS for the time specified (1 year) at max-age, including the subdomains. <1>Learn more</1>", "type": "string" }, "xContentTypeOptions": { "title": "X-Content-Type-Options", "description": "The default value prevents Internet Explorer and Google Chrome from MIME-sniffing a response away from the declared content-type. <1>Learn more</1>", "type": "string" }, "xFrameOptions": { "title": "X-Frame-Options", "description": "Default value prevents pages from being included by non-origin iframes. <1>Learn more</1>", "type": "string" }, "xRobotsTag": { "title": "X-Robots-Tag", "description": "Prevent pages from appearing in search engines. <1>Learn more</1>", "type": "string" }, "xXSSProtection": { "title": "X-XSS-Protection", "description": "This header configures the Cross-site scripting (XSS) filter in your browser. Using the default behaviour, the browser will prevent rendering of the page when a XSS attack is detected. <1>Learn more</1>", "type": "string" } }, "additionalProperties": false } ``` </details>
+
+---
+
+### spec.definition.browserSecurityHeaders.contentSecurityPolicy
+
+Type: string
+
+Default value prevents pages from being included by non-origin iframes. <1>Learn more</1>
+
+---
+
+### spec.definition.browserSecurityHeaders.contentSecurityPolicyReportOnly
+
+Type: string
+
+For testing Content Security Policies <1>Learn more</1>
+
+---
+
+### spec.definition.browserSecurityHeaders.strictTransportSecurity
+
+Type: string
+
+The Strict-Transport-Security HTTP header tells browsers to always use HTTPS. Once a browser sees this header, it will only visit the site over HTTPS for the time specified (1 year) at max-age, including the subdomains. <1>Learn more</1>
+
+---
+
+### spec.definition.browserSecurityHeaders.xContentTypeOptions
+
+Type: string
+
+The default value prevents Internet Explorer and Google Chrome from MIME-sniffing a response away from the declared content-type. <1>Learn more</1>
+
+---
+
+### spec.definition.browserSecurityHeaders.xFrameOptions
+
+Type: string
+
+Default value prevents pages from being included by non-origin iframes. <1>Learn more</1>
+
+---
+
+### spec.definition.browserSecurityHeaders.xRobotsTag
+
+Type: string
+
+Prevent pages from appearing in search engines. <1>Learn more</1>
+
+---
+
+### spec.definition.browserSecurityHeaders.xXSSProtection
+
+Type: string
+
+This header configures the Cross-site scripting (XSS) filter in your browser. Using the default behaviour, the browser will prevent rendering of the page when a XSS attack is detected. <1>Learn more</1>
+
+---
+
+### spec.definition.bruteForceDetection
+
+Type: object
+
 *missing*
 
 ---
@@ -1077,7 +1325,7 @@ Type: boolean
 
 Type: string
 
-*missing*
+Multiple means wait time will be increased only when number of failures are multiples of '{{failureFactor}}'. Linear means each new failure starting at '{{failureFactor}}' will increase wait time.
 
 ---
 
@@ -1122,7 +1370,11 @@ Type: object
 |[globalPolicies[]](#specdefinitionclientpoliciesglobalpolicies)|object||
 |[policies[]](#specdefinitionclientpoliciespolicies)|object||
 
-*missing*
+ClientPoliciesRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "globalPolicies": { "type": "array", "items": { "$ref": "#/$defs/ClientPolicyRepresentation" } }, "policies": { "type": "array", "items": { "$ref": "#/$defs/ClientPolicyRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1138,7 +1390,11 @@ Type: object
 |[name](#specdefinitionclientpoliciesglobalpoliciesname)|string||
 |[profiles[]](#specdefinitionclientpoliciesglobalpoliciesprofiles)|string||
 
-*missing*
+ClientPolicyRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "conditions": { "type": "array", "items": { "$ref": "#/$defs/ClientPolicyConditionRepresentation" } }, "description": { "type": "string" }, "enabled": { "type": "boolean" }, "name": { "type": "string" }, "profiles": { "type": "array", "items": { "type": "string" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1151,7 +1407,11 @@ Type: object
 |[condition](#specdefinitionclientpoliciesglobalpoliciesconditionscondition)|string||
 |[configuration](#specdefinitionclientpoliciesglobalpoliciesconditionsconfiguration)|object||
 
-*missing*
+ClientPolicyConditionRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "condition": { "type": "string" }, "configuration": { "type": "object" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1215,7 +1475,11 @@ Type: object
 |[name](#specdefinitionclientpoliciespoliciesname)|string||
 |[profiles[]](#specdefinitionclientpoliciespoliciesprofiles)|string||
 
-*missing*
+ClientPolicyRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "conditions": { "type": "array", "items": { "$ref": "#/$defs/ClientPolicyConditionRepresentation" } }, "description": { "type": "string" }, "enabled": { "type": "boolean" }, "name": { "type": "string" }, "profiles": { "type": "array", "items": { "type": "string" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1228,7 +1492,11 @@ Type: object
 |[condition](#specdefinitionclientpoliciespoliciesconditionscondition)|string||
 |[configuration](#specdefinitionclientpoliciespoliciesconditionsconfiguration)|object||
 
-*missing*
+ClientPolicyConditionRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "condition": { "type": "string" }, "configuration": { "type": "object" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1289,7 +1557,11 @@ Type: object
 |[globalProfiles[]](#specdefinitionclientprofilesglobalprofiles)|object||
 |[profiles[]](#specdefinitionclientprofilesprofiles)|object||
 
-*missing*
+ClientProfilesRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "globalProfiles": { "type": "array", "items": { "$ref": "#/$defs/ClientProfileRepresentation" } }, "profiles": { "type": "array", "items": { "$ref": "#/$defs/ClientProfileRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1303,7 +1575,11 @@ Type: object
 |[executors[]](#specdefinitionclientprofilesglobalprofilesexecutors)|object||
 |[name](#specdefinitionclientprofilesglobalprofilesname)|string||
 
-*missing*
+ClientProfileRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "description": { "type": "string" }, "executors": { "type": "array", "items": { "$ref": "#/$defs/ClientPolicyExecutorRepresentation" } }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1324,7 +1600,11 @@ Type: object
 |[configuration](#specdefinitionclientprofilesglobalprofilesexecutorsconfiguration)|object||
 |[executor](#specdefinitionclientprofilesglobalprofilesexecutorsexecutor)|string||
 
-*missing*
+ClientPolicyExecutorRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "configuration": { "type": "object" }, "executor": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1362,7 +1642,11 @@ Type: object
 |[executors[]](#specdefinitionclientprofilesprofilesexecutors)|object||
 |[name](#specdefinitionclientprofilesprofilesname)|string||
 
-*missing*
+ClientProfileRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "description": { "type": "string" }, "executors": { "type": "array", "items": { "$ref": "#/$defs/ClientPolicyExecutorRepresentation" } }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1383,7 +1667,11 @@ Type: object
 |[configuration](#specdefinitionclientprofilesprofilesexecutorsconfiguration)|object||
 |[executor](#specdefinitionclientprofilesprofilesexecutorsexecutor)|string||
 
-*missing*
+ClientPolicyExecutorRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "configuration": { "type": "object" }, "executor": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1432,7 +1720,11 @@ Type: object
 |[protocol](#specdefinitionclientscopesprotocol)|string||
 |[protocolMappers[]](#specdefinitionclientscopesprotocolmappers)|object||
 
-*missing*
+ClientScopeRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attributes": { "type": "object", "additionalProperties": { "type": "string" } }, "description": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMappers": { "type": "array", "items": { "$ref": "#/$defs/ProtocolMapperRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1472,7 +1764,11 @@ Type: string
 
 Type: string
 
-*missing*
+ClientScopeRepresentationProtocol
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
 
 ---
 
@@ -1490,7 +1786,11 @@ Type: object
 |[protocol](#specdefinitionclientscopesprotocolmappersprotocol)|string||
 |[protocolMapper](#specdefinitionclientscopesprotocolmappersprotocolmapper)|string||
 
-*missing*
+ProtocolMapperRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1538,7 +1838,11 @@ Type: string
 
 Type: string
 
-*missing*
+ProtocolMapperRepresentationProtocol
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
 
 ---
 
@@ -1554,7 +1858,7 @@ Type: string
 
 Type: integer
 
-*missing*
+Time a client session is allowed to be idle before it expires. Tokens are invalidated when a client session is expired. The option does not affect the global user SSO session. If not set, it uses the standard SSO Session Idle value.
 
 ---
 
@@ -1562,7 +1866,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Max time before a client session is expired. Tokens are invalidated when a session is expired. The option does not affect the global user SSO session. If not set, it uses the standard SSO Session Max value.
 
 ---
 
@@ -1588,7 +1892,11 @@ Type: object
 |[serviceAccountsEnabled](#specdefinitionclienttemplatesserviceaccountsenabled)|boolean||
 |[standardFlowEnabled](#specdefinitionclienttemplatesstandardflowenabled)|boolean||
 
-*missing*
+ClientTemplateRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attributes": { "type": "object", "additionalProperties": { "type": "string" } }, "bearerOnly": { "type": "boolean" }, "consentRequired": { "type": "boolean" }, "description": { "type": "string" }, "directAccessGrantsEnabled": { "type": "boolean" }, "frontchannelLogout": { "type": "boolean" }, "fullScopeAllowed": { "type": "boolean" }, "id": { "type": "string" }, "implicitFlowEnabled": { "type": "boolean" }, "name": { "type": "string" }, "protocol": { "type": "string" }, "protocolMappers": { "type": "array", "items": { "$ref": "#/$defs/ProtocolMapperRepresentation" } }, "publicClient": { "type": "boolean" }, "serviceAccountsEnabled": { "type": "boolean" }, "standardFlowEnabled": { "type": "boolean" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1694,7 +2002,11 @@ Type: object
 |[protocol](#specdefinitionclienttemplatesprotocolmappersprotocol)|string||
 |[protocolMapper](#specdefinitionclienttemplatesprotocolmappersprotocolmapper)|string||
 
-*missing*
+ProtocolMapperRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1742,7 +2054,11 @@ Type: string
 
 Type: string
 
-*missing*
+ProtocolMapperRepresentationProtocol
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
 
 ---
 
@@ -1834,7 +2150,11 @@ Type: object
 |[name](#specdefinitiondefaultrolename)|string||
 |[scopeParamRequired](#specdefinitiondefaultrolescopeparamrequired)|boolean||
 
-*missing*
+RoleRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientRole": { "type": "boolean" }, "composite": { "type": "boolean" }, "composites": { "$ref": "#/$defs/Composites" }, "containerId": { "type": "string" }, "description": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "scopeParamRequired": { "type": "boolean" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1872,7 +2192,11 @@ Type: object
 |[client](#specdefinitiondefaultrolecompositesclient)|object||
 |[realm[]](#specdefinitiondefaultrolecompositesrealm)|string||
 
-*missing*
+Composites
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "application": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "client": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "realm": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -1952,7 +2276,7 @@ Type: string
 
 Type: string
 
-*missing*
+Default algorithm used to sign tokens for the realm
 
 ---
 
@@ -1992,7 +2316,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Allow multiple users to have the same email address. Changing this setting will also clear the user's cache. It is recommended to manually update email constraints of existing users in the database after switching off support for duplicate email addresses.
 
 ---
 
@@ -2000,7 +2324,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+If enabled, the username field is editable, readonly otherwise.
 
 ---
 
@@ -2008,7 +2332,7 @@ Type: boolean
 
 Type: string
 
-*missing*
+Select a theme for emails that are sent by the server.
 
 ---
 
@@ -2032,7 +2356,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+If enabled, user events are saved to the database, which makes events available to the admin and account management UIs.
 
 ---
 
@@ -2040,7 +2364,7 @@ Type: boolean
 
 Type: integer
 
-*missing*
+Sets the expiration for events. Expired events are periodically deleted from the database.
 
 ---
 
@@ -2056,7 +2380,7 @@ Type: string
 
 Type: integer
 
-*missing*
+Max login failures
 
 ---
 
@@ -2094,7 +2418,11 @@ Type: object
 |[userProfileMetadata](#specdefinitionfederatedusersuserprofilemetadata)|object||
 |[username](#specdefinitionfederatedusersusername)|string||
 
-*missing*
+UserRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "applicationRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientConsents": { "type": "array", "items": { "$ref": "#/$defs/UserConsentRepresentation" } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "createdTimestamp": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentials": { "type": "array", "items": { "$ref": "#/$defs/CredentialRepresentation" } }, "disableableCredentialTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "email": { "type": "string" }, "emailVerified": { "type": "boolean" }, "enabled": { "type": "boolean" }, "federatedIdentities": { "type": "array", "items": { "$ref": "#/$defs/FederatedIdentityRepresentation" } }, "federationLink": { "type": "string" }, "firstName": { "type": "string" }, "groups": { "type": "array", "items": { "type": "string" } }, "id": { "type": "string" }, "lastName": { "type": "string" }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "origin": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "requiredActions": { "type": "array", "items": { "type": "string" } }, "self": { "type": "string" }, "serviceAccountClientId": { "type": "string" }, "socialLinks": { "type": "array", "items": { "$ref": "#/$defs/SocialLinkRepresentation" } }, "totp": { "type": "boolean" }, "userProfileMetadata": { "$ref": "#/$defs/UserProfileMetadata" }, "username": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2134,7 +2462,11 @@ Type: object
 |[grantedRealmRoles[]](#specdefinitionfederatedusersclientconsentsgrantedrealmroles)|string||
 |[lastUpdatedDate](#specdefinitionfederatedusersclientconsentslastupdateddate)|integer||
 
-*missing*
+UserConsentRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "clientId": { "type": "string" }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "grantedClientScopes": { "type": "array", "items": { "type": "string" } }, "grantedRealmRoles": { "type": "array", "items": { "type": "string" } }, "lastUpdatedDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2219,7 +2551,11 @@ Type: object
 |[userLabel](#specdefinitionfederateduserscredentialsuserlabel)|string||
 |[value](#specdefinitionfederateduserscredentialsvalue)|string||
 
-*missing*
+CredentialRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2409,7 +2745,11 @@ Type: object
 |[userId](#specdefinitionfederatedusersfederatedidentitiesuserid)|string||
 |[userName](#specdefinitionfederatedusersfederatedidentitiesusername)|string||
 
-*missing*
+FederatedIdentityRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "identityProvider": { "type": "string" }, "userId": { "type": "string" }, "userName": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2535,7 +2875,11 @@ Type: object
 |[socialUserId](#specdefinitionfederateduserssociallinkssocialuserid)|string||
 |[socialUsername](#specdefinitionfederateduserssociallinkssocialusername)|string||
 
-*missing*
+SocialLinkRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "socialProvider": { "type": "string" }, "socialUserId": { "type": "string" }, "socialUsername": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2580,7 +2924,11 @@ Type: object
 |[attributes[]](#specdefinitionfederatedusersuserprofilemetadataattributes)|object||
 |[groups[]](#specdefinitionfederatedusersuserprofilemetadatagroups)|object||
 
-*missing*
+UserProfileMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attributes": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeMetadata" } }, "groups": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeGroupMetadata" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2599,7 +2947,11 @@ Type: object
 |[required](#specdefinitionfederatedusersuserprofilemetadataattributesrequired)|boolean||
 |[validators](#specdefinitionfederatedusersuserprofilemetadataattributesvalidators)|object||
 
-*missing*
+UserProfileAttributeMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayName": { "type": "string" }, "group": { "type": "string" }, "multivalued": { "type": "boolean" }, "name": { "type": "string" }, "readOnly": { "type": "boolean" }, "required": { "type": "boolean" }, "validators": { "type": "object", "additionalProperties": { "type": "object", "additionalProperties": {} } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2678,7 +3030,11 @@ Type: object
 |[displayHeader](#specdefinitionfederatedusersuserprofilemetadatagroupsdisplayheader)|string||
 |[name](#specdefinitionfederatedusersuserprofilemetadatagroupsname)|string||
 
-*missing*
+UserProfileAttributeGroupMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayDescription": { "type": "string" }, "displayHeader": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2750,7 +3106,11 @@ Type: object
 |[identityProviderMapper](#specdefinitionidentityprovidermappersidentityprovidermapper)|string||
 |[name](#specdefinitionidentityprovidermappersname)|string||
 
-*missing*
+IdentityProviderMapperRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "properties": { "attribute.friendly.name": { "title": "Friendly name", "description": "Friendly name of attribute to search for in assertion. You can leave this blank and specify a name instead.", "type": "string" }, "attribute.name.format": { "type": "string", "enum": [ "ATTRIBUTE_FORMAT_BASIC", "ATTRIBUTE_FORMAT_URI", "ATTRIBUTE_FORMAT_UNSPECIFIED" ] }, "syncMode": { "title": "Sync mode override", "description": "Overrides the default sync mode of the IDP for this mapper. Values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider and 'inherit' to use the sync mode defined in the identity provider for this mapper.", "type": "string", "enum": [ "INHERIT", "IMPORT", "LEGACY", "FORCE" ] }, "user.attribute": { "title": "User Attribute Name", "description": "Name of user attribute you want to hardcode", "type": "string" } }, "additionalProperties": { "type": "string" } }, "id": { "type": "string" }, "identityProviderAlias": { "type": "string" }, "identityProviderMapper": { "type": "string" }, "name": { "title": "Name", "description": "Name of the mapper.", "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2758,7 +3118,54 @@ Type: object
 
 Type: object
 
-*missing*
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[attribute.friendly.name](#specdefinitionidentityprovidermappersconfigattributefriendlyname)|string||
+|[attribute.name.format](#specdefinitionidentityprovidermappersconfigattributenameformat)|string||
+|[syncMode](#specdefinitionidentityprovidermappersconfigsyncmode)|string||
+|[user.attribute](#specdefinitionidentityprovidermappersconfiguserattribute)|string||
+
+IdentityProviderMapperRepresentationConfig
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attribute.friendly.name": { "title": "Friendly name", "description": "Friendly name of attribute to search for in assertion. You can leave this blank and specify a name instead.", "type": "string" }, "attribute.name.format": { "type": "string", "enum": [ "ATTRIBUTE_FORMAT_BASIC", "ATTRIBUTE_FORMAT_URI", "ATTRIBUTE_FORMAT_UNSPECIFIED" ] }, "syncMode": { "title": "Sync mode override", "description": "Overrides the default sync mode of the IDP for this mapper. Values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider and 'inherit' to use the sync mode defined in the identity provider for this mapper.", "type": "string", "enum": [ "INHERIT", "IMPORT", "LEGACY", "FORCE" ] }, "user.attribute": { "title": "User Attribute Name", "description": "Name of user attribute you want to hardcode", "type": "string" } }, "additionalProperties": { "type": "string" } } ``` </details>
+
+---
+
+### spec.definition.identityProviderMappers[].config.attribute.friendly.name
+
+Type: string
+
+Friendly name of attribute to search for in assertion. You can leave this blank and specify a name instead.
+
+---
+
+### spec.definition.identityProviderMappers[].config.attribute.name.format
+
+Type: string
+
+IdentityProviderMapperRepresentationConfigAttributeNameFormat
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "ATTRIBUTE_FORMAT_BASIC", "ATTRIBUTE_FORMAT_URI", "ATTRIBUTE_FORMAT_UNSPECIFIED" ] } ``` </details>
+
+---
+
+### spec.definition.identityProviderMappers[].config.syncMode
+
+Type: string
+
+Overrides the default sync mode of the IDP for this mapper. Values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider and 'inherit' to use the sync mode defined in the identity provider for this mapper.
+
+---
+
+### spec.definition.identityProviderMappers[].config.user.attribute
+
+Type: string
+
+Name of user attribute you want to hardcode
 
 ---
 
@@ -2790,7 +3197,7 @@ Type: string
 
 Type: string
 
-*missing*
+Name of the mapper.
 
 ---
 
@@ -2818,7 +3225,11 @@ Type: object
 |[updateProfileFirstLogin](#specdefinitionidentityprovidersupdateprofilefirstlogin)|boolean||
 |[updateProfileFirstLoginMode](#specdefinitionidentityprovidersupdateprofilefirstloginmode)|string||
 
-*missing*
+IdentityProviderRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "addReadTokenRoleOnCreate": { "title": "Stored tokens readable", "description": "Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.", "type": "boolean" }, "alias": { "title": "Alias", "description": "The alias uniquely identifies an identity provider and it is also used to build the redirect uri.", "type": "string" }, "authenticateByDefault": { "type": "boolean" }, "config": { "type": "object", "properties": { "allowCreate": { "title": "Allow create", "description": "Allow the external identity provider to create a new identifier to represent the principal.", "type": "string", "enum": [ "true", "false", "" ] }, "allowedClockSkew": { "title": "Allowed clock skew", "description": "Clock skew in seconds that is tolerated when validating identity provider tokens. Default value is zero.", "type": "string", "pattern": "^[0-9]*$" }, "attributeConsumingServiceIndex": { "title": "Attribute Consuming Service Index", "description": "Index of the Attribute Consuming Service profile to request during authentication.", "type": "string", "pattern": "^[0-9]*$" }, "authnContextClassRefs": { "title": "AuthnContext ClassRefs", "description": "Ordered list of requested AuthnContext ClassRefs.", "type": "string" }, "authnContextComparisonType": { "title": "Comparison", "description": "Specifies the comparison method used to evaluate the requested context classes or statements. The default is \"Exact\".", "type": "string", "enum": [ "exact", "minimum", "maximum", "better" ] }, "authnContextDeclRefs": { "title": "AuthnContext DeclRefs", "description": "Ordered list of requested AuthnContext DeclRefs.", "type": "string" }, "backchannelSupported": { "title": "Backchannel logout", "description": "Does the external IDP support backchannel logout?", "type": "string", "enum": [ "true", "false", "" ] }, "encryptionAlgorithm": { "title": "Encryption Algorithm", "description": "Encryption algorithm, which is used by SAML IDP for encryption of SAML documents, assertions or IDs. The corresponding decryption key for decrypt SAML document parts will be chosen based on this configured algorithm and should be available in realm keys for the encryption (ENC) usage. If algorithm is not configured, then any supported algorithm is allowed and decryption key will be chosen based on the algorithm configured in SAML document itself.", "type": "string" }, "entityId": { "title": "Service provider entity ID", "description": "The Entity ID that will be used to uniquely identify this SAML Service Provider.", "type": "string" }, "forceAuthn": { "title": "Force authentication", "description": "Indicates whether the identity provider must authenticate the presenter directly rather than rely on a previous security context.", "type": "string", "enum": [ "true", "false", "" ] }, "hideOnLoginPage": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "string", "enum": [ "true", "false", "" ] }, "idpEntityId": { "title": "Identity provider entity ID", "description": "The Entity ID used to validate the Issuer for received SAML assertions. If empty, no Issuer validation is performed.", "type": "string" }, "loginHint": { "title": "Pass subject", "description": "During login phase, forward an optional login_hint query parameter to SAML AuthnRequest's Subject.", "type": "string", "enum": [ "true", "false", "" ] }, "nameIDPolicyFormat": { "title": "NameID policy format", "description": "Specifies the URI reference corresponding to a name identifier format.", "type": "string" }, "postBindingAuthnRequest": { "title": "HTTP-POST binding for AuthnRequest", "description": "Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingLogout": { "title": "HTTP-POST binding logout", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingResponse": { "title": "HTTP-POST binding response", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "principalAttribute": { "title": "Principal attribute", "description": "Name or Friendly Name of the attribute used to identify external users.", "type": "string" }, "principalType": { "title": "Principal type", "description": "Way to identify and track external users from the assertion. Default is using Subject NameID, alternatively you can set up identifying attribute.", "type": "string", "enum": [ "SUBJECT", "ATTRIBUTE", "FRIENDLY_ATTRIBUTE" ] }, "signSpMetadata": { "title": "Sign service provider metadata", "description": "Enable/disable signature of the provider SAML metadata.", "type": "string", "enum": [ "true", "false", "" ] }, "signatureAlgorithm": { "title": "Signature algorithm", "description": "The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.", "type": "string" }, "signingCertificate": { "title": "Validating X509 certificates", "description": "The public certificates Keycloak uses to validate the signatures of SAML requests and responses from the external IDP when Use metadata descriptor URL is OFF. Multiple certificates can be entered separated by comma (,). The certificates can be re-imported from the Metadata descriptor URL clicking the Import Keys action in the identity provider page. The action downloads the current certificates in the metadata endpoint and assigns them to the config in this same option. You need to click Save to definitely store the re-imported certificates.", "type": "string" }, "singleSignOnServiceUrl": { "title": "Single Sign-On service URL", "description": "The Url that must be used to send authentication requests (SAML AuthnRequest).", "type": "string" }, "syncMode": { "title": "Sync mode", "description": "Default sync mode for all mappers. The sync mode determines when user data will be synced using the mappers. Possible values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider.", "type": "string", "enum": [ "IMPORT", "LEGACY", "FORCE" ] }, "validateSignature": { "title": "Validate Signatures", "description": "Enable/disable signature validation of external IDP signatures.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsEncrypted": { "title": "Want Assertions encrypted", "description": "Indicates whether this service provider expects an encrypted Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsSigned": { "title": "Want Assertions signed", "description": "Indicates whether this service provider expects a signed Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAuthnRequestsSigned": { "title": "Want AuthnRequests signed", "description": "Indicates whether the identity provider expects a signed AuthnRequest.", "type": "string", "enum": [ "true", "false", "" ] }, "xmlSigKeyInfoKeyNameTransformer": { "title": "SAML signature key name", "description": "Signed SAML documents contain identification of signing key in KeyName element. For Keycloak / RH-SSO counter-party, use KEY_ID, for MS AD FS use CERT_SUBJECT, for others check and use NONE if no other option works.", "type": "string", "enum": [ "NONE", "KEY_ID", "CERT_SUBJECT" ] } }, "additionalProperties": { "type": "string" } }, "displayName": { "title": "Display name", "description": "Friendly name for Identity Providers.", "type": "string" }, "enabled": { "title": "Enabled", "type": "boolean" }, "firstBrokerLoginFlowAlias": { "title": "First login flow override", "description": "Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that no Keycloak account is currently linked to the authenticated identity provider account.", "type": "string" }, "hideOnLogin": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "boolean" }, "internalId": { "type": "string" }, "linkOnly": { "title": "Account linking only", "description": "If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider.", "type": "boolean" }, "organizationId": { "type": "string" }, "postBrokerLoginFlowAlias": { "title": "Post login flow", "description": "Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this to \"None\" if you need no any additional authenticators to be triggered after login with this identity provider. Also note that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.", "type": "string" }, "providerId": { "type": "string" }, "storeToken": { "title": "Store tokens", "description": "Enable/disable if tokens must be stored after authenticating users.", "type": "boolean" }, "trustEmail": { "title": "Trust Email", "description": "If enabled, email provided by this provider is not verified even if verification is enabled for the realm.", "type": "boolean" }, "updateProfileFirstLogin": { "type": "boolean" }, "updateProfileFirstLoginMode": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -2826,7 +3237,7 @@ Type: object
 
 Type: boolean
 
-*missing*
+Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.
 
 ---
 
@@ -2834,7 +3245,7 @@ Type: boolean
 
 Type: string
 
-*missing*
+The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 
 ---
 
@@ -2850,7 +3261,275 @@ Type: boolean
 
 Type: object
 
-*missing*
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[allowCreate](#specdefinitionidentityprovidersconfigallowcreate)|string||
+|[allowedClockSkew](#specdefinitionidentityprovidersconfigallowedclockskew)|string||
+|[attributeConsumingServiceIndex](#specdefinitionidentityprovidersconfigattributeconsumingserviceindex)|string||
+|[authnContextClassRefs](#specdefinitionidentityprovidersconfigauthncontextclassrefs)|string||
+|[authnContextComparisonType](#specdefinitionidentityprovidersconfigauthncontextcomparisontype)|string||
+|[authnContextDeclRefs](#specdefinitionidentityprovidersconfigauthncontextdeclrefs)|string||
+|[backchannelSupported](#specdefinitionidentityprovidersconfigbackchannelsupported)|string||
+|[encryptionAlgorithm](#specdefinitionidentityprovidersconfigencryptionalgorithm)|string||
+|[entityId](#specdefinitionidentityprovidersconfigentityid)|string||
+|[forceAuthn](#specdefinitionidentityprovidersconfigforceauthn)|string||
+|[hideOnLoginPage](#specdefinitionidentityprovidersconfighideonloginpage)|string||
+|[idpEntityId](#specdefinitionidentityprovidersconfigidpentityid)|string||
+|[loginHint](#specdefinitionidentityprovidersconfigloginhint)|string||
+|[nameIDPolicyFormat](#specdefinitionidentityprovidersconfignameidpolicyformat)|string||
+|[postBindingAuthnRequest](#specdefinitionidentityprovidersconfigpostbindingauthnrequest)|string||
+|[postBindingLogout](#specdefinitionidentityprovidersconfigpostbindinglogout)|string||
+|[postBindingResponse](#specdefinitionidentityprovidersconfigpostbindingresponse)|string||
+|[principalAttribute](#specdefinitionidentityprovidersconfigprincipalattribute)|string||
+|[principalType](#specdefinitionidentityprovidersconfigprincipaltype)|string||
+|[signSpMetadata](#specdefinitionidentityprovidersconfigsignspmetadata)|string||
+|[signatureAlgorithm](#specdefinitionidentityprovidersconfigsignaturealgorithm)|string||
+|[signingCertificate](#specdefinitionidentityprovidersconfigsigningcertificate)|string||
+|[singleSignOnServiceUrl](#specdefinitionidentityprovidersconfigsinglesignonserviceurl)|string||
+|[syncMode](#specdefinitionidentityprovidersconfigsyncmode)|string||
+|[validateSignature](#specdefinitionidentityprovidersconfigvalidatesignature)|string||
+|[wantAssertionsEncrypted](#specdefinitionidentityprovidersconfigwantassertionsencrypted)|string||
+|[wantAssertionsSigned](#specdefinitionidentityprovidersconfigwantassertionssigned)|string||
+|[wantAuthnRequestsSigned](#specdefinitionidentityprovidersconfigwantauthnrequestssigned)|string||
+|[xmlSigKeyInfoKeyNameTransformer](#specdefinitionidentityprovidersconfigxmlsigkeyinfokeynametransformer)|string||
+
+IdentityProviderRepresentationConfig
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "allowCreate": { "title": "Allow create", "description": "Allow the external identity provider to create a new identifier to represent the principal.", "type": "string", "enum": [ "true", "false", "" ] }, "allowedClockSkew": { "title": "Allowed clock skew", "description": "Clock skew in seconds that is tolerated when validating identity provider tokens. Default value is zero.", "type": "string", "pattern": "^[0-9]*$" }, "attributeConsumingServiceIndex": { "title": "Attribute Consuming Service Index", "description": "Index of the Attribute Consuming Service profile to request during authentication.", "type": "string", "pattern": "^[0-9]*$" }, "authnContextClassRefs": { "title": "AuthnContext ClassRefs", "description": "Ordered list of requested AuthnContext ClassRefs.", "type": "string" }, "authnContextComparisonType": { "title": "Comparison", "description": "Specifies the comparison method used to evaluate the requested context classes or statements. The default is \"Exact\".", "type": "string", "enum": [ "exact", "minimum", "maximum", "better" ] }, "authnContextDeclRefs": { "title": "AuthnContext DeclRefs", "description": "Ordered list of requested AuthnContext DeclRefs.", "type": "string" }, "backchannelSupported": { "title": "Backchannel logout", "description": "Does the external IDP support backchannel logout?", "type": "string", "enum": [ "true", "false", "" ] }, "encryptionAlgorithm": { "title": "Encryption Algorithm", "description": "Encryption algorithm, which is used by SAML IDP for encryption of SAML documents, assertions or IDs. The corresponding decryption key for decrypt SAML document parts will be chosen based on this configured algorithm and should be available in realm keys for the encryption (ENC) usage. If algorithm is not configured, then any supported algorithm is allowed and decryption key will be chosen based on the algorithm configured in SAML document itself.", "type": "string" }, "entityId": { "title": "Service provider entity ID", "description": "The Entity ID that will be used to uniquely identify this SAML Service Provider.", "type": "string" }, "forceAuthn": { "title": "Force authentication", "description": "Indicates whether the identity provider must authenticate the presenter directly rather than rely on a previous security context.", "type": "string", "enum": [ "true", "false", "" ] }, "hideOnLoginPage": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "string", "enum": [ "true", "false", "" ] }, "idpEntityId": { "title": "Identity provider entity ID", "description": "The Entity ID used to validate the Issuer for received SAML assertions. If empty, no Issuer validation is performed.", "type": "string" }, "loginHint": { "title": "Pass subject", "description": "During login phase, forward an optional login_hint query parameter to SAML AuthnRequest's Subject.", "type": "string", "enum": [ "true", "false", "" ] }, "nameIDPolicyFormat": { "title": "NameID policy format", "description": "Specifies the URI reference corresponding to a name identifier format.", "type": "string" }, "postBindingAuthnRequest": { "title": "HTTP-POST binding for AuthnRequest", "description": "Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingLogout": { "title": "HTTP-POST binding logout", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingResponse": { "title": "HTTP-POST binding response", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "principalAttribute": { "title": "Principal attribute", "description": "Name or Friendly Name of the attribute used to identify external users.", "type": "string" }, "principalType": { "title": "Principal type", "description": "Way to identify and track external users from the assertion. Default is using Subject NameID, alternatively you can set up identifying attribute.", "type": "string", "enum": [ "SUBJECT", "ATTRIBUTE", "FRIENDLY_ATTRIBUTE" ] }, "signSpMetadata": { "title": "Sign service provider metadata", "description": "Enable/disable signature of the provider SAML metadata.", "type": "string", "enum": [ "true", "false", "" ] }, "signatureAlgorithm": { "title": "Signature algorithm", "description": "The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.", "type": "string" }, "signingCertificate": { "title": "Validating X509 certificates", "description": "The public certificates Keycloak uses to validate the signatures of SAML requests and responses from the external IDP when Use metadata descriptor URL is OFF. Multiple certificates can be entered separated by comma (,). The certificates can be re-imported from the Metadata descriptor URL clicking the Import Keys action in the identity provider page. The action downloads the current certificates in the metadata endpoint and assigns them to the config in this same option. You need to click Save to definitely store the re-imported certificates.", "type": "string" }, "singleSignOnServiceUrl": { "title": "Single Sign-On service URL", "description": "The Url that must be used to send authentication requests (SAML AuthnRequest).", "type": "string" }, "syncMode": { "title": "Sync mode", "description": "Default sync mode for all mappers. The sync mode determines when user data will be synced using the mappers. Possible values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider.", "type": "string", "enum": [ "IMPORT", "LEGACY", "FORCE" ] }, "validateSignature": { "title": "Validate Signatures", "description": "Enable/disable signature validation of external IDP signatures.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsEncrypted": { "title": "Want Assertions encrypted", "description": "Indicates whether this service provider expects an encrypted Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsSigned": { "title": "Want Assertions signed", "description": "Indicates whether this service provider expects a signed Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAuthnRequestsSigned": { "title": "Want AuthnRequests signed", "description": "Indicates whether the identity provider expects a signed AuthnRequest.", "type": "string", "enum": [ "true", "false", "" ] }, "xmlSigKeyInfoKeyNameTransformer": { "title": "SAML signature key name", "description": "Signed SAML documents contain identification of signing key in KeyName element. For Keycloak / RH-SSO counter-party, use KEY_ID, for MS AD FS use CERT_SUBJECT, for others check and use NONE if no other option works.", "type": "string", "enum": [ "NONE", "KEY_ID", "CERT_SUBJECT" ] } }, "additionalProperties": { "type": "string" } } ``` </details>
+
+---
+
+### spec.definition.identityProviders[].config.allowCreate
+
+Type: string
+
+Allow the external identity provider to create a new identifier to represent the principal.
+
+---
+
+### spec.definition.identityProviders[].config.allowedClockSkew
+
+Type: string
+
+Clock skew in seconds that is tolerated when validating identity provider tokens. Default value is zero.
+
+---
+
+### spec.definition.identityProviders[].config.attributeConsumingServiceIndex
+
+Type: string
+
+Index of the Attribute Consuming Service profile to request during authentication.
+
+---
+
+### spec.definition.identityProviders[].config.authnContextClassRefs
+
+Type: string
+
+Ordered list of requested AuthnContext ClassRefs.
+
+---
+
+### spec.definition.identityProviders[].config.authnContextComparisonType
+
+Type: string
+
+Specifies the comparison method used to evaluate the requested context classes or statements. The default is "Exact".
+
+---
+
+### spec.definition.identityProviders[].config.authnContextDeclRefs
+
+Type: string
+
+Ordered list of requested AuthnContext DeclRefs.
+
+---
+
+### spec.definition.identityProviders[].config.backchannelSupported
+
+Type: string
+
+Does the external IDP support backchannel logout?
+
+---
+
+### spec.definition.identityProviders[].config.encryptionAlgorithm
+
+Type: string
+
+Encryption algorithm, which is used by SAML IDP for encryption of SAML documents, assertions or IDs. The corresponding decryption key for decrypt SAML document parts will be chosen based on this configured algorithm and should be available in realm keys for the encryption (ENC) usage. If algorithm is not configured, then any supported algorithm is allowed and decryption key will be chosen based on the algorithm configured in SAML document itself.
+
+---
+
+### spec.definition.identityProviders[].config.entityId
+
+Type: string
+
+The Entity ID that will be used to uniquely identify this SAML Service Provider.
+
+---
+
+### spec.definition.identityProviders[].config.forceAuthn
+
+Type: string
+
+Indicates whether the identity provider must authenticate the presenter directly rather than rely on a previous security context.
+
+---
+
+### spec.definition.identityProviders[].config.hideOnLoginPage
+
+Type: string
+
+If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.
+
+---
+
+### spec.definition.identityProviders[].config.idpEntityId
+
+Type: string
+
+The Entity ID used to validate the Issuer for received SAML assertions. If empty, no Issuer validation is performed.
+
+---
+
+### spec.definition.identityProviders[].config.loginHint
+
+Type: string
+
+During login phase, forward an optional login_hint query parameter to SAML AuthnRequest's Subject.
+
+---
+
+### spec.definition.identityProviders[].config.nameIDPolicyFormat
+
+Type: string
+
+Specifies the URI reference corresponding to a name identifier format.
+
+---
+
+### spec.definition.identityProviders[].config.postBindingAuthnRequest
+
+Type: string
+
+Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
+
+---
+
+### spec.definition.identityProviders[].config.postBindingLogout
+
+Type: string
+
+Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
+
+---
+
+### spec.definition.identityProviders[].config.postBindingResponse
+
+Type: string
+
+Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
+
+---
+
+### spec.definition.identityProviders[].config.principalAttribute
+
+Type: string
+
+Name or Friendly Name of the attribute used to identify external users.
+
+---
+
+### spec.definition.identityProviders[].config.principalType
+
+Type: string
+
+Way to identify and track external users from the assertion. Default is using Subject NameID, alternatively you can set up identifying attribute.
+
+---
+
+### spec.definition.identityProviders[].config.signSpMetadata
+
+Type: string
+
+Enable/disable signature of the provider SAML metadata.
+
+---
+
+### spec.definition.identityProviders[].config.signatureAlgorithm
+
+Type: string
+
+The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.
+
+---
+
+### spec.definition.identityProviders[].config.signingCertificate
+
+Type: string
+
+The public certificates Keycloak uses to validate the signatures of SAML requests and responses from the external IDP when Use metadata descriptor URL is OFF. Multiple certificates can be entered separated by comma (,). The certificates can be re-imported from the Metadata descriptor URL clicking the Import Keys action in the identity provider page. The action downloads the current certificates in the metadata endpoint and assigns them to the config in this same option. You need to click Save to definitely store the re-imported certificates.
+
+---
+
+### spec.definition.identityProviders[].config.singleSignOnServiceUrl
+
+Type: string
+
+The Url that must be used to send authentication requests (SAML AuthnRequest).
+
+---
+
+### spec.definition.identityProviders[].config.syncMode
+
+Type: string
+
+Default sync mode for all mappers. The sync mode determines when user data will be synced using the mappers. Possible values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider.
+
+---
+
+### spec.definition.identityProviders[].config.validateSignature
+
+Type: string
+
+Enable/disable signature validation of external IDP signatures.
+
+---
+
+### spec.definition.identityProviders[].config.wantAssertionsEncrypted
+
+Type: string
+
+Indicates whether this service provider expects an encrypted Assertion.
+
+---
+
+### spec.definition.identityProviders[].config.wantAssertionsSigned
+
+Type: string
+
+Indicates whether this service provider expects a signed Assertion.
+
+---
+
+### spec.definition.identityProviders[].config.wantAuthnRequestsSigned
+
+Type: string
+
+Indicates whether the identity provider expects a signed AuthnRequest.
+
+---
+
+### spec.definition.identityProviders[].config.xmlSigKeyInfoKeyNameTransformer
+
+Type: string
+
+Signed SAML documents contain identification of signing key in KeyName element. For Keycloak / RH-SSO counter-party, use KEY_ID, for MS AD FS use CERT_SUBJECT, for others check and use NONE if no other option works.
 
 ---
 
@@ -2858,7 +3537,7 @@ Type: object
 
 Type: string
 
-*missing*
+Friendly name for Identity Providers.
 
 ---
 
@@ -2874,7 +3553,7 @@ Type: boolean
 
 Type: string
 
-*missing*
+Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that no Keycloak account is currently linked to the authenticated identity provider account.
 
 ---
 
@@ -2882,7 +3561,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.
 
 ---
 
@@ -2898,7 +3577,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider.
 
 ---
 
@@ -2914,7 +3593,7 @@ Type: string
 
 Type: string
 
-*missing*
+Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this to "None" if you need no any additional authenticators to be triggered after login with this identity provider. Also note that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
 
 ---
 
@@ -2930,7 +3609,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Enable/disable if tokens must be stored after authenticating users.
 
 ---
 
@@ -2938,7 +3617,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+If enabled, email provided by this provider is not verified even if verification is enabled for the realm.
 
 ---
 
@@ -2962,7 +3641,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+If enabled, you can choose which locales you support for this realm and which locale is the default.
 
 ---
 
@@ -2986,7 +3665,7 @@ Type: object
 
 Type: string
 
-*missing*
+Select theme for login, OTP, grant, registration and forgot password pages.
 
 ---
 
@@ -2994,7 +3673,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Allow users to log in with their email address.
 
 ---
 
@@ -3002,7 +3681,7 @@ Type: boolean
 
 Type: integer
 
-*missing*
+When will failure count be reset?
 
 ---
 
@@ -3010,7 +3689,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Max time a user will be locked out.
 
 ---
 
@@ -3018,7 +3697,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+The number of temporary lockouts permitted before the user is permanently locked out.
 
 ---
 
@@ -3026,7 +3705,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+How long to wait after a quick login failure.
 
 ---
 
@@ -3058,7 +3737,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Max time before the device code and user code are expired. This value needs to be a long enough lifetime to be usable (allowing the user to retrieve their secondary device, navigate to the verification URI, login, etc.), but should be sufficiently short to limit the usability of a code obtained for phishing.
 
 ---
 
@@ -3066,7 +3745,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+The minimum amount of time in seconds that the client should wait between polling requests to the token endpoint.
 
 ---
 
@@ -3074,7 +3753,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Time an offline session is allowed to be idle before it expires. You need to use offline token to refresh at least once within this period; otherwise offline session will expire.
 
 ---
 
@@ -3082,7 +3761,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Max time before an offline session is expired regardless of activity.
 
 ---
 
@@ -3090,7 +3769,7 @@ Type: integer
 
 Type: boolean
 
-*missing*
+Enable offline session maximum lifetime
 
 ---
 
@@ -3111,7 +3790,11 @@ Type: object
 |[name](#specdefinitionorganizationsname)|string||
 |[redirectUrl](#specdefinitionorganizationsredirecturl)|string||
 
-*missing*
+OrganizationRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "alias": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "description": { "type": "string" }, "domains": { "type": "array", "items": { "$ref": "#/$defs/OrganizationDomainRepresentation" }, "uniqueItems": true }, "enabled": { "type": "boolean" }, "id": { "type": "string" }, "identityProviders": { "type": "array", "items": { "$ref": "#/$defs/IdentityProviderRepresentation" } }, "members": { "type": "array", "items": { "$ref": "#/$defs/MemberRepresentation" } }, "name": { "type": "string" }, "redirectUrl": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -3148,7 +3831,11 @@ Type: object
 |[name](#specdefinitionorganizationsdomainsname)|string||
 |[verified](#specdefinitionorganizationsdomainsverified)|boolean||
 
-*missing*
+OrganizationDomainRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "name": { "type": "string" }, "verified": { "type": "boolean" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -3208,7 +3895,11 @@ Type: object
 |[updateProfileFirstLogin](#specdefinitionorganizationsidentityprovidersupdateprofilefirstlogin)|boolean||
 |[updateProfileFirstLoginMode](#specdefinitionorganizationsidentityprovidersupdateprofilefirstloginmode)|string||
 
-*missing*
+IdentityProviderRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "addReadTokenRoleOnCreate": { "title": "Stored tokens readable", "description": "Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.", "type": "boolean" }, "alias": { "title": "Alias", "description": "The alias uniquely identifies an identity provider and it is also used to build the redirect uri.", "type": "string" }, "authenticateByDefault": { "type": "boolean" }, "config": { "type": "object", "properties": { "allowCreate": { "title": "Allow create", "description": "Allow the external identity provider to create a new identifier to represent the principal.", "type": "string", "enum": [ "true", "false", "" ] }, "allowedClockSkew": { "title": "Allowed clock skew", "description": "Clock skew in seconds that is tolerated when validating identity provider tokens. Default value is zero.", "type": "string", "pattern": "^[0-9]*$" }, "attributeConsumingServiceIndex": { "title": "Attribute Consuming Service Index", "description": "Index of the Attribute Consuming Service profile to request during authentication.", "type": "string", "pattern": "^[0-9]*$" }, "authnContextClassRefs": { "title": "AuthnContext ClassRefs", "description": "Ordered list of requested AuthnContext ClassRefs.", "type": "string" }, "authnContextComparisonType": { "title": "Comparison", "description": "Specifies the comparison method used to evaluate the requested context classes or statements. The default is \"Exact\".", "type": "string", "enum": [ "exact", "minimum", "maximum", "better" ] }, "authnContextDeclRefs": { "title": "AuthnContext DeclRefs", "description": "Ordered list of requested AuthnContext DeclRefs.", "type": "string" }, "backchannelSupported": { "title": "Backchannel logout", "description": "Does the external IDP support backchannel logout?", "type": "string", "enum": [ "true", "false", "" ] }, "encryptionAlgorithm": { "title": "Encryption Algorithm", "description": "Encryption algorithm, which is used by SAML IDP for encryption of SAML documents, assertions or IDs. The corresponding decryption key for decrypt SAML document parts will be chosen based on this configured algorithm and should be available in realm keys for the encryption (ENC) usage. If algorithm is not configured, then any supported algorithm is allowed and decryption key will be chosen based on the algorithm configured in SAML document itself.", "type": "string" }, "entityId": { "title": "Service provider entity ID", "description": "The Entity ID that will be used to uniquely identify this SAML Service Provider.", "type": "string" }, "forceAuthn": { "title": "Force authentication", "description": "Indicates whether the identity provider must authenticate the presenter directly rather than rely on a previous security context.", "type": "string", "enum": [ "true", "false", "" ] }, "hideOnLoginPage": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "string", "enum": [ "true", "false", "" ] }, "idpEntityId": { "title": "Identity provider entity ID", "description": "The Entity ID used to validate the Issuer for received SAML assertions. If empty, no Issuer validation is performed.", "type": "string" }, "loginHint": { "title": "Pass subject", "description": "During login phase, forward an optional login_hint query parameter to SAML AuthnRequest's Subject.", "type": "string", "enum": [ "true", "false", "" ] }, "nameIDPolicyFormat": { "title": "NameID policy format", "description": "Specifies the URI reference corresponding to a name identifier format.", "type": "string" }, "postBindingAuthnRequest": { "title": "HTTP-POST binding for AuthnRequest", "description": "Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingLogout": { "title": "HTTP-POST binding logout", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingResponse": { "title": "HTTP-POST binding response", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "principalAttribute": { "title": "Principal attribute", "description": "Name or Friendly Name of the attribute used to identify external users.", "type": "string" }, "principalType": { "title": "Principal type", "description": "Way to identify and track external users from the assertion. Default is using Subject NameID, alternatively you can set up identifying attribute.", "type": "string", "enum": [ "SUBJECT", "ATTRIBUTE", "FRIENDLY_ATTRIBUTE" ] }, "signSpMetadata": { "title": "Sign service provider metadata", "description": "Enable/disable signature of the provider SAML metadata.", "type": "string", "enum": [ "true", "false", "" ] }, "signatureAlgorithm": { "title": "Signature algorithm", "description": "The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.", "type": "string" }, "signingCertificate": { "title": "Validating X509 certificates", "description": "The public certificates Keycloak uses to validate the signatures of SAML requests and responses from the external IDP when Use metadata descriptor URL is OFF. Multiple certificates can be entered separated by comma (,). The certificates can be re-imported from the Metadata descriptor URL clicking the Import Keys action in the identity provider page. The action downloads the current certificates in the metadata endpoint and assigns them to the config in this same option. You need to click Save to definitely store the re-imported certificates.", "type": "string" }, "singleSignOnServiceUrl": { "title": "Single Sign-On service URL", "description": "The Url that must be used to send authentication requests (SAML AuthnRequest).", "type": "string" }, "syncMode": { "title": "Sync mode", "description": "Default sync mode for all mappers. The sync mode determines when user data will be synced using the mappers. Possible values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider.", "type": "string", "enum": [ "IMPORT", "LEGACY", "FORCE" ] }, "validateSignature": { "title": "Validate Signatures", "description": "Enable/disable signature validation of external IDP signatures.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsEncrypted": { "title": "Want Assertions encrypted", "description": "Indicates whether this service provider expects an encrypted Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsSigned": { "title": "Want Assertions signed", "description": "Indicates whether this service provider expects a signed Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAuthnRequestsSigned": { "title": "Want AuthnRequests signed", "description": "Indicates whether the identity provider expects a signed AuthnRequest.", "type": "string", "enum": [ "true", "false", "" ] }, "xmlSigKeyInfoKeyNameTransformer": { "title": "SAML signature key name", "description": "Signed SAML documents contain identification of signing key in KeyName element. For Keycloak / RH-SSO counter-party, use KEY_ID, for MS AD FS use CERT_SUBJECT, for others check and use NONE if no other option works.", "type": "string", "enum": [ "NONE", "KEY_ID", "CERT_SUBJECT" ] } }, "additionalProperties": { "type": "string" } }, "displayName": { "title": "Display name", "description": "Friendly name for Identity Providers.", "type": "string" }, "enabled": { "title": "Enabled", "type": "boolean" }, "firstBrokerLoginFlowAlias": { "title": "First login flow override", "description": "Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that no Keycloak account is currently linked to the authenticated identity provider account.", "type": "string" }, "hideOnLogin": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "boolean" }, "internalId": { "type": "string" }, "linkOnly": { "title": "Account linking only", "description": "If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider.", "type": "boolean" }, "organizationId": { "type": "string" }, "postBrokerLoginFlowAlias": { "title": "Post login flow", "description": "Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this to \"None\" if you need no any additional authenticators to be triggered after login with this identity provider. Also note that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.", "type": "string" }, "providerId": { "type": "string" }, "storeToken": { "title": "Store tokens", "description": "Enable/disable if tokens must be stored after authenticating users.", "type": "boolean" }, "trustEmail": { "title": "Trust Email", "description": "If enabled, email provided by this provider is not verified even if verification is enabled for the realm.", "type": "boolean" }, "updateProfileFirstLogin": { "type": "boolean" }, "updateProfileFirstLoginMode": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -3216,7 +3907,7 @@ Type: object
 
 Type: boolean
 
-*missing*
+Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.
 
 ---
 
@@ -3224,7 +3915,7 @@ Type: boolean
 
 Type: string
 
-*missing*
+The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
 
 ---
 
@@ -3240,7 +3931,275 @@ Type: boolean
 
 Type: object
 
-*missing*
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[allowCreate](#specdefinitionorganizationsidentityprovidersconfigallowcreate)|string||
+|[allowedClockSkew](#specdefinitionorganizationsidentityprovidersconfigallowedclockskew)|string||
+|[attributeConsumingServiceIndex](#specdefinitionorganizationsidentityprovidersconfigattributeconsumingserviceindex)|string||
+|[authnContextClassRefs](#specdefinitionorganizationsidentityprovidersconfigauthncontextclassrefs)|string||
+|[authnContextComparisonType](#specdefinitionorganizationsidentityprovidersconfigauthncontextcomparisontype)|string||
+|[authnContextDeclRefs](#specdefinitionorganizationsidentityprovidersconfigauthncontextdeclrefs)|string||
+|[backchannelSupported](#specdefinitionorganizationsidentityprovidersconfigbackchannelsupported)|string||
+|[encryptionAlgorithm](#specdefinitionorganizationsidentityprovidersconfigencryptionalgorithm)|string||
+|[entityId](#specdefinitionorganizationsidentityprovidersconfigentityid)|string||
+|[forceAuthn](#specdefinitionorganizationsidentityprovidersconfigforceauthn)|string||
+|[hideOnLoginPage](#specdefinitionorganizationsidentityprovidersconfighideonloginpage)|string||
+|[idpEntityId](#specdefinitionorganizationsidentityprovidersconfigidpentityid)|string||
+|[loginHint](#specdefinitionorganizationsidentityprovidersconfigloginhint)|string||
+|[nameIDPolicyFormat](#specdefinitionorganizationsidentityprovidersconfignameidpolicyformat)|string||
+|[postBindingAuthnRequest](#specdefinitionorganizationsidentityprovidersconfigpostbindingauthnrequest)|string||
+|[postBindingLogout](#specdefinitionorganizationsidentityprovidersconfigpostbindinglogout)|string||
+|[postBindingResponse](#specdefinitionorganizationsidentityprovidersconfigpostbindingresponse)|string||
+|[principalAttribute](#specdefinitionorganizationsidentityprovidersconfigprincipalattribute)|string||
+|[principalType](#specdefinitionorganizationsidentityprovidersconfigprincipaltype)|string||
+|[signSpMetadata](#specdefinitionorganizationsidentityprovidersconfigsignspmetadata)|string||
+|[signatureAlgorithm](#specdefinitionorganizationsidentityprovidersconfigsignaturealgorithm)|string||
+|[signingCertificate](#specdefinitionorganizationsidentityprovidersconfigsigningcertificate)|string||
+|[singleSignOnServiceUrl](#specdefinitionorganizationsidentityprovidersconfigsinglesignonserviceurl)|string||
+|[syncMode](#specdefinitionorganizationsidentityprovidersconfigsyncmode)|string||
+|[validateSignature](#specdefinitionorganizationsidentityprovidersconfigvalidatesignature)|string||
+|[wantAssertionsEncrypted](#specdefinitionorganizationsidentityprovidersconfigwantassertionsencrypted)|string||
+|[wantAssertionsSigned](#specdefinitionorganizationsidentityprovidersconfigwantassertionssigned)|string||
+|[wantAuthnRequestsSigned](#specdefinitionorganizationsidentityprovidersconfigwantauthnrequestssigned)|string||
+|[xmlSigKeyInfoKeyNameTransformer](#specdefinitionorganizationsidentityprovidersconfigxmlsigkeyinfokeynametransformer)|string||
+
+IdentityProviderRepresentationConfig
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "allowCreate": { "title": "Allow create", "description": "Allow the external identity provider to create a new identifier to represent the principal.", "type": "string", "enum": [ "true", "false", "" ] }, "allowedClockSkew": { "title": "Allowed clock skew", "description": "Clock skew in seconds that is tolerated when validating identity provider tokens. Default value is zero.", "type": "string", "pattern": "^[0-9]*$" }, "attributeConsumingServiceIndex": { "title": "Attribute Consuming Service Index", "description": "Index of the Attribute Consuming Service profile to request during authentication.", "type": "string", "pattern": "^[0-9]*$" }, "authnContextClassRefs": { "title": "AuthnContext ClassRefs", "description": "Ordered list of requested AuthnContext ClassRefs.", "type": "string" }, "authnContextComparisonType": { "title": "Comparison", "description": "Specifies the comparison method used to evaluate the requested context classes or statements. The default is \"Exact\".", "type": "string", "enum": [ "exact", "minimum", "maximum", "better" ] }, "authnContextDeclRefs": { "title": "AuthnContext DeclRefs", "description": "Ordered list of requested AuthnContext DeclRefs.", "type": "string" }, "backchannelSupported": { "title": "Backchannel logout", "description": "Does the external IDP support backchannel logout?", "type": "string", "enum": [ "true", "false", "" ] }, "encryptionAlgorithm": { "title": "Encryption Algorithm", "description": "Encryption algorithm, which is used by SAML IDP for encryption of SAML documents, assertions or IDs. The corresponding decryption key for decrypt SAML document parts will be chosen based on this configured algorithm and should be available in realm keys for the encryption (ENC) usage. If algorithm is not configured, then any supported algorithm is allowed and decryption key will be chosen based on the algorithm configured in SAML document itself.", "type": "string" }, "entityId": { "title": "Service provider entity ID", "description": "The Entity ID that will be used to uniquely identify this SAML Service Provider.", "type": "string" }, "forceAuthn": { "title": "Force authentication", "description": "Indicates whether the identity provider must authenticate the presenter directly rather than rely on a previous security context.", "type": "string", "enum": [ "true", "false", "" ] }, "hideOnLoginPage": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "string", "enum": [ "true", "false", "" ] }, "idpEntityId": { "title": "Identity provider entity ID", "description": "The Entity ID used to validate the Issuer for received SAML assertions. If empty, no Issuer validation is performed.", "type": "string" }, "loginHint": { "title": "Pass subject", "description": "During login phase, forward an optional login_hint query parameter to SAML AuthnRequest's Subject.", "type": "string", "enum": [ "true", "false", "" ] }, "nameIDPolicyFormat": { "title": "NameID policy format", "description": "Specifies the URI reference corresponding to a name identifier format.", "type": "string" }, "postBindingAuthnRequest": { "title": "HTTP-POST binding for AuthnRequest", "description": "Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingLogout": { "title": "HTTP-POST binding logout", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingResponse": { "title": "HTTP-POST binding response", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "principalAttribute": { "title": "Principal attribute", "description": "Name or Friendly Name of the attribute used to identify external users.", "type": "string" }, "principalType": { "title": "Principal type", "description": "Way to identify and track external users from the assertion. Default is using Subject NameID, alternatively you can set up identifying attribute.", "type": "string", "enum": [ "SUBJECT", "ATTRIBUTE", "FRIENDLY_ATTRIBUTE" ] }, "signSpMetadata": { "title": "Sign service provider metadata", "description": "Enable/disable signature of the provider SAML metadata.", "type": "string", "enum": [ "true", "false", "" ] }, "signatureAlgorithm": { "title": "Signature algorithm", "description": "The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.", "type": "string" }, "signingCertificate": { "title": "Validating X509 certificates", "description": "The public certificates Keycloak uses to validate the signatures of SAML requests and responses from the external IDP when Use metadata descriptor URL is OFF. Multiple certificates can be entered separated by comma (,). The certificates can be re-imported from the Metadata descriptor URL clicking the Import Keys action in the identity provider page. The action downloads the current certificates in the metadata endpoint and assigns them to the config in this same option. You need to click Save to definitely store the re-imported certificates.", "type": "string" }, "singleSignOnServiceUrl": { "title": "Single Sign-On service URL", "description": "The Url that must be used to send authentication requests (SAML AuthnRequest).", "type": "string" }, "syncMode": { "title": "Sync mode", "description": "Default sync mode for all mappers. The sync mode determines when user data will be synced using the mappers. Possible values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider.", "type": "string", "enum": [ "IMPORT", "LEGACY", "FORCE" ] }, "validateSignature": { "title": "Validate Signatures", "description": "Enable/disable signature validation of external IDP signatures.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsEncrypted": { "title": "Want Assertions encrypted", "description": "Indicates whether this service provider expects an encrypted Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsSigned": { "title": "Want Assertions signed", "description": "Indicates whether this service provider expects a signed Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAuthnRequestsSigned": { "title": "Want AuthnRequests signed", "description": "Indicates whether the identity provider expects a signed AuthnRequest.", "type": "string", "enum": [ "true", "false", "" ] }, "xmlSigKeyInfoKeyNameTransformer": { "title": "SAML signature key name", "description": "Signed SAML documents contain identification of signing key in KeyName element. For Keycloak / RH-SSO counter-party, use KEY_ID, for MS AD FS use CERT_SUBJECT, for others check and use NONE if no other option works.", "type": "string", "enum": [ "NONE", "KEY_ID", "CERT_SUBJECT" ] } }, "additionalProperties": { "type": "string" } } ``` </details>
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.allowCreate
+
+Type: string
+
+Allow the external identity provider to create a new identifier to represent the principal.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.allowedClockSkew
+
+Type: string
+
+Clock skew in seconds that is tolerated when validating identity provider tokens. Default value is zero.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.attributeConsumingServiceIndex
+
+Type: string
+
+Index of the Attribute Consuming Service profile to request during authentication.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.authnContextClassRefs
+
+Type: string
+
+Ordered list of requested AuthnContext ClassRefs.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.authnContextComparisonType
+
+Type: string
+
+Specifies the comparison method used to evaluate the requested context classes or statements. The default is "Exact".
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.authnContextDeclRefs
+
+Type: string
+
+Ordered list of requested AuthnContext DeclRefs.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.backchannelSupported
+
+Type: string
+
+Does the external IDP support backchannel logout?
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.encryptionAlgorithm
+
+Type: string
+
+Encryption algorithm, which is used by SAML IDP for encryption of SAML documents, assertions or IDs. The corresponding decryption key for decrypt SAML document parts will be chosen based on this configured algorithm and should be available in realm keys for the encryption (ENC) usage. If algorithm is not configured, then any supported algorithm is allowed and decryption key will be chosen based on the algorithm configured in SAML document itself.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.entityId
+
+Type: string
+
+The Entity ID that will be used to uniquely identify this SAML Service Provider.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.forceAuthn
+
+Type: string
+
+Indicates whether the identity provider must authenticate the presenter directly rather than rely on a previous security context.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.hideOnLoginPage
+
+Type: string
+
+If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.idpEntityId
+
+Type: string
+
+The Entity ID used to validate the Issuer for received SAML assertions. If empty, no Issuer validation is performed.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.loginHint
+
+Type: string
+
+During login phase, forward an optional login_hint query parameter to SAML AuthnRequest's Subject.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.nameIDPolicyFormat
+
+Type: string
+
+Specifies the URI reference corresponding to a name identifier format.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.postBindingAuthnRequest
+
+Type: string
+
+Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.postBindingLogout
+
+Type: string
+
+Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.postBindingResponse
+
+Type: string
+
+Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.principalAttribute
+
+Type: string
+
+Name or Friendly Name of the attribute used to identify external users.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.principalType
+
+Type: string
+
+Way to identify and track external users from the assertion. Default is using Subject NameID, alternatively you can set up identifying attribute.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.signSpMetadata
+
+Type: string
+
+Enable/disable signature of the provider SAML metadata.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.signatureAlgorithm
+
+Type: string
+
+The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.signingCertificate
+
+Type: string
+
+The public certificates Keycloak uses to validate the signatures of SAML requests and responses from the external IDP when Use metadata descriptor URL is OFF. Multiple certificates can be entered separated by comma (,). The certificates can be re-imported from the Metadata descriptor URL clicking the Import Keys action in the identity provider page. The action downloads the current certificates in the metadata endpoint and assigns them to the config in this same option. You need to click Save to definitely store the re-imported certificates.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.singleSignOnServiceUrl
+
+Type: string
+
+The Url that must be used to send authentication requests (SAML AuthnRequest).
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.syncMode
+
+Type: string
+
+Default sync mode for all mappers. The sync mode determines when user data will be synced using the mappers. Possible values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.validateSignature
+
+Type: string
+
+Enable/disable signature validation of external IDP signatures.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.wantAssertionsEncrypted
+
+Type: string
+
+Indicates whether this service provider expects an encrypted Assertion.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.wantAssertionsSigned
+
+Type: string
+
+Indicates whether this service provider expects a signed Assertion.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.wantAuthnRequestsSigned
+
+Type: string
+
+Indicates whether the identity provider expects a signed AuthnRequest.
+
+---
+
+### spec.definition.organizations[].identityProviders[].config.xmlSigKeyInfoKeyNameTransformer
+
+Type: string
+
+Signed SAML documents contain identification of signing key in KeyName element. For Keycloak / RH-SSO counter-party, use KEY_ID, for MS AD FS use CERT_SUBJECT, for others check and use NONE if no other option works.
 
 ---
 
@@ -3248,7 +4207,7 @@ Type: object
 
 Type: string
 
-*missing*
+Friendly name for Identity Providers.
 
 ---
 
@@ -3264,7 +4223,7 @@ Type: boolean
 
 Type: string
 
-*missing*
+Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that no Keycloak account is currently linked to the authenticated identity provider account.
 
 ---
 
@@ -3272,7 +4231,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.
 
 ---
 
@@ -3288,7 +4247,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider.
 
 ---
 
@@ -3304,7 +4263,7 @@ Type: string
 
 Type: string
 
-*missing*
+Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this to "None" if you need no any additional authenticators to be triggered after login with this identity provider. Also note that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
 
 ---
 
@@ -3320,7 +4279,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Enable/disable if tokens must be stored after authenticating users.
 
 ---
 
@@ -3328,7 +4287,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+If enabled, email provided by this provider is not verified even if verification is enabled for the realm.
 
 ---
 
@@ -3383,7 +4342,11 @@ Type: object
 |[userProfileMetadata](#specdefinitionorganizationsmembersuserprofilemetadata)|object||
 |[username](#specdefinitionorganizationsmembersusername)|string||
 
-*missing*
+MemberRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "applicationRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientConsents": { "type": "array", "items": { "$ref": "#/$defs/UserConsentRepresentation" } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "createdTimestamp": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentials": { "type": "array", "items": { "$ref": "#/$defs/CredentialRepresentation" } }, "disableableCredentialTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "email": { "type": "string" }, "emailVerified": { "type": "boolean" }, "enabled": { "type": "boolean" }, "federatedIdentities": { "type": "array", "items": { "$ref": "#/$defs/FederatedIdentityRepresentation" } }, "federationLink": { "type": "string" }, "firstName": { "type": "string" }, "groups": { "type": "array", "items": { "type": "string" } }, "id": { "type": "string" }, "lastName": { "type": "string" }, "membershipType": { "$ref": "#/$defs/MembershipType" }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "origin": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "requiredActions": { "type": "array", "items": { "type": "string" } }, "self": { "type": "string" }, "serviceAccountClientId": { "type": "string" }, "socialLinks": { "type": "array", "items": { "$ref": "#/$defs/SocialLinkRepresentation" } }, "totp": { "type": "boolean" }, "userProfileMetadata": { "$ref": "#/$defs/UserProfileMetadata" }, "username": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -3423,7 +4386,11 @@ Type: object
 |[grantedRealmRoles[]](#specdefinitionorganizationsmembersclientconsentsgrantedrealmroles)|string||
 |[lastUpdatedDate](#specdefinitionorganizationsmembersclientconsentslastupdateddate)|integer||
 
-*missing*
+UserConsentRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "clientId": { "type": "string" }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "grantedClientScopes": { "type": "array", "items": { "type": "string" } }, "grantedRealmRoles": { "type": "array", "items": { "type": "string" } }, "lastUpdatedDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -3508,7 +4475,11 @@ Type: object
 |[userLabel](#specdefinitionorganizationsmemberscredentialsuserlabel)|string||
 |[value](#specdefinitionorganizationsmemberscredentialsvalue)|string||
 
-*missing*
+CredentialRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -3698,7 +4669,11 @@ Type: object
 |[userId](#specdefinitionorganizationsmembersfederatedidentitiesuserid)|string||
 |[userName](#specdefinitionorganizationsmembersfederatedidentitiesusername)|string||
 
-*missing*
+FederatedIdentityRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "identityProvider": { "type": "string" }, "userId": { "type": "string" }, "userName": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -3770,7 +4745,11 @@ Type: string
 
 Type: string
 
-*missing*
+MembershipType
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "UNMANAGED", "MANAGED" ] } ``` </details>
 
 ---
 
@@ -3832,7 +4811,11 @@ Type: object
 |[socialUserId](#specdefinitionorganizationsmemberssociallinkssocialuserid)|string||
 |[socialUsername](#specdefinitionorganizationsmemberssociallinkssocialusername)|string||
 
-*missing*
+SocialLinkRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "socialProvider": { "type": "string" }, "socialUserId": { "type": "string" }, "socialUsername": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -3877,7 +4860,11 @@ Type: object
 |[attributes[]](#specdefinitionorganizationsmembersuserprofilemetadataattributes)|object||
 |[groups[]](#specdefinitionorganizationsmembersuserprofilemetadatagroups)|object||
 
-*missing*
+UserProfileMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attributes": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeMetadata" } }, "groups": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeGroupMetadata" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -3896,7 +4883,11 @@ Type: object
 |[required](#specdefinitionorganizationsmembersuserprofilemetadataattributesrequired)|boolean||
 |[validators](#specdefinitionorganizationsmembersuserprofilemetadataattributesvalidators)|object||
 
-*missing*
+UserProfileAttributeMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayName": { "type": "string" }, "group": { "type": "string" }, "multivalued": { "type": "boolean" }, "name": { "type": "string" }, "readOnly": { "type": "boolean" }, "required": { "type": "boolean" }, "validators": { "type": "object", "additionalProperties": { "type": "object", "additionalProperties": {} } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -3975,7 +4966,11 @@ Type: object
 |[displayHeader](#specdefinitionorganizationsmembersuserprofilemetadatagroupsdisplayheader)|string||
 |[name](#specdefinitionorganizationsmembersuserprofilemetadatagroupsname)|string||
 
-*missing*
+UserProfileAttributeGroupMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayDescription": { "type": "string" }, "displayHeader": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4047,7 +5042,7 @@ Type: boolean
 
 Type: string
 
-*missing*
+What hashing algorithm should be used to generate the OTP.
 
 ---
 
@@ -4055,7 +5050,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Possibility to use the same OTP code again after successful authentication.
 
 ---
 
@@ -4063,7 +5058,7 @@ Type: boolean
 
 Type: integer
 
-*missing*
+How many digits should the OTP have?
 
 ---
 
@@ -4079,7 +5074,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+How far around (extra token periods or counts) should the server look just in case the token generator and server are out of time sync or counter sync?
 
 ---
 
@@ -4087,7 +5082,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+How many seconds should an OTP token be valid? Defaults to 30 seconds.
 
 ---
 
@@ -4095,7 +5090,7 @@ Type: integer
 
 Type: string
 
-*missing*
+totp is Time-Based One Time Password. 'hotp' is a counter base one time password in which the server keeps a counter to hash against.
 
 ---
 
@@ -4153,7 +5148,11 @@ Type: object
 |[protocol](#specdefinitionprotocolmappersprotocol)|string||
 |[protocolMapper](#specdefinitionprotocolmappersprotocolmapper)|string||
 
-*missing*
+ProtocolMapperRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4201,7 +5200,11 @@ Type: string
 
 Type: string
 
-*missing*
+ProtocolMapperRepresentationProtocol
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
 
 ---
 
@@ -4225,7 +5228,7 @@ Type: string
 
 Type: integer
 
-*missing*
+If a failure happens concurrently too quickly, lock out the user.
 
 ---
 
@@ -4253,7 +5256,7 @@ Type: boolean
 
 Type: integer
 
-*missing*
+Maximum number of times a refresh token can be reused. When a different token is used, revocation is immediate.
 
 ---
 
@@ -4261,7 +5264,7 @@ Type: integer
 
 Type: boolean
 
-*missing*
+Enable/disable the registration page. A link for registration will show on login page too.
 
 ---
 
@@ -4269,7 +5272,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+Allow users to set email as username.
 
 ---
 
@@ -4285,7 +5288,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Show checkbox on login page to allow user to remain logged in between browser restarts until session expires.
 
 ---
 
@@ -4303,7 +5306,11 @@ Type: object
 |[priority](#specdefinitionrequiredactionspriority)|integer||
 |[providerId](#specdefinitionrequiredactionsproviderid)|string||
 
-*missing*
+RequiredActionProviderRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "alias": { "type": "string" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "defaultAction": { "type": "boolean" }, "enabled": { "type": "boolean" }, "name": { "type": "string" }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "providerId": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4383,7 +5390,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Show a link on login page for user to click when they have forgotten their credentials.
 
 ---
 
@@ -4391,7 +5398,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+If enabled a refresh token can only be used up to 'Refresh Token Max Reuse' and is revoked when a different token is used. Otherwise refresh tokens are not revoked when used and can be used multiple times.
 
 ---
 
@@ -4405,7 +5412,11 @@ Type: object
 |[client](#specdefinitionrolesclient)|object||
 |[realm[]](#specdefinitionrolesrealm)|object||
 
-*missing*
+RolesRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "application": { "type": "object", "additionalProperties": { "type": "array", "items": { "$ref": "#/$defs/RoleRepresentation" } } }, "client": { "type": "object", "additionalProperties": { "type": "array", "items": { "$ref": "#/$defs/RoleRepresentation" } } }, "realm": { "type": "array", "items": { "$ref": "#/$defs/RoleRepresentation" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4441,7 +5452,11 @@ Type: object
 |[name](#specdefinitionrolesrealmname)|string||
 |[scopeParamRequired](#specdefinitionrolesrealmscopeparamrequired)|boolean||
 
-*missing*
+RoleRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientRole": { "type": "boolean" }, "composite": { "type": "boolean" }, "composites": { "$ref": "#/$defs/Composites" }, "containerId": { "type": "string" }, "description": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "scopeParamRequired": { "type": "boolean" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4479,7 +5494,11 @@ Type: object
 |[client](#specdefinitionrolesrealmcompositesclient)|object||
 |[realm[]](#specdefinitionrolesrealmcompositesrealm)|string||
 
-*missing*
+Composites
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "application": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "client": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "realm": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4559,7 +5578,11 @@ Type: object
 |[roles[]](#specdefinitionscopemappingsroles)|string||
 |[self](#specdefinitionscopemappingsself)|string||
 
-*missing*
+ScopeMappingRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "client": { "type": "string" }, "clientScope": { "type": "string" }, "clientTemplate": { "type": "string" }, "roles": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "self": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4607,6 +5630,133 @@ Type: string
 
 Type: object
 
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[auth](#specdefinitionsmtpserverauth)|string||
+|[envelopeFrom](#specdefinitionsmtpserverenvelopefrom)|string||
+|[from](#specdefinitionsmtpserverfrom)|string||
+|[fromDisplayName](#specdefinitionsmtpserverfromdisplayname)|string||
+|[host](#specdefinitionsmtpserverhost)|string||
+|[password](#specdefinitionsmtpserverpassword)|string||
+|[port](#specdefinitionsmtpserverport)|string||
+|[replyTo](#specdefinitionsmtpserverreplyto)|string||
+|[replyToDisplayName](#specdefinitionsmtpserverreplytodisplayname)|string||
+|[ssl](#specdefinitionsmtpserverssl)|string||
+|[starttls](#specdefinitionsmtpserverstarttls)|string||
+|[user](#specdefinitionsmtpserveruser)|string||
+
+RealmRepresentationSmtpServer
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "auth": { "title": "Authentication", "type": "string", "enum": [ "true", "false", "" ] }, "envelopeFrom": { "title": "Envelope from", "description": "An email address used for bounces (optional).", "type": "string" }, "from": { "title": "From", "type": "string" }, "fromDisplayName": { "title": "From display name", "description": "A user-friendly name for the 'From' address (optional).", "type": "string" }, "host": { "title": "Host", "type": "string" }, "password": { "title": "Password", "description": "SMTP password. This field is able to obtain its value from vault, use ${vault.ID} format.", "type": "string" }, "port": { "title": "Port", "type": "string" }, "replyTo": { "title": "Reply to", "type": "string" }, "replyToDisplayName": { "title": "Reply to display name", "description": "A user-friendly name for the 'Reply-To' address (optional).", "type": "string" }, "ssl": { "title": "Enable SSL", "type": "string", "enum": [ "true", "false", "" ] }, "starttls": { "title": "Enable StartTLS", "type": "string", "enum": [ "true", "false", "" ] }, "user": { "title": "Username", "type": "string" } }, "additionalProperties": false } ``` </details>
+
+---
+
+### spec.definition.smtpServer.auth
+
+Type: string
+
+Authentication
+
+<details><summary>JSON schema</summary>
+
+```json { "title": "Authentication", "type": "string", "enum": [ "true", "false", "" ] } ``` </details>
+
+---
+
+### spec.definition.smtpServer.envelopeFrom
+
+Type: string
+
+An email address used for bounces (optional).
+
+---
+
+### spec.definition.smtpServer.from
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.smtpServer.fromDisplayName
+
+Type: string
+
+A user-friendly name for the 'From' address (optional).
+
+---
+
+### spec.definition.smtpServer.host
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.smtpServer.password
+
+Type: string
+
+SMTP password. This field is able to obtain its value from vault, use ${vault.ID} format.
+
+---
+
+### spec.definition.smtpServer.port
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.smtpServer.replyTo
+
+Type: string
+
+*missing*
+
+---
+
+### spec.definition.smtpServer.replyToDisplayName
+
+Type: string
+
+A user-friendly name for the 'Reply-To' address (optional).
+
+---
+
+### spec.definition.smtpServer.ssl
+
+Type: string
+
+EnableSsl
+
+<details><summary>JSON schema</summary>
+
+```json { "title": "Enable SSL", "type": "string", "enum": [ "true", "false", "" ] } ``` </details>
+
+---
+
+### spec.definition.smtpServer.starttls
+
+Type: string
+
+EnableStartTls
+
+<details><summary>JSON schema</summary>
+
+```json { "title": "Enable StartTLS", "type": "string", "enum": [ "true", "false", "" ] } ``` </details>
+
+---
+
+### spec.definition.smtpServer.user
+
+Type: string
+
 *missing*
 
 ---
@@ -4631,7 +5781,7 @@ Type: object
 
 Type: string
 
-*missing*
+Is HTTPS required? 'None' means HTTPS is not required for any client IP address. 'External requests' means localhost and private IP addresses can access without HTTPS. 'All requests' means HTTPS is required for all IP addresses.
 
 ---
 
@@ -4639,7 +5789,7 @@ Type: string
 
 Type: integer
 
-*missing*
+Time a session is allowed to be idle before it expires. Tokens and browser sessions are invalidated when a session is expired.
 
 ---
 
@@ -4647,7 +5797,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Time a remember me session is allowed to be idle before it expires. Tokens and browser sessions are invalidated when a session is expired. If not set it uses the standard SSO Session Idle value.
 
 ---
 
@@ -4655,7 +5805,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Max time before a session is expired. Tokens and browser sessions are invalidated when a session is expired.
 
 ---
 
@@ -4663,7 +5813,7 @@ Type: integer
 
 Type: integer
 
-*missing*
+Max time before a session is expired when a user has set the remember me option. Tokens and browser sessions are invalidated when a session is expired. If not set it uses the standard SSO Session Max value.
 
 ---
 
@@ -4703,7 +5853,11 @@ Type: object
 |[id](#specdefinitionuserfederationmappersid)|string||
 |[name](#specdefinitionuserfederationmappersname)|string||
 
-*missing*
+UserFederationMapperRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "federationMapperType": { "type": "string" }, "federationProviderDisplayName": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4762,7 +5916,11 @@ Type: object
 |[priority](#specdefinitionuserfederationproviderspriority)|integer||
 |[providerName](#specdefinitionuserfederationprovidersprovidername)|string||
 
-*missing*
+UserFederationProviderRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "changedSyncPeriod": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "displayName": { "type": "string" }, "fullSyncPeriod": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "id": { "type": "string" }, "lastSync": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "providerName": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4834,7 +5992,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+If enabled, users are allowed to manage their resources and permissions using the Account Management UI.
 
 ---
 
@@ -4872,7 +6030,11 @@ Type: object
 |[userProfileMetadata](#specdefinitionusersuserprofilemetadata)|object||
 |[username](#specdefinitionusersusername)|string||
 
-*missing*
+UserRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "applicationRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientConsents": { "type": "array", "items": { "$ref": "#/$defs/UserConsentRepresentation" } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "createdTimestamp": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentials": { "type": "array", "items": { "$ref": "#/$defs/CredentialRepresentation" } }, "disableableCredentialTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "email": { "type": "string" }, "emailVerified": { "type": "boolean" }, "enabled": { "type": "boolean" }, "federatedIdentities": { "type": "array", "items": { "$ref": "#/$defs/FederatedIdentityRepresentation" } }, "federationLink": { "type": "string" }, "firstName": { "type": "string" }, "groups": { "type": "array", "items": { "type": "string" } }, "id": { "type": "string" }, "lastName": { "type": "string" }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "origin": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "requiredActions": { "type": "array", "items": { "type": "string" } }, "self": { "type": "string" }, "serviceAccountClientId": { "type": "string" }, "socialLinks": { "type": "array", "items": { "$ref": "#/$defs/SocialLinkRepresentation" } }, "totp": { "type": "boolean" }, "userProfileMetadata": { "$ref": "#/$defs/UserProfileMetadata" }, "username": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4912,7 +6074,11 @@ Type: object
 |[grantedRealmRoles[]](#specdefinitionusersclientconsentsgrantedrealmroles)|string||
 |[lastUpdatedDate](#specdefinitionusersclientconsentslastupdateddate)|integer||
 
-*missing*
+UserConsentRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "clientId": { "type": "string" }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "grantedClientScopes": { "type": "array", "items": { "type": "string" } }, "grantedRealmRoles": { "type": "array", "items": { "type": "string" } }, "lastUpdatedDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -4997,7 +6163,11 @@ Type: object
 |[userLabel](#specdefinitionuserscredentialsuserlabel)|string||
 |[value](#specdefinitionuserscredentialsvalue)|string||
 
-*missing*
+CredentialRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -5187,7 +6357,11 @@ Type: object
 |[userId](#specdefinitionusersfederatedidentitiesuserid)|string||
 |[userName](#specdefinitionusersfederatedidentitiesusername)|string||
 
-*missing*
+FederatedIdentityRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "identityProvider": { "type": "string" }, "userId": { "type": "string" }, "userName": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -5313,7 +6487,11 @@ Type: object
 |[socialUserId](#specdefinitionuserssociallinkssocialuserid)|string||
 |[socialUsername](#specdefinitionuserssociallinkssocialusername)|string||
 
-*missing*
+SocialLinkRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "socialProvider": { "type": "string" }, "socialUserId": { "type": "string" }, "socialUsername": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -5358,7 +6536,11 @@ Type: object
 |[attributes[]](#specdefinitionusersuserprofilemetadataattributes)|object||
 |[groups[]](#specdefinitionusersuserprofilemetadatagroups)|object||
 
-*missing*
+UserProfileMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "attributes": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeMetadata" } }, "groups": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeGroupMetadata" } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -5377,7 +6559,11 @@ Type: object
 |[required](#specdefinitionusersuserprofilemetadataattributesrequired)|boolean||
 |[validators](#specdefinitionusersuserprofilemetadataattributesvalidators)|object||
 
-*missing*
+UserProfileAttributeMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayName": { "type": "string" }, "group": { "type": "string" }, "multivalued": { "type": "boolean" }, "name": { "type": "string" }, "readOnly": { "type": "boolean" }, "required": { "type": "boolean" }, "validators": { "type": "object", "additionalProperties": { "type": "object", "additionalProperties": {} } } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -5456,7 +6642,11 @@ Type: object
 |[displayHeader](#specdefinitionusersuserprofilemetadatagroupsdisplayheader)|string||
 |[name](#specdefinitionusersuserprofilemetadatagroupsname)|string||
 
-*missing*
+UserProfileAttributeGroupMetadata
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayDescription": { "type": "string" }, "displayHeader": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -5512,7 +6702,7 @@ Type: boolean
 
 Type: boolean
 
-*missing*
+Require user to verify their email address after initial login or after address changes are submitted.
 
 ---
 
@@ -5520,7 +6710,7 @@ Type: boolean
 
 Type: integer
 
-*missing*
+When failure threshold has been met, how much time should the user be locked out?
 
 ---
 
@@ -5536,7 +6726,7 @@ Type: string
 
 Type: string
 
-*missing*
+Communicates to an authenticator the preference of how to generate an attestation statement.
 
 ---
 
@@ -5544,7 +6734,7 @@ Type: string
 
 Type: string
 
-*missing*
+Communicates to an authenticator an acceptable attachment pattern.
 
 ---
 
@@ -5552,7 +6742,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Avoid registering an authenticator that has already been registered.
 
 ---
 
@@ -5560,7 +6750,7 @@ Type: boolean
 
 Type: integer
 
-*missing*
+The timeout value for creating the user's public key credential in seconds. If set to 0, this timeout option is not adapted.
 
 ---
 
@@ -5584,7 +6774,7 @@ Type: string
 
 Type: string
 
-*missing*
+Communicates to an authenticator the preference of how to generate an attestation statement.
 
 ---
 
@@ -5592,7 +6782,7 @@ Type: string
 
 Type: string
 
-*missing*
+Communicates to an authenticator an acceptable attachment pattern.
 
 ---
 
@@ -5600,7 +6790,7 @@ Type: string
 
 Type: boolean
 
-*missing*
+Avoid registering an authenticator that has already been registered.
 
 ---
 
@@ -5608,7 +6798,7 @@ Type: boolean
 
 Type: integer
 
-*missing*
+The timeout value for creating the user's public key credential in seconds. If set to 0, this timeout option is not adapted.
 
 ---
 
@@ -5624,7 +6814,7 @@ Type: string
 
 Type: string
 
-*missing*
+It tells an authenticator whether to create a public key credential as a Discoverable Credential.
 
 ---
 
@@ -5632,7 +6822,7 @@ Type: string
 
 Type: string
 
-*missing*
+Human-readable server name as WebAuthn Relying Party
 
 ---
 
@@ -5640,7 +6830,7 @@ Type: string
 
 Type: string
 
-*missing*
+The WebAuthn Relying Party ID (RpID). It must be the origin's effective domain, e.g. 'company.com' or 'auth.company.com'.
 
 ---
 
@@ -5648,7 +6838,11 @@ Type: string
 
 Type: string
 
-*missing*
+SignatureAlgorithmsItem
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "Ed25519", "ES256", "ES384", "ES512", "RS256", "RS384", "RS512", "RS1" ] } ``` </details>
 
 ---
 
@@ -5656,7 +6850,7 @@ Type: string
 
 Type: string
 
-*missing*
+Communicates to an authenticator whether to require to verify a user.
 
 ---
 
@@ -5664,7 +6858,7 @@ Type: string
 
 Type: string
 
-*missing*
+It tells an authenticator whether to create a public key credential as a Discoverable Credential.
 
 ---
 
@@ -5672,7 +6866,7 @@ Type: string
 
 Type: string
 
-*missing*
+Human-readable server name as WebAuthn Relying Party
 
 ---
 
@@ -5680,7 +6874,7 @@ Type: string
 
 Type: string
 
-*missing*
+The WebAuthn Relying Party ID (RpID). It must be the origin's effective domain, e.g. 'company.com' or 'auth.company.com'.
 
 ---
 
@@ -5688,7 +6882,11 @@ Type: string
 
 Type: string
 
-*missing*
+SignatureAlgorithmsItem
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "Ed25519", "ES256", "ES384", "ES512", "RS256", "RS384", "RS512", "RS1" ] } ``` </details>
 
 ---
 
@@ -5696,7 +6894,7 @@ Type: string
 
 Type: string
 
-*missing*
+Communicates to an authenticator whether to require to verify a user.
 
 ---
 

@@ -60,7 +60,11 @@ Type: object
 |:--------------|:------------|
 |has(self.id) == has(oldSelf.id)|Value is immutable|
 
-*missing*
+AuthenticatorConfigRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "alias": { "type": "string" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "id": { "type": "string" } }, "additionalProperties": false } ``` </details>
 
 ---
 

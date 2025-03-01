@@ -37,6 +37,13 @@ spec:
             description: the KeycloakAuthenticatorConfig resource
             properties:
               definition:
+                additionalProperties: false
+                description: |-
+                  AuthenticatorConfigRepresentation
+
+                  <details><summary>JSON schema</summary>
+
+                  ```json { "type": "object", "properties": { "alias": { "type": "string" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "id": { "type": "string" } }, "additionalProperties": false } ``` </details>
                 properties:
                   alias:
                     nullable: true
@@ -44,7 +51,6 @@ spec:
                   config:
                     additionalProperties:
                       type: string
-                    nullable: true
                     type: object
                   id:
                     nullable: true

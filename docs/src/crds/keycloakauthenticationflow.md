@@ -76,7 +76,11 @@ Type: object
 |:--------------|:------------|
 |has(self.id) == has(oldSelf.id)|Value is immutable|
 
-*missing*
+AuthenticationFlowRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "alias": { "type": "string" }, "authenticationExecutions": { "type": "array", "items": { "$ref": "#/$defs/AuthenticationExecutionExportRepresentation" } }, "builtIn": { "type": "boolean" }, "description": { "type": "string" }, "id": { "type": "string" }, "providerId": { "type": "string" }, "topLevel": { "type": "boolean" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -103,7 +107,11 @@ Type: object
 |[requirement](#specdefinitionauthenticationexecutionsrequirement)|string||
 |[userSetupAllowed](#specdefinitionauthenticationexecutionsusersetupallowed)|boolean||
 
-*missing*
+AuthenticationExecutionExportRepresentation
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "object", "properties": { "authenticator": { "type": "string" }, "authenticatorConfig": { "type": "string" }, "authenticatorFlow": { "type": "boolean" }, "autheticatorFlow": { "type": "boolean" }, "flowAlias": { "type": "string" }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "requirement": { "type": "string", "enum": [ "ALTERNATIVE", "CONDITIONAL", "DISABLED", "REQUIRED" ] }, "userSetupAllowed": { "type": "boolean" } }, "additionalProperties": false } ``` </details>
 
 ---
 
@@ -159,7 +167,11 @@ Type: integer
 
 Type: string
 
-*missing*
+AuthenticationExecutionExportRepresentationRequirement
+
+<details><summary>JSON schema</summary>
+
+```json { "type": "string", "enum": [ "ALTERNATIVE", "CONDITIONAL", "DISABLED", "REQUIRED" ] } ``` </details>
 
 ---
 
