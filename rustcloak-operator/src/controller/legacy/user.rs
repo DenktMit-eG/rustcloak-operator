@@ -5,7 +5,7 @@ use crate::{
     error::{Error, Result},
 };
 use async_trait::async_trait;
-use k8s_openapi::{ByteString, api::core::v1::Secret};
+use k8s_openapi::{ByteString, api::core::v1::Secret, serde_json};
 use keycloak_crd::KeycloakUser as LegacyUser;
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;

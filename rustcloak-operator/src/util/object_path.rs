@@ -1,4 +1,4 @@
-use serde_json::Value;
+use k8s_openapi::serde_json::Value;
 
 pub trait ObjectPathMut {
     fn path_mut(&mut self, path: &str) -> Option<&mut Value>;

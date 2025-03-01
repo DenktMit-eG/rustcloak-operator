@@ -7,6 +7,7 @@ use crate::{
 };
 use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
+use k8s_openapi::serde_json::json;
 use kube::{
     Api, Resource as KubeResource, ResourceExt,
     api::{Patch, PatchParams},
@@ -19,7 +20,6 @@ use kube::{
 };
 use log::{debug, info, warn};
 use serde::{Serialize, de::DeserializeOwned};
-use serde_json::json;
 
 use crate::error::*;
 use futures::StreamExt;

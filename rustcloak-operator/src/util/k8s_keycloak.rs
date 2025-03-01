@@ -4,8 +4,11 @@ use crate::{
     util::ToPatch,
 };
 use chrono::{DateTime, Utc};
+use k8s_openapi::serde_json::Value;
 use k8s_openapi::{ByteString, api::core::v1::Secret};
-use keycloak_client::{ApiAuth, ApiAuthBuilder, ApiClient, OAuth2Token};
+use keycloak_client::{
+    ApiAuth, ApiAuthBuilder, ApiClient, ClientId, ClientSecret, OAuth2Token,
+};
 use kube::{
     Api, Resource, ResourceExt,
     api::{ObjectMeta, Patch, PatchParams},
@@ -13,9 +16,7 @@ use kube::{
     runtime::reflector::ObjectRef,
 };
 use log::{debug, warn};
-use oauth2::{ClientId, ClientSecret};
 use rustcloak_crd::{KeycloakInstance, traits::SecretKeyNames};
-use serde_json::Value;
 use std::{
     collections::{BTreeMap, HashMap},
     ops::Deref,

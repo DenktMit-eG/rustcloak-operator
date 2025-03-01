@@ -11,7 +11,7 @@ use crate::{
     util::ToPatch,
 };
 use async_trait::async_trait;
-use k8s_openapi::NamespaceResourceScope;
+use k8s_openapi::{NamespaceResourceScope, serde_json::json};
 use kube::{
     Api, Resource, ResourceExt,
     api::{ObjectMeta, Patch, PatchParams},
@@ -25,7 +25,6 @@ use rustcloak_crd::{
     inner_spec::HasInnerSpec, traits::Endpoint,
 };
 use serde::{Serialize, de::DeserializeOwned};
-use serde_json::json;
 
 #[derive(Debug)]
 pub struct MorphController<R, M = ResourceMarker> {

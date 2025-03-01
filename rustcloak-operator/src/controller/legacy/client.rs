@@ -4,6 +4,7 @@ use crate::app_id;
 use crate::error::Error;
 use crate::error::Result;
 use async_trait::async_trait;
+use k8s_openapi::serde_json;
 use keycloak_crd::KeycloakClient as LegacyClient;
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;
