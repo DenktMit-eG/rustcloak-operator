@@ -37,7 +37,6 @@ spec:
             description: the KeycloakRequiredActionProvider resource
             properties:
               definition:
-                additionalProperties: false
                 description: |-
                   RequiredActionProviderRepresentation
 

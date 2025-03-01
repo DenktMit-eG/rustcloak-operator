@@ -37,7 +37,6 @@ spec:
             description: the KeycloakOrganization resource
             properties:
               definition:
-                additionalProperties: false
                 description: |-
                   OrganizationRepresentation
 
@@ -59,7 +58,6 @@ spec:
                     type: string
                   domains:
                     items:
-                      additionalProperties: false
                       description: |-
                         OrganizationDomainRepresentation
 
@@ -87,7 +85,6 @@ spec:
                       rule: self == oldSelf
                   identityProviders:
                     items:
-                      additionalProperties: false
                       description: |-
                         IdentityProviderRepresentation
 
@@ -351,7 +348,6 @@ spec:
                     type: array
                   members:
                     items:
-                      additionalProperties: false
                       description: |-
                         MemberRepresentation
 
@@ -377,7 +373,6 @@ spec:
                           type: object
                         clientConsents:
                           items:
-                            additionalProperties: false
                             description: |-
                               UserConsentRepresentation
 
@@ -418,7 +413,6 @@ spec:
                           type: integer
                         credentials:
                           items:
-                            additionalProperties: false
                             description: |-
                               CredentialRepresentation
 
@@ -508,7 +502,6 @@ spec:
                           type: boolean
                         federatedIdentities:
                           items:
-                            additionalProperties: false
                             description: |-
                               FederatedIdentityRepresentation
 
@@ -578,7 +571,6 @@ spec:
                           type: string
                         socialLinks:
                           items:
-                            additionalProperties: false
                             description: |-
                               SocialLinkRepresentation
 
@@ -601,7 +593,6 @@ spec:
                           nullable: true
                           type: boolean
                         userProfileMetadata:
-                          additionalProperties: false
                           description: |-
                             UserProfileMetadata
 
@@ -612,7 +603,6 @@ spec:
                           properties:
                             attributes:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   UserProfileAttributeMetadata
 
@@ -650,7 +640,6 @@ spec:
                               type: array
                             groups:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   UserProfileAttributeGroupMetadata
 

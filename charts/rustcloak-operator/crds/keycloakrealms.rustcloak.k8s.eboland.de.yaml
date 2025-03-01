@@ -37,7 +37,6 @@ spec:
             description: the KeycloakRealm resource
             properties:
               definition:
-                additionalProperties: false
                 description: |-
                   RealmRepresentation
 
@@ -93,7 +92,6 @@ spec:
                     nullable: true
                     type: boolean
                   adminPermissionsClient:
-                    additionalProperties: false
                     description: |-
                       ClientRepresentation
 
@@ -307,7 +305,6 @@ spec:
                         nullable: true
                         type: boolean
                       authorizationSettings:
-                        additionalProperties: false
                         description: |-
                           ResourceServerRepresentation
 
@@ -320,7 +317,6 @@ spec:
                             nullable: true
                             type: boolean
                           authorizationSchema:
-                            additionalProperties: false
                             description: |-
                               AuthorizationSchema
 
@@ -331,7 +327,6 @@ spec:
                             properties:
                               resourceTypes:
                                 additionalProperties:
-                                  additionalProperties: false
                                   description: |-
                                     ResourceType
 
@@ -374,7 +369,6 @@ spec:
                             type: string
                           policies:
                             items:
-                              additionalProperties: false
                               description: |-
                                 PolicyRepresentation
 
@@ -438,7 +432,6 @@ spec:
                                   type: array
                                 resourcesData:
                                   items:
-                                    additionalProperties: false
                                     description: |-
                                       ResourceRepresentation
 
@@ -465,7 +458,6 @@ spec:
                                         nullable: true
                                         type: string
                                       owner:
-                                        additionalProperties: false
                                         description: |-
                                           ResourceOwnerRepresentation
 
@@ -602,7 +594,6 @@ spec:
                                               nullable: true
                                               type: string
                                             owner:
-                                              additionalProperties: false
                                               description: |-
                                                 ResourceOwnerRepresentation
 
@@ -659,7 +650,6 @@ spec:
                             type: string
                           resources:
                             items:
-                              additionalProperties: false
                               description: |-
                                 ResourceRepresentation
 
@@ -686,7 +676,6 @@ spec:
                                   nullable: true
                                   type: string
                                 owner:
-                                  additionalProperties: false
                                   description: |-
                                     ResourceOwnerRepresentation
 
@@ -918,7 +907,6 @@ spec:
                             type: array
                           scopes:
                             items:
-                              additionalProperties: false
                               description: |-
                                 ScopeRepresentation
 
@@ -1029,7 +1017,6 @@ spec:
                                               nullable: true
                                               type: string
                                             owner:
-                                              additionalProperties: false
                                               description: |-
                                                 ResourceOwnerRepresentation
 
@@ -1102,7 +1089,6 @@ spec:
                                         nullable: true
                                         type: string
                                       owner:
-                                        additionalProperties: false
                                         description: |-
                                           ResourceOwnerRepresentation
 
@@ -1229,7 +1215,6 @@ spec:
                         type: string
                       protocolMappers:
                         items:
-                          additionalProperties: false
                           description: |-
                             ProtocolMapperRepresentation
 
@@ -1333,7 +1318,6 @@ spec:
                   applicationScopeMappings:
                     additionalProperties:
                       items:
-                        additionalProperties: false
                         description: |-
                           ScopeMappingRepresentation
 
@@ -1402,7 +1386,6 @@ spec:
                     type: object
                   authenticationFlows:
                     items:
-                      additionalProperties: false
                       description: |-
                         AuthenticationFlowRepresentation
 
@@ -1415,7 +1398,6 @@ spec:
                           type: string
                         authenticationExecutions:
                           items:
-                            additionalProperties: false
                             description: |-
                               AuthenticationExecutionExportRepresentation
 
@@ -1480,7 +1462,6 @@ spec:
                     type: array
                   authenticatorConfig:
                     items:
-                      additionalProperties: false
                       description: |-
                         AuthenticatorConfigRepresentation
 
@@ -1504,7 +1485,6 @@ spec:
                     nullable: true
                     type: string
                   browserSecurityHeaders:
-                    additionalProperties: false
                     description: |-
                       RealmRepresentationBrowserSecurityHeaders
 
@@ -1542,8 +1522,6 @@ spec:
                         nullable: true
                         type: string
                     type: object
-                  bruteForceDetection:
-                    nullable: true
                   bruteForceProtected:
                     nullable: true
                     type: boolean
@@ -1569,7 +1547,6 @@ spec:
                     nullable: true
                     type: integer
                   clientPolicies:
-                    additionalProperties: false
                     description: |-
                       ClientPoliciesRepresentation
 
@@ -1580,7 +1557,6 @@ spec:
                     properties:
                       globalPolicies:
                         items:
-                          additionalProperties: false
                           description: |-
                             ClientPolicyRepresentation
 
@@ -1590,7 +1566,6 @@ spec:
                           properties:
                             conditions:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   ClientPolicyConditionRepresentation
 
@@ -1623,7 +1598,6 @@ spec:
                         type: array
                       policies:
                         items:
-                          additionalProperties: false
                           description: |-
                             ClientPolicyRepresentation
 
@@ -1633,7 +1607,6 @@ spec:
                           properties:
                             conditions:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   ClientPolicyConditionRepresentation
 
@@ -1666,7 +1639,6 @@ spec:
                         type: array
                     type: object
                   clientProfiles:
-                    additionalProperties: false
                     description: |-
                       ClientProfilesRepresentation
 
@@ -1677,7 +1649,6 @@ spec:
                     properties:
                       globalProfiles:
                         items:
-                          additionalProperties: false
                           description: |-
                             ClientProfileRepresentation
 
@@ -1690,7 +1661,6 @@ spec:
                               type: string
                             executors:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   ClientPolicyExecutorRepresentation
 
@@ -1713,7 +1683,6 @@ spec:
                         type: array
                       profiles:
                         items:
-                          additionalProperties: false
                           description: |-
                             ClientProfileRepresentation
 
@@ -1726,7 +1695,6 @@ spec:
                               type: string
                             executors:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   ClientPolicyExecutorRepresentation
 
@@ -1751,7 +1719,6 @@ spec:
                   clientScopeMappings:
                     additionalProperties:
                       items:
-                        additionalProperties: false
                         description: |-
                           ScopeMappingRepresentation
 
@@ -1781,7 +1748,6 @@ spec:
                     type: object
                   clientScopes:
                     items:
-                      additionalProperties: false
                       description: |-
                         ClientScopeRepresentation
 
@@ -1816,7 +1782,6 @@ spec:
                           type: string
                         protocolMappers:
                           items:
-                            additionalProperties: false
                             description: |-
                               ProtocolMapperRepresentation
 
@@ -1871,7 +1836,6 @@ spec:
                     type: integer
                   clientTemplates:
                     items:
-                      additionalProperties: false
                       description: |-
                         ClientTemplateRepresentation
 
@@ -1915,7 +1879,6 @@ spec:
                           type: string
                         protocolMappers:
                           items:
-                            additionalProperties: false
                             description: |-
                               ProtocolMapperRepresentation
 
@@ -1986,7 +1949,6 @@ spec:
                       type: string
                     type: array
                   defaultRole:
-                    additionalProperties: false
                     description: |-
                       RoleRepresentation
 
@@ -2008,7 +1970,6 @@ spec:
                         nullable: true
                         type: boolean
                       composites:
-                        additionalProperties: false
                         description: |-
                           Composites
 
@@ -2125,7 +2086,6 @@ spec:
                     type: integer
                   federatedUsers:
                     items:
-                      additionalProperties: false
                       description: |-
                         UserRepresentation
 
@@ -2151,7 +2111,6 @@ spec:
                           type: object
                         clientConsents:
                           items:
-                            additionalProperties: false
                             description: |-
                               UserConsentRepresentation
 
@@ -2192,7 +2151,6 @@ spec:
                           type: integer
                         credentials:
                           items:
-                            additionalProperties: false
                             description: |-
                               CredentialRepresentation
 
@@ -2282,7 +2240,6 @@ spec:
                           type: boolean
                         federatedIdentities:
                           items:
-                            additionalProperties: false
                             description: |-
                               FederatedIdentityRepresentation
 
@@ -2340,7 +2297,6 @@ spec:
                           type: string
                         socialLinks:
                           items:
-                            additionalProperties: false
                             description: |-
                               SocialLinkRepresentation
 
@@ -2363,7 +2319,6 @@ spec:
                           nullable: true
                           type: boolean
                         userProfileMetadata:
-                          additionalProperties: false
                           description: |-
                             UserProfileMetadata
 
@@ -2374,7 +2329,6 @@ spec:
                           properties:
                             attributes:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   UserProfileAttributeMetadata
 
@@ -2412,7 +2366,6 @@ spec:
                               type: array
                             groups:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   UserProfileAttributeGroupMetadata
 
@@ -2448,7 +2401,6 @@ spec:
                     type: string
                   identityProviderMappers:
                     items:
-                      additionalProperties: false
                       description: |-
                         IdentityProviderMapperRepresentation
 
@@ -2513,7 +2465,6 @@ spec:
                     type: array
                   identityProviders:
                     items:
-                      additionalProperties: false
                       description: |-
                         IdentityProviderRepresentation
 
@@ -2854,7 +2805,6 @@ spec:
                     type: boolean
                   organizations:
                     items:
-                      additionalProperties: false
                       description: |-
                         OrganizationRepresentation
 
@@ -2876,7 +2826,6 @@ spec:
                           type: string
                         domains:
                           items:
-                            additionalProperties: false
                             description: |-
                               OrganizationDomainRepresentation
 
@@ -2901,7 +2850,6 @@ spec:
                           type: string
                         identityProviders:
                           items:
-                            additionalProperties: false
                             description: |-
                               IdentityProviderRepresentation
 
@@ -3165,7 +3113,6 @@ spec:
                           type: array
                         members:
                           items:
-                            additionalProperties: false
                             description: |-
                               MemberRepresentation
 
@@ -3191,7 +3138,6 @@ spec:
                                 type: object
                               clientConsents:
                                 items:
-                                  additionalProperties: false
                                   description: |-
                                     UserConsentRepresentation
 
@@ -3232,7 +3178,6 @@ spec:
                                 type: integer
                               credentials:
                                 items:
-                                  additionalProperties: false
                                   description: |-
                                     CredentialRepresentation
 
@@ -3322,7 +3267,6 @@ spec:
                                 type: boolean
                               federatedIdentities:
                                 items:
-                                  additionalProperties: false
                                   description: |-
                                     FederatedIdentityRepresentation
 
@@ -3392,7 +3336,6 @@ spec:
                                 type: string
                               socialLinks:
                                 items:
-                                  additionalProperties: false
                                   description: |-
                                     SocialLinkRepresentation
 
@@ -3415,7 +3358,6 @@ spec:
                                 nullable: true
                                 type: boolean
                               userProfileMetadata:
-                                additionalProperties: false
                                 description: |-
                                   UserProfileMetadata
 
@@ -3426,7 +3368,6 @@ spec:
                                 properties:
                                   attributes:
                                     items:
-                                      additionalProperties: false
                                       description: |-
                                         UserProfileAttributeMetadata
 
@@ -3464,7 +3405,6 @@ spec:
                                     type: array
                                   groups:
                                     items:
-                                      additionalProperties: false
                                       description: |-
                                         UserProfileAttributeGroupMetadata
 
@@ -3555,7 +3495,6 @@ spec:
                     type: string
                   protocolMappers:
                     items:
-                      additionalProperties: false
                       description: |-
                         ProtocolMapperRepresentation
 
@@ -3635,7 +3574,6 @@ spec:
                     type: boolean
                   requiredActions:
                     items:
-                      additionalProperties: false
                       description: |-
                         RequiredActionProviderRepresentation
 
@@ -3685,7 +3623,6 @@ spec:
                     nullable: true
                     type: boolean
                   roles:
-                    additionalProperties: false
                     description: |-
                       RolesRepresentation
 
@@ -3697,7 +3634,6 @@ spec:
                       application:
                         additionalProperties:
                           items:
-                            additionalProperties: false
                             description: |-
                               RoleRepresentation
 
@@ -3718,7 +3654,6 @@ spec:
                                 nullable: true
                                 type: boolean
                               composites:
-                                additionalProperties: false
                                 description: |-
                                   Composites
 
@@ -3766,7 +3701,6 @@ spec:
                       client:
                         additionalProperties:
                           items:
-                            additionalProperties: false
                             description: |-
                               RoleRepresentation
 
@@ -3787,7 +3721,6 @@ spec:
                                 nullable: true
                                 type: boolean
                               composites:
-                                additionalProperties: false
                                 description: |-
                                   Composites
 
@@ -3834,7 +3767,6 @@ spec:
                         type: object
                       realm:
                         items:
-                          additionalProperties: false
                           description: |-
                             RoleRepresentation
 
@@ -3855,7 +3787,6 @@ spec:
                               nullable: true
                               type: boolean
                             composites:
-                              additionalProperties: false
                               description: |-
                                 Composites
 
@@ -3902,7 +3833,6 @@ spec:
                     type: object
                   scopeMappings:
                     items:
-                      additionalProperties: false
                       description: |-
                         ScopeMappingRepresentation
 
@@ -3930,7 +3860,6 @@ spec:
                       type: object
                     type: array
                   smtpServer:
-                    additionalProperties: false
                     description: |-
                       RealmRepresentationSmtpServer
 
@@ -4058,7 +3987,6 @@ spec:
                     type: boolean
                   userFederationMappers:
                     items:
-                      additionalProperties: false
                       description: |-
                         UserFederationMapperRepresentation
 
@@ -4086,7 +4014,6 @@ spec:
                     type: array
                   userFederationProviders:
                     items:
-                      additionalProperties: false
                       description: |-
                         UserFederationProviderRepresentation
 
@@ -4131,7 +4058,6 @@ spec:
                     type: boolean
                   users:
                     items:
-                      additionalProperties: false
                       description: |-
                         UserRepresentation
 
@@ -4157,7 +4083,6 @@ spec:
                           type: object
                         clientConsents:
                           items:
-                            additionalProperties: false
                             description: |-
                               UserConsentRepresentation
 
@@ -4198,7 +4123,6 @@ spec:
                           type: integer
                         credentials:
                           items:
-                            additionalProperties: false
                             description: |-
                               CredentialRepresentation
 
@@ -4288,7 +4212,6 @@ spec:
                           type: boolean
                         federatedIdentities:
                           items:
-                            additionalProperties: false
                             description: |-
                               FederatedIdentityRepresentation
 
@@ -4346,7 +4269,6 @@ spec:
                           type: string
                         socialLinks:
                           items:
-                            additionalProperties: false
                             description: |-
                               SocialLinkRepresentation
 
@@ -4369,7 +4291,6 @@ spec:
                           nullable: true
                           type: boolean
                         userProfileMetadata:
-                          additionalProperties: false
                           description: |-
                             UserProfileMetadata
 
@@ -4380,7 +4301,6 @@ spec:
                           properties:
                             attributes:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   UserProfileAttributeMetadata
 
@@ -4418,7 +4338,6 @@ spec:
                               type: array
                             groups:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   UserProfileAttributeGroupMetadata
 

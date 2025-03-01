@@ -299,7 +299,6 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.browserSecurityHeaders.xFrameOptions](#specdefinitionbrowsersecurityheadersxframeoptions)|string||
 |[spec.definition.browserSecurityHeaders.xRobotsTag](#specdefinitionbrowsersecurityheadersxrobotstag)|string||
 |[spec.definition.browserSecurityHeaders.xXSSProtection](#specdefinitionbrowsersecurityheadersxxssprotection)|string||
-|[spec.definition.bruteForceDetection](#specdefinitionbruteforcedetection)|object||
 |[spec.definition.bruteForceProtected](#specdefinitionbruteforceprotected)|boolean||
 |[spec.definition.bruteForceStrategy](#specdefinitionbruteforcestrategy)|string||
 |[spec.definition.certificate](#specdefinitioncertificate)|string||
@@ -943,7 +942,6 @@ Type: object
 |[authenticatorConfig[]](#specdefinitionauthenticatorconfig)|object||
 |[browserFlow](#specdefinitionbrowserflow)|string||
 |[browserSecurityHeaders](#specdefinitionbrowsersecurityheaders)|object||
-|[bruteForceDetection](#specdefinitionbruteforcedetection)|object||
 |[bruteForceProtected](#specdefinitionbruteforceprotected)|boolean||
 |[bruteForceStrategy](#specdefinitionbruteforcestrategy)|string||
 |[certificate](#specdefinitioncertificate)|string||
@@ -3948,14 +3946,6 @@ Prevent pages from appearing in search engines. <1>Learn more</1>
 Type: string
 
 This header configures the Cross-site scripting (XSS) filter in your browser. Using the default behaviour, the browser will prevent rendering of the page when a XSS attack is detected. <1>Learn more</1>
-
----
-
-### spec.definition.bruteForceDetection
-
-Type: object
-
-*missing*
 
 ---
 

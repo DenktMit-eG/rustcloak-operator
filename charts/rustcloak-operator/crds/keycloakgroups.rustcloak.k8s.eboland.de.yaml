@@ -42,7 +42,6 @@ spec:
             description: the KeycloakGroup resource
             properties:
               definition:
-                additionalProperties: false
                 description: |-
                   GroupRepresentation
 

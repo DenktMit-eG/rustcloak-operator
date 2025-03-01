@@ -37,7 +37,6 @@ spec:
             description: the KeycloakClientScope resource
             properties:
               definition:
-                additionalProperties: false
                 description: |-
                   ClientScopeRepresentation
 
@@ -75,7 +74,6 @@ spec:
                     type: string
                   protocolMappers:
                     items:
-                      additionalProperties: false
                       description: |-
                         ProtocolMapperRepresentation
 

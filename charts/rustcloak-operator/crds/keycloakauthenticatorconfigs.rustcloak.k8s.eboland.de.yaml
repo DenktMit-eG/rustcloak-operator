@@ -37,7 +37,6 @@ spec:
             description: the KeycloakAuthenticatorConfig resource
             properties:
               definition:
-                additionalProperties: false
                 description: |-
                   AuthenticatorConfigRepresentation
 

@@ -37,7 +37,6 @@ spec:
             description: the KeycloakComponent resource
             properties:
               definition:
-                additionalProperties: false
                 description: |-
                   ComponentRepresentation
 
