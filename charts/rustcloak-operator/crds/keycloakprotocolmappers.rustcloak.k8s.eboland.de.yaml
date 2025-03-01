@@ -52,7 +52,6 @@ spec:
                 - message: Value is immutable
                   rule: self == oldSelf
               definition:
-                additionalProperties: false
                 description: |-
                   ProtocolMapperRepresentation
 

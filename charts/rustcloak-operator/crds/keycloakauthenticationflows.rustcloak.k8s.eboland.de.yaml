@@ -37,7 +37,6 @@ spec:
             description: the KeycloakAuthenticationFlow resource
             properties:
               definition:
-                additionalProperties: false
                 description: |-
                   AuthenticationFlowRepresentation
 
@@ -50,7 +49,6 @@ spec:
                     type: string
                   authenticationExecutions:
                     items:
-                      additionalProperties: false
                       description: |-
                         AuthenticationExecutionExportRepresentation
 

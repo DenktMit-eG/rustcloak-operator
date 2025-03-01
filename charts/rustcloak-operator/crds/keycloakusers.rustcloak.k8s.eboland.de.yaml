@@ -37,7 +37,6 @@ spec:
             description: the KeycloakUser resource
             properties:
               definition:
-                additionalProperties: false
                 description: |-
                   UserRepresentation
 
@@ -63,7 +62,6 @@ spec:
                     type: object
                   clientConsents:
                     items:
-                      additionalProperties: false
                       description: |-
                         UserConsentRepresentation
 
@@ -104,7 +102,6 @@ spec:
                     type: integer
                   credentials:
                     items:
-                      additionalProperties: false
                       description: |-
                         CredentialRepresentation
 
@@ -194,7 +191,6 @@ spec:
                     type: boolean
                   federatedIdentities:
                     items:
-                      additionalProperties: false
                       description: |-
                         FederatedIdentityRepresentation
 
@@ -255,7 +251,6 @@ spec:
                     type: string
                   socialLinks:
                     items:
-                      additionalProperties: false
                       description: |-
                         SocialLinkRepresentation
 
@@ -278,7 +273,6 @@ spec:
                     nullable: true
                     type: boolean
                   userProfileMetadata:
-                    additionalProperties: false
                     description: |-
                       UserProfileMetadata
 
@@ -289,7 +283,6 @@ spec:
                     properties:
                       attributes:
                         items:
-                          additionalProperties: false
                           description: |-
                             UserProfileAttributeMetadata
 
@@ -327,7 +320,6 @@ spec:
                         type: array
                       groups:
                         items:
-                          additionalProperties: false
                           description: |-
                             UserProfileAttributeGroupMetadata
 

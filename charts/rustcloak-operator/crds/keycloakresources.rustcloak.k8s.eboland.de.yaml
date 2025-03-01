@@ -43,7 +43,6 @@ spec:
                 - message: Value is immutable
                   rule: self == oldSelf
               definition:
-                additionalProperties: false
                 description: |-
                   ResourceRepresentation
 
@@ -73,7 +72,6 @@ spec:
                     nullable: true
                     type: string
                   owner:
-                    additionalProperties: false
                     description: |-
                       ResourceOwnerRepresentation
 
@@ -94,7 +92,6 @@ spec:
                     type: boolean
                   scopes:
                     items:
-                      additionalProperties: false
                       description: |-
                         ScopeRepresentation
 

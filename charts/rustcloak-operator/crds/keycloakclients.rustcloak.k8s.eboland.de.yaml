@@ -51,7 +51,6 @@ spec:
                 - secretName
                 type: object
               definition:
-                additionalProperties: false
                 description: |-
                   ClientRepresentation
 
@@ -264,7 +263,6 @@ spec:
                     nullable: true
                     type: boolean
                   authorizationSettings:
-                    additionalProperties: false
                     description: |-
                       ResourceServerRepresentation
 
@@ -277,7 +275,6 @@ spec:
                         nullable: true
                         type: boolean
                       authorizationSchema:
-                        additionalProperties: false
                         description: |-
                           AuthorizationSchema
 
@@ -288,7 +285,6 @@ spec:
                         properties:
                           resourceTypes:
                             additionalProperties:
-                              additionalProperties: false
                               description: |-
                                 ResourceType
 
@@ -331,7 +327,6 @@ spec:
                         type: string
                       policies:
                         items:
-                          additionalProperties: false
                           description: |-
                             PolicyRepresentation
 
@@ -395,7 +390,6 @@ spec:
                               type: array
                             resourcesData:
                               items:
-                                additionalProperties: false
                                 description: |-
                                   ResourceRepresentation
 
@@ -422,7 +416,6 @@ spec:
                                     nullable: true
                                     type: string
                                   owner:
-                                    additionalProperties: false
                                     description: |-
                                       ResourceOwnerRepresentation
 
@@ -559,7 +552,6 @@ spec:
                                           nullable: true
                                           type: string
                                         owner:
-                                          additionalProperties: false
                                           description: |-
                                             ResourceOwnerRepresentation
 
@@ -616,7 +608,6 @@ spec:
                         type: string
                       resources:
                         items:
-                          additionalProperties: false
                           description: |-
                             ResourceRepresentation
 
@@ -643,7 +634,6 @@ spec:
                               nullable: true
                               type: string
                             owner:
-                              additionalProperties: false
                               description: |-
                                 ResourceOwnerRepresentation
 
@@ -875,7 +865,6 @@ spec:
                         type: array
                       scopes:
                         items:
-                          additionalProperties: false
                           description: |-
                             ScopeRepresentation
 
@@ -986,7 +975,6 @@ spec:
                                           nullable: true
                                           type: string
                                         owner:
-                                          additionalProperties: false
                                           description: |-
                                             ResourceOwnerRepresentation
 
@@ -1059,7 +1047,6 @@ spec:
                                     nullable: true
                                     type: string
                                   owner:
-                                    additionalProperties: false
                                     description: |-
                                       ResourceOwnerRepresentation
 
@@ -1189,7 +1176,6 @@ spec:
                     type: string
                   protocolMappers:
                     items:
-                      additionalProperties: false
                       description: |-
                         ProtocolMapperRepresentation
 

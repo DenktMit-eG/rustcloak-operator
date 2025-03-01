@@ -47,7 +47,6 @@ spec:
                 - message: Value is immutable
                   rule: self == oldSelf
               definition:
-                additionalProperties: false
                 description: |-
                   RoleRepresentation
 
@@ -68,7 +67,6 @@ spec:
                     nullable: true
                     type: boolean
                   composites:
-                    additionalProperties: false
                     description: |-
                       Composites
 
