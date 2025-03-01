@@ -112,8 +112,8 @@ fn make_k8s_happy_array(array: &mut ArrayValidation) {
                 make_k8s_happy(schema);
             }
         }
-        _ => return,
-    };
+        _ => (),
+    }
 }
 
 fn make_k8s_happy_object(object: &mut ObjectValidation) {
@@ -129,7 +129,7 @@ fn make_k8s_happy_object(object: &mut ObjectValidation) {
     // See: https://github.com/jirutka/keycloak-json-schema/issues/2
     object.properties.remove("bruteForceDetection");
 
-    for (_, schema) in &mut object.properties {
+    for schema in object.properties.values_mut() {
         make_k8s_happy(schema);
     }
     if let Some(schema) = &mut object.additional_properties {
