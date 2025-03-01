@@ -238,17 +238,8 @@ spec:
                                             name:
                                               nullable: true
                                               type: string
-                                            policies:
-                                              items:
-                                                $ref: '#/components/schemas/PolicyRepresentation'
-                                              nullable: true
-                                              type: array
-                                            resources:
-                                              items:
-                                                $ref: '#/components/schemas/ResourceRepresentation'
-                                              nullable: true
-                                              type: array
                                           type: object
+                                          x-kubernetes-preserve-unknown-fields: true
                                         nullable: true
                                         type: array
                                       scopesUma:
@@ -266,17 +257,8 @@ spec:
                                             name:
                                               nullable: true
                                               type: string
-                                            policies:
-                                              items:
-                                                $ref: '#/components/schemas/PolicyRepresentation'
-                                              nullable: true
-                                              type: array
-                                            resources:
-                                              items:
-                                                $ref: '#/components/schemas/ResourceRepresentation'
-                                              nullable: true
-                                              type: array
                                           type: object
+                                          x-kubernetes-preserve-unknown-fields: true
                                         nullable: true
                                         type: array
                                       type:
@@ -313,11 +295,6 @@ spec:
                                       name:
                                         nullable: true
                                         type: string
-                                      policies:
-                                        items:
-                                          $ref: '#/components/schemas/PolicyRepresentation'
-                                        nullable: true
-                                        type: array
                                       resources:
                                         items:
                                           properties:
@@ -353,16 +330,6 @@ spec:
                                             ownerManagedAccess:
                                               nullable: true
                                               type: boolean
-                                            scopes:
-                                              items:
-                                                $ref: '#/components/schemas/ScopeRepresentation'
-                                              nullable: true
-                                              type: array
-                                            scopesUma:
-                                              items:
-                                                $ref: '#/components/schemas/ScopeRepresentation'
-                                              nullable: true
-                                              type: array
                                             type:
                                               nullable: true
                                               type: string
@@ -375,9 +342,11 @@ spec:
                                               nullable: true
                                               type: array
                                           type: object
+                                          x-kubernetes-preserve-unknown-fields: true
                                         nullable: true
                                         type: array
                                     type: object
+                                    x-kubernetes-preserve-unknown-fields: true
                                   nullable: true
                                   type: array
                                 type:
@@ -489,33 +458,20 @@ spec:
                                                 type: string
                                               nullable: true
                                               type: array
-                                            resourcesData:
-                                              items:
-                                                $ref: '#/components/schemas/ResourceRepresentation'
-                                              nullable: true
-                                              type: array
                                             scopes:
                                               items:
                                                 type: string
-                                              nullable: true
-                                              type: array
-                                            scopesData:
-                                              items:
-                                                $ref: '#/components/schemas/ScopeRepresentation'
                                               nullable: true
                                               type: array
                                             type:
                                               nullable: true
                                               type: string
                                           type: object
-                                        nullable: true
-                                        type: array
-                                      resources:
-                                        items:
-                                          $ref: '#/components/schemas/ResourceRepresentation'
+                                          x-kubernetes-preserve-unknown-fields: true
                                         nullable: true
                                         type: array
                                     type: object
+                                    x-kubernetes-preserve-unknown-fields: true
                                   nullable: true
                                   type: array
                                 scopesUma:
@@ -579,33 +535,20 @@ spec:
                                                 type: string
                                               nullable: true
                                               type: array
-                                            resourcesData:
-                                              items:
-                                                $ref: '#/components/schemas/ResourceRepresentation'
-                                              nullable: true
-                                              type: array
                                             scopes:
                                               items:
                                                 type: string
-                                              nullable: true
-                                              type: array
-                                            scopesData:
-                                              items:
-                                                $ref: '#/components/schemas/ScopeRepresentation'
                                               nullable: true
                                               type: array
                                             type:
                                               nullable: true
                                               type: string
                                           type: object
-                                        nullable: true
-                                        type: array
-                                      resources:
-                                        items:
-                                          $ref: '#/components/schemas/ResourceRepresentation'
+                                          x-kubernetes-preserve-unknown-fields: true
                                         nullable: true
                                         type: array
                                     type: object
+                                    x-kubernetes-preserve-unknown-fields: true
                                   nullable: true
                                   type: array
                                 type:
@@ -718,16 +661,6 @@ spec:
                                             ownerManagedAccess:
                                               nullable: true
                                               type: boolean
-                                            scopes:
-                                              items:
-                                                $ref: '#/components/schemas/ScopeRepresentation'
-                                              nullable: true
-                                              type: array
-                                            scopesUma:
-                                              items:
-                                                $ref: '#/components/schemas/ScopeRepresentation'
-                                              nullable: true
-                                              type: array
                                             type:
                                               nullable: true
                                               type: string
@@ -740,6 +673,7 @@ spec:
                                               nullable: true
                                               type: array
                                           type: object
+                                          x-kubernetes-preserve-unknown-fields: true
                                         nullable: true
                                         type: array
                                       scopes:
@@ -747,15 +681,11 @@ spec:
                                           type: string
                                         nullable: true
                                         type: array
-                                      scopesData:
-                                        items:
-                                          $ref: '#/components/schemas/ScopeRepresentation'
-                                        nullable: true
-                                        type: array
                                       type:
                                         nullable: true
                                         type: string
                                     type: object
+                                    x-kubernetes-preserve-unknown-fields: true
                                   nullable: true
                                   type: array
                                 resources:
@@ -793,16 +723,6 @@ spec:
                                       ownerManagedAccess:
                                         nullable: true
                                         type: boolean
-                                      scopes:
-                                        items:
-                                          $ref: '#/components/schemas/ScopeRepresentation'
-                                        nullable: true
-                                        type: array
-                                      scopesUma:
-                                        items:
-                                          $ref: '#/components/schemas/ScopeRepresentation'
-                                        nullable: true
-                                        type: array
                                       type:
                                         nullable: true
                                         type: string
@@ -815,6 +735,7 @@ spec:
                                         nullable: true
                                         type: array
                                     type: object
+                                    x-kubernetes-preserve-unknown-fields: true
                                   nullable: true
                                   type: array
                               type: object

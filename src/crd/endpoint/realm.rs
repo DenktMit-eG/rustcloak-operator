@@ -1,8 +1,9 @@
 use crate::{
     api_object_impl,
     crd::{
-        schema_patch, HasRoute, ImmutableString, KeycloakApiObjectOptions,
-        KeycloakApiPatchList, KeycloakApiStatus, KeycloakInstance,
+        client_schema, schema_patch, HasRoute, ImmutableString,
+        KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+        KeycloakInstance,
     },
 };
 use keycloak::types::RealmRepresentation;
@@ -92,4 +93,5 @@ schema_patch!(KeycloakRealm: |s| {
         .remove("clients")
         .remove("components")
         .remove("oauthClients");
+    client_schema(s.prop("adminPermissionsClient"));
 });

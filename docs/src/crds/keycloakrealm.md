@@ -59,15 +59,11 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopes[].iconUri](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesiconuri)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopes[].id](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesid)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopes[].name](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesname)|string||
-|[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopes[].policies[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopespolicies)|object||
-|[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopes[].resources[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesresources)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesuma)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[].displayName](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumadisplayname)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[].iconUri](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumaiconuri)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[].id](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumaid)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[].name](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumaname)|string||
-|[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[].policies[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumapolicies)|object||
-|[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[].resources[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumaresources)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].type](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatatype)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].uri](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatauri)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].uris[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatauris)|string||
@@ -77,7 +73,6 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].iconUri](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataiconuri)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].id](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataid)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].name](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataname)|string||
-|[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].policies[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdatapolicies)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresources)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[]._id](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesid)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].attributes](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesattributes)|object||
@@ -88,8 +83,6 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].owner.id](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesownerid)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].owner.name](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesownername)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].ownerManagedAccess](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesownermanagedaccess)|boolean||
-|[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesscopes)|object||
-|[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].scopesUma[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesscopesuma)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].type](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcestype)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].uri](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesuri)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].uris[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesuris)|string||
@@ -121,11 +114,8 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].policies[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciespolicies)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].resourceType](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciesresourcetype)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].resources[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciesresources)|string||
-|[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].resourcesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciesresourcesdata)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciesscopes)|string||
-|[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].scopesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciesscopesdata)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].type](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciestype)|string||
-|[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].resources[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesresources)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesuma)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].displayName](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumadisplayname)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].iconUri](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumaiconuri)|string||
@@ -142,11 +132,8 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].policies[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciespolicies)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].resourceType](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciesresourcetype)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].resources[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciesresources)|string||
-|[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].resourcesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciesresourcesdata)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciesscopes)|string||
-|[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].scopesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciesscopesdata)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].type](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciestype)|string||
-|[spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].resources[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumaresources)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].type](#specdefinitionadminpermissionsclientauthorizationsettingsresourcestype)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].uri](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesuri)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.resources[].uris[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesuris)|string||
@@ -176,13 +163,10 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].owner.id](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdataownerid)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].owner.name](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdataownername)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].ownerManagedAccess](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdataownermanagedaccess)|boolean||
-|[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdatascopes)|object||
-|[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].scopesUma[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdatascopesuma)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].type](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdatatype)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].uri](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdatauri)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].uris[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdatauris)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesscopes)|string||
-|[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].scopesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesscopesdata)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].type](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciestype)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresources)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[]._id](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesid)|string||
@@ -194,8 +178,6 @@ resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].owner.id](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesownerid)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].owner.name](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesownername)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].ownerManagedAccess](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesownermanagedaccess)|boolean||
-|[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesscopes)|object||
-|[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].scopesUma[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesscopesuma)|object||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].type](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcestype)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].uri](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesuri)|string||
 |[spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].uris[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesuris)|string||
@@ -1455,8 +1437,6 @@ Type: object
 |[iconUri](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesiconuri)|string||
 |[id](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesid)|string||
 |[name](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesname)|string||
-|[policies[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopespolicies)|object||
-|[resources[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesresources)|object||
 
 *missing*
 
@@ -1494,22 +1474,6 @@ Type: string
 
 ---
 
-### spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopes[].policies[]
-
-Type: object
-
-*missing*
-
----
-
-### spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopes[].resources[]
-
-Type: object
-
-*missing*
-
----
-
 ### spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[]
 
 Type: object
@@ -1520,8 +1484,6 @@ Type: object
 |[iconUri](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumaiconuri)|string||
 |[id](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumaid)|string||
 |[name](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumaname)|string||
-|[policies[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumapolicies)|object||
-|[resources[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesresourcesdatascopesumaresources)|object||
 
 *missing*
 
@@ -1554,22 +1516,6 @@ Type: string
 ### spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[].name
 
 Type: string
-
-*missing*
-
----
-
-### spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[].policies[]
-
-Type: object
-
-*missing*
-
----
-
-### spec.definition.adminPermissionsClient.authorizationSettings.policies[].resourcesData[].scopesUma[].resources[]
-
-Type: object
 
 *missing*
 
@@ -1617,7 +1563,6 @@ Type: object
 |[iconUri](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataiconuri)|string||
 |[id](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataid)|string||
 |[name](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataname)|string||
-|[policies[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdatapolicies)|object||
 |[resources[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresources)|object||
 
 *missing*
@@ -1656,14 +1601,6 @@ Type: string
 
 ---
 
-### spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].policies[]
-
-Type: object
-
-*missing*
-
----
-
 ### spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[]
 
 Type: object
@@ -1677,8 +1614,6 @@ Type: object
 |[name](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesname)|string||
 |[owner](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesowner)|object||
 |[ownerManagedAccess](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesownermanagedaccess)|boolean||
-|[scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesscopes)|object||
-|[scopesUma[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesscopesuma)|object||
 |[type](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcestype)|string||
 |[uri](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesuri)|string||
 |[uris[]](#specdefinitionadminpermissionsclientauthorizationsettingspoliciesscopesdataresourcesuris)|string||
@@ -1759,22 +1694,6 @@ Type: string
 ### spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].ownerManagedAccess
 
 Type: boolean
-
-*missing*
-
----
-
-### spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].scopes[]
-
-Type: object
-
-*missing*
-
----
-
-### spec.definition.adminPermissionsClient.authorizationSettings.policies[].scopesData[].resources[].scopesUma[]
-
-Type: object
 
 *missing*
 
@@ -1931,7 +1850,6 @@ Type: object
 |[id](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesid)|string||
 |[name](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesname)|string||
 |[policies[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespolicies)|object||
-|[resources[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesresources)|object||
 
 *missing*
 
@@ -1985,9 +1903,7 @@ Type: object
 |[policies[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciespolicies)|string||
 |[resourceType](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciesresourcetype)|string||
 |[resources[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciesresources)|string||
-|[resourcesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciesresourcesdata)|object||
 |[scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciesscopes)|string||
-|[scopesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciesscopesdata)|object||
 |[type](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopespoliciestype)|string||
 
 *missing*
@@ -2074,14 +1990,6 @@ Type: string
 
 ---
 
-### spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].resourcesData[]
-
-Type: object
-
-*missing*
-
----
-
 ### spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].scopes[]
 
 Type: string
@@ -2090,25 +1998,9 @@ Type: string
 
 ---
 
-### spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].scopesData[]
-
-Type: object
-
-*missing*
-
----
-
 ### spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].policies[].type
 
 Type: string
-
-*missing*
-
----
-
-### spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopes[].resources[]
-
-Type: object
 
 *missing*
 
@@ -2125,7 +2017,6 @@ Type: object
 |[id](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumaid)|string||
 |[name](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumaname)|string||
 |[policies[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapolicies)|object||
-|[resources[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumaresources)|object||
 
 *missing*
 
@@ -2179,9 +2070,7 @@ Type: object
 |[policies[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciespolicies)|string||
 |[resourceType](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciesresourcetype)|string||
 |[resources[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciesresources)|string||
-|[resourcesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciesresourcesdata)|object||
 |[scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciesscopes)|string||
-|[scopesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciesscopesdata)|object||
 |[type](#specdefinitionadminpermissionsclientauthorizationsettingsresourcesscopesumapoliciestype)|string||
 
 *missing*
@@ -2268,14 +2157,6 @@ Type: string
 
 ---
 
-### spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].resourcesData[]
-
-Type: object
-
-*missing*
-
----
-
 ### spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].scopes[]
 
 Type: string
@@ -2284,25 +2165,9 @@ Type: string
 
 ---
 
-### spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].scopesData[]
-
-Type: object
-
-*missing*
-
----
-
 ### spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].policies[].type
 
 Type: string
-
-*missing*
-
----
-
-### spec.definition.adminPermissionsClient.authorizationSettings.resources[].scopesUma[].resources[]
-
-Type: object
 
 *missing*
 
@@ -2399,7 +2264,6 @@ Type: object
 |[resources[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresources)|string||
 |[resourcesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdata)|object||
 |[scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesscopes)|string||
-|[scopesData[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesscopesdata)|object||
 |[type](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciestype)|string||
 
 *missing*
@@ -2499,8 +2363,6 @@ Type: object
 |[name](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdataname)|string||
 |[owner](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdataowner)|object||
 |[ownerManagedAccess](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdataownermanagedaccess)|boolean||
-|[scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdatascopes)|object||
-|[scopesUma[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdatascopesuma)|object||
 |[type](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdatatype)|string||
 |[uri](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdatauri)|string||
 |[uris[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopespoliciesresourcesdatauris)|string||
@@ -2586,22 +2448,6 @@ Type: boolean
 
 ---
 
-### spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].scopes[]
-
-Type: object
-
-*missing*
-
----
-
-### spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].scopesUma[]
-
-Type: object
-
-*missing*
-
----
-
 ### spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].resourcesData[].type
 
 Type: string
@@ -2634,14 +2480,6 @@ Type: string
 
 ---
 
-### spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].scopesData[]
-
-Type: object
-
-*missing*
-
----
-
 ### spec.definition.adminPermissionsClient.authorizationSettings.scopes[].policies[].type
 
 Type: string
@@ -2663,8 +2501,6 @@ Type: object
 |[name](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesname)|string||
 |[owner](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesowner)|object||
 |[ownerManagedAccess](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesownermanagedaccess)|boolean||
-|[scopes[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesscopes)|object||
-|[scopesUma[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesscopesuma)|object||
 |[type](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcestype)|string||
 |[uri](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesuri)|string||
 |[uris[]](#specdefinitionadminpermissionsclientauthorizationsettingsscopesresourcesuris)|string||
@@ -2745,22 +2581,6 @@ Type: string
 ### spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].ownerManagedAccess
 
 Type: boolean
-
-*missing*
-
----
-
-### spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].scopes[]
-
-Type: object
-
-*missing*
-
----
-
-### spec.definition.adminPermissionsClient.authorizationSettings.scopes[].resources[].scopesUma[]
-
-Type: object
 
 *missing*
 
