@@ -271,7 +271,9 @@
 <tr><td style="text-align: left">has(self._id) == has(oldSelf._id)</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>ResourceRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinition_id"><a class="header" href="#specdefinition_id">spec.definition._id</a></h3>
 <p>Type: string</p>
@@ -304,7 +306,9 @@
 <tr><td style="text-align: left"><a href="#specdefinitionownername">name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>ResourceOwnerRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinitionownerid"><a class="header" href="#specdefinitionownerid">spec.definition.owner.id</a></h3>
 <p>Type: string</p>
@@ -328,7 +332,9 @@
 <tr><td style="text-align: left"><a href="#specdefinitionscopespolicies">policies[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>ScopeRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinitionscopesdisplayname"><a class="header" href="#specdefinitionscopesdisplayname">spec.definition.scopes[].displayName</a></h3>
 <p>Type: string</p>
@@ -363,7 +369,9 @@
 <tr><td style="text-align: left"><a href="#specdefinitionscopespoliciestype">type</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>PolicyRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinitionscopespoliciesconfig"><a class="header" href="#specdefinitionscopespoliciesconfig">spec.definition.scopes[].policies[].config</a></h3>
 <p>Type: object</p>
@@ -371,7 +379,9 @@
 <hr />
 <h3 id="specdefinitionscopespoliciesdecisionstrategy"><a class="header" href="#specdefinitionscopespoliciesdecisionstrategy">spec.definition.scopes[].policies[].decisionStrategy</a></h3>
 <p>Type: string</p>
-<p><em>missing</em></p>
+<p>DecisionStrategy</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } </code> </details></p>
 <hr />
 <h3 id="specdefinitionscopespoliciesdescription"><a class="header" href="#specdefinitionscopespoliciesdescription">spec.definition.scopes[].policies[].description</a></h3>
 <p>Type: string</p>
@@ -383,7 +393,9 @@
 <hr />
 <h3 id="specdefinitionscopespolicieslogic"><a class="header" href="#specdefinitionscopespolicieslogic">spec.definition.scopes[].policies[].logic</a></h3>
 <p>Type: string</p>
-<p><em>missing</em></p>
+<p>Logic</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } </code> </details></p>
 <hr />
 <h3 id="specdefinitionscopespoliciesname"><a class="header" href="#specdefinitionscopespoliciesname">spec.definition.scopes[].policies[].name</a></h3>
 <p>Type: string</p>
@@ -423,7 +435,9 @@
 <tr><td style="text-align: left"><a href="#specdefinitionscopesumapolicies">policies[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>ScopeRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinitionscopesumadisplayname"><a class="header" href="#specdefinitionscopesumadisplayname">spec.definition.scopesUma[].displayName</a></h3>
 <p>Type: string</p>
@@ -458,7 +472,9 @@
 <tr><td style="text-align: left"><a href="#specdefinitionscopesumapoliciestype">type</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>PolicyRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinitionscopesumapoliciesconfig"><a class="header" href="#specdefinitionscopesumapoliciesconfig">spec.definition.scopesUma[].policies[].config</a></h3>
 <p>Type: object</p>
@@ -466,7 +482,9 @@
 <hr />
 <h3 id="specdefinitionscopesumapoliciesdecisionstrategy"><a class="header" href="#specdefinitionscopesumapoliciesdecisionstrategy">spec.definition.scopesUma[].policies[].decisionStrategy</a></h3>
 <p>Type: string</p>
-<p><em>missing</em></p>
+<p>DecisionStrategy</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } </code> </details></p>
 <hr />
 <h3 id="specdefinitionscopesumapoliciesdescription"><a class="header" href="#specdefinitionscopesumapoliciesdescription">spec.definition.scopesUma[].policies[].description</a></h3>
 <p>Type: string</p>
@@ -478,7 +496,9 @@
 <hr />
 <h3 id="specdefinitionscopesumapolicieslogic"><a class="header" href="#specdefinitionscopesumapolicieslogic">spec.definition.scopesUma[].policies[].logic</a></h3>
 <p>Type: string</p>
-<p><em>missing</em></p>
+<p>Logic</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } </code> </details></p>
 <hr />
 <h3 id="specdefinitionscopesumapoliciesname"><a class="header" href="#specdefinitionscopesumapoliciesname">spec.definition.scopesUma[].policies[].name</a></h3>
 <p>Type: string</p>

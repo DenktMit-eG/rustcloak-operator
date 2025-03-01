@@ -223,7 +223,9 @@
 <tr><td style="text-align: left">has(self.id) == has(oldSelf.id)</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>GroupRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "id": { "type": "string" }, "name": { "type": "string" }, "parentId": { "type": "string" }, "path": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "subGroupCount": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "subGroups": { "type": "array", "items": { "$ref": "#/$defs/GroupRepresentation" } } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinitionaccess"><a class="header" href="#specdefinitionaccess">spec.definition.access</a></h3>
 <p>Type: object</p>

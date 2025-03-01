@@ -224,7 +224,9 @@
 <tr><td style="text-align: left">has(self.id) == has(oldSelf.id)</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>ClientScopeRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "attributes": { "type": "object", "additionalProperties": { "type": "string" } }, "description": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMappers": { "type": "array", "items": { "$ref": "#/$defs/ProtocolMapperRepresentation" } } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinitionattributes"><a class="header" href="#specdefinitionattributes">spec.definition.attributes</a></h3>
 <p>Type: object</p>
@@ -248,7 +250,9 @@
 <hr />
 <h3 id="specdefinitionprotocol"><a class="header" href="#specdefinitionprotocol">spec.definition.protocol</a></h3>
 <p>Type: string</p>
-<p><em>missing</em></p>
+<p>ClientScopeRepresentationProtocol</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "string", "enum": [ "openid-connect", "saml" ] } </code> </details></p>
 <hr />
 <h3 id="specdefinitionprotocolmappers"><a class="header" href="#specdefinitionprotocolmappers">spec.definition.protocolMappers[]</a></h3>
 <p>Type: object</p>
@@ -262,7 +266,9 @@
 <tr><td style="text-align: left"><a href="#specdefinitionprotocolmappersprotocolmapper">protocolMapper</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>ProtocolMapperRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinitionprotocolmappersconfig"><a class="header" href="#specdefinitionprotocolmappersconfig">spec.definition.protocolMappers[].config</a></h3>
 <p>Type: object</p>
@@ -286,7 +292,9 @@
 <hr />
 <h3 id="specdefinitionprotocolmappersprotocol"><a class="header" href="#specdefinitionprotocolmappersprotocol">spec.definition.protocolMappers[].protocol</a></h3>
 <p>Type: string</p>
-<p><em>missing</em></p>
+<p>ProtocolMapperRepresentationProtocol</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "string", "enum": [ "openid-connect", "saml" ] } </code> </details></p>
 <hr />
 <h3 id="specdefinitionprotocolmappersprotocolmapper"><a class="header" href="#specdefinitionprotocolmappersprotocolmapper">spec.definition.protocolMappers[].protocolMapper</a></h3>
 <p>Type: string</p>

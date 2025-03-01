@@ -225,7 +225,9 @@
 <tr><td style="text-align: left">has(self.id) == has(oldSelf.id)</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>AuthenticationFlowRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "alias": { "type": "string" }, "authenticationExecutions": { "type": "array", "items": { "$ref": "#/$defs/AuthenticationExecutionExportRepresentation" } }, "builtIn": { "type": "boolean" }, "description": { "type": "string" }, "id": { "type": "string" }, "providerId": { "type": "string" }, "topLevel": { "type": "boolean" } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinitionalias"><a class="header" href="#specdefinitionalias">spec.definition.alias</a></h3>
 <p>Type: string</p>
@@ -244,7 +246,9 @@
 <tr><td style="text-align: left"><a href="#specdefinitionauthenticationexecutionsusersetupallowed">userSetupAllowed</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>AuthenticationExecutionExportRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "authenticator": { "type": "string" }, "authenticatorConfig": { "type": "string" }, "authenticatorFlow": { "type": "boolean" }, "autheticatorFlow": { "type": "boolean" }, "flowAlias": { "type": "string" }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "requirement": { "type": "string", "enum": [ "ALTERNATIVE", "CONDITIONAL", "DISABLED", "REQUIRED" ] }, "userSetupAllowed": { "type": "boolean" } }, "additionalProperties": false } </code> </details></p>
 <hr />
 <h3 id="specdefinitionauthenticationexecutionsauthenticator"><a class="header" href="#specdefinitionauthenticationexecutionsauthenticator">spec.definition.authenticationExecutions[].authenticator</a></h3>
 <p>Type: string</p>
@@ -272,7 +276,9 @@
 <hr />
 <h3 id="specdefinitionauthenticationexecutionsrequirement"><a class="header" href="#specdefinitionauthenticationexecutionsrequirement">spec.definition.authenticationExecutions[].requirement</a></h3>
 <p>Type: string</p>
-<p><em>missing</em></p>
+<p>AuthenticationExecutionExportRepresentationRequirement</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "string", "enum": [ "ALTERNATIVE", "CONDITIONAL", "DISABLED", "REQUIRED" ] } </code> </details></p>
 <hr />
 <h3 id="specdefinitionauthenticationexecutionsusersetupallowed"><a class="header" href="#specdefinitionauthenticationexecutionsusersetupallowed">spec.definition.authenticationExecutions[].userSetupAllowed</a></h3>
 <p>Type: boolean</p>
