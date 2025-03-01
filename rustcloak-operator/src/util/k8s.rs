@@ -1,6 +1,6 @@
 use kube::api::Patch;
 use rustcloak_crd::KeycloakApiStatus;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 
 use crate::error::Error;
 

@@ -3,13 +3,13 @@ use std::collections::BTreeMap;
 use crate::app_id;
 use crate::error::Error;
 use case_style::CaseStyle;
-use k8s_openapi::apimachinery::pkg::apis::meta::v1::LabelSelector;
 use k8s_openapi::NamespaceResourceScope;
-use kube::api::ListParams;
-use kube::api::ObjectMeta;
+use k8s_openapi::apimachinery::pkg::apis::meta::v1::LabelSelector;
 use kube::Api;
 use kube::Resource;
 use kube::ResourceExt;
+use kube::api::ListParams;
+use kube::api::ObjectMeta;
 use serde::de::DeserializeOwned;
 
 use crate::error::Result;

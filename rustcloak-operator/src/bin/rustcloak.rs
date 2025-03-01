@@ -1,8 +1,8 @@
 use actix_web::{
-    get, middleware, App, HttpRequest, HttpResponse, HttpServer, Responder,
+    App, HttpRequest, HttpResponse, HttpServer, Responder, get, middleware,
 };
 use clap::Parser;
-use futures::{future, FutureExt};
+use futures::{FutureExt, future};
 use rustcloak_operator::{
     controller::{
         ControllerRunner, KeycloakApiObjectController,
@@ -29,7 +29,7 @@ fn init_logger() {
 
 #[cfg(not(debug_assertions))]
 fn init_logger() {
-    use structured_logger::{async_json::new_writer, Builder};
+    use structured_logger::{Builder, async_json::new_writer};
 
     Builder::with_level("info")
         .with_target_writer("*", new_writer(tokio::io::stdout()))

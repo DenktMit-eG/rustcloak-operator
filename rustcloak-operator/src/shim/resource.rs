@@ -3,10 +3,10 @@ use either::Either;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{Api, Resource};
 use rustcloak_crd::{
-    inner_spec::HasInnerSpec, traits::Endpoint, KeycloakInstance,
-    KeycloakRestObject,
+    KeycloakInstance, KeycloakRestObject, inner_spec::HasInnerSpec,
+    traits::Endpoint,
 };
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 use serde_json::Value;
 use std::{fmt::Debug, ops::Deref, sync::Arc};
 
@@ -108,9 +108,9 @@ impl<R, RP, LP, RR, LR> ParentShim<EitherMarker> for ResourceShim<R>
 where
     R: Resource + HasInnerSpec,
     R::InnerSpec: KeycloakRestObject<
-        ParentObject = Either<RP, LP>,
-        ParentRef = Either<LR, RR>,
-    >,
+            ParentObject = Either<RP, LP>,
+            ParentRef = Either<LR, RR>,
+        >,
     LP: Resource<Scope = NamespaceResourceScope, DynamicType = ()>
         + Clone
         + Debug

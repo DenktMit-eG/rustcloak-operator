@@ -9,11 +9,11 @@ impl ObjectPathMut for Value {
         let mut current = self;
         for key in path.split('.') {
             match current {
-                Value::Array(ref mut arr) => {
+                Value::Array(arr) => {
                     let index = key.parse::<usize>().ok()?;
                     current = arr.get_mut(index)?;
                 }
-                Value::Object(ref mut obj) => {
+                Value::Object(obj) => {
                     if obj.get(key).is_none() {
                         obj.insert(
                             key.to_string(),

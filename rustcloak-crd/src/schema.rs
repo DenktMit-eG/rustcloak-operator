@@ -38,7 +38,7 @@ impl SchemaUtil for Schema {
 
     fn array_item(&mut self) -> &mut Self {
         let array = &mut self.object().array.as_mut().unwrap().items;
-        if let Some(SingleOrVec::Single(ref mut schema)) = array {
+        if let Some(SingleOrVec::Single(schema)) = array {
             schema.as_mut()
         } else {
             panic!("Expected array schema for RealmRepresentation")
@@ -46,7 +46,7 @@ impl SchemaUtil for Schema {
     }
 
     fn object(&mut self) -> &mut SchemaObject {
-        if let Schema::Object(ref mut schema_object) = self {
+        if let Schema::Object(schema_object) = self {
             schema_object
         } else {
             panic!("Expected object schema for RealmRepresentation")
@@ -106,7 +106,7 @@ macro_rules! schema_patch {
         $crate::schema_patch!($name: |_| ());
     };
     ($name:ty: $schema:expr) => {
-        use schemars::{gen::SchemaGenerator, schema::Schema};
+        use schemars::{r#gen::SchemaGenerator, schema::Schema};
         use $crate::object::KeycloakRestObject;
         use $crate::schema::SchemaUtil;
 

@@ -1,4 +1,4 @@
-use crate::{macros::both_scopes, ImmutableString, KeycloakApiStatus};
+use crate::{ImmutableString, KeycloakApiStatus, macros::both_scopes};
 use k8s_openapi::api::core::v1::EnvVar;
 use kube::CustomResource;
 use schemars::JsonSchema;

@@ -1,8 +1,8 @@
 use crate::error::{Error, Result};
 use k8s_openapi::{ClusterResourceScope, ResourceScope};
 use kube::{
-    core::{object::HasSpec, NamespaceResourceScope},
     Api, Resource, ResourceExt,
+    core::{NamespaceResourceScope, object::HasSpec},
 };
 use rustcloak_crd::KeycloakRestObject;
 use serde::de::DeserializeOwned;

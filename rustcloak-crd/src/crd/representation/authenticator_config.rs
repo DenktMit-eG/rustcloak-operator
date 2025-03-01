@@ -1,7 +1,7 @@
 use crate::{
-    impl_object, macros::namespace_scope, schema_patch,
-    traits::impl_instance_ref, ImmutableString, KeycloakApiObjectOptions,
-    KeycloakApiPatchList, KeycloakApiStatus, KeycloakRealm,
+    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
+    KeycloakApiStatus, KeycloakRealm, impl_object, macros::namespace_scope,
+    schema_patch, traits::impl_instance_ref,
 };
 
 use crate::keycloak_types::AuthenticatorConfigRepresentation;

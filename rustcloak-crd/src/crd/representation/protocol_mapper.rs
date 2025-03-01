@@ -1,12 +1,11 @@
 use crate::keycloak_types::ProtocolMapperRepresentation;
 use crate::{
-    impl_object,
+    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+    KeycloakClient, KeycloakClientScope, impl_object,
     macros::namespace_scope,
     refs::{ClientRef, ClientScopeRef},
     schema_patch,
     traits::impl_instance_ref,
-    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    KeycloakClient, KeycloakClientScope,
 };
 use either::Either;
 use kube::CustomResource;

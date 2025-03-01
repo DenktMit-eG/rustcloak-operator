@@ -3,26 +3,27 @@ use std::{sync::Arc, time::Duration};
 use crate::{
     app_id,
     error::Result,
-    util::{wait_for_crd, FromError},
+    util::{FromError, wait_for_crd},
 };
 use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{
+    Api, Resource as KubeResource, ResourceExt,
     api::{Patch, PatchParams},
     core::object::HasStatus,
     runtime::{
+        Controller,
         controller::{self, Action},
-        watcher, Controller,
+        watcher,
     },
-    Api, Resource as KubeResource, ResourceExt,
 };
 use log::{debug, info, warn};
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 use serde_json::json;
 
 use crate::error::*;
 use futures::StreamExt;
-use kube::runtime::finalizer::{finalizer, Error as FinalizerError, Event};
+use kube::runtime::finalizer::{Error as FinalizerError, Event, finalizer};
 use std::fmt::Debug;
 use std::hash::Hash;
 

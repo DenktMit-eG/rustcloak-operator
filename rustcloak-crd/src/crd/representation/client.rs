@@ -1,10 +1,9 @@
 use crate::{
-    impl_object,
+    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
+    KeycloakApiStatus, KeycloakRealm, impl_object,
     macros::namespace_scope,
     schema_patch,
-    traits::{impl_instance_ref, SecretKeyNames},
-    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
-    KeycloakApiStatus, KeycloakRealm,
+    traits::{SecretKeyNames, impl_instance_ref},
 };
 
 use crate::keycloak_types::ClientRepresentation;

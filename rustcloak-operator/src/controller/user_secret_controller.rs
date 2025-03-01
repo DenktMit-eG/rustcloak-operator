@@ -6,23 +6,24 @@ use crate::util::{RefWatcher, SecretUtils, ToPatch};
 use crate::{
     app_id,
     error::Result,
-    util::{wait_for_crd, K8sKeycloakBuilder},
+    util::{K8sKeycloakBuilder, wait_for_crd},
 };
 use futures::StreamExt;
-use k8s_openapi::{api::core::v1::Secret, ByteString};
+use k8s_openapi::{ByteString, api::core::v1::Secret};
 use kube::{
+    Api, Resource as KubeResource, ResourceExt,
     api::{ObjectMeta, PatchParams, PostParams},
     runtime::{
+        Controller,
         controller::{self, Action},
-        watcher, Controller,
+        watcher,
     },
-    Api, Resource as KubeResource, ResourceExt,
 };
 use log::{info, warn};
 use randstr::randstr;
+use rustcloak_crd::KeycloakUser;
 use rustcloak_crd::keycloak_types::CredentialRepresentation;
 use rustcloak_crd::traits::SecretKeyNames;
-use rustcloak_crd::KeycloakUser;
 
 pub struct KeycloakUserSecretController {
     client: kube::Client,

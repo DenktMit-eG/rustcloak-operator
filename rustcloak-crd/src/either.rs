@@ -1,5 +1,5 @@
 use crate::traits::Endpoint;
-use either::{for_both, Either};
+use either::{Either, for_both};
 
 impl<L: Endpoint, R: Endpoint> Endpoint for Either<L, R> {
     fn endpoint(&self) -> Option<&crate::KeycloakApiStatusEndpoint> {
