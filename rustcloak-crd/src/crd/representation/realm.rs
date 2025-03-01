@@ -9,6 +9,8 @@ use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+use super::client_schema;
+
 both_scopes! {
     "KeycloakRealm", "kcrm", "ClusterKeycloakRealm", "ckcrm", ClusterKeycloakRealmSpec {
         #[kube(
@@ -82,6 +84,6 @@ schema_patch!(KeycloakRealmSpec: |s| {
         .remove("applications")
         .remove("clients")
         .remove("components")
-        .remove("oauthClients")
-        .remove("adminPermissionsClient");
+        .remove("oauthClients");
+    client_schema(s.prop("adminPermissionsClient"));
 });
