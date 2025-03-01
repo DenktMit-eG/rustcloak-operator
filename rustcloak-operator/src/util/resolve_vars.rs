@@ -6,8 +6,8 @@ use k8s_openapi::api::core::v1::{
 };
 use kube::{Api, Client};
 use kube::{Resource, ResourceExt};
-use rustcloak_crd::inner_spec::HasInnerSpec;
 use rustcloak_crd::KeycloakApiObjectSpec;
+use rustcloak_crd::inner_spec::HasInnerSpec;
 use serde_json::Value;
 
 struct Resolver<'a> {

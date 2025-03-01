@@ -5,25 +5,25 @@ use crate::{
     util::{ApiResolver, K8sKeycloakBuilder, RefWatcher, ToPatch},
 };
 use async_trait::async_trait;
-use futures::{stream, StreamExt};
+use futures::{StreamExt, stream};
 use k8s_openapi::{
-    api::core::v1::{ConfigMap, Secret},
     DeepMerge, NamespaceResourceScope,
+    api::core::v1::{ConfigMap, Secret},
 };
 use keycloak_client::ApiClient;
+use kube::Resource;
 use kube::core::object::HasStatus;
 use kube::runtime::watcher;
-use kube::Resource;
 use kube::{
-    api::PatchParams,
-    runtime::{controller::Action, Controller},
     Api, ResourceExt,
+    api::PatchParams,
+    runtime::{Controller, controller::Action},
 };
 use log::warn;
 use reqwest::StatusCode;
 use rustcloak_crd::{
-    inner_spec::HasInnerSpec, KeycloakApiEndpointPath, KeycloakApiObjectSpec,
-    KeycloakApiStatus, KeycloakApiStatusEndpoint, KeycloakInstance,
+    KeycloakApiEndpointPath, KeycloakApiObjectSpec, KeycloakApiStatus,
+    KeycloakApiStatusEndpoint, KeycloakInstance, inner_spec::HasInnerSpec,
 };
 use serde::de::DeserializeOwned;
 use serde_json::Value;
@@ -74,7 +74,7 @@ where
         let (parent_ref, sub_path) =
             match &resource.inner_spec().endpoint.path_def {
                 KeycloakApiEndpointPath::Path(path) => {
-                    return Ok(path.to_string())
+                    return Ok(path.to_string());
                 }
                 KeycloakApiEndpointPath::Parent {
                     parent_ref,

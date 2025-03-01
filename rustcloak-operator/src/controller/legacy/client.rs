@@ -8,8 +8,8 @@ use keycloak_crd::KeycloakClient as LegacyClient;
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;
 use kube::{
-    runtime::{controller::Action, Controller},
     Api,
+    runtime::{Controller, controller::Action},
 };
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::{

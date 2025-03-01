@@ -1,11 +1,11 @@
 use crate::keycloak_types::GroupRepresentation;
 use crate::{
+    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
     impl_object,
     macros::namespace_scope,
     refs::{RealmRef, SubGroupRef},
     schema_patch,
     traits::impl_instance_ref,
-    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
 };
 use either::Either;
 use kube::CustomResource;

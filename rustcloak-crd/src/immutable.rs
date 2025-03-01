@@ -1,5 +1,5 @@
 use crate::schema::SchemaUtil;
-use schemars::{gen::SchemaGenerator, schema::Schema, JsonSchema};
+use schemars::{JsonSchema, r#gen::SchemaGenerator, schema::Schema};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::ops::Deref;

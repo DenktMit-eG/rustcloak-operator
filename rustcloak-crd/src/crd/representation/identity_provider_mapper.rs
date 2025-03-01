@@ -1,8 +1,8 @@
 use crate::keycloak_types::IdentityProviderMapperRepresentation;
 use crate::{
-    impl_object, macros::namespace_scope, schema_patch,
-    traits::impl_instance_ref, ImmutableString, KeycloakApiObjectOptions,
-    KeycloakApiPatchList, KeycloakApiStatus, KeycloakIdentityProvider,
+    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
+    KeycloakApiStatus, KeycloakIdentityProvider, impl_object,
+    macros::namespace_scope, schema_patch, traits::impl_instance_ref,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;

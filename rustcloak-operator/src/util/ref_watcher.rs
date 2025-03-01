@@ -1,4 +1,4 @@
-use kube::{runtime::reflector::ObjectRef, Resource, ResourceExt};
+use kube::{Resource, ResourceExt, runtime::reflector::ObjectRef};
 use std::collections::{HashMap, HashSet};
 use std::sync::RwLock;
 

@@ -9,8 +9,8 @@ use keycloak_crd::KeycloakRealm as LegacyRealm;
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::runtime::watcher;
 use kube::{
-    runtime::{controller::Action, Controller},
     Api,
+    runtime::{Controller, controller::Action},
 };
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::{KeycloakInstance, KeycloakRealm, KeycloakRealmSpec};

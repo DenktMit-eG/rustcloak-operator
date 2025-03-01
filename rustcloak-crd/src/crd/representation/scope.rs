@@ -1,8 +1,8 @@
 use crate::keycloak_types::ScopeRepresentation;
 use crate::{
-    impl_object, macros::namespace_scope, schema_patch,
-    traits::impl_instance_ref, ImmutableString, KeycloakApiObjectOptions,
-    KeycloakApiPatchList, KeycloakApiStatus, KeycloakClient,
+    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
+    KeycloakApiStatus, KeycloakClient, impl_object, macros::namespace_scope,
+    schema_patch, traits::impl_instance_ref,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;

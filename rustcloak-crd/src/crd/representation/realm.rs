@@ -1,9 +1,9 @@
 use crate::keycloak_types::RealmRepresentation;
 use crate::{
+    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
+    KeycloakApiStatus, KeycloakApiStatusEndpoint, KeycloakInstance,
     impl_object, inner_spec::HasInnerSpec, macros::both_scopes, schema_patch,
-    traits::Endpoint, ImmutableString, KeycloakApiObjectOptions,
-    KeycloakApiPatchList, KeycloakApiStatus, KeycloakApiStatusEndpoint,
-    KeycloakInstance,
+    traits::Endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;

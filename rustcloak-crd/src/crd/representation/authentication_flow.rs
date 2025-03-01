@@ -1,8 +1,8 @@
 use crate::keycloak_types::AuthenticationFlowRepresentation;
 use crate::{
-    crd::patches::KeycloakApiPatchList, impl_object, macros::namespace_scope,
-    schema_patch, traits::impl_instance_ref, ImmutableString,
-    KeycloakApiObjectOptions, KeycloakApiStatus, KeycloakRealm,
+    ImmutableString, KeycloakApiObjectOptions, KeycloakApiStatus,
+    KeycloakRealm, crd::patches::KeycloakApiPatchList, impl_object,
+    macros::namespace_scope, schema_patch, traits::impl_instance_ref,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;

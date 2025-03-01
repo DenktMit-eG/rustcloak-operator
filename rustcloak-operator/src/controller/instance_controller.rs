@@ -8,15 +8,15 @@ use crate::{
 };
 use async_trait::async_trait;
 use chrono::{Duration, Utc};
-use k8s_openapi::{api::core::v1::Secret, ByteString};
+use k8s_openapi::{ByteString, api::core::v1::Secret};
 use kube::{
-    api::{ListParams, ObjectMeta, PatchParams, PostParams},
-    runtime::{controller::Action, watcher, Controller},
     Api, Resource, ResourceExt,
+    api::{ListParams, ObjectMeta, PatchParams, PostParams},
+    runtime::{Controller, controller::Action, watcher},
 };
 use rustcloak_crd::{
-    traits::SecretKeyNames, KeycloakApiObject, KeycloakApiStatus,
-    KeycloakInstance,
+    KeycloakApiObject, KeycloakApiStatus, KeycloakInstance,
+    traits::SecretKeyNames,
 };
 
 use log::warn;

@@ -13,18 +13,18 @@ use crate::{
 use async_trait::async_trait;
 use k8s_openapi::NamespaceResourceScope;
 use kube::{
+    Api, Resource, ResourceExt,
     api::{ObjectMeta, Patch, PatchParams},
     core::object::HasStatus,
-    runtime::{controller::Action, watcher, Controller},
-    Api, Resource, ResourceExt,
+    runtime::{Controller, controller::Action, watcher},
 };
 use log::debug;
 use rustcloak_crd::{
-    inner_spec::HasInnerSpec, traits::Endpoint, KeycloakApiEndpoint,
-    KeycloakApiEndpointPath, KeycloakApiObject, KeycloakApiObjectSpec,
-    KeycloakApiStatus, KeycloakRestObject,
+    KeycloakApiEndpoint, KeycloakApiEndpointPath, KeycloakApiObject,
+    KeycloakApiObjectSpec, KeycloakApiStatus, KeycloakRestObject,
+    inner_spec::HasInnerSpec, traits::Endpoint,
 };
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 use serde_json::json;
 
 #[derive(Debug)]

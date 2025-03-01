@@ -1,6 +1,6 @@
 use k8s_openapi::api::core::v1::EnvVar;
 use serde::Serialize;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 
 use crate::{error::Error, util::ObjectPathMut};
 use rustcloak_crd::{KeycloakApiPatch, KeycloakApiPatchValueAs};
