@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use clap::Parser;
 use crd2md::ToMarkdown;
 use kube::{CustomResourceExt, ResourceExt};
-use rustcloak_crd::*;
+use rustcloak_crd::map_all_crds;
 
 static MD_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../docs/src/crds");
 static CRD_DIR: &str = concat!(
@@ -22,31 +22,8 @@ struct Opts {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let opts = Opts::parse();
 
-    let crds = [
-        ClusterKeycloakInstance::crd(),
-        KeycloakInstance::crd(),
-        KeycloakApiObject::crd(),
-        KeycloakAuthenticationFlow::crd(),
-        KeycloakAuthenticatorConfig::crd(),
-        KeycloakClient::crd(),
-        KeycloakClientScope::crd(),
-        KeycloakComponent::crd(),
-        KeycloakGroup::crd(),
-        KeycloakIdentityProvider::crd(),
-        KeycloakIdentityProviderMapper::crd(),
-        KeycloakOrganization::crd(),
-        KeycloakProtocolMapper::crd(),
-        ClusterKeycloakRealm::crd(),
-        KeycloakRealm::crd(),
-        KeycloakRequiredActionProvider::crd(),
-        KeycloakResource::crd(),
-        KeycloakRole::crd(),
-        KeycloakScope::crd(),
-        KeycloakUser::crd(),
-    ];
-
-    for crd in crds.iter() {
-        let yaml = serde_yaml::to_string(crd)?;
+    for crd in map_all_crds!(Crd => Crd::crd()) {
+        let yaml = serde_yaml::to_string(&crd)?;
         let md = crd.to_markdown();
         if opts.markdown {
             println!("---\n{}", md);

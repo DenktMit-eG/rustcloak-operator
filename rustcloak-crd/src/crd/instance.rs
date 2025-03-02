@@ -1,8 +1,10 @@
-use crate::macros::both_scopes;
+use crate::crd::both_scopes;
+use crate::refs::ref_type;
 use crate::traits::{Endpoint, SecretKeyNames};
 
 use super::KeycloakApiStatus;
 use super::KeycloakApiStatusEndpoint;
+use either::Either;
 use kube::CustomResource;
 use kube::ResourceExt;
 use schemars::JsonSchema;
@@ -113,10 +115,18 @@ impl Endpoint for KeycloakInstance {
     fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
         self.status.as_ref().and_then(|s| s.endpoint.as_ref())
     }
-    fn instance_ref(&self) -> Option<&str> {
-        self.metadata.name.as_deref()
+    fn instance_ref(&self) -> Option<&InstanceRef> {
+        None
     }
     fn resource_path(&self) -> Option<&str> {
-        Some("")
+        None
     }
 }
+
+ref_type!(NamespacedInstanceRef, instance_ref, KeycloakInstance);
+ref_type!(
+    ClusterInstanceRef,
+    cluster_instance_ref,
+    ClusterKeycloakInstance
+);
+pub type InstanceRef = Either<NamespacedInstanceRef, ClusterInstanceRef>;

@@ -3,6 +3,7 @@ use actix_web::{
 };
 use clap::Parser;
 use futures::{FutureExt, future};
+use kube::Resource;
 use rustcloak_operator::{
     controller::{
         ControllerRunner, KeycloakApiObjectController,
@@ -13,7 +14,7 @@ use rustcloak_operator::{
     },
     crd::*,
     error::Result,
-    opts::{ControllerOpt, LegacyMode, Opts},
+    opts::{LegacyMode, Opts, legacy_kinds},
     shim::resource::EitherMarker,
 };
 
@@ -52,15 +53,10 @@ async fn main() -> Result<()> {
     let mut controllers_str = opts.controllers.clone();
 
     if opts.legacy != LegacyMode::Disabled {
-        controllers_str.extend_from_slice(&[
-            ControllerOpt::LegacyInstance,
-            ControllerOpt::LegacyRealm,
-            ControllerOpt::LegacyClient,
-            ControllerOpt::LegacyUser,
-        ]);
+        controllers_str.extend_from_slice(&legacy_kinds());
     }
 
-    if controllers_str.contains(&ControllerOpt::Api) {
+    if controllers_str.contains(&KeycloakApiObject::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 KeycloakApiObjectController::<KeycloakApiObject>::default(),
@@ -70,7 +66,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::Instance) {
+    if controllers_str.contains(&KeycloakInstance::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 KeycloakInstanceController::default(),
@@ -80,7 +76,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::Realm) {
+    if controllers_str.contains(&KeycloakRealm::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakRealm>::default(),
@@ -90,7 +86,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::Client) {
+    if controllers_str.contains(&KeycloakClient::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakClient>::default(),
@@ -100,7 +96,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::User) {
+    if controllers_str.contains(&KeycloakUser::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakUser>::default(),
@@ -112,7 +108,7 @@ async fn main() -> Result<()> {
     }
     if opts
         .controllers
-        .contains(&ControllerOpt::AuthenticationFlow)
+        .contains(&KeycloakAuthenticationFlow::kind(&()).to_string())
     {
         controllers.push(
             ControllerRunner::new(
@@ -125,7 +121,7 @@ async fn main() -> Result<()> {
     }
     if opts
         .controllers
-        .contains(&ControllerOpt::AuthenticatorConfig)
+        .contains(&KeycloakAuthenticatorConfig::kind(&()).to_string())
     {
         controllers.push(
             ControllerRunner::new(
@@ -136,7 +132,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::ClientScope) {
+    if controllers_str.contains(&KeycloakClientScope::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakClientScope>::default(),
@@ -146,7 +142,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::Component) {
+    if controllers_str.contains(&KeycloakComponent::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakComponent>::default(),
@@ -156,7 +152,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::Group) {
+    if controllers_str.contains(&KeycloakGroup::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakGroup, EitherMarker>::default(),
@@ -166,7 +162,9 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::IdentityProvider) {
+    if controllers_str
+        .contains(&KeycloakIdentityProvider::kind(&()).to_string())
+    {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakIdentityProvider>::default(),
@@ -176,9 +174,8 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if opts
-        .controllers
-        .contains(&ControllerOpt::IdentityProviderMapper)
+    if controllers_str
+        .contains(&KeycloakIdentityProviderMapper::kind(&()).to_string())
     {
         controllers.push(
             ControllerRunner::new(
@@ -189,7 +186,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::Organization) {
+    if controllers_str.contains(&KeycloakOrganization::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakOrganization>::default(),
@@ -199,7 +196,8 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::ProtocolMapper) {
+    if controllers_str.contains(&KeycloakProtocolMapper::kind(&()).to_string())
+    {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakProtocolMapper, EitherMarker>::default(),
@@ -211,7 +209,7 @@ async fn main() -> Result<()> {
     }
     if opts
         .controllers
-        .contains(&ControllerOpt::RequiredActionProvider)
+        .contains(&KeycloakRequiredActionProvider::kind(&()).to_string())
     {
         controllers.push(
             ControllerRunner::new(
@@ -222,7 +220,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::Resource) {
+    if controllers_str.contains(&KeycloakResource::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakResource>::default(),
@@ -232,7 +230,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::Role) {
+    if controllers_str.contains(&KeycloakRole::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakRole, EitherMarker>::default(),
@@ -242,7 +240,7 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::Scope) {
+    if controllers_str.contains(&KeycloakScope::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
                 MorphController::<KeycloakScope>::default(),
@@ -253,7 +251,10 @@ async fn main() -> Result<()> {
         );
     }
     let prudent = opts.legacy == LegacyMode::Prudent;
-    if controllers_str.contains(&ControllerOpt::LegacyInstance) {
+    if controllers_str.contains(&format!(
+        "Legacy{}",
+        keycloak_crd::ExternalKeycloak::kind(&())
+    )) {
         controllers.push(
             ControllerRunner::new(
                 LegacyInstanceController::new(prudent),
@@ -263,14 +264,19 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::LegacyRealm) {
+    if controllers_str
+        .contains(&format!("Legacy{}", keycloak_crd::KeycloakRealm::kind(&())))
+    {
         controllers.push(
             ControllerRunner::new(LegacyRealmController::new(prudent), &client)
                 .run()
                 .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::LegacyClient) {
+    if controllers_str.contains(&format!(
+        "Legacy{}",
+        keycloak_crd::KeycloakClient::kind(&())
+    )) {
         controllers.push(
             ControllerRunner::new(
                 LegacyClientController::new(prudent),
@@ -280,18 +286,20 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::LegacyUser) {
+    if controllers_str
+        .contains(&format!("Legacy{}", keycloak_crd::KeycloakUser::kind(&())))
+    {
         controllers.push(
             ControllerRunner::new(LegacyUserController::new(prudent), &client)
                 .run()
                 .boxed(),
         );
     }
-    if controllers_str.contains(&ControllerOpt::ClientSecret) {
+    if controllers_str.contains(&KeycloakClient::kind(&()).to_string()) {
         controllers
             .push(KeycloakClientSecretController::new(&client).run().boxed());
     }
-    if controllers_str.contains(&ControllerOpt::UserSecret) {
+    if controllers_str.contains(&KeycloakUser::kind(&()).to_string()) {
         controllers
             .push(KeycloakUserSecretController::new(&client).run().boxed());
     }

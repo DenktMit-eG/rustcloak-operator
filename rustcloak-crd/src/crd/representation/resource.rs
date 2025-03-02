@@ -1,12 +1,13 @@
 use crate::keycloak_types::ResourceRepresentation;
 use crate::{
-    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
-    KeycloakApiStatus, KeycloakClient, impl_object, macros::namespace_scope,
-    schema_patch, traits::impl_instance_ref,
+    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+
+use super::ClientRef;
 
 namespace_scope! {
     "KeycloakResource", "kcrs" {
@@ -17,31 +18,13 @@ namespace_scope! {
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",
-            printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Age",
-                    "type":"date",
-                    "description":"time since the realm was created",
-                    "jsonPath":".metadata.creationTimestamp"
-                }"#
         )]
         /// the KeycloakResource resource
         pub struct KeycloakResourceSpec {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub options: Option<KeycloakApiObjectOptions>,
-            /// the name of the kubernetes object that created the client.
-            pub client_ref: ImmutableString,
+            #[serde(flatten)]
+            pub parent_ref: ClientRef,
             #[schemars(schema_with = "schema")]
             pub definition: ResourceRepresentation,
             #[serde(default, flatten)]
@@ -50,7 +33,7 @@ namespace_scope! {
     }
 }
 
-impl_object!("resource" <client_ref: String => KeycloakClient> / |_d| {"authz/resource-server/resource"} / (id => "_id") for KeycloakResourceSpec => ResourceRepresentation);
+impl_object!("resource" <ClientRef> / |_d| {"authz/resource-server/resource"} / (id => "_id") for KeycloakResourceSpec => ResourceRepresentation);
 
 impl_instance_ref!(KeycloakResource);
 

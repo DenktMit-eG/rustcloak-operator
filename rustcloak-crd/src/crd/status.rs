@@ -2,6 +2,8 @@ use k8s_openapi::apimachinery::pkg::apis::meta::v1::Time;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+use super::InstanceRef;
+
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakApiCondition {
@@ -12,11 +14,12 @@ pub struct KeycloakApiCondition {
     pub type_: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakApiStatusEndpoint {
     pub resource_path: String,
-    pub instance_ref: String,
+    #[serde(flatten)]
+    pub instance_ref: InstanceRef,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]

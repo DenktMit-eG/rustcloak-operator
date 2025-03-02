@@ -1,18 +1,13 @@
+use super::{ClientRef, RealmRef};
 use crate::keycloak_types::RoleRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    impl_object,
-    macros::namespace_scope,
-    refs::{ClientRef, RealmRef},
-    schema_patch,
-    traits::impl_instance_ref,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
 };
 use either::Either;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
-use super::{KeycloakClient, KeycloakRealm};
 
 namespace_scope! {
     "KeycloakRole", "kcr" {
@@ -23,24 +18,6 @@ namespace_scope! {
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",
-            printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Age",
-                    "type":"date",
-                    "description":"time since the realm was created",
-                    "jsonPath":".metadata.creationTimestamp"
-                }"#
         )]
         /// the KeycloakRole resource
         pub struct KeycloakRoleSpec {
@@ -57,9 +34,8 @@ namespace_scope! {
 }
 
 type ParentRef = Either<RealmRef, ClientRef>;
-type Parents = Either<KeycloakRealm, KeycloakClient>;
 
-impl_object!("role" <parent_ref: ParentRef => Parents> / |_d| {"roles"} / name for KeycloakRoleSpec => RoleRepresentation);
+impl_object!("role" <ParentRef> / |_d| {"roles"} / name for KeycloakRoleSpec => RoleRepresentation);
 
 impl_instance_ref!(KeycloakRole);
 

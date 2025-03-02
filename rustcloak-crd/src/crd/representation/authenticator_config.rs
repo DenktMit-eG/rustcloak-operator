@@ -1,13 +1,14 @@
 use crate::{
-    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
-    KeycloakApiStatus, KeycloakRealm, impl_object, macros::namespace_scope,
-    schema_patch, traits::impl_instance_ref,
+    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
 };
 
 use crate::keycloak_types::AuthenticatorConfigRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+
+use super::RealmRef;
 
 namespace_scope! {
     "KeycloakAuthenticatorConfig", "kcac" {
@@ -18,31 +19,13 @@ namespace_scope! {
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",
-            printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Age",
-                    "type":"date",
-                    "description":"time since the realm was created",
-                    "jsonPath":".metadata.creationTimestamp"
-                }"#
         )]
         /// the KeycloakAuthenticatorConfig resource
         pub struct KeycloakAuthenticatorConfigSpec {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub options: Option<KeycloakApiObjectOptions>,
             /// the name of the kubernetes object that created the realm.
-            pub realm_ref: ImmutableString,
+            pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
             pub definition: AuthenticatorConfigRepresentation,
             #[serde(default, flatten)]
@@ -51,7 +34,7 @@ namespace_scope! {
     }
 }
 
-impl_object!("authconfig" <realm_ref: String => KeycloakRealm> / |_d| {"authentication/config"} / id for KeycloakAuthenticatorConfigSpec => AuthenticatorConfigRepresentation);
+impl_object!("authconfig" <RealmRef> / |_d| {"authentication/config"} / id for KeycloakAuthenticatorConfigSpec => AuthenticatorConfigRepresentation);
 
 impl_instance_ref!(KeycloakAuthenticatorConfig);
 

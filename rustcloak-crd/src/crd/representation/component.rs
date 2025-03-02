@@ -1,12 +1,14 @@
 use crate::keycloak_types::ComponentRepresentation;
+use crate::refs::ref_type;
 use crate::{
-    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
-    KeycloakApiStatus, KeycloakRealm, impl_object, macros::namespace_scope,
-    schema_patch, traits::impl_instance_ref,
+    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+
+use super::RealmRef;
 
 namespace_scope! {
     "KeycloakComponent", "kcco" {
@@ -17,31 +19,13 @@ namespace_scope! {
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",
-            printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Age",
-                    "type":"date",
-                    "description":"time since the realm was created",
-                    "jsonPath":".metadata.creationTimestamp"
-                }"#
         )]
         /// the KeycloakComponent resource
         pub struct KeycloakComponentSpec {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub options: Option<KeycloakApiObjectOptions>,
-            /// the name of the kubernetes object that created the realm.
-            pub realm_ref: ImmutableString,
+            #[serde(flatten)]
+            pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
             pub definition: ComponentRepresentation,
             #[serde(default, flatten)]
@@ -50,8 +34,10 @@ namespace_scope! {
     }
 }
 
-impl_object!("component" <realm_ref: String => KeycloakRealm> / |_d| {"components"} / id for KeycloakComponentSpec => ComponentRepresentation);
+impl_object!("component" <RealmRef> / |_d| {"components"} / id for KeycloakComponentSpec => ComponentRepresentation);
 
 impl_instance_ref!(KeycloakComponent);
 
 schema_patch!(KeycloakComponentSpec);
+
+ref_type!(ComponentRef, component_ref, KeycloakComponent);

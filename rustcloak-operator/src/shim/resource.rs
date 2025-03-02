@@ -78,6 +78,7 @@ pub trait ParentShim<Marker> {
     async fn parent(&self) -> Result<Self::Parent>;
 }
 
+#[derive(Debug, Clone)]
 pub struct ResourceMarker;
 #[async_trait::async_trait]
 impl<R> ParentShim<ResourceMarker> for ResourceShim<R>
@@ -102,6 +103,7 @@ where
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct EitherMarker;
 #[async_trait::async_trait]
 impl<R, RP, LP, RR, LR> ParentShim<EitherMarker> for ResourceShim<R>

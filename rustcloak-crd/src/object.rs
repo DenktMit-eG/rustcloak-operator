@@ -3,7 +3,6 @@ pub trait KeycloakRestObject {
     type ParentObject;
     type Definition;
     const ID_FIELD: &'static str;
-    const PARENT_IDENTIFIER: &'static str;
     const API_PREFIX: &'static str;
 
     fn id(&self) -> Option<&str>;
@@ -15,17 +14,16 @@ pub trait KeycloakRestObject {
 }
 
 macro_rules! impl_object {
-    ($api_prefix:literal <$parent_ref:ident: $parent_ref_type:ty => $parent_type:ty> / |$def_v:ident| $mount_path:block / $id_ident:ident for $object_type:ty => $definition_type:ty) => {
-        impl_object!($api_prefix <$parent_ref: $parent_ref_type => $parent_type> / |$def_v| $mount_path / ($id_ident => stringify!($id_ident)) for $object_type => $definition_type);
+    ($api_prefix:literal <$parent_ref_type:ty> / |$def_v:ident| $mount_path:block / $id_ident:ident for $object_type:ty => $definition_type:ty) => {
+        impl_object!($api_prefix <$parent_ref_type> / |$def_v| $mount_path / ($id_ident => stringify!($id_ident)) for $object_type => $definition_type);
     };
-    ($api_prefix:literal <$parent_ref:ident: $parent_ref_type:ty => $parent_type:ty> / |$def_v:ident| $mount_path:block / ($id_ident:ident => $id_lit:expr) for $object_type:ty => $definition_type:ty) => {
+    ($api_prefix:literal <$parent_ref_type:ty> / |$def_v:ident| $mount_path:block / ($id_ident:ident => $id_lit:expr) for $object_type:ty => $definition_type:ty) => {
         impl $crate::object::KeycloakRestObject for $object_type {
             type ParentRef = $parent_ref_type;
-            type ParentObject = $parent_type;
+            type ParentObject = <$parent_ref_type as $crate::refs::Ref>::Target;
             type Definition = $definition_type;
 
             const ID_FIELD: &'static str = $id_lit;
-            const PARENT_IDENTIFIER: &'static str = stringify!($parent_ref);
             const API_PREFIX: &'static str = $api_prefix;
 
             fn id(&self) -> Option<&str> {
@@ -42,7 +40,7 @@ macro_rules! impl_object {
             }
 
             fn parent_ref(&self) -> &Self::ParentRef {
-                &self.$parent_ref
+                &self.parent_ref
             }
 
             fn patches(&self) -> Option<&$crate::KeycloakApiPatchList> {

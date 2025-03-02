@@ -75,7 +75,7 @@ impl LifecycleController for LegacyClientController {
             },
             spec: KeycloakClientSpec {
                 options: None,
-                realm_ref: find_name::<KeycloakRealm>(
+                parent_ref: find_name::<KeycloakRealm>(
                     client,
                     &namespace,
                     &resource.spec.realm_selector,
