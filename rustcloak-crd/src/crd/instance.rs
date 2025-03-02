@@ -3,7 +3,7 @@ use crate::refs::ref_type;
 use crate::traits::{Endpoint, SecretKeyNames};
 
 use super::KeycloakApiStatusEndpoint;
-use super::{KeycloakApiStatus, namespace_scope};
+use super::{KeycloakApiStatus, both_scopes};
 use kube::{CustomResource, Resource};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -48,10 +48,8 @@ pub struct KeycloakInstanceClient {
     pub secret: Option<String>,
 }
 
-namespace_scope! {
-    "KeycloakInstance", "kci" {
-//both_scopes! {
-//    "KeycloakInstance", "kci", "ClusterKeycloakInstance", "ckci", ClusterKeycloakInstanceSpec {
+both_scopes! {
+    "KeycloakInstance", "kci", "ClusterKeycloakInstance", "ckci", ClusterKeycloakInstanceSpec {
         #[kube(
             doc = "This resource makes a Keycloak instance known to the operator",
             group = "rustcloak.k8s.eboland.de",
@@ -118,21 +116,21 @@ impl HasMarker for KeycloakInstance {
     type Marker = ResourceMarker<<Self as Resource>::Scope>;
 }
 
-//impl Endpoint for ClusterKeycloakInstance {
-//    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
-//        None
-//    }
-//}
-//
-//impl HasMarker for ClusterKeycloakInstance {
-//    type Marker = ResourceMarker<<Self as Resource>::Scope>;
-//}
+impl Endpoint for ClusterKeycloakInstance {
+    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
+        None
+    }
+}
+
+impl HasMarker for ClusterKeycloakInstance {
+    type Marker = ResourceMarker<<Self as Resource>::Scope>;
+}
 
 ref_type!(InstanceRef, instance_ref, KeycloakInstance);
 //ref_type!(NamespacedInstanceRef, instance_ref, KeycloakInstance);
-//ref_type!(
-//    ClusterInstanceRef,
-//    cluster_instance_ref,
-//    ClusterKeycloakInstance
-//);
+ref_type!(
+    ClusterInstanceRef,
+    cluster_instance_ref,
+    ClusterKeycloakInstance
+);
 //pub type InstanceRef = Either<NamespacedInstanceRef, ClusterInstanceRef>;
