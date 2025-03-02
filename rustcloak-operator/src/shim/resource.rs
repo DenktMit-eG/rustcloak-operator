@@ -4,8 +4,8 @@ use k8s_openapi::NamespaceResourceScope;
 use k8s_openapi::serde_json::{self, Value};
 use kube::{Api, Resource};
 use rustcloak_crd::{
-    KeycloakInstance, KeycloakRestObject, inner_spec::HasInnerSpec,
-    traits::Endpoint,
+    InstanceRef, KeycloakInstance, KeycloakRestObject,
+    inner_spec::HasInnerSpec, refs::HasParent, traits::Endpoint,
 };
 use serde::{Serialize, de::DeserializeOwned};
 use std::{fmt::Debug, ops::Deref, sync::Arc};
@@ -89,7 +89,7 @@ where
         + Clone
         + Debug
         + DeserializeOwned,
-    <R::InnerSpec as KeycloakRestObject>::ParentRef: AsRef<str>,
+    <R::InnerSpec as HasParent>::ParentRef: AsRef<str>,
     Self: Send + Sync,
 {
     type Parent = <R::InnerSpec as KeycloakRestObject>::ParentObject;
@@ -149,7 +149,7 @@ where
 
 #[async_trait::async_trait]
 pub trait InstanceShim {
-    fn instance_ref(&self) -> Result<&str>;
+    fn instance_ref(&self) -> Result<&InstanceRef>;
     fn resource_path(&self) -> Result<&str>;
     async fn instance(&self) -> Result<KeycloakInstance>;
 }
@@ -160,7 +160,7 @@ where
     R: Endpoint + Resource<DynamicType = (), Scope = NamespaceResourceScope>,
     Self: Send + Sync,
 {
-    fn instance_ref(&self) -> Result<&str> {
+    fn instance_ref(&self) -> Result<&InstanceRef> {
         self.resource.instance_ref().ok_or(Error::NoData)
     }
 
@@ -173,6 +173,6 @@ where
             self.client.clone(),
             self.namespace()?,
         );
-        Ok(api.get(self.instance_ref()?).await?)
+        Ok(api.get(self.instance_ref()?.as_ref()).await?)
     }
 }

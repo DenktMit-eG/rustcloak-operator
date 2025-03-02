@@ -22,7 +22,7 @@ use log::debug;
 use rustcloak_crd::{
     KeycloakApiEndpoint, KeycloakApiEndpointPath, KeycloakApiObject,
     KeycloakApiObjectSpec, KeycloakApiStatus, KeycloakRestObject,
-    inner_spec::HasInnerSpec, traits::Endpoint,
+    inner_spec::HasInnerSpec, refs::HasParent, traits::Endpoint,
 };
 use serde::{Serialize, de::DeserializeOwned};
 
@@ -56,8 +56,7 @@ where
     R::InnerSpec: KeycloakRestObject + Morph,
     <<R as HasInnerSpec>::InnerSpec as KeycloakRestObject>::Definition:
         Send + Sync + Serialize + DeserializeOwned,
-    <<R as HasInnerSpec>::InnerSpec as KeycloakRestObject>::ParentRef:
-        AsRef<str>,
+    <<R as HasInnerSpec>::InnerSpec as HasParent>::ParentRef: AsRef<str>,
     <<R as HasInnerSpec>::InnerSpec as KeycloakRestObject>::ParentObject:
         Send + Sync + Clone + Debug + DeserializeOwned + Endpoint,
     ResourceShim<R>: ParentShim<M>,
@@ -133,7 +132,7 @@ where
         );
 
         let endpoint = KeycloakApiEndpoint {
-            instance_ref: instance_ref.to_string().into(),
+            instance_ref: instance_ref.clone(),
             path_def: KeycloakApiEndpointPath::Path(resource_path.into()),
         };
         debug!(
@@ -150,7 +149,7 @@ where
                 labels: Some(
                     [(
                         app_id!("instanceRef").to_string(),
-                        endpoint.instance_ref.0.clone(),
+                        endpoint.instance_ref.clone().into(),
                     )]
                     .into(),
                 ),

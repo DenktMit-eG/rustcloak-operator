@@ -124,7 +124,7 @@ impl LifecycleController for KeycloakInstanceController {
         let api = Api::<Self::Resource>::namespaced(client.clone(), &ns);
 
         self.secret_refs
-            .add(&resource, [resource.credential_secret_name()]);
+            .add(&resource, [resource.spec.credential_secret_name()]);
 
         api.patch_status(
             &resource.name_unchecked(),

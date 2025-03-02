@@ -4,7 +4,7 @@ use kube::{
     Api, Resource, ResourceExt,
     core::{NamespaceResourceScope, object::HasSpec},
 };
-use rustcloak_crd::KeycloakRestObject;
+use rustcloak_crd::{KeycloakRestObject, refs::HasParent};
 use serde::de::DeserializeOwned;
 use std::{fmt::Debug, marker::PhantomData};
 
@@ -19,7 +19,7 @@ impl<S, T> RefShim<S, T> {
     where
         R: Resource + HasSpec,
         R::Spec: KeycloakRestObject<ParentRef = S, ParentObject = T>,
-        <R::Spec as KeycloakRestObject>::ParentRef: AsRef<str> + Clone,
+        <R::Spec as HasParent>::ParentRef: AsRef<str> + Clone,
     {
         RefShim {
             source: resource.spec().parent_ref().clone(),

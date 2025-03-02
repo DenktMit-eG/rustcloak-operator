@@ -43,7 +43,7 @@ fn token_into_secret(
     let expires = oauth2_token
         .expires
         .map(|x| ByteString(x.to_rfc3339().into_bytes()));
-    let name = instance.token_secret_name();
+    let name = instance.spec.token_secret_name(instance.name_unchecked());
     let [token_key, expires_key] = instance.spec.token.secret_key_names();
     let namespace = instance.namespace().unwrap();
     let owner_ref = instance.owner_ref(&()).unwrap();
@@ -112,7 +112,7 @@ impl<'a> K8sKeycloakBuilder<'a> {
         let kind = KeycloakInstance::kind(&());
         let secret_api = Api::<Secret>::namespaced(self.client.clone(), &ns);
         let credential_secret_name =
-            self.instance.credential_secret_name().to_string();
+            self.instance.spec.credential_secret_name().to_string();
         debug!(
             name = self.instance.name_unchecked(),
             namespace = ns,
@@ -133,7 +133,11 @@ impl<'a> K8sKeycloakBuilder<'a> {
         let ns = self.instance.namespace().ok_or(Error::NoNamespace)?;
         let kind = KeycloakInstance::kind(&());
         let secret_api = Api::<Secret>::namespaced(self.client.clone(), &ns);
-        let token_secret_name = self.instance.token_secret_name().to_string();
+        let token_secret_name = self
+            .instance
+            .spec
+            .token_secret_name(self.instance.name_unchecked())
+            .to_string();
         debug!(
             name = self.instance.name_unchecked(),
             namespace = ns,

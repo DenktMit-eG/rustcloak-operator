@@ -107,9 +107,9 @@ where
 
         let instance_ref = &resource.inner_spec().endpoint.instance_ref;
         let instance = instance_api
-            .get_opt(instance_ref)
+            .get_opt(instance_ref.as_ref())
             .await?
-            .ok_or(Error::NoInstance(ns, instance_ref.to_string()))?;
+            .ok_or(Error::NoInstance(ns, instance_ref.as_ref().to_string()))?;
 
         K8sKeycloakBuilder::new(&instance, client)
             .with_token()
@@ -221,7 +221,6 @@ where
                     .inner_spec()
                     .endpoint
                     .instance_ref
-                    .0
                     .clone(),
             });
 

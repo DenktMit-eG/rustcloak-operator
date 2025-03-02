@@ -10,4 +10,4 @@ impl<L, R> HasMarker for Either<L, R> {
 }
 
 pub struct EitherMarker;
-pub struct ResourceMarker<R: ResourceScope> (R);
+pub struct ResourceMarker<R: ResourceScope>(R);
