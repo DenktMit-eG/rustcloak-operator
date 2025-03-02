@@ -1,7 +1,7 @@
 use crate::keycloak_types::OrganizationRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -36,6 +36,6 @@ namespace_scope! {
 
 impl_object!("org" <RealmRef> / |_d| {"organizations"} / id for KeycloakOrganizationSpec => OrganizationRepresentation);
 
-impl_instance_ref!(KeycloakOrganization);
+impl_endpoint!(KeycloakOrganization);
 
 schema_patch!(KeycloakOrganizationSpec);

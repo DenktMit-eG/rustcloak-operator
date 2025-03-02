@@ -4,7 +4,7 @@ use crate::{
     impl_object,
     refs::ref_type,
     schema_patch,
-    traits::{SecretKeyNames, impl_instance_ref},
+    traits::{SecretKeyNames, impl_endpoint},
 };
 
 use crate::keycloak_types::ClientRepresentation;
@@ -58,7 +58,7 @@ impl SecretKeyNames<2> for Option<KeycloakClientSecretReference> {
 
 impl_object!("client" <RealmRef> / |_d| {"clients"} / id for KeycloakClientSpec => ClientRepresentation);
 
-impl_instance_ref!(KeycloakClient);
+impl_endpoint!(KeycloakClient);
 
 pub(crate) fn client_schema(s: &mut Schema) {
     s.prop("authorizationSettings")

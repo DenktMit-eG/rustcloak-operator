@@ -1,6 +1,6 @@
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
 
 use crate::keycloak_types::AuthenticatorConfigRepresentation;
@@ -36,6 +36,6 @@ namespace_scope! {
 
 impl_object!("authconfig" <RealmRef> / |_d| {"authentication/config"} / id for KeycloakAuthenticatorConfigSpec => AuthenticatorConfigRepresentation);
 
-impl_instance_ref!(KeycloakAuthenticatorConfig);
+impl_endpoint!(KeycloakAuthenticatorConfig);
 
 schema_patch!(KeycloakAuthenticatorConfigSpec);

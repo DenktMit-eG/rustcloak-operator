@@ -2,7 +2,7 @@ use crate::keycloak_types::ComponentRepresentation;
 use crate::refs::ref_type;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -36,7 +36,7 @@ namespace_scope! {
 
 impl_object!("component" <RealmRef> / |_d| {"components"} / id for KeycloakComponentSpec => ComponentRepresentation);
 
-impl_instance_ref!(KeycloakComponent);
+impl_endpoint!(KeycloakComponent);
 
 schema_patch!(KeycloakComponentSpec);
 

@@ -5,6 +5,7 @@ pub mod inner_spec;
 pub mod macros;
 mod object;
 pub mod refs;
+pub mod marker;
 mod schema;
 pub mod traits;
 

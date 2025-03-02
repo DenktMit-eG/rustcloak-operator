@@ -3,7 +3,7 @@ use crate::keycloak_types::AuthenticationFlowRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
     crd::patches::KeycloakApiPatchList, impl_object, schema_patch,
-    traits::impl_instance_ref,
+    traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -35,6 +35,6 @@ namespace_scope! {
 
 impl_object!("authflow" <RealmRef> / |_d| {"authentication/flows"} / id for KeycloakAuthenticationFlowSpec => AuthenticationFlowRepresentation);
 
-impl_instance_ref!(KeycloakAuthenticationFlow);
+impl_endpoint!(KeycloakAuthenticationFlow);
 
 schema_patch!(KeycloakAuthenticationFlowSpec);

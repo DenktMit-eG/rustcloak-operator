@@ -18,11 +18,15 @@ pub trait SecretKeyNames<const N: usize> {
 
 pub trait Endpoint {
     fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint>;
-    fn instance_ref(&self) -> Option<&InstanceRef>;
-    fn resource_path(&self) -> Option<&str>;
+    fn instance_ref(&self) -> Option<&InstanceRef> {
+        self.endpoint().map(|e| &e.instance_ref)
+    }
+    fn resource_path(&self) -> Option<&str> {
+        self.endpoint().map(|e| e.resource_path.as_str())
+    }
 }
 
-macro_rules! impl_instance_ref {
+macro_rules! impl_endpoint {
     ($type:ident, $cluster_type:ident) => {
         impl_instance_ref!($type);
         impl_instance_ref!($cluster_type);
@@ -32,14 +36,13 @@ macro_rules! impl_instance_ref {
             fn endpoint(&self) -> Option<&$crate::KeycloakApiStatusEndpoint> {
                 self.status.as_ref().and_then(|s| s.endpoint.as_ref())
             }
-            fn instance_ref(&self) -> Option<&$crate::InstanceRef> {
-                self.endpoint().map(|e| &e.instance_ref)
-            }
-            fn resource_path(&self) -> Option<&str> {
-                self.endpoint().map(|e| e.resource_path.as_str())
-            }
+        }
+        impl $crate::marker::HasMarker for $type {
+            type Marker = $crate::marker::ResourceMarker<
+                <$type as ::kube::Resource>::Scope,
+            >;
         }
     };
 }
 
-pub(crate) use impl_instance_ref;
+pub(crate) use impl_endpoint;

@@ -1,7 +1,7 @@
 use crate::keycloak_types::IdentityProviderMapperRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -36,6 +36,6 @@ namespace_scope! {
 
 impl_object!("ipm" <IdentityProviderRef> / |_d| {"mappers"} / id for KeycloakIdentityProviderMapperSpec => IdentityProviderMapperRepresentation);
 
-impl_instance_ref!(KeycloakIdentityProviderMapper);
+impl_endpoint!(KeycloakIdentityProviderMapper);
 
 schema_patch!(KeycloakIdentityProviderMapperSpec);

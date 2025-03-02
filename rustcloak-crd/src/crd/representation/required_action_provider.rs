@@ -1,7 +1,7 @@
 use crate::keycloak_types::RequiredActionProviderRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -35,6 +35,6 @@ namespace_scope! {
 
 impl_object!("rap" <RealmRef> / |_d| {"authentication/required-actions"} / alias for KeycloakRequiredActionProviderSpec => RequiredActionProviderRepresentation);
 
-impl_instance_ref!(KeycloakRequiredActionProvider);
+impl_endpoint!(KeycloakRequiredActionProvider);
 
 schema_patch!(KeycloakRequiredActionProviderSpec);

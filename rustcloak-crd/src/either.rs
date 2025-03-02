@@ -1,4 +1,7 @@
-use crate::{InstanceRef, traits::Endpoint};
+use crate::{
+    InstanceRef,
+    traits::Endpoint,
+};
 use either::{Either, for_both};
 
 impl<L: Endpoint, R: Endpoint> Endpoint for Either<L, R> {

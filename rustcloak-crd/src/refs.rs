@@ -1,15 +1,10 @@
 use either::Either;
 
-pub struct EitherMarker;
-pub struct ResourceMarker;
-
 pub trait Ref: AsRef<str> {
-    type Marker;
     type Target;
 }
 
 impl<L: Ref, R: Ref> Ref for Either<L, R> {
-    type Marker = EitherMarker;
     type Target = Either<L::Target, R::Target>;
 }
 
@@ -36,10 +31,13 @@ macro_rules! ref_type {
             }
         }
         impl $crate::refs::Ref for $name {
-            type Marker = $crate::refs::ResourceMarker;
             type Target = $target;
         }
     };
 }
-
 pub(crate) use ref_type;
+
+pub trait HasParent {
+    type ParentRef: Ref;
+    fn parent_ref(&self) -> &Self::ParentRef;
+}

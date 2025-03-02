@@ -3,7 +3,7 @@ use crate::keycloak_types::GroupRepresentation;
 use crate::refs::ref_type;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
 use either::Either;
 use kube::CustomResource;
@@ -45,7 +45,7 @@ impl_object!("group" <ParentRef> / |d| {
     }
 } / id for KeycloakGroupSpec => GroupRepresentation);
 
-impl_instance_ref!(KeycloakGroup);
+impl_endpoint!(KeycloakGroup);
 
 schema_patch!(KeycloakGroupSpec: |s| {
     s.remove("subGroups");

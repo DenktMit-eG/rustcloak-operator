@@ -1,7 +1,7 @@
 use crate::keycloak_types::ResourceRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -35,7 +35,7 @@ namespace_scope! {
 
 impl_object!("resource" <ClientRef> / |_d| {"authz/resource-server/resource"} / (id => "_id") for KeycloakResourceSpec => ResourceRepresentation);
 
-impl_instance_ref!(KeycloakResource);
+impl_endpoint!(KeycloakResource);
 
 schema_patch!(KeycloakResourceSpec: |s| {
     s.prop("scopes")

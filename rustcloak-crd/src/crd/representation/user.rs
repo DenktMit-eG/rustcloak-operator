@@ -3,7 +3,7 @@ use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
     crd::namespace_scope,
     impl_object, schema_patch,
-    traits::{SecretKeyNames, impl_instance_ref},
+    traits::{SecretKeyNames, impl_endpoint},
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -54,6 +54,6 @@ impl SecretKeyNames<2> for Option<KeycloakUserSecretReference> {
 
 impl_object!("user" <RealmRef> / |_d| {"users"} / id for KeycloakUserSpec => UserRepresentation);
 
-impl_instance_ref!(KeycloakUser);
+impl_endpoint!(KeycloakUser);
 
 schema_patch!(KeycloakUserSpec);

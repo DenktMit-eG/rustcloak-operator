@@ -1,7 +1,7 @@
 use crate::keycloak_types::ProtocolMapperRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_instance_ref,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
 use either::Either;
 use kube::CustomResource;
@@ -40,6 +40,6 @@ type ParentRef = Either<ClientRef, ClientScopeRef>;
 
 impl_object!("pm" <ParentRef> / |_d| {"protocol-mappers/models"} / id for KeycloakProtocolMapperSpec => ProtocolMapperRepresentation);
 
-impl_instance_ref!(KeycloakProtocolMapper);
+impl_endpoint!(KeycloakProtocolMapper);
 
 schema_patch!(KeycloakProtocolMapperSpec);

@@ -3,18 +3,19 @@ use crate::keycloak_types::RealmRepresentation;
 use crate::refs::ref_type;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    KeycloakApiStatusEndpoint, crd::both_scopes, impl_object,
+    KeycloakApiStatusEndpoint, crd::namespace_scope, impl_object,
     inner_spec::HasInnerSpec, schema_patch, traits::Endpoint,
 };
-use either::Either;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 use super::client_schema;
 
-both_scopes! {
-    "KeycloakRealm", "kcrm", "ClusterKeycloakRealm", "ckcrm", ClusterKeycloakRealmSpec {
+namespace_scope! {
+    "KeycloakRealm", "kcrm" {
+///both_scopes! {
+//    "KeycloakRealm", "kcrm", "ClusterKeycloakRealm", "ckcrm", ClusterKeycloakRealmSpec {
         #[kube(
             doc = "resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)",
             group = "rustcloak.k8s.eboland.de",
@@ -46,22 +47,16 @@ impl Endpoint for KeycloakRealm {
     fn instance_ref(&self) -> Option<&InstanceRef> {
         Some(&self.inner_spec().parent_ref)
     }
-    fn resource_path(&self) -> Option<&str> {
-        self.endpoint().map(|e| e.resource_path.as_str())
-    }
 }
 
-impl Endpoint for ClusterKeycloakRealm {
-    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
-        self.status.as_ref().and_then(|s| s.endpoint.as_ref())
-    }
-    fn instance_ref(&self) -> Option<&InstanceRef> {
-        Some(&self.inner_spec().parent_ref)
-    }
-    fn resource_path(&self) -> Option<&str> {
-        self.endpoint().map(|e| e.resource_path.as_str())
-    }
-}
+//impl Endpoint for ClusterKeycloakRealm {
+//    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
+//        self.status.as_ref().and_then(|s| s.endpoint.as_ref())
+//    }
+//    fn instance_ref(&self) -> Option<&InstanceRef> {
+//        Some(&self.inner_spec().parent_ref)
+//    }
+//}
 
 schema_patch!(KeycloakRealmSpec: |s| {
     s.remove("groups")
@@ -71,6 +66,7 @@ schema_patch!(KeycloakRealmSpec: |s| {
         .remove("oauthClients");
     client_schema(s.prop("adminPermissionsClient"));
 });
-ref_type!(NamespacedRealmRef, instance_ref, KeycloakRealm);
-ref_type!(ClusterRealmRef, cluster_instance_ref, ClusterKeycloakRealm);
-pub type RealmRef = Either<NamespacedRealmRef, ClusterRealmRef>;
+ref_type!(RealmRef, instance_ref, KeycloakRealm);
+//ref_type!(NamespacedRealmRef, instance_ref, KeycloakRealm);
+//ref_type!(ClusterRealmRef, cluster_instance_ref, ClusterKeycloakRealm);
+//pub type RealmRef = Either<NamespacedRealmRef, ClusterRealmRef>;

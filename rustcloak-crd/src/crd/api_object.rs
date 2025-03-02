@@ -4,6 +4,8 @@ use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+use super::InstanceRef;
+
 both_scopes! {
     "KeycloakApiObject", "kcapi", "ClusterKeycloakApiObject", "ckcapi", ClusterKeycloakApiObjectSpec {
         #[kube(
@@ -68,15 +70,16 @@ pub enum KeycloakApiEndpointPath {
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakApiEndpoint {
-    pub instance_ref: ImmutableString,
+    #[serde(flatten)]
+    pub instance_ref: InstanceRef,
     #[serde(flatten)]
     pub path_def: KeycloakApiEndpointPath,
 }
 
 impl KeycloakApiEndpoint {
-    pub fn new(instance_ref: &str, path: &str) -> Self {
-        let instance_ref = instance_ref.to_string().into();
+    pub fn new(instance_ref: &InstanceRef, path: &str) -> Self {
         let path = path.to_string().into();
+        let instance_ref = instance_ref.clone();
         Self {
             instance_ref,
             path_def: KeycloakApiEndpointPath::Path(path),

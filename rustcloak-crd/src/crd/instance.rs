@@ -1,12 +1,10 @@
-use crate::crd::both_scopes;
+use crate::marker::{HasMarker, ResourceMarker};
 use crate::refs::ref_type;
 use crate::traits::{Endpoint, SecretKeyNames};
 
-use super::KeycloakApiStatus;
 use super::KeycloakApiStatusEndpoint;
-use either::Either;
-use kube::CustomResource;
-use kube::ResourceExt;
+use super::{KeycloakApiStatus, namespace_scope};
+use kube::{CustomResource, Resource};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -50,8 +48,10 @@ pub struct KeycloakInstanceClient {
     pub secret: Option<String>,
 }
 
-both_scopes! {
-    "KeycloakInstance", "kci", "ClusterKeycloakInstance", "ckci", ClusterKeycloakInstanceSpec {
+namespace_scope! {
+    "KeycloakInstance", "kci" {
+//both_scopes! {
+//    "KeycloakInstance", "kci", "ClusterKeycloakInstance", "ckci", ClusterKeycloakInstanceSpec {
         #[kube(
             doc = "This resource makes a Keycloak instance known to the operator",
             group = "rustcloak.k8s.eboland.de",
@@ -88,45 +88,51 @@ both_scopes! {
     }
 }
 
-impl KeycloakInstance {
+impl KeycloakInstanceSpec {
     pub fn token_secret_ref(&self) -> Option<&KeycloakInstanceTokenReference> {
-        self.spec.token.as_ref()
+        self.token.as_ref()
     }
 
-    pub fn token_secret_name(&self) -> String {
-        if let Some(name) = self
-            .spec
-            .token
-            .as_ref()
-            .and_then(|x| x.secret_name.as_ref())
+    pub fn token_secret_name(&self, name: String) -> String {
+        if let Some(name) =
+            self.token.as_ref().and_then(|x| x.secret_name.as_ref())
         {
             name.to_string()
         } else {
-            self.name_unchecked() + "-api-token"
+            format!("{}-api-token", name)
         }
     }
 
     pub fn credential_secret_name(&self) -> &str {
-        self.spec.credentials.secret_name.as_str()
+        self.credentials.secret_name.as_str()
     }
 }
 
 impl Endpoint for KeycloakInstance {
     fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
-        self.status.as_ref().and_then(|s| s.endpoint.as_ref())
-    }
-    fn instance_ref(&self) -> Option<&InstanceRef> {
-        None
-    }
-    fn resource_path(&self) -> Option<&str> {
         None
     }
 }
 
-ref_type!(NamespacedInstanceRef, instance_ref, KeycloakInstance);
-ref_type!(
-    ClusterInstanceRef,
-    cluster_instance_ref,
-    ClusterKeycloakInstance
-);
-pub type InstanceRef = Either<NamespacedInstanceRef, ClusterInstanceRef>;
+impl HasMarker for KeycloakInstance {
+    type Marker = ResourceMarker<<Self as Resource>::Scope>;
+}
+
+//impl Endpoint for ClusterKeycloakInstance {
+//    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
+//        None
+//    }
+//}
+//
+//impl HasMarker for ClusterKeycloakInstance {
+//    type Marker = ResourceMarker<<Self as Resource>::Scope>;
+//}
+
+ref_type!(InstanceRef, instance_ref, KeycloakInstance);
+//ref_type!(NamespacedInstanceRef, instance_ref, KeycloakInstance);
+//ref_type!(
+//    ClusterInstanceRef,
+//    cluster_instance_ref,
+//    ClusterKeycloakInstance
+//);
+//pub type InstanceRef = Either<NamespacedInstanceRef, ClusterInstanceRef>;
