@@ -1,10 +1,10 @@
 use super::{ClientRef, RealmRef};
+use crate::either::UntaggedEither;
 use crate::keycloak_types::RoleRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
     crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
-use either::Either;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -33,7 +33,7 @@ namespace_scope! {
     }
 }
 
-type ParentRef = Either<RealmRef, ClientRef>;
+type ParentRef = UntaggedEither<RealmRef, ClientRef>;
 
 impl_object!("role" <ParentRef> / |_d| {"roles"} / name for KeycloakRoleSpec => RoleRepresentation);
 

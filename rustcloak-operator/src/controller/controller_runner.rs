@@ -3,7 +3,7 @@ use std::{sync::Arc, time::Duration};
 use crate::{
     app_id,
     error::Result,
-    util::{FromError, wait_for_crd},
+    util::{ApiExt, ApiFactory, FromError, wait_for_crd},
 };
 use async_trait::async_trait;
 use k8s_openapi::serde_json::json;
@@ -67,7 +67,7 @@ pub struct ControllerRunner<C> {
 impl<C> ControllerRunner<C>
 where
     C: LifecycleController + Sync + Send + 'static,
-    C::Resource: KubeResource
+    C::Resource: KubeResource<DynamicType = ()>
         + Clone
         + HasStatus<Status: FromError + Serialize + Send + Sync>
         + Debug
@@ -79,6 +79,7 @@ where
         + Debug,
     <C::Resource as KubeResource>::DynamicType:
         Default + Eq + Hash + Clone + Debug + Unpin + From<()>,
+    ApiExt<C::Resource>: ApiFactory<Resource = C::Resource>,
 {
     pub fn new(controller: C, client: &kube::Client) -> Self {
         let client = client.clone();
@@ -138,13 +139,9 @@ where
         resource: Arc<C::Resource>,
         ctx: Arc<Self>,
     ) -> Result<Action> {
-        let ns = resource
-            .meta()
-            .namespace
-            .as_deref()
-            .ok_or(Error::NoNamespace)?;
+        let ns = resource.namespace();
         let name = resource.name_unchecked();
-        let api: Api<C::Resource> = Api::all(ctx.client.clone());
+        let api = ApiExt::<C::Resource>::api(ctx.client.clone(), &ns);
         let client = ctx.client.clone();
         let dt = ().into();
         let kind = C::Resource::kind(&dt);
@@ -161,23 +158,22 @@ where
             .before_finalizer(&client, resource.clone())
             .await
         {
-            Ok(should_handle) => {
-                if should_handle {
-                    debug!(
-                        kind = kind,
-                        namespace = ns,
-                        name = name;
-                        "handling resource, before_finalizer returned true"
-                    )
-                } else {
-                    debug!(
-                        kind = kind,
-                        namespace = ns,
-                        name = name;
-                        "skipping resource, before_finalizer returned false"
-                    );
-                    return Ok(Action::await_change());
-                }
+            Ok(true) => {
+                debug!(
+                    kind = kind,
+                    namespace = ns,
+                    name = name;
+                    "handling resource, before_finalizer returned true"
+                )
+            }
+            Ok(false) => {
+                debug!(
+                    kind = kind,
+                    namespace = ns,
+                    name = name;
+                    "skipping resource, before_finalizer returned false"
+                );
+                return Ok(Action::await_change());
             }
             Err(e) => {
                 Self::handle_error(ctx.clone(), &resource, &e).await?;
@@ -192,6 +188,7 @@ where
             |event| async {
                 match event {
                     Event::Apply(resource) => {
+                        println!("aaaaa {}", std::any::type_name_of_val(&api));
                         ctx.controller.apply(&client, resource).await
                     }
                     Event::Cleanup(resource) => {
@@ -217,9 +214,16 @@ where
         resource: &C::Resource,
         e: &Error,
     ) -> Result<()> {
+        let ns = resource.namespace();
         let name = resource.name_unchecked();
-        let api: Api<C::Resource> = Api::all(ctx.client.clone());
+        let api: Api<C::Resource> = ApiExt::api(ctx.client.clone(), &ns);
         let status = <C::Resource as HasStatus>::Status::from_error(e);
+        log::error!(
+            kind = C::Resource::kind(&()),
+            namespace = resource.namespace().unwrap_or_default(),
+            name = name;
+            "error: {e}"
+        );
         let patch = Patch::Merge(json!({
             "status": status,
         }));

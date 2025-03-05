@@ -3,15 +3,25 @@ use std::iter;
 
 pub trait SecretKeyNames<const N: usize> {
     const DEFAULTS: [&'static str; N];
-    fn secret_key_names_opts(&self) -> Option<[&Option<String>; N]>;
+    fn secret_key_names_opts(&self) -> [&Option<String>; N];
     fn secret_key_names(&self) -> [&str; N] {
-        if let Some(key_names) = self.secret_key_names_opts() {
-            let mut iter = iter::zip(key_names, Self::DEFAULTS);
-            [(); N]
-                .map(|_| iter.next().unwrap())
-                .map(|(opt, def)| opt.as_ref().map_or(def, |s| s))
+        let mut iter = iter::zip(self.secret_key_names_opts(), Self::DEFAULTS);
+        [(); N]
+            .map(|_| iter.next().unwrap())
+            .map(|(opt, def)| opt.as_ref().map_or(def, |s| s))
+    }
+}
+
+impl<T, const N: usize> SecretKeyNames<N> for Option<T>
+where
+    T: SecretKeyNames<N>,
+{
+    const DEFAULTS: [&'static str; N] = T::DEFAULTS;
+    fn secret_key_names_opts(&self) -> [&Option<String>; N] {
+        if let Some(s) = self.as_ref() {
+            s.secret_key_names_opts()
         } else {
-            Self::DEFAULTS
+            [&None; N]
         }
     }
 }

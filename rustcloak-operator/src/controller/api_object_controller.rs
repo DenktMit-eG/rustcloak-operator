@@ -3,8 +3,8 @@ use crate::{
     controller::controller_runner::LifecycleController,
     error::{Error, Result},
     util::{
-        ApiResolver, K8sKeycloakBuilder, RefWatcher, Retrieve, Retriever,
-        ToPatch,
+        ApiExt, ApiFactory, ApiResolver, K8sKeycloakBuilder, RefWatcher,
+        Retrieve, Retriever, ToPatch,
     },
 };
 use async_trait::async_trait;
@@ -131,6 +131,7 @@ where
         + Debug
         + DeserializeOwned
         + 'static,
+    ApiExt<R>: ApiFactory,
 {
     type Resource = R;
     const MODULE_PATH: &'static str = module_path!();
@@ -169,7 +170,7 @@ where
     ) -> Result<Action> {
         let ns = resource.namespace();
         let name = resource.name_unchecked();
-        let api = Api::<R>::all(client.clone());
+        let api = ApiExt::<R>::api(client.clone(), &ns);
         let keycloak = Self::keycloak(client, &resource).await?;
         let mut payload = resource.resolve(client).await?;
         let immutable_payload: Value =

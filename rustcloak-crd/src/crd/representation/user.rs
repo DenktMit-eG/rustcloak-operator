@@ -15,6 +15,7 @@ use super::RealmRef;
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakUserSecretReference {
     pub secret_name: String,
+    pub email_key: Option<String>,
     pub username_key: Option<String>,
     pub password_key: Option<String>,
 }
@@ -44,11 +45,11 @@ namespace_scope! {
     }
 }
 
-impl SecretKeyNames<2> for Option<KeycloakUserSecretReference> {
-    const DEFAULTS: [&'static str; 2] = ["username", "password"];
+impl SecretKeyNames<3> for KeycloakUserSecretReference {
+    const DEFAULTS: [&'static str; 3] = ["username", "password", "email"];
 
-    fn secret_key_names_opts(&self) -> Option<[&Option<String>; 2]> {
-        self.as_ref().map(|s| [&s.username_key, &s.password_key])
+    fn secret_key_names_opts(&self) -> [&Option<String>; 3] {
+        [&self.username_key, &self.password_key, &self.email_key]
     }
 }
 

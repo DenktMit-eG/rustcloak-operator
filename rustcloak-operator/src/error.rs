@@ -15,8 +15,12 @@ pub enum Error {
     FromUtf8Error(#[from] std::string::FromUtf8Error),
     #[error("{0}")]
     Other(#[from] Box<dyn std::error::Error + Send + Sync>),
-    #[error("No data")]
-    NoData,
+    #[error("Missing Field: {0}")]
+    MissingField(String),
+    #[error("Missing Resource Path")]
+    MissingResourcePath,
+    #[error("Missing Instance Reference")]
+    MissingInstanceReference,
     #[error("No username")]
     NoUsername,
     #[error("No var {0}")]
@@ -47,7 +51,7 @@ pub enum Error {
     NoTokenSecret(String, String),
     #[error("IO Error: {0}")]
     IoError(#[from] std::io::Error),
-    #[error("Unknown Secret Type: {0}")]
+    #[error("Unknown Secret Type returned by Keycloak: {0}")]
     UnknownSecretType(String),
     #[error("No Client Id")]
     NoClientId,
@@ -63,6 +67,8 @@ pub enum Error {
     PathNotFound(String),
     #[error("Wait Error: {0}")]
     WaitError(#[from] kube::runtime::wait::Error),
+    #[error("No Client Id was provided by Keycloak")]
+    MissingClientId,
     #[error("No ConfigMap in namespace {0} with name {1} found")]
     NoConfigMap(String, String),
     #[error("No Resource Path")]

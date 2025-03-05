@@ -7,7 +7,7 @@ resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
-|[spec.clusterInstanceRef](#specclusterinstanceref)|string||
+|[spec.clusterRealmRef](#specclusterrealmref)|string||
 |[spec.definition](#specdefinition)|object|✅|
 |[spec.definition.access](#specdefinitionaccess)|object||
 |[spec.definition.applicationRoles](#specdefinitionapplicationroles)|object||
@@ -79,14 +79,16 @@ resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)
 |[spec.definition.userProfileMetadata.groups[].displayHeader](#specdefinitionuserprofilemetadatagroupsdisplayheader)|string||
 |[spec.definition.userProfileMetadata.groups[].name](#specdefinitionuserprofilemetadatagroupsname)|string||
 |[spec.definition.username](#specdefinitionusername)|string||
-|[spec.instanceRef](#specinstanceref)|string||
 |[spec.options](#specoptions)|object||
 |[spec.patchFrom](#specpatchfrom)|object||
+|[spec.realmRef](#specrealmref)|string||
 |[spec.userSecret](#specusersecret)|object||
+|[spec.userSecret.emailKey](#specusersecretemailkey)|string||
 |[spec.userSecret.passwordKey](#specusersecretpasswordkey)|string||
 |[spec.userSecret.secretName](#specusersecretsecretname)|string|✅|
 |[spec.userSecret.usernameKey](#specusersecretusernamekey)|string||
 |[status](#status)|object||
+|[status.clusterInstanceRef](#statusclusterinstanceref)|string||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
 |[status.conditions[].message](#statusconditionsmessage)|string||
@@ -107,18 +109,18 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[clusterInstanceRef](#specclusterinstanceref)|string||
+|[clusterRealmRef](#specclusterrealmref)|string||
 |[definition](#specdefinition)|object|✅|
-|[instanceRef](#specinstanceref)|string||
 |[options](#specoptions)|object||
 |[patchFrom](#specpatchfrom)|object||
+|[realmRef](#specrealmref)|string||
 |[userSecret](#specusersecret)|object||
 
 the KeycloakUser resource
 
 ---
 
-### spec.clusterInstanceRef
+### spec.clusterRealmRef
 
 Type: string
 
@@ -834,18 +836,6 @@ Type: string
 
 ---
 
-### spec.instanceRef
-
-Type: string
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|self == oldSelf|Value is immutable|
-
-The name of the realm to which this object belongs to
-
----
-
 ### spec.options
 
 Type: object
@@ -862,15 +852,36 @@ Defines additional values that can be loaded from secrets or configmaps. Field s
 
 ---
 
+### spec.realmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the realm to which this object belongs to
+
+---
+
 ### spec.userSecret
 
 Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[emailKey](#specusersecretemailkey)|string||
 |[passwordKey](#specusersecretpasswordkey)|string||
 |[secretName](#specusersecretsecretname)|string|✅|
 |[usernameKey](#specusersecretusernamekey)|string||
+
+*missing*
+
+---
+
+### spec.userSecret.emailKey
+
+Type: string
 
 *missing*
 
@@ -906,6 +917,7 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[clusterInstanceRef](#statusclusterinstanceref)|string||
 |[conditions[]](#statusconditions)|object||
 |[instanceRef](#statusinstanceref)|string||
 |[message](#statusmessage)|string||
@@ -914,6 +926,18 @@ Type: object
 |[status](#statusstatus)|string||
 
 *missing*
+
+---
+
+### status.clusterInstanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
 
 ---
 
@@ -981,7 +1005,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-The name of the instance to which this object belongs to.
+*missing*
 
 ---
 

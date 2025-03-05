@@ -1,24 +1,20 @@
-# KeycloakProtocolMapper
+# KeycloakUserCredential
 
 ## v1beta1
 
-resource to define a Protocol Mapper within either a [KeycloakClient](./keycloakclient.md) or a [KeycloakClientScope](./keycloakclientscope.md)
+represents credentials for a keycloak user
 
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
-|[spec.clientRef](#specclientref)|string||
-|[spec.clientScopeRef](#specclientscoperef)|string||
-|[spec.definition](#specdefinition)|object|✅|
-|[spec.definition.config](#specdefinitionconfig)|object||
-|[spec.definition.consentRequired](#specdefinitionconsentrequired)|boolean||
-|[spec.definition.consentText](#specdefinitionconsenttext)|string||
-|[spec.definition.id](#specdefinitionid)|string||
-|[spec.definition.name](#specdefinitionname)|string||
-|[spec.definition.protocol](#specdefinitionprotocol)|string||
-|[spec.definition.protocolMapper](#specdefinitionprotocolmapper)|string||
-|[spec.options](#specoptions)|object||
-|[spec.patchFrom](#specpatchfrom)|object||
+|[spec.clusterInstanceRef](#specclusterinstanceref)|string||
+|[spec.instanceRef](#specinstanceref)|string||
+|[spec.resourcePath](#specresourcepath)|string|✅|
+|[spec.userSecret](#specusersecret)|object|✅|
+|[spec.userSecret.emailKey](#specusersecretemailkey)|string||
+|[spec.userSecret.passwordKey](#specusersecretpasswordkey)|string||
+|[spec.userSecret.secretName](#specusersecretsecretname)|string|✅|
+|[spec.userSecret.usernameKey](#specusersecretusernamekey)|string||
 |[status](#status)|object||
 |[status.clusterInstanceRef](#statusclusterinstanceref)|string||
 |[status.conditions[]](#statusconditions)|object||
@@ -41,17 +37,28 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[clientRef](#specclientref)|string||
-|[clientScopeRef](#specclientscoperef)|string||
-|[definition](#specdefinition)|object|✅|
-|[options](#specoptions)|object||
-|[patchFrom](#specpatchfrom)|object||
+|[clusterInstanceRef](#specclusterinstanceref)|string||
+|[instanceRef](#specinstanceref)|string||
+|[resourcePath](#specresourcepath)|string|✅|
+|[userSecret](#specusersecret)|object|✅|
 
-the KeycloakProtocolMapper resource
+*missing*
 
 ---
 
-### spec.clientRef
+### spec.clusterInstanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
+
+---
+
+### spec.instanceRef
 
 Type: string
 
@@ -63,63 +70,30 @@ Type: string
 
 ---
 
-### spec.clientScopeRef
+### spec.resourcePath
 
 Type: string
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|self == oldSelf|Value is immutable|
 
 *missing*
 
 ---
 
-### spec.definition
+### spec.userSecret
 
 Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[config](#specdefinitionconfig)|object||
-|[consentRequired](#specdefinitionconsentrequired)|boolean||
-|[consentText](#specdefinitionconsenttext)|string||
-|[id](#specdefinitionid)|string||
-|[name](#specdefinitionname)|string||
-|[protocol](#specdefinitionprotocol)|string||
-|[protocolMapper](#specdefinitionprotocolmapper)|string||
-
-&nbsp;
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|has(self.id) == has(oldSelf.id)|Value is immutable|
-
-ProtocolMapperRepresentation
-
-<details><summary>JSON schema</summary>
-
-```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } ``` </details>
-
----
-
-### spec.definition.config
-
-Type: object
+|[emailKey](#specusersecretemailkey)|string||
+|[passwordKey](#specusersecretpasswordkey)|string||
+|[secretName](#specusersecretsecretname)|string|✅|
+|[usernameKey](#specusersecretusernamekey)|string||
 
 *missing*
 
 ---
 
-### spec.definition.consentRequired
-
-Type: boolean
-
-*missing*
-
----
-
-### spec.definition.consentText
+### spec.userSecret.emailKey
 
 Type: string
 
@@ -127,19 +101,7 @@ Type: string
 
 ---
 
-### spec.definition.id
-
-Type: string
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|self == oldSelf|Value is immutable|
-
-*missing*
-
----
-
-### spec.definition.name
+### spec.userSecret.passwordKey
 
 Type: string
 
@@ -147,19 +109,7 @@ Type: string
 
 ---
 
-### spec.definition.protocol
-
-Type: string
-
-ProtocolMapperRepresentationProtocol
-
-<details><summary>JSON schema</summary>
-
-```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
-
----
-
-### spec.definition.protocolMapper
+### spec.userSecret.secretName
 
 Type: string
 
@@ -167,19 +117,11 @@ Type: string
 
 ---
 
-### spec.options
+### spec.userSecret.usernameKey
 
-Type: object
+Type: string
 
-Options for the request to the Keycloak Admin API.
-
----
-
-### spec.patchFrom
-
-Type: object
-
-Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
+*missing*
 
 ---
 

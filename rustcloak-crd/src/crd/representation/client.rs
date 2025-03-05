@@ -47,12 +47,11 @@ namespace_scope! {
     }
 }
 
-impl SecretKeyNames<2> for Option<KeycloakClientSecretReference> {
+impl SecretKeyNames<2> for KeycloakClientSecretReference {
     const DEFAULTS: [&'static str; 2] = ["client_id", "client_secret"];
 
-    fn secret_key_names_opts(&self) -> Option<[&Option<String>; 2]> {
-        self.as_ref()
-            .map(|s| [&s.client_id_key, &s.client_secret_key])
+    fn secret_key_names_opts(&self) -> [&Option<String>; 2] {
+        [&self.client_id_key, &self.client_secret_key]
     }
 }
 

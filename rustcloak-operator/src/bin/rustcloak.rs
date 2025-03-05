@@ -6,10 +6,10 @@ use futures::{FutureExt, future};
 use kube::Resource;
 use rustcloak_operator::{
     controller::{
-        ApiObjectController, ControllerRunner, InstanceController,
-        KeycloakClientSecretController, KeycloakUserSecretController,
-        LegacyClientController, LegacyInstanceController,
-        LegacyRealmController, LegacyUserController, RepresentationController,
+        ApiObjectController, ClientCredentialController, ControllerRunner,
+        ConverterController, InstanceController, LegacyClientController,
+        LegacyInstanceController, LegacyRealmController, LegacyUserController,
+        RepresentationController, UserCredentialController,
     },
     crd::*,
     error::Result,
@@ -47,13 +47,32 @@ async fn main() -> Result<()> {
     init_logger();
 
     let client = kube::Client::try_default().await?;
-    let mut controllers = vec![];
     let mut controllers_str = opts.controllers.clone();
+    if controllers_str.is_empty() {
+        controllers_str =
+            map_all_crds!(Crd => Crd::kind(&()).to_string()).collect();
+    }
 
     if opts.legacy != LegacyMode::Disabled {
         controllers_str.extend_from_slice(&legacy_kinds());
     }
 
+    // All Rest CRDs
+    let mut controllers = map_rest_crds!( Crd => {
+        controllers_str.contains(&Crd::kind(&()).to_string()).then(|| {
+            ControllerRunner::new(
+                RepresentationController::<Crd>::default(),
+                &client,
+            )
+            .run()
+            .boxed()
+        })
+    })
+    .into_iter()
+    .flatten()
+    .collect::<Vec<_>>();
+
+    // Plumbing CRDs
     if controllers_str
         .contains(&ClusterKeycloakApiObject::kind(&()).to_string())
     {
@@ -97,185 +116,34 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str.contains(&KeycloakRealm::kind(&()).to_string()) {
-        controllers.push(
-            ControllerRunner::new(
-                RepresentationController::<KeycloakRealm>::default(),
+
+    // Credential CRDs
+    if controllers_str.contains(&KeycloakUserCredential::kind(&()).to_string())
+    {
+        controllers.extend([
+            ControllerRunner::new(UserCredentialController::default(), &client)
+                .run()
+                .boxed(),
+            ConverterController::<KeycloakUser, KeycloakUserCredential>::new(
                 &client,
             )
             .run()
             .boxed(),
-        );
+        ]);
     }
-    //if controllers_str.contains(&KeycloakClient::kind(&()).to_string()) {
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakClient>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if controllers_str.contains(&KeycloakUser::kind(&()).to_string()) {
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakUser>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if opts
-    //    .controllers
-    //    .contains(&KeycloakAuthenticationFlow::kind(&()).to_string())
-    //{
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakAuthenticationFlow>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if opts
-    //    .controllers
-    //    .contains(&KeycloakAuthenticatorConfig::kind(&()).to_string())
-    //{
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakAuthenticatorConfig>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if controllers_str.contains(&KeycloakClientScope::kind(&()).to_string()) {
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakClientScope>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if controllers_str.contains(&KeycloakComponent::kind(&()).to_string()) {
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakComponent>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    if controllers_str.contains(&KeycloakGroup::kind(&()).to_string()) {
-        controllers.push(
-            ControllerRunner::new(
-                RepresentationController::<KeycloakGroup>::default(),
-                &client,
-            )
-            .run()
-            .boxed(),
-        );
+    if controllers_str
+        .contains(&KeycloakClientCredential::kind(&()).to_string())
+    {
+        controllers.extend([
+            ControllerRunner::new(ClientCredentialController::default(), &client) .run() .boxed(),
+            ConverterController::<KeycloakClient, KeycloakClientCredential>::new(&client).run().boxed()
+        ])
     }
-    //if controllers_str
-    //    .contains(&KeycloakIdentityProvider::kind(&()).to_string())
-    //{
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakIdentityProvider>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if controllers_str
-    //    .contains(&KeycloakIdentityProviderMapper::kind(&()).to_string())
-    //{
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakIdentityProviderMapper>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if controllers_str.contains(&KeycloakOrganization::kind(&()).to_string()) {
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakOrganization>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if controllers_str.contains(&KeycloakProtocolMapper::kind(&()).to_string())
-    //{
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakProtocolMapper>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if opts
-    //    .controllers
-    //    .contains(&KeycloakRequiredActionProvider::kind(&()).to_string())
-    //{
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakRequiredActionProvider>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if controllers_str.contains(&KeycloakResource::kind(&()).to_string()) {
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakResource>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    //if controllers_str.contains(&KeycloakRole::kind(&()).to_string()) {
-    //    controllers.push(
-    //        ControllerRunner::new(
-    //            RepresentationController::<KeycloakRole>::default(),
-    //            &client,
-    //        )
-    //        .run()
-    //        .boxed(),
-    //    );
-    //}
-    if controllers_str.contains(&KeycloakScope::kind(&()).to_string()) {
-        controllers.push(
-            ControllerRunner::new(
-                RepresentationController::<KeycloakScope>::default(),
-                &client,
-            )
-            .run()
-            .boxed(),
-        );
-    }
+
+    // Legacy CRDs
     let prudent = opts.legacy == LegacyMode::Prudent;
-    if controllers_str.contains(&format!(
-        "Legacy{}",
-        keycloak_crd::ExternalKeycloak::kind(&())
-    )) {
+
+    if controllers_str.contains(&"LegacyInstance".to_string()) {
         controllers.push(
             ControllerRunner::new(
                 LegacyInstanceController::new(prudent),
@@ -285,19 +153,14 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str
-        .contains(&format!("Legacy{}", keycloak_crd::KeycloakRealm::kind(&())))
-    {
+    if controllers_str.contains(&"LegacyRealm".to_string()) {
         controllers.push(
             ControllerRunner::new(LegacyRealmController::new(prudent), &client)
                 .run()
                 .boxed(),
         );
     }
-    if controllers_str.contains(&format!(
-        "Legacy{}",
-        keycloak_crd::KeycloakClient::kind(&())
-    )) {
+    if controllers_str.contains(&"LegacyClient".to_string()) {
         controllers.push(
             ControllerRunner::new(
                 LegacyClientController::new(prudent),
@@ -307,24 +170,15 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
-    if controllers_str
-        .contains(&format!("Legacy{}", keycloak_crd::KeycloakUser::kind(&())))
-    {
+    if controllers_str.contains(&"LegacyUser".to_string()) {
         controllers.push(
             ControllerRunner::new(LegacyUserController::new(prudent), &client)
                 .run()
                 .boxed(),
         );
     }
-    if controllers_str.contains(&KeycloakClient::kind(&()).to_string()) {
-        controllers
-            .push(KeycloakClientSecretController::new(&client).run().boxed());
-    }
-    if controllers_str.contains(&KeycloakUser::kind(&()).to_string()) {
-        controllers
-            .push(KeycloakUserSecretController::new(&client).run().boxed());
-    }
 
+    // Metrics
     if let Some(sock_addr) = opts.metrics_addr {
         controllers.push(
             HttpServer::new(move || {

@@ -5,6 +5,7 @@ use crate::{
     error::{Error, Result},
 };
 use async_trait::async_trait;
+use either::Either;
 use k8s_openapi::serde_json;
 use keycloak_crd::KeycloakRealm as LegacyRealm;
 use kube::api::{ObjectMeta, Patch, PatchParams};
@@ -14,7 +15,9 @@ use kube::{
     runtime::{Controller, controller::Action},
 };
 use kube::{Resource, ResourceExt};
-use rustcloak_crd::{KeycloakInstance, KeycloakRealm, KeycloakRealmSpec};
+use rustcloak_crd::{
+    KeycloakInstance, KeycloakRealm, KeycloakRealmSpec, either::UntaggedEither,
+};
 use std::sync::Arc;
 
 #[derive(Debug)]
@@ -73,15 +76,19 @@ impl LifecycleController for LegacyRealmController {
             },
             spec: KeycloakRealmSpec {
                 options: None,
-                parent_ref: find_name::<KeycloakInstance>(
-                    client,
-                    &namespace,
-                    &resource.spec.instance_selector,
-                    &resource.metadata,
-                    "instance_ref",
-                )
-                .await?
-                .into(),
+                parent_ref: UntaggedEither {
+                    inner: Either::Left(
+                        find_name::<KeycloakInstance>(
+                            client,
+                            &namespace,
+                            &resource.spec.instance_selector,
+                            &resource.metadata,
+                            "instance_ref",
+                        )
+                        .await?
+                        .into(),
+                    ),
+                },
                 definition: serde_json::from_value(definition)?,
                 patches: None,
             },

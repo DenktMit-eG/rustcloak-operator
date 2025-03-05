@@ -1,14 +1,18 @@
 mod api_object;
+mod client_credentials;
 mod instance;
 mod patches;
 mod representation;
 mod status;
+mod user_credentials;
 
 pub use api_object::*;
+pub use client_credentials::*;
 pub use instance::*;
 pub use patches::*;
 pub use representation::*;
 pub use status::*;
+pub use user_credentials::*;
 
 macro_rules! both_scopes {
     ($kind:literal, $shortname:literal, $cluster_kind:literal, $cluster_shortname:literal, $cluster_name:ident { $(#[$meta:meta])* pub struct $name:ident { $($(#[$field_meta:meta])* $vis:vis $field:ident : $type:ty),* $(,)? } }) => {

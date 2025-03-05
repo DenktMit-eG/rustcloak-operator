@@ -1,10 +1,12 @@
 use either::Either;
 
-pub trait Ref: AsRef<str> {
+pub trait Ref:
+    AsRef<str> + Serialize + DeserializeOwned + JsonSchema + Clone
+{
     type Target;
 }
 
-impl<L: Ref, R: Ref> Ref for Either<L, R> {
+impl<L: Ref, R: Ref> Ref for UntaggedEither<L, R> {
     type Target = Either<L::Target, R::Target>;
 }
 
@@ -40,6 +42,10 @@ macro_rules! ref_type {
     };
 }
 pub(crate) use ref_type;
+use schemars::JsonSchema;
+use serde::{Serialize, de::DeserializeOwned};
+
+use crate::either::UntaggedEither;
 
 pub trait HasParent {
     type ParentRef: Ref;

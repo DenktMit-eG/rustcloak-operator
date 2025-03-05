@@ -1,3 +1,4 @@
+use crate::either::UntaggedEither;
 use crate::marker::{HasMarker, ResourceMarker};
 use crate::refs::ref_type;
 use crate::traits::{Endpoint, SecretKeyNames};
@@ -20,8 +21,8 @@ pub struct KeycloakInstanceCredentialReference {
 impl SecretKeyNames<2> for KeycloakInstanceCredentialReference {
     const DEFAULTS: [&'static str; 2] = ["user", "password"];
 
-    fn secret_key_names_opts(&self) -> Option<[&Option<String>; 2]> {
-        Some([&self.username_key, &self.password_key])
+    fn secret_key_names_opts(&self) -> [&Option<String>; 2] {
+        [&self.username_key, &self.password_key]
     }
 }
 
@@ -33,11 +34,11 @@ pub struct KeycloakInstanceTokenReference {
     pub expires_key: Option<String>,
 }
 
-impl SecretKeyNames<2> for Option<KeycloakInstanceTokenReference> {
+impl SecretKeyNames<2> for KeycloakInstanceTokenReference {
     const DEFAULTS: [&'static str; 2] = ["token", "expires"];
 
-    fn secret_key_names_opts(&self) -> Option<[&Option<String>; 2]> {
-        self.as_ref().map(|x| [&x.token_key, &x.expires_key])
+    fn secret_key_names_opts(&self) -> [&Option<String>; 2] {
+        [&self.token_key, &self.expires_key]
     }
 }
 
@@ -110,6 +111,14 @@ impl Endpoint for KeycloakInstance {
     fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
         None
     }
+
+    fn instance_ref(&self) -> Option<&InstanceRef> {
+        None
+    }
+
+    fn resource_path(&self) -> Option<&str> {
+        Some("")
+    }
 }
 
 impl HasMarker for KeycloakInstance {
@@ -120,23 +129,26 @@ impl Endpoint for ClusterKeycloakInstance {
     fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
         None
     }
+
+    fn instance_ref(&self) -> Option<&InstanceRef> {
+        None
+    }
+
+    fn resource_path(&self) -> Option<&str> {
+        Some("")
+    }
 }
 
 impl HasMarker for ClusterKeycloakInstance {
     type Marker = ResourceMarker<<Self as Resource>::Scope>;
 }
 
-ref_type!(
-    InstanceRef,
-    instance_ref,
-    KeycloakInstance,
-    "The name of the instance to which this object belongs to."
-);
-//ref_type!(NamespacedInstanceRef, instance_ref, KeycloakInstance);
+ref_type!(NamespacedInstanceRef, instance_ref, KeycloakInstance);
 ref_type!(
     ClusterInstanceRef,
     cluster_instance_ref,
     ClusterKeycloakInstance,
     "The name of the cluster instance to which this object belongs to."
 );
-//pub type InstanceRef = Either<NamespacedInstanceRef, ClusterInstanceRef>;
+pub type InstanceRef =
+    UntaggedEither<NamespacedInstanceRef, ClusterInstanceRef>;

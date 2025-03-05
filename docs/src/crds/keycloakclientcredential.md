@@ -1,24 +1,19 @@
-# KeycloakComponent
+# KeycloakClientCredential
 
 ## v1beta1
 
-resource to define a Component within a [KeycloakRealm](./keycloakrealm.md)
+represents credentials for a keycloak client
 
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
-|[spec.clusterRealmRef](#specclusterrealmref)|string||
-|[spec.definition](#specdefinition)|object|✅|
-|[spec.definition.config](#specdefinitionconfig)|object||
-|[spec.definition.id](#specdefinitionid)|string||
-|[spec.definition.name](#specdefinitionname)|string||
-|[spec.definition.parentId](#specdefinitionparentid)|string||
-|[spec.definition.providerId](#specdefinitionproviderid)|string||
-|[spec.definition.providerType](#specdefinitionprovidertype)|string||
-|[spec.definition.subType](#specdefinitionsubtype)|string||
-|[spec.options](#specoptions)|object||
-|[spec.patchFrom](#specpatchfrom)|object||
-|[spec.realmRef](#specrealmref)|string||
+|[spec.clientSecret](#specclientsecret)|object|✅|
+|[spec.clientSecret.clientIdKey](#specclientsecretclientidkey)|string||
+|[spec.clientSecret.clientSecretKey](#specclientsecretclientsecretkey)|string||
+|[spec.clientSecret.secretName](#specclientsecretsecretname)|string|✅|
+|[spec.clusterInstanceRef](#specclusterinstanceref)|string||
+|[spec.instanceRef](#specinstanceref)|string||
+|[spec.resourcePath](#specresourcepath)|string|✅|
 |[status](#status)|object||
 |[status.clusterInstanceRef](#statusclusterinstanceref)|string||
 |[status.conditions[]](#statusconditions)|object||
@@ -41,65 +36,66 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[clusterRealmRef](#specclusterrealmref)|string||
-|[definition](#specdefinition)|object|✅|
-|[options](#specoptions)|object||
-|[patchFrom](#specpatchfrom)|object||
-|[realmRef](#specrealmref)|string||
+|[clientSecret](#specclientsecret)|object|✅|
+|[clusterInstanceRef](#specclusterinstanceref)|string||
+|[instanceRef](#specinstanceref)|string||
+|[resourcePath](#specresourcepath)|string|✅|
 
-the KeycloakComponent resource
-
----
-
-### spec.clusterRealmRef
-
-Type: string
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|self == oldSelf|Value is immutable|
-
-The name of the cluster realm to which this object belongs to
+*missing*
 
 ---
 
-### spec.definition
+### spec.clientSecret
 
 Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[config](#specdefinitionconfig)|object||
-|[id](#specdefinitionid)|string||
-|[name](#specdefinitionname)|string||
-|[parentId](#specdefinitionparentid)|string||
-|[providerId](#specdefinitionproviderid)|string||
-|[providerType](#specdefinitionprovidertype)|string||
-|[subType](#specdefinitionsubtype)|string||
-
-&nbsp;
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|has(self.id) == has(oldSelf.id)|Value is immutable|
-
-ComponentRepresentation
-
-<details><summary>JSON schema</summary>
-
-```json { "type": "object", "properties": { "config": { "$ref": "#/$defs/MultivaluedHashMapStringString" }, "id": { "type": "string" }, "name": { "type": "string" }, "parentId": { "type": "string" }, "providerId": { "type": "string" }, "providerType": { "type": "string" }, "subType": { "type": "string" } }, "additionalProperties": false } ``` </details>
-
----
-
-### spec.definition.config
-
-Type: object
+|[clientIdKey](#specclientsecretclientidkey)|string||
+|[clientSecretKey](#specclientsecretclientsecretkey)|string||
+|[secretName](#specclientsecretsecretname)|string|✅|
 
 *missing*
 
 ---
 
-### spec.definition.id
+### spec.clientSecret.clientIdKey
+
+Type: string
+
+*missing*
+
+---
+
+### spec.clientSecret.clientSecretKey
+
+Type: string
+
+*missing*
+
+---
+
+### spec.clientSecret.secretName
+
+Type: string
+
+*missing*
+
+---
+
+### spec.clusterInstanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
+
+---
+
+### spec.instanceRef
 
 Type: string
 
@@ -111,71 +107,11 @@ Type: string
 
 ---
 
-### spec.definition.name
+### spec.resourcePath
 
 Type: string
 
 *missing*
-
----
-
-### spec.definition.parentId
-
-Type: string
-
-*missing*
-
----
-
-### spec.definition.providerId
-
-Type: string
-
-*missing*
-
----
-
-### spec.definition.providerType
-
-Type: string
-
-*missing*
-
----
-
-### spec.definition.subType
-
-Type: string
-
-*missing*
-
----
-
-### spec.options
-
-Type: object
-
-Options for the request to the Keycloak Admin API.
-
----
-
-### spec.patchFrom
-
-Type: object
-
-Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
-
----
-
-### spec.realmRef
-
-Type: string
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|self == oldSelf|Value is immutable|
-
-The name of the realm to which this object belongs to
 
 ---
 

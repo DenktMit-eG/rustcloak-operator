@@ -110,7 +110,7 @@ impl KeycloakUserSecretController {
         let ns = resource.namespace()?;
 
         let secret_api: Api<Secret> = Api::namespaced(client.clone(), ns);
-        let [username_key, password_key] =
+        let [username_key, password_key, _] =
             resource.spec.user_secret.secret_key_names();
 
         let secret_name = &secret_ref.secret_name;
@@ -161,7 +161,7 @@ impl KeycloakUserSecretController {
             secret_api.create(&PostParams::default(), &secret).await?
         };
 
-        let [_, password] = secret.extract(&resource.spec.user_secret)?;
+        let [_, password, _] = secret.extract(&resource.spec.user_secret)?;
 
         let path = format!("{}/reset-password", resource_path);
         let credential = CredentialRepresentation {

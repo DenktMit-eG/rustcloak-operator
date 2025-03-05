@@ -513,16 +513,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b63caa9aa9397e2d9480a9b13673856c78d8ac123288526c37d7839f2a86990"
 
 [[package]]
-name = "concat-idents"
-version = "1.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f76990911f2267d837d9d0ad060aa63aaad170af40904b29461734c339030d4d"
-dependencies = [
- "quote",
- "syn",
-]
-
-[[package]]
 name = "concurrent-queue"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2099,8 +2089,7 @@ dependencies = [
 [[package]]
 name = "randstr"
 version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "06609afffff6b2997dbf30b411bae19e8b6cd274f7310574c790d2d4c26ebf8c"
+source = "git+https://github.com/Gottox/randstr?branch=main#ad8069d6c274963f52d26d2011355df47ce21719"
 dependencies = [
  "rand",
 ]
@@ -2242,11 +2231,11 @@ dependencies = [
 name = "rustcloak-crd"
 version = "0.1.0"
 dependencies = [
- "concat-idents",
  "either",
  "k8s-openapi",
  "keycloak-types",
  "kube",
+ "randstr",
  "schemars",
  "serde",
  "serde_json",

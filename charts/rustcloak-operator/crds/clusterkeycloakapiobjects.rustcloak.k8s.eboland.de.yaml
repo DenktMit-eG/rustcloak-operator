@@ -53,14 +53,24 @@ spec:
             description: defines an API request to the Keycloak Admin API.
             properties:
               endpoint:
+                anyOf:
+                - required:
+                  - instanceRef
+                - required:
+                  - clusterInstanceRef
                 oneOf:
                 - required:
                   - path
                 - required:
                   - parent
                 properties:
+                  clusterInstanceRef:
+                    description: The name of the cluster instance to which this object belongs to.
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
                   instanceRef:
-                    description: The name of the instance to which this object belongs to.
                     type: string
                     x-kubernetes-validations:
                     - message: Value is immutable
@@ -97,8 +107,6 @@ spec:
                     x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
-                required:
-                - instanceRef
                 type: object
               immutablePayload:
                 type: string
@@ -194,8 +202,19 @@ spec:
             - payload
             type: object
           status:
+            anyOf:
+            - required:
+              - instanceRef
+            - required:
+              - clusterInstanceRef
             nullable: true
             properties:
+              clusterInstanceRef:
+                description: The name of the cluster instance to which this object belongs to.
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               conditions:
                 items:
                   properties:
@@ -220,7 +239,6 @@ spec:
                   type: object
                 type: array
               instanceRef:
-                description: The name of the instance to which this object belongs to.
                 type: string
                 x-kubernetes-validations:
                 - message: Value is immutable

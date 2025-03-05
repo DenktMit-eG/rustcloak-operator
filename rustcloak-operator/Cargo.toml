@@ -20,7 +20,7 @@ derive_builder = "0.20.2"
 actix-web = { version = "4.9.0", default-features = false, features = ["http2", "macros"] }
 either = { version = "1.14.0", features = ["serde"] }
 keycloak-crd = { git = "https://github.com/withlazers/keycloak-crd.git", branch = "rustcloak" }
-randstr = "0.2.1"
+randstr = { git = "https://github.com/Gottox/randstr", branch = "main" }
 structured-logger = "1.0.3"
 case_style = "0.2.1"
 rustcloak-crd = { path = "../rustcloak-crd" }

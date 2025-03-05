@@ -2,12 +2,12 @@ use crate::error::Result;
 use crate::morph::Morph;
 use either::Either;
 use k8s_openapi::{ClusterResourceScope, NamespaceResourceScope};
-use kube::Api;
 use kube::{Resource, core::object::HasStatus};
 use rustcloak_crd::KeycloakRestObject;
 use rustcloak_crd::marker::{EitherMarker, ResourceMarker};
 use rustcloak_crd::{
     KeycloakApiStatus,
+    either::UntaggedEither,
     inner_spec::HasInnerSpec,
     marker::HasMarker,
     refs::{HasParent, Ref},
@@ -15,6 +15,9 @@ use rustcloak_crd::{
 use serde::Serialize;
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
+use std::ops::Deref;
+
+use super::{ApiExt, ApiFactory};
 
 shorter_bounds::alias!(
     pub trait Parent: Send
@@ -80,12 +83,7 @@ where
         reference: &Self::Ref,
         ns: &Option<String>,
     ) -> Result<<Self::Ref as Ref>::Target> {
-        let ns = if let Some(ns) = ns {
-            ns.to_string()
-        } else {
-            client.default_namespace().to_string()
-        };
-        let api: Api<<Self::Ref as Ref>::Target> = Api::namespaced(client, &ns);
+        let api = ApiExt::<R::Target>::api(client, ns);
         Ok(api.get(reference.as_ref()).await?)
     }
 }
@@ -102,29 +100,29 @@ where
     async fn get(
         client: kube::Client,
         reference: &Self::Ref,
-        _ns: &Option<String>,
+        ns: &Option<String>,
     ) -> Result<<Self::Ref as Ref>::Target> {
-        let api: Api<<Self::Ref as Ref>::Target> = Api::all(client);
+        let api = ApiExt::<R::Target>::api(client, ns);
         Ok(api.get(reference.as_ref()).await?)
     }
 }
 
 #[async_trait::async_trait]
-impl<L, R> Retrieve for (Either<L, R>, EitherMarker)
+impl<L, R> Retrieve for (UntaggedEither<L, R>, EitherMarker)
 where
     L: ParentRef,
     R: ParentRef,
     Retriever<L>: Retrieve<Ref = L>,
     Retriever<R>: Retrieve<Ref = R>,
 {
-    type Ref = Either<L, R>;
+    type Ref = UntaggedEither<L, R>;
 
     async fn get(
         client: kube::Client,
         reference: &Self::Ref,
         ns: &Option<String>,
     ) -> Result<<Self::Ref as Ref>::Target> {
-        match reference {
+        match reference.deref() {
             Either::Left(l) => {
                 Retriever::<L>::get(client, l, ns).await.map(Either::Left)
             }

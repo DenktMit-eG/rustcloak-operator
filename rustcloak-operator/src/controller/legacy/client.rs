@@ -14,6 +14,7 @@ use kube::{
     runtime::{Controller, controller::Action},
 };
 use kube::{Resource, ResourceExt};
+use rustcloak_crd::either::UntaggedEither;
 use rustcloak_crd::{
     KeycloakClient, KeycloakClientSecretReference, KeycloakClientSpec,
     KeycloakRealm,
@@ -76,17 +77,19 @@ impl LifecycleController for LegacyClientController {
             },
             spec: KeycloakClientSpec {
                 options: None,
-                parent_ref: Either::Left(
-                    find_name::<KeycloakRealm>(
-                        client,
-                        &namespace,
-                        &resource.spec.realm_selector,
-                        &resource.metadata,
-                        "realm_ref",
-                    )
-                    .await?
-                    .into(),
-                ),
+                parent_ref: UntaggedEither {
+                    inner: Either::Left(
+                        find_name::<KeycloakRealm>(
+                            client,
+                            &namespace,
+                            &resource.spec.realm_selector,
+                            &resource.metadata,
+                            "realm_ref",
+                        )
+                        .await?
+                        .into(),
+                    ),
+                },
                 definition: serde_json::from_value(definition)?,
                 client_secret: Some(KeycloakClientSecretReference {
                     secret_name: format!("keycloak-client-secret-{}", name),

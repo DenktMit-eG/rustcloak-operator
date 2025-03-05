@@ -2,7 +2,6 @@ pub mod controller;
 pub mod error;
 pub mod morph;
 pub mod opts;
-pub mod shim;
 pub mod util;
 
 macro_rules! app_id {

@@ -18,12 +18,12 @@ pub enum LegacyMode {
 
 pub fn legacy_kinds() -> [String; 4] {
     [
-        keycloak_crd::ExternalKeycloak::kind(&()),
-        keycloak_crd::KeycloakRealm::kind(&()),
-        keycloak_crd::KeycloakClient::kind(&()),
-        keycloak_crd::KeycloakUser::kind(&()),
+        "LegacyInstance",
+        "LegacyRealm",
+        "LegacyUser",
+        "LegacyClient",
     ]
-    .map(|x| format!("Legacy{}", x))
+    .map(String::from)
 }
 
 fn controller_values() -> PossibleValuesParser {
@@ -43,7 +43,7 @@ pub struct Opts {
     /// if specified, the operator will report metrics and health checks on the specified address.
     /// e.g. --metrics-addr 0.0.0.0:8080
     pub metrics_addr: Option<SocketAddr>,
-    /// Enables the legacy controllers: legacy-instance, legacy-realm, legacy-user, legacy-client
+    /// Enables the legacy controllers: LegacyInstance, LegacyRealm, LegacyUser, LegacyClient
     #[clap(long, default_value = "disabled")]
     pub legacy: LegacyMode,
 }

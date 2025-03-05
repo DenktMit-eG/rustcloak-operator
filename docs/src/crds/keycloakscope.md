@@ -55,6 +55,7 @@ resource to define a Scope within a [KeyclaokClient](./keycloakclient.md)
 |[spec.options](#specoptions)|object||
 |[spec.patchFrom](#specpatchfrom)|object||
 |[status](#status)|object||
+|[status.clusterInstanceRef](#statusclusterinstanceref)|string||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
 |[status.conditions[].message](#statusconditionsmessage)|string||
@@ -573,6 +574,7 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[clusterInstanceRef](#statusclusterinstanceref)|string||
 |[conditions[]](#statusconditions)|object||
 |[instanceRef](#statusinstanceref)|string||
 |[message](#statusmessage)|string||
@@ -581,6 +583,18 @@ Type: object
 |[status](#statusstatus)|string||
 
 *missing*
+
+---
+
+### status.clusterInstanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
 
 ---
 
@@ -648,7 +662,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-The name of the instance to which this object belongs to.
+*missing*
 
 ---
 

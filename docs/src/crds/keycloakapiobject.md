@@ -8,7 +8,8 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
 |[spec.endpoint](#specendpoint)|object|✅|
-|[spec.endpoint.instanceRef](#specendpointinstanceref)|string|✅|
+|[spec.endpoint.clusterInstanceRef](#specendpointclusterinstanceref)|string||
+|[spec.endpoint.instanceRef](#specendpointinstanceref)|string||
 |[spec.endpoint.parent](#specendpointparent)|object||
 |[spec.endpoint.parent.clusterParentRef](#specendpointparentclusterparentref)|string||
 |[spec.endpoint.parent.parentRef](#specendpointparentparentref)|string||
@@ -37,6 +38,7 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |[spec.vars[].valueFrom.secretKeyRef.name](#specvarsvaluefromsecretkeyrefname)|string|✅|
 |[spec.vars[].valueFrom.secretKeyRef.optional](#specvarsvaluefromsecretkeyrefoptional)|boolean||
 |[status](#status)|object||
+|[status.clusterInstanceRef](#statusclusterinstanceref)|string||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
 |[status.conditions[].message](#statusconditionsmessage)|string||
@@ -73,11 +75,24 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[instanceRef](#specendpointinstanceref)|string|✅|
+|[clusterInstanceRef](#specendpointclusterinstanceref)|string||
+|[instanceRef](#specendpointinstanceref)|string||
 |[parent](#specendpointparent)|object||
 |[path](#specendpointpath)|string||
 
 *missing*
+
+---
+
+### spec.endpoint.clusterInstanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
 
 ---
 
@@ -89,7 +104,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-The name of the instance to which this object belongs to.
+*missing*
 
 ---
 
@@ -377,6 +392,7 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[clusterInstanceRef](#statusclusterinstanceref)|string||
 |[conditions[]](#statusconditions)|object||
 |[instanceRef](#statusinstanceref)|string||
 |[message](#statusmessage)|string||
@@ -385,6 +401,18 @@ Type: object
 |[status](#statusstatus)|string||
 
 *missing*
+
+---
+
+### status.clusterInstanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
 
 ---
 
@@ -452,7 +480,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-The name of the instance to which this object belongs to.
+*missing*
 
 ---
 

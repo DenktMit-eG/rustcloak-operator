@@ -17,6 +17,7 @@ use kube::{
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::{
     KeycloakRealm, KeycloakUser, KeycloakUserSecretReference, KeycloakUserSpec,
+    either::UntaggedEither,
 };
 use std::sync::Arc;
 
@@ -88,6 +89,7 @@ async fn make_secret(
         secret_name: name,
         username_key: Some(username_key),
         password_key: Some(password_key),
+        email_key: None,
     }))
 }
 
@@ -139,17 +141,19 @@ impl LifecycleController for LegacyUserController {
             },
             spec: KeycloakUserSpec {
                 options: None,
-                parent_ref: Either::Left(
-                    find_name::<KeycloakRealm>(
-                        client,
-                        &namespace,
-                        &resource.spec.realm_selector,
-                        &resource.metadata,
-                        "realm_ref",
-                    )
-                    .await?
-                    .into(),
-                ),
+                parent_ref: UntaggedEither {
+                    inner: Either::Left(
+                        find_name::<KeycloakRealm>(
+                            client,
+                            &namespace,
+                            &resource.spec.realm_selector,
+                            &resource.metadata,
+                            "realm_ref",
+                        )
+                        .await?
+                        .into(),
+                    ),
+                },
                 definition: serde_json::from_value(definition)?,
                 patches: None,
                 user_secret,

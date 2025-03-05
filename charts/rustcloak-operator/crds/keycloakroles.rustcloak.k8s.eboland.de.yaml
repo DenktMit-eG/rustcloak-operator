@@ -37,9 +37,9 @@ spec:
             anyOf:
             - anyOf:
               - required:
-                - instanceRef
+                - realmRef
               - required:
-                - clusterInstanceRef
+                - clusterRealmRef
             - required:
               - clientRef
             description: the KeycloakRole resource
@@ -49,7 +49,7 @@ spec:
                 x-kubernetes-validations:
                 - message: Value is immutable
                   rule: self == oldSelf
-              clusterInstanceRef:
+              clusterRealmRef:
                 description: The name of the cluster realm to which this object belongs to
                 type: string
                 x-kubernetes-validations:
@@ -124,12 +124,6 @@ spec:
                 x-kubernetes-validations:
                 - message: Value is immutable
                   rule: has(self.name) == has(oldSelf.name)
-              instanceRef:
-                description: The name of the realm to which this object belongs to
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
               options:
                 description: Options for the request to the Keycloak Admin API.
                 nullable: true
@@ -210,12 +204,29 @@ spec:
                   type: object
                 description: Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
                 type: object
+              realmRef:
+                description: The name of the realm to which this object belongs to
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
             required:
             - definition
             type: object
           status:
+            anyOf:
+            - required:
+              - instanceRef
+            - required:
+              - clusterInstanceRef
             nullable: true
             properties:
+              clusterInstanceRef:
+                description: The name of the cluster instance to which this object belongs to.
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               conditions:
                 items:
                   properties:
@@ -240,7 +251,6 @@ spec:
                   type: object
                 type: array
               instanceRef:
-                description: The name of the instance to which this object belongs to.
                 type: string
                 x-kubernetes-validations:
                 - message: Value is immutable

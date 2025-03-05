@@ -1,12 +1,12 @@
-apiVersion: rustcloak.k8s.eboland.de/v1
+apiVersion: rustcloak.k8s.eboland.de/v1beta1
 kind: KeycloakInstance
 metadata:
   name: keycloak-instance
 spec:
-  baseUrl: http://keycloak-keycloakx-http:80/auth
+  baseUrl: http://127.0.0.1:8080/
   credentials:
     # Rustcloak will take care of creating this secret with a random password.
     create: true
-    passwordKey: KEYCLOAK_ADMIN_PASSWORD
-    secretName: keycloak-admin
-    usernameKey: KEYCLOAK_ADMIN
+    passwordKey: password
+    secretName: keycloak-credentials
+    usernameKey: user

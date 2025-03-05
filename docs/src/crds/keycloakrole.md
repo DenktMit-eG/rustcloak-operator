@@ -8,7 +8,7 @@ resource to define a Protocol Mapper within either a [KeycloakRealm](./keycloakr
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
 |[spec.clientRef](#specclientref)|string||
-|[spec.clusterInstanceRef](#specclusterinstanceref)|string||
+|[spec.clusterRealmRef](#specclusterrealmref)|string||
 |[spec.definition](#specdefinition)|object|✅|
 |[spec.definition.attributes](#specdefinitionattributes)|object||
 |[spec.definition.clientRole](#specdefinitionclientrole)|boolean||
@@ -22,10 +22,11 @@ resource to define a Protocol Mapper within either a [KeycloakRealm](./keycloakr
 |[spec.definition.id](#specdefinitionid)|string||
 |[spec.definition.name](#specdefinitionname)|string||
 |[spec.definition.scopeParamRequired](#specdefinitionscopeparamrequired)|boolean||
-|[spec.instanceRef](#specinstanceref)|string||
 |[spec.options](#specoptions)|object||
 |[spec.patchFrom](#specpatchfrom)|object||
+|[spec.realmRef](#specrealmref)|string||
 |[status](#status)|object||
+|[status.clusterInstanceRef](#statusclusterinstanceref)|string||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
 |[status.conditions[].message](#statusconditionsmessage)|string||
@@ -47,11 +48,11 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[clientRef](#specclientref)|string||
-|[clusterInstanceRef](#specclusterinstanceref)|string||
+|[clusterRealmRef](#specclusterrealmref)|string||
 |[definition](#specdefinition)|object|✅|
-|[instanceRef](#specinstanceref)|string||
 |[options](#specoptions)|object||
 |[patchFrom](#specpatchfrom)|object||
+|[realmRef](#specrealmref)|string||
 
 the KeycloakRole resource
 
@@ -69,7 +70,7 @@ Type: string
 
 ---
 
-### spec.clusterInstanceRef
+### spec.clusterRealmRef
 
 Type: string
 
@@ -221,18 +222,6 @@ Type: boolean
 
 ---
 
-### spec.instanceRef
-
-Type: string
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|self == oldSelf|Value is immutable|
-
-The name of the realm to which this object belongs to
-
----
-
 ### spec.options
 
 Type: object
@@ -249,12 +238,25 @@ Defines additional values that can be loaded from secrets or configmaps. Field s
 
 ---
 
+### spec.realmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the realm to which this object belongs to
+
+---
+
 ### status
 
 Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[clusterInstanceRef](#statusclusterinstanceref)|string||
 |[conditions[]](#statusconditions)|object||
 |[instanceRef](#statusinstanceref)|string||
 |[message](#statusmessage)|string||
@@ -263,6 +265,18 @@ Type: object
 |[status](#statusstatus)|string||
 
 *missing*
+
+---
+
+### status.clusterInstanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
 
 ---
 
@@ -330,7 +344,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-The name of the instance to which this object belongs to.
+*missing*
 
 ---
 

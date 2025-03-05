@@ -4,7 +4,9 @@ use crate::{
     app_id,
     controller::controller_runner::LifecycleController,
     error::{Error, Result},
-    util::{K8sKeycloakRefreshManager, RefWatcher, ToPatch},
+    util::{
+        ApiExt, ApiFactory, K8sKeycloakRefreshManager, RefWatcher, ToPatch,
+    },
 };
 use async_trait::async_trait;
 use chrono::{Duration, Utc};
@@ -108,6 +110,7 @@ where
 impl<R> LifecycleController for InstanceController<R>
 where
     R: Instance,
+    ApiExt<R>: ApiFactory,
 {
     type Resource = R;
     const MODULE_PATH: &'static str = module_path!();
@@ -155,8 +158,9 @@ where
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
+        let ns = resource.namespace();
         let spec = resource.inner_spec();
-        let api = Api::<Self::Resource>::all(client.clone());
+        let api = ApiExt::<Self::Resource>::api(client.clone(), &ns);
 
         self.secret_refs
             .add(&resource, [spec.credential_secret_name()]);

@@ -1,3 +1,4 @@
+use crate::either::UntaggedEither;
 use crate::keycloak_types::RealmRepresentation;
 use crate::marker::ResourceMarker;
 use crate::refs::ref_type;
@@ -7,7 +8,6 @@ use crate::{
     KeycloakApiStatusEndpoint, impl_object, inner_spec::HasInnerSpec,
     schema_patch, traits::Endpoint,
 };
-use either::Either;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -87,14 +87,14 @@ schema_patch!(KeycloakRealmSpec: |s| {
 });
 ref_type!(
     NamespacedRealmRef,
-    instance_ref,
+    realm_ref,
     KeycloakRealm,
     "The name of the realm to which this object belongs to"
 );
 ref_type!(
     ClusterRealmRef,
-    cluster_instance_ref,
+    cluster_realm_ref,
     ClusterKeycloakRealm,
     "The name of the cluster realm to which this object belongs to"
 );
-pub type RealmRef = Either<NamespacedRealmRef, ClusterRealmRef>;
+pub type RealmRef = UntaggedEither<NamespacedRealmRef, ClusterRealmRef>;
