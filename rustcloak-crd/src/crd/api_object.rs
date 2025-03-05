@@ -4,7 +4,6 @@ use crate::{
     marker::{HasMarker, ResourceMarker},
     refs::{HasParent, ref_type},
 };
-use either::Either;
 use k8s_openapi::api::core::v1::EnvVar;
 use kube::{CustomResource, Resource};
 use schemars::JsonSchema;

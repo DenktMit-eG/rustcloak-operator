@@ -11,7 +11,6 @@ use rustcloak_crd::{
     inner_spec::HasInnerSpec,
     marker::HasMarker,
     refs::{HasParent, Ref},
-    traits::Endpoint,
 };
 use serde::Serialize;
 use serde::de::DeserializeOwned;
