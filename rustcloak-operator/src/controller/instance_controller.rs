@@ -22,13 +22,25 @@ use rustcloak_crd::{
 use log::warn;
 use randstr::randstr;
 
-#[derive(Debug, Default)]
-pub struct KeycloakInstanceController {
+#[derive(Debug)]
+pub struct InstanceController<R>
+where
+    R: Resource<DynamicType = ()>,
+{
     manager: K8sKeycloakRefreshManager,
-    secret_refs: Arc<RefWatcher<KeycloakInstance, Secret>>,
+    secret_refs: Arc<RefWatcher<R, Secret>>,
 }
 
-impl KeycloakInstanceController {
+impl Default for InstanceController<KeycloakInstance> {
+    fn default() -> Self {
+        Self {
+            manager: K8sKeycloakRefreshManager::default(),
+            secret_refs: Arc::new(RefWatcher::default()),
+        }
+    }
+}
+
+impl InstanceController<KeycloakInstance> {
     async fn create_secret(
         &self,
         client: &kube::Client,
@@ -74,7 +86,7 @@ impl KeycloakInstanceController {
 }
 
 #[async_trait]
-impl LifecycleController for KeycloakInstanceController {
+impl LifecycleController for InstanceController<KeycloakInstance> {
     type Resource = KeycloakInstance;
     const MODULE_PATH: &'static str = module_path!();
 

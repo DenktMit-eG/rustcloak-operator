@@ -6,8 +6,8 @@ use futures::{FutureExt, future};
 use kube::Resource;
 use rustcloak_operator::{
     controller::{
-        ApiObjectController, ControllerRunner, KeycloakClientSecretController,
-        KeycloakInstanceController, KeycloakUserSecretController,
+        ApiObjectController, ControllerRunner, InstanceController,
+        KeycloakClientSecretController, KeycloakUserSecretController,
         LegacyClientController, LegacyInstanceController,
         LegacyRealmController, LegacyUserController, RepresentationController,
     },
@@ -78,12 +78,9 @@ async fn main() -> Result<()> {
     }
     if controllers_str.contains(&KeycloakInstance::kind(&()).to_string()) {
         controllers.push(
-            ControllerRunner::new(
-                KeycloakInstanceController::default(),
-                &client,
-            )
-            .run()
-            .boxed(),
+            ControllerRunner::new(InstanceController::default(), &client)
+                .run()
+                .boxed(),
         );
     }
     if controllers_str.contains(&KeycloakRealm::kind(&()).to_string()) {
