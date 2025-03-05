@@ -28,13 +28,14 @@ macro_rules! map_all_crds {
 }
 
 meta_map_crds!(map_plumbing_crds:
-    KeycloakInstance,
+    ClusterKeycloakApiObject,
+    ClusterKeycloakInstance,
     KeycloakApiObject,
+    KeycloakInstance,
 );
 
 meta_map_crds!(map_rest_crds:
-//    ClusterKeycloakInstance,
-//    ClusterKeycloakRealm,
+    ClusterKeycloakRealm,
     KeycloakAuthenticationFlow,
     KeycloakAuthenticatorConfig,
     KeycloakClient,

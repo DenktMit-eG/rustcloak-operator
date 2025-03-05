@@ -43,5 +43,6 @@ schema_patch!(KeycloakIdentityProviderSpec);
 ref_type!(
     IdentityProviderRef,
     identity_provider_ref,
-    KeycloakIdentityProvider
+    KeycloakIdentityProvider,
+    "the name of the kubernetes object that created the identity provider."
 );

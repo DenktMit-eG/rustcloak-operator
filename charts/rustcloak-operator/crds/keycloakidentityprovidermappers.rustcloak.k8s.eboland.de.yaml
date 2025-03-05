@@ -221,7 +221,11 @@ spec:
                   type: object
                 type: array
               instanceRef:
+                description: The name of the instance to which this object belongs to.
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               message:
                 type: string
               ready:

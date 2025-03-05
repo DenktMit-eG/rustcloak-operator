@@ -4,6 +4,7 @@ use crate::app_id;
 use crate::error::Error;
 use crate::error::Result;
 use async_trait::async_trait;
+use either::Either;
 use k8s_openapi::serde_json;
 use keycloak_crd::KeycloakClient as LegacyClient;
 use kube::api::{ObjectMeta, Patch, PatchParams};
@@ -75,15 +76,17 @@ impl LifecycleController for LegacyClientController {
             },
             spec: KeycloakClientSpec {
                 options: None,
-                parent_ref: find_name::<KeycloakRealm>(
-                    client,
-                    &namespace,
-                    &resource.spec.realm_selector,
-                    &resource.metadata,
-                    "realm_ref",
-                )
-                .await?
-                .into(),
+                parent_ref: Either::Left(
+                    find_name::<KeycloakRealm>(
+                        client,
+                        &namespace,
+                        &resource.spec.realm_selector,
+                        &resource.metadata,
+                        "realm_ref",
+                    )
+                    .await?
+                    .into(),
+                ),
                 definition: serde_json::from_value(definition)?,
                 client_secret: Some(KeycloakClientSecretReference {
                     secret_name: format!("keycloak-client-secret-{}", name),

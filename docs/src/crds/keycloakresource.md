@@ -97,7 +97,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-the name of the kubernetes object that created the client.
+*missing*
 
 ---
 
@@ -702,7 +702,11 @@ Type: string
 
 Type: string
 
-*missing*
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the instance to which this object belongs to.
 
 ---
 

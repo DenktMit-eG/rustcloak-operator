@@ -24,6 +24,7 @@ namespace_scope! {
         pub struct KeycloakClientScopeSpec {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub options: Option<KeycloakApiObjectOptions>,
+            #[serde(flatten)]
             pub parent_ref: RealmRef,
             // TODO: is_template should be immutable. We can't do immutable options yet.
             #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -38,7 +39,7 @@ namespace_scope! {
 
 impl_endpoint!(KeycloakClientScope);
 
-impl_object!("scopespec" <RealmRef> / |d| {
+impl_object!("scope" <RealmRef> / |d| {
     if d.is_template == Some(true) {
         "client-scopes"
     } else {

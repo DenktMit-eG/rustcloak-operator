@@ -6,7 +6,6 @@ use crate::{
     util::{FromError, wait_for_crd},
 };
 use async_trait::async_trait;
-use k8s_openapi::NamespaceResourceScope;
 use k8s_openapi::serde_json::json;
 use kube::{
     Api, Resource as KubeResource, ResourceExt,
@@ -68,7 +67,7 @@ pub struct ControllerRunner<C> {
 impl<C> ControllerRunner<C>
 where
     C: LifecycleController + Sync + Send + 'static,
-    C::Resource: KubeResource<Scope = NamespaceResourceScope>
+    C::Resource: KubeResource
         + Clone
         + HasStatus<Status: FromError + Serialize + Send + Sync>
         + Debug
@@ -145,7 +144,7 @@ where
             .as_deref()
             .ok_or(Error::NoNamespace)?;
         let name = resource.name_unchecked();
-        let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
+        let api: Api<C::Resource> = Api::all(ctx.client.clone());
         let client = ctx.client.clone();
         let dt = ().into();
         let kind = C::Resource::kind(&dt);
@@ -218,13 +217,8 @@ where
         resource: &C::Resource,
         e: &Error,
     ) -> Result<()> {
-        let ns = resource
-            .meta()
-            .namespace
-            .as_deref()
-            .ok_or(Error::NoNamespace)?;
         let name = resource.name_unchecked();
-        let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
+        let api: Api<C::Resource> = Api::all(ctx.client.clone());
         let status = <C::Resource as HasStatus>::Status::from_error(e);
         let patch = Patch::Merge(json!({
             "status": status,

@@ -1,4 +1,5 @@
 use crate::keycloak_types::RealmRepresentation;
+use crate::marker::ResourceMarker;
 use crate::refs::ref_type;
 use crate::{InstanceRef, both_scopes};
 use crate::{
@@ -6,6 +7,7 @@ use crate::{
     KeycloakApiStatusEndpoint, impl_object, inner_spec::HasInnerSpec,
     schema_patch, traits::Endpoint,
 };
+use either::Either;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -56,6 +58,14 @@ impl Endpoint for ClusterKeycloakRealm {
     }
 }
 
+impl crate::marker::HasMarker for KeycloakRealm {
+    type Marker = ResourceMarker<<Self as kube::Resource>::Scope>;
+}
+
+impl crate::marker::HasMarker for ClusterKeycloakRealm {
+    type Marker = ResourceMarker<<Self as kube::Resource>::Scope>;
+}
+
 schema_patch!(KeycloakRealmSpec: |s| {
     s.remove("groups")
         .remove("applications")
@@ -64,7 +74,16 @@ schema_patch!(KeycloakRealmSpec: |s| {
         .remove("oauthClients");
     client_schema(s.prop("adminPermissionsClient"));
 });
-ref_type!(RealmRef, instance_ref, KeycloakRealm);
-//ref_type!(NamespacedRealmRef, instance_ref, KeycloakRealm);
-ref_type!(ClusterRealmRef, cluster_instance_ref, ClusterKeycloakRealm);
-//pub type RealmRef = Either<NamespacedRealmRef, ClusterRealmRef>;
+ref_type!(
+    NamespacedRealmRef,
+    instance_ref,
+    KeycloakRealm,
+    "The name of the realm to which this object belongs to"
+);
+ref_type!(
+    ClusterRealmRef,
+    cluster_instance_ref,
+    ClusterKeycloakRealm,
+    "The name of the cluster realm to which this object belongs to"
+);
+pub type RealmRef = Either<NamespacedRealmRef, ClusterRealmRef>;

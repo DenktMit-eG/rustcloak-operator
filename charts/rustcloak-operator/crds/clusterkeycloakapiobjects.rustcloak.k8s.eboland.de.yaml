@@ -1,25 +1,21 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: keycloakapiobjects.rustcloak.k8s.eboland.de
+  name: clusterkeycloakapiobjects.rustcloak.k8s.eboland.de
 spec:
   group: rustcloak.k8s.eboland.de
   names:
     categories:
     - keycloak
     - all
-    kind: KeycloakApiObject
-    plural: keycloakapiobjects
+    kind: ClusterKeycloakApiObject
+    plural: clusterkeycloakapiobjects
     shortNames:
-    - kcapi
-    singular: keycloakapiobject
-  scope: Namespaced
+    - ckcapi
+    singular: clusterkeycloakapiobject
+  scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - description: Instance that API request is sent to
-      jsonPath: .spec.endpoint.instanceRef
-      name: Instance
-      type: string
     - description: true if the realm is ready
       jsonPath: .status.ready
       name: Ready
@@ -32,6 +28,10 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    - description: Instance that API request is sent to
+      jsonPath: .spec.endpoint.instanceRef
+      name: Instance
+      type: string
     - description: true if the realm is ready
       jsonPath: .status.ready
       name: Ready
@@ -227,7 +227,7 @@ spec:
             type: object
         required:
         - spec
-        title: KeycloakApiObject
+        title: ClusterKeycloakApiObject
         type: object
     served: true
     storage: true

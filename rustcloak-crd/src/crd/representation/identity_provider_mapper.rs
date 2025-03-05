@@ -24,7 +24,7 @@ namespace_scope! {
         pub struct KeycloakIdentityProviderMapperSpec {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub options: Option<KeycloakApiObjectOptions>,
-            /// the name of the kubernetes object that created the identity provider.
+            #[serde(flatten)]
             pub parent_ref: IdentityProviderRef,
             #[schemars(schema_with = "schema")]
             pub definition: IdentityProviderMapperRepresentation,

@@ -24,7 +24,7 @@ namespace_scope! {
         pub struct KeycloakAuthenticatorConfigSpec {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub options: Option<KeycloakApiObjectOptions>,
-            /// the name of the kubernetes object that created the realm.
+            #[serde(flatten)]
             pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
             pub definition: AuthenticatorConfigRepresentation,

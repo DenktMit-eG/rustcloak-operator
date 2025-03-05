@@ -1,4 +1,4 @@
-# KeycloakApiObject
+# ClusterKeycloakApiObject
 
 ## v1
 

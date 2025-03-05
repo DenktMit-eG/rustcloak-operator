@@ -25,6 +25,7 @@ structured-logger = "1.0.3"
 case_style = "0.2.1"
 rustcloak-crd = { path = "../rustcloak-crd" }
 keycloak-client = { git = "https://github.com/Gottox/keycloak-client.rs" }
+shorter-bounds = "0.1.1"
 
 [profile.release]
 strip = true

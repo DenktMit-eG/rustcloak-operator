@@ -245,7 +245,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-the name of the kubernetes object that created the realm.
+The name of the realm to which this object belongs to
 
 ---
 
@@ -326,7 +326,11 @@ Type: string
 
 Type: string
 
-*missing*
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the instance to which this object belongs to.
 
 ---
 

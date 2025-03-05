@@ -5,6 +5,7 @@ use crate::{
     error::{Error, Result},
 };
 use async_trait::async_trait;
+use either::Either;
 use k8s_openapi::{ByteString, api::core::v1::Secret, serde_json};
 use keycloak_crd::KeycloakUser as LegacyUser;
 use kube::api::{ObjectMeta, Patch, PatchParams};
@@ -138,15 +139,17 @@ impl LifecycleController for LegacyUserController {
             },
             spec: KeycloakUserSpec {
                 options: None,
-                parent_ref: find_name::<KeycloakRealm>(
-                    client,
-                    &namespace,
-                    &resource.spec.realm_selector,
-                    &resource.metadata,
-                    "realm_ref",
-                )
-                .await?
-                .into(),
+                parent_ref: Either::Left(
+                    find_name::<KeycloakRealm>(
+                        client,
+                        &namespace,
+                        &resource.spec.realm_selector,
+                        &resource.metadata,
+                        "realm_ref",
+                    )
+                    .await?
+                    .into(),
+                ),
                 definition: serde_json::from_value(definition)?,
                 patches: None,
                 user_secret,
