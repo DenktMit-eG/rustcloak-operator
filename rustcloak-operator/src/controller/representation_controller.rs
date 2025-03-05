@@ -1,157 +1,28 @@
 use crate::app_id;
 use crate::error::{Error, Result};
 use crate::morph::{Morph, Patcher};
-use crate::{controller::LifecycleController, util::ToPatch};
-use either::Either;
+use crate::{
+    controller::LifecycleController,
+    util::{ParentGetter, ParentRetrieve, Representation, Retrieve, ToPatch},
+};
 use k8s_openapi::serde_json::json;
-use k8s_openapi::{ClusterResourceScope, NamespaceResourceScope};
 use kube::ResourceExt;
 use kube::api::{ObjectMeta, Patch, PatchParams};
 use kube::{
-    Api, Resource,
-    core::object::HasStatus,
+    Api,
     runtime::{Controller, controller::Action, watcher},
 };
 use log::debug;
 use rustcloak_crd::{
     ClusterKeycloakApiObject, KeycloakApiObject, KeycloakApiObjectSpec,
-    KeycloakApiStatus,
     inner_spec::HasInnerSpec,
-    marker::{HasMarker, ResourceMarker, EitherMarker},
     refs::{HasParent, Ref},
     traits::Endpoint,
 };
 use rustcloak_crd::{
     KeycloakApiEndpoint, KeycloakApiEndpointPath, KeycloakRestObject,
 };
-use serde::Serialize;
-use serde::de::DeserializeOwned;
 use std::{fmt::Debug, marker::PhantomData, sync::Arc};
-
-shorter_bounds::alias!(
-    pub trait Parent: Endpoint
-        + Send
-        + Sync
-        + 'static
-        + Sized
-        + Clone
-        + std::fmt::Debug
-        + DeserializeOwned
-);
-shorter_bounds::alias!(
-    pub trait ParentRef: Ref<Target: Parent + HasMarker>
-        + Send
-        + Sync
-        + Debug
-        + Clone
-        + DeserializeOwned
-        + 'static
-);
-shorter_bounds::alias!(
-    pub trait InnerSpec: HasParent<ParentRef: ParentRef>
-        + KeycloakRestObject<Definition: Serialize>
-        + Send
-        + Sync
-        + Debug
-        + Morph
-        + Clone
-        + DeserializeOwned
-);
-shorter_bounds::alias! (
-    pub trait Representation: Resource<DynamicType = ()>
-        + Send
-        + Sync
-        + Debug
-        + Clone
-        + HasInnerSpec<InnerSpec: InnerSpec>
-        + DeserializeOwned
-        + HasStatus<Status = KeycloakApiStatus>
-        + Endpoint
-        + 'static
-);
-
-#[async_trait::async_trait]
-pub trait Get {
-    type Ref: Ref;
-    async fn get(
-        client: kube::Client,
-        reference: &Self::Ref,
-        ns: &Option<String>,
-    ) -> Result<<Self::Ref as Ref>::Target>;
-}
-
-#[async_trait::async_trait]
-impl<R> Get for (R, ResourceMarker<NamespaceResourceScope>)
-where
-    R: ParentRef,
-    R::Target:
-        Parent + Resource<DynamicType = (), Scope = NamespaceResourceScope>,
-{
-    type Ref = R;
-
-    async fn get(
-        client: kube::Client,
-        reference: &Self::Ref,
-        ns: &Option<String>,
-    ) -> Result<<Self::Ref as Ref>::Target> {
-        let ns = if let Some(ns) = ns {
-            ns.to_string()
-        } else {
-            client.default_namespace().to_string()
-        };
-        let api: Api<<Self::Ref as Ref>::Target> = Api::namespaced(client, &ns);
-        Ok(api.get(reference.as_ref()).await?)
-    }
-}
-
-#[async_trait::async_trait]
-impl<R> Get for (R, ResourceMarker<ClusterResourceScope>)
-where
-    R: ParentRef,
-    R::Target:
-        Parent + Resource<DynamicType = (), Scope = ClusterResourceScope>,
-{
-    type Ref = R;
-
-    async fn get(
-        client: kube::Client,
-        reference: &Self::Ref,
-        _ns: &Option<String>,
-    ) -> Result<<Self::Ref as Ref>::Target> {
-        let api: Api<<Self::Ref as Ref>::Target> = Api::all(client);
-        Ok(api.get(reference.as_ref()).await?)
-    }
-}
-
-#[async_trait::async_trait]
-impl<L, R> Get for (Either<L, R>, EitherMarker)
-where
-    L: ParentRef,
-    R: ParentRef,
-    Getter<L>: Get<Ref = L>,
-    Getter<R>: Get<Ref = R>,
-{
-    type Ref = Either<L, R>;
-
-    async fn get(
-        client: kube::Client,
-        reference: &Self::Ref,
-        ns: &Option<String>,
-    ) -> Result<<Self::Ref as Ref>::Target> {
-        match reference {
-            Either::Left(l) => {
-                Getter::<L>::get(client, l, ns).await.map(Either::Left)
-            }
-            Either::Right(r) => {
-                Getter::<R>::get(client, r, ns).await.map(Either::Right)
-            }
-        }
-    }
-}
-
-type Getter<R> = (R, <<R as Ref>::Target as HasMarker>::Marker);
-type ParentGetter<R> =
-    Getter<<<R as HasInnerSpec>::InnerSpec as HasParent>::ParentRef>;
 
 #[derive(Debug)]
 pub struct RepresentationController<R> {
@@ -169,9 +40,10 @@ impl<R> Default for RepresentationController<R> {
 #[async_trait::async_trait]
 impl<R> LifecycleController for RepresentationController<R>
 where
-    R: Representation,
-    ParentGetter<R>:
-        Get<Ref = <<R as HasInnerSpec>::InnerSpec as HasParent>::ParentRef>,
+    R: Representation + Endpoint,
+    ParentGetter<R>: ParentRetrieve<R>,
+    <<<R as HasInnerSpec>::InnerSpec as HasParent>::ParentRef as Ref>::Target:
+        Endpoint,
 {
     type Resource = R;
     const MODULE_PATH: &'static str = module_path!();

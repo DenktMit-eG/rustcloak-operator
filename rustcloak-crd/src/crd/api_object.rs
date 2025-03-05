@@ -1,6 +1,12 @@
-use crate::{ImmutableString, KeycloakApiStatus, crd::both_scopes};
+use crate::{
+    ImmutableString, KeycloakApiStatus,
+    crd::both_scopes,
+    marker::{HasMarker, ResourceMarker},
+    refs::{HasParent, ref_type},
+};
+use either::Either;
 use k8s_openapi::api::core::v1::EnvVar;
-use kube::CustomResource;
+use kube::{CustomResource, Resource};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -52,7 +58,20 @@ both_scopes! {
         }
     }
 }
+impl HasMarker for KeycloakApiObject {
+    type Marker = ResourceMarker<<Self as Resource>::Scope>;
+}
 
+impl HasMarker for ClusterKeycloakApiObject {
+    type Marker = ResourceMarker<<Self as Resource>::Scope>;
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+pub struct KeycloakApiEndpointParent {
+    #[serde(flatten)]
+    pub parent_ref: ApiObjectRef,
+    pub sub_path: ImmutableString,
+}
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 pub enum KeycloakApiEndpointPath {
     // BUG: while the values of Path and Parent variants are both ImmutableString, there's
@@ -61,10 +80,7 @@ pub enum KeycloakApiEndpointPath {
     #[serde(rename = "path")]
     Path(ImmutableString),
     #[serde(rename = "parent")]
-    Parent {
-        parent_ref: ImmutableString,
-        sub_path: ImmutableString,
-    },
+    Parent(KeycloakApiEndpointParent),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
@@ -86,6 +102,29 @@ impl KeycloakApiEndpoint {
         }
     }
 }
+
+impl HasParent for KeycloakApiEndpointParent {
+    type ParentRef = ApiObjectRef;
+
+    fn parent_ref(&self) -> &Self::ParentRef {
+        &self.parent_ref
+    }
+}
+
+ref_type!(
+    NamespacedApiObjectRef,
+    parent_ref,
+    KeycloakApiObject,
+    "The name of the API Object to which this object belongs to."
+);
+ref_type!(
+    ClusterApiObjectRef,
+    cluster_parent_ref,
+    ClusterKeycloakApiObject,
+    "The name of the cluster API Object to which this object belongs to."
+);
+//type ApiObjectRef = Either<NamespacedApiObjectRef, ClusterApiObjectRef>;
+pub type ApiObjectRef = NamespacedApiObjectRef;
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]

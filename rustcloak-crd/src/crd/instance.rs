@@ -136,6 +136,7 @@ ref_type!(
 ref_type!(
     ClusterInstanceRef,
     cluster_instance_ref,
-    ClusterKeycloakInstance
+    ClusterKeycloakInstance,
+    "The name of the cluster instance to which this object belongs to."
 );
 //pub type InstanceRef = Either<NamespacedInstanceRef, ClusterInstanceRef>;

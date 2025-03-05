@@ -22,8 +22,9 @@ use kube::{
 };
 use log::warn;
 use rustcloak_crd::{
-    KeycloakApiEndpointPath, KeycloakApiObjectSpec, KeycloakApiStatus,
-    KeycloakApiStatusEndpoint, KeycloakInstance, inner_spec::HasInnerSpec,
+    KeycloakApiEndpointParent, KeycloakApiEndpointPath, KeycloakApiObjectSpec,
+    KeycloakApiStatus, KeycloakApiStatusEndpoint, KeycloakInstance,
+    inner_spec::HasInnerSpec,
 };
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
@@ -70,17 +71,17 @@ where
         ns: &str,
         resource: &R,
     ) -> Result<String> {
-        let (parent_ref, sub_path) =
-            match &resource.inner_spec().endpoint.path_def {
-                KeycloakApiEndpointPath::Path(path) => {
-                    return Ok(path.to_string());
-                }
-                KeycloakApiEndpointPath::Parent {
-                    parent_ref,
-                    sub_path,
-                } => (parent_ref, sub_path),
-            };
+        let KeycloakApiEndpointParent {
+            parent_ref,
+            sub_path,
+        } = match &resource.inner_spec().endpoint.path_def {
+            KeycloakApiEndpointPath::Path(path) => {
+                return Ok(path.to_string());
+            }
+            KeycloakApiEndpointPath::Parent(x) => x,
+        };
         let api = Api::<R>::namespaced(client.clone(), ns);
+        let parent_ref = parent_ref.as_ref();
         let parent = api
             .get_opt(parent_ref)
             .await?
