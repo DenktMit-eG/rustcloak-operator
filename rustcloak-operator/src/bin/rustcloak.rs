@@ -6,11 +6,10 @@ use futures::{FutureExt, future};
 use kube::Resource;
 use rustcloak_operator::{
     controller::{
-        ControllerRunner, KeycloakApiObjectController,
-        KeycloakClientSecretController, KeycloakInstanceController,
-        KeycloakUserSecretController, LegacyClientController,
-        LegacyInstanceController, LegacyRealmController, LegacyUserController,
-        RepresentationController,
+        ApiObjectController, ControllerRunner, KeycloakClientSecretController,
+        KeycloakInstanceController, KeycloakUserSecretController,
+        LegacyClientController, LegacyInstanceController,
+        LegacyRealmController, LegacyUserController, RepresentationController,
     },
     crd::*,
     error::Result,
@@ -55,10 +54,22 @@ async fn main() -> Result<()> {
         controllers_str.extend_from_slice(&legacy_kinds());
     }
 
+    if controllers_str
+        .contains(&ClusterKeycloakApiObject::kind(&()).to_string())
+    {
+        controllers.push(
+            ControllerRunner::new(
+                ApiObjectController::<ClusterKeycloakApiObject>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
     if controllers_str.contains(&KeycloakApiObject::kind(&()).to_string()) {
         controllers.push(
             ControllerRunner::new(
-                KeycloakApiObjectController::<KeycloakApiObject>::default(),
+                ApiObjectController::<KeycloakApiObject>::default(),
                 &client,
             )
             .run()

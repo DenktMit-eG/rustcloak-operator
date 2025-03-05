@@ -4,6 +4,7 @@ use crate::{
     marker::{HasMarker, ResourceMarker},
     refs::{HasParent, ref_type},
 };
+use either::Either;
 use k8s_openapi::api::core::v1::EnvVar;
 use kube::{CustomResource, Resource};
 use schemars::JsonSchema;
@@ -122,8 +123,7 @@ ref_type!(
     ClusterKeycloakApiObject,
     "The name of the cluster API Object to which this object belongs to."
 );
-//type ApiObjectRef = Either<NamespacedApiObjectRef, ClusterApiObjectRef>;
-pub type ApiObjectRef = NamespacedApiObjectRef;
+pub type ApiObjectRef = Either<NamespacedApiObjectRef, ClusterApiObjectRef>;
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
