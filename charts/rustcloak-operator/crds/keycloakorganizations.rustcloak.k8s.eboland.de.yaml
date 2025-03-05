@@ -28,14 +28,25 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
-    name: v1
+    name: v1beta1
     schema:
       openAPIV3Schema:
         description: resource to define an Organisation within a [KeyclaokRealm](./keycloakrealm.md)
         properties:
           spec:
+            anyOf:
+            - required:
+              - instanceRef
+            - required:
+              - clusterInstanceRef
             description: the KeycloakOrganization resource
             properties:
+              clusterInstanceRef:
+                description: The name of the cluster realm to which this object belongs to
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               definition:
                 description: |-
                   OrganizationRepresentation
@@ -677,6 +688,12 @@ spec:
                 x-kubernetes-validations:
                 - message: Value is immutable
                   rule: has(self.id) == has(oldSelf.id)
+              instanceRef:
+                description: The name of the realm to which this object belongs to
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               options:
                 description: Options for the request to the Keycloak Admin API.
                 nullable: true
@@ -757,15 +774,8 @@ spec:
                   type: object
                 description: Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
                 type: object
-              realmRef:
-                description: The name of the realm to which this object belongs to
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
             required:
             - definition
-            - realmRef
             type: object
           status:
             nullable: true

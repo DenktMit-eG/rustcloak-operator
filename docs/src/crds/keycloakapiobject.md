@@ -1,6 +1,6 @@
 # KeycloakApiObject
 
-## v1
+## v1beta1
 
 Custom Resource for Keycloak API requests. The user should not use this resource directly.
 
@@ -10,7 +10,8 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |[spec.endpoint](#specendpoint)|object|✅|
 |[spec.endpoint.instanceRef](#specendpointinstanceref)|string|✅|
 |[spec.endpoint.parent](#specendpointparent)|object||
-|[spec.endpoint.parent.parent_ref](#specendpointparentparentref)|string|✅|
+|[spec.endpoint.parent.clusterParentRef](#specendpointparentclusterparentref)|string||
+|[spec.endpoint.parent.parentRef](#specendpointparentparentref)|string||
 |[spec.endpoint.parent.sub_path](#specendpointparentsubpath)|string|✅|
 |[spec.endpoint.path](#specendpointpath)|string||
 |[spec.immutablePayload](#specimmutablepayload)|string|✅|
@@ -98,14 +99,15 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[parent_ref](#specendpointparentparentref)|string|✅|
+|[clusterParentRef](#specendpointparentclusterparentref)|string||
+|[parentRef](#specendpointparentparentref)|string||
 |[sub_path](#specendpointparentsubpath)|string|✅|
 
 *missing*
 
 ---
 
-### spec.endpoint.parent.parent_ref
+### spec.endpoint.parent.clusterParentRef
 
 Type: string
 
@@ -113,7 +115,19 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-*missing*
+The name of the cluster API Object to which this object belongs to.
+
+---
+
+### spec.endpoint.parent.parentRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the API Object to which this object belongs to.
 
 ---
 

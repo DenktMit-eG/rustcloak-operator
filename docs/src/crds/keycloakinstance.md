@@ -1,6 +1,6 @@
 # KeycloakInstance
 
-## v1
+## v1beta1
 
 This resource makes a Keycloak instance known to the operator
 

@@ -28,20 +28,29 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
-    name: v1
+    name: v1beta1
     schema:
       openAPIV3Schema:
         description: resource to define a Protocol Mapper within either a [KeycloakRealm](./keycloakrealm.md) or a [KeycloakClient](./keycloakclient.md)
         properties:
           spec:
             anyOf:
-            - required:
-              - realmRef
+            - anyOf:
+              - required:
+                - instanceRef
+              - required:
+                - clusterInstanceRef
             - required:
               - clientRef
             description: the KeycloakRole resource
             properties:
               clientRef:
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              clusterInstanceRef:
+                description: The name of the cluster realm to which this object belongs to
                 type: string
                 x-kubernetes-validations:
                 - message: Value is immutable
@@ -115,6 +124,12 @@ spec:
                 x-kubernetes-validations:
                 - message: Value is immutable
                   rule: has(self.name) == has(oldSelf.name)
+              instanceRef:
+                description: The name of the realm to which this object belongs to
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               options:
                 description: Options for the request to the Keycloak Admin API.
                 nullable: true
@@ -195,12 +210,6 @@ spec:
                   type: object
                 description: Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
                 type: object
-              realmRef:
-                description: The name of the realm to which this object belongs to
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
             required:
             - definition
             type: object

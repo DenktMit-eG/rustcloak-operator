@@ -1,6 +1,6 @@
 # KeycloakRole
 
-## v1
+## v1beta1
 
 resource to define a Protocol Mapper within either a [KeycloakRealm](./keycloakrealm.md) or a [KeycloakClient](./keycloakclient.md)
 
@@ -8,6 +8,7 @@ resource to define a Protocol Mapper within either a [KeycloakRealm](./keycloakr
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
 |[spec.clientRef](#specclientref)|string||
+|[spec.clusterInstanceRef](#specclusterinstanceref)|string||
 |[spec.definition](#specdefinition)|object|✅|
 |[spec.definition.attributes](#specdefinitionattributes)|object||
 |[spec.definition.clientRole](#specdefinitionclientrole)|boolean||
@@ -21,9 +22,9 @@ resource to define a Protocol Mapper within either a [KeycloakRealm](./keycloakr
 |[spec.definition.id](#specdefinitionid)|string||
 |[spec.definition.name](#specdefinitionname)|string||
 |[spec.definition.scopeParamRequired](#specdefinitionscopeparamrequired)|boolean||
+|[spec.instanceRef](#specinstanceref)|string||
 |[spec.options](#specoptions)|object||
 |[spec.patchFrom](#specpatchfrom)|object||
-|[spec.realmRef](#specrealmref)|string||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
@@ -46,10 +47,11 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[clientRef](#specclientref)|string||
+|[clusterInstanceRef](#specclusterinstanceref)|string||
 |[definition](#specdefinition)|object|✅|
+|[instanceRef](#specinstanceref)|string||
 |[options](#specoptions)|object||
 |[patchFrom](#specpatchfrom)|object||
-|[realmRef](#specrealmref)|string||
 
 the KeycloakRole resource
 
@@ -64,6 +66,18 @@ Type: string
 |self == oldSelf|Value is immutable|
 
 *missing*
+
+---
+
+### spec.clusterInstanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster realm to which this object belongs to
 
 ---
 
@@ -207,6 +221,18 @@ Type: boolean
 
 ---
 
+### spec.instanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the realm to which this object belongs to
+
+---
+
 ### spec.options
 
 Type: object
@@ -220,18 +246,6 @@ Options for the request to the Keycloak Admin API.
 Type: object
 
 Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
-
----
-
-### spec.realmRef
-
-Type: string
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|self == oldSelf|Value is immutable|
-
-The name of the realm to which this object belongs to
 
 ---
 

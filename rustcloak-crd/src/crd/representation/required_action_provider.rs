@@ -14,7 +14,7 @@ namespace_scope! {
         #[kube(
             doc = "resource to define an Required Action Provider within a [KeyclaokRealm](./keycloakrealm.md)",
             group = "rustcloak.k8s.eboland.de",
-            version = "v1",
+            version = "v1beta1",
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",

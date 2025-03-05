@@ -17,7 +17,7 @@ both_scopes! {
         #[kube(
             doc = "Custom Resource for Keycloak API requests. The user should not use this resource directly.",
             group = "rustcloak.k8s.eboland.de",
-            version = "v1",
+            version = "v1beta1",
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",

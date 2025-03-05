@@ -44,7 +44,7 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
-    name: v1
+    name: v1beta1
     schema:
       openAPIV3Schema:
         description: Custom Resource for Keycloak API requests. The user should not use this resource directly.
@@ -66,8 +66,20 @@ spec:
                     - message: Value is immutable
                       rule: self == oldSelf
                   parent:
+                    anyOf:
+                    - required:
+                      - parentRef
+                    - required:
+                      - clusterParentRef
                     properties:
-                      parent_ref:
+                      clusterParentRef:
+                        description: The name of the cluster API Object to which this object belongs to.
+                        type: string
+                        x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                      parentRef:
+                        description: The name of the API Object to which this object belongs to.
                         type: string
                         x-kubernetes-validations:
                         - message: Value is immutable
@@ -78,7 +90,6 @@ spec:
                         - message: Value is immutable
                           rule: self == oldSelf
                     required:
-                    - parent_ref
                     - sub_path
                     type: object
                   path:

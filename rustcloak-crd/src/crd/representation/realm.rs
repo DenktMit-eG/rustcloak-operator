@@ -19,7 +19,7 @@ both_scopes! {
         #[kube(
             doc = "resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)",
             group = "rustcloak.k8s.eboland.de",
-            version = "v1",
+            version = "v1beta1",
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",
@@ -68,10 +68,21 @@ impl crate::marker::HasMarker for ClusterKeycloakRealm {
 
 schema_patch!(KeycloakRealmSpec: |s| {
     s.remove("groups")
-        .remove("applications")
+        .remove("users")
+        .remove("federatedUsers")
         .remove("clients")
+        .remove("clientScopes")
+        .remove("identityProviders")
+        .remove("identityProviderMappers")
+        .remove("protocolMappers")
+        .remove("authenticationFlows")
+        .remove("authenticatorConfig")
+        .remove("requiredActions")
+        .remove("organizations")
+        .remove("applications")
         .remove("components")
-        .remove("oauthClients");
+        .remove("oauthClients")
+        .remove("roles");
     client_schema(s.prop("adminPermissionsClient"));
 });
 ref_type!(

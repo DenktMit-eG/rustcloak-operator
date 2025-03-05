@@ -40,7 +40,7 @@ spec:
       jsonPath: .status.status
       name: Status
       type: string
-    name: v1
+    name: v1beta1
     schema:
       openAPIV3Schema:
         description: This resource makes a Keycloak instance known to the operator

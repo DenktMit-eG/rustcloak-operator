@@ -1,6 +1,6 @@
 # KeycloakRealm
 
-## v1
+## v1beta1
 
 resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)
 

@@ -1,6 +1,6 @@
 # KeycloakResource
 
-## v1
+## v1beta1
 
 resource to define a Resource within a [KeyclaokClient](./keycloakclient.md)
 

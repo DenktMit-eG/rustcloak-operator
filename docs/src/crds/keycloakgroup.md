@@ -1,12 +1,13 @@
 # KeycloakGroup
 
-## v1
+## v1beta1
 
 resource to define a Group within a [KeycloakRealm](./keycloakrealm.md)
 
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
+|[spec.clusterInstanceRef](#specclusterinstanceref)|string||
 |[spec.definition](#specdefinition)|object|✅|
 |[spec.definition.access](#specdefinitionaccess)|object||
 |[spec.definition.attributes](#specdefinitionattributes)|object||
@@ -17,10 +18,10 @@ resource to define a Group within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.definition.path](#specdefinitionpath)|string||
 |[spec.definition.realmRoles[]](#specdefinitionrealmroles)|string||
 |[spec.definition.subGroupCount](#specdefinitionsubgroupcount)|integer||
+|[spec.instanceRef](#specinstanceref)|string||
 |[spec.options](#specoptions)|object||
 |[spec.parentGroupRef](#specparentgroupref)|string||
 |[spec.patchFrom](#specpatchfrom)|object||
-|[spec.realmRef](#specrealmref)|string||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
@@ -42,13 +43,26 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[clusterInstanceRef](#specclusterinstanceref)|string||
 |[definition](#specdefinition)|object|✅|
+|[instanceRef](#specinstanceref)|string||
 |[options](#specoptions)|object||
 |[parentGroupRef](#specparentgroupref)|string||
 |[patchFrom](#specpatchfrom)|object||
-|[realmRef](#specrealmref)|string||
 
 the KeycloakGroup resource
+
+---
+
+### spec.clusterInstanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster realm to which this object belongs to
 
 ---
 
@@ -158,6 +172,18 @@ Type: integer
 
 ---
 
+### spec.instanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the realm to which this object belongs to
+
+---
+
 ### spec.options
 
 Type: object
@@ -183,18 +209,6 @@ Type: string
 Type: object
 
 Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
-
----
-
-### spec.realmRef
-
-Type: string
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|self == oldSelf|Value is immutable|
-
-The name of the realm to which this object belongs to
 
 ---
 

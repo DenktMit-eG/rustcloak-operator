@@ -1,6 +1,6 @@
 # KeycloakScope
 
-## v1
+## v1beta1
 
 resource to define a Scope within a [KeyclaokClient](./keycloakclient.md)
 

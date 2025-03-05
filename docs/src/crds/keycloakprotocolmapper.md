@@ -1,6 +1,6 @@
 # KeycloakProtocolMapper
 
-## v1
+## v1beta1
 
 resource to define a Protocol Mapper within either a [KeycloakClient](./keycloakclient.md) or a [KeycloakClientScope](./keycloakclientscope.md)
 

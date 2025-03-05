@@ -1,6 +1,6 @@
 # KeycloakIdentityProviderMapper
 
-## v1
+## v1beta1
 
 resource to define a identity provider mapper within a [KeyclaokIdentityProvider](./keycloakidentityprovider.md)
 

@@ -28,7 +28,7 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
-    name: v1
+    name: v1beta1
     schema:
       openAPIV3Schema:
         description: resource to define a identity provider mapper within a [KeyclaokIdentityProvider](./keycloakidentityprovider.md)
