@@ -76,11 +76,25 @@ async fn main() -> Result<()> {
             .boxed(),
         );
     }
+    if controllers_str.contains(&ClusterKeycloakInstance::kind(&()).to_string())
+    {
+        controllers.push(
+            ControllerRunner::new(
+                InstanceController::<ClusterKeycloakInstance>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
+        );
+    }
     if controllers_str.contains(&KeycloakInstance::kind(&()).to_string()) {
         controllers.push(
-            ControllerRunner::new(InstanceController::default(), &client)
-                .run()
-                .boxed(),
+            ControllerRunner::new(
+                InstanceController::<KeycloakInstance>::default(),
+                &client,
+            )
+            .run()
+            .boxed(),
         );
     }
     if controllers_str.contains(&KeycloakRealm::kind(&()).to_string()) {

@@ -12,26 +12,42 @@ use k8s_openapi::{ByteString, api::core::v1::Secret};
 use kube::{
     Api, Resource, ResourceExt,
     api::{ListParams, ObjectMeta, PatchParams, PostParams},
+    core::object::HasStatus,
     runtime::{Controller, controller::Action, watcher},
 };
-use rustcloak_crd::{
-    KeycloakApiObject, KeycloakApiStatus, KeycloakInstance,
-    traits::SecretKeyNames,
-};
-
 use log::warn;
 use randstr::randstr;
+use rustcloak_crd::{
+    KeycloakApiObject, KeycloakApiStatus, KeycloakInstanceSpec,
+    inner_spec::HasInnerSpec, traits::SecretKeyNames,
+};
+use serde::de::DeserializeOwned;
+
+shorter_bounds::alias!(
+    pub trait Instance: Resource<DynamicType = ()>
+        + HasStatus<Status = KeycloakApiStatus>
+        + HasInnerSpec<InnerSpec = KeycloakInstanceSpec>
+        + Send
+        + Sync
+        + std::fmt::Debug
+        + Clone
+        + DeserializeOwned
+        + 'static
+);
 
 #[derive(Debug)]
 pub struct InstanceController<R>
 where
-    R: Resource<DynamicType = ()>,
+    R: Instance,
 {
-    manager: K8sKeycloakRefreshManager,
+    manager: K8sKeycloakRefreshManager<R>,
     secret_refs: Arc<RefWatcher<R, Secret>>,
 }
 
-impl Default for InstanceController<KeycloakInstance> {
+impl<R> Default for InstanceController<R>
+where
+    R: Instance,
+{
     fn default() -> Self {
         Self {
             manager: K8sKeycloakRefreshManager::default(),
@@ -40,17 +56,20 @@ impl Default for InstanceController<KeycloakInstance> {
     }
 }
 
-impl InstanceController<KeycloakInstance> {
+impl<R> InstanceController<R>
+where
+    R: Instance,
+{
     async fn create_secret(
         &self,
         client: &kube::Client,
-        resource: Arc<KeycloakInstance>,
+        resource: Arc<R>,
     ) -> Result<()> {
-        let secret_name = &resource.spec.credentials.secret_name;
+        let spec = resource.inner_spec();
+        let secret_name = &spec.credentials.secret_name;
         let ns = resource.namespace().ok_or(Error::NoNamespace)?;
         let secret_api = Api::<Secret>::namespaced(client.clone(), &ns);
-        let [username_key, password_key] =
-            resource.spec.credentials.secret_key_names();
+        let [username_key, password_key] = spec.credentials.secret_key_names();
 
         let username = "rustcloak-admin".to_string();
         let password = randstr()
@@ -86,8 +105,11 @@ impl InstanceController<KeycloakInstance> {
 }
 
 #[async_trait]
-impl LifecycleController for InstanceController<KeycloakInstance> {
-    type Resource = KeycloakInstance;
+impl<R> LifecycleController for InstanceController<R>
+where
+    R: Instance,
+{
+    type Resource = R;
     const MODULE_PATH: &'static str = module_path!();
 
     fn prepare(
@@ -109,13 +131,14 @@ impl LifecycleController for InstanceController<KeycloakInstance> {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<bool> {
+        let spec = resource.inner_spec();
         match self
             .manager
             .schedule_refresh(&resource, client.clone())
             .await
         {
             Err(Error::NoCredentialSecret(x, y)) => {
-                if resource.spec.credentials.create.unwrap_or(false) {
+                if spec.credentials.create.unwrap_or(false) {
                     self.create_secret(client, resource.clone()).await?;
                 } else {
                     Err(Error::NoCredentialSecret(x, y))?;
@@ -132,11 +155,11 @@ impl LifecycleController for InstanceController<KeycloakInstance> {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
-        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let api = Api::<Self::Resource>::namespaced(client.clone(), &ns);
+        let spec = resource.inner_spec();
+        let api = Api::<Self::Resource>::all(client.clone());
 
         self.secret_refs
-            .add(&resource, [resource.spec.credential_secret_name()]);
+            .add(&resource, [spec.credential_secret_name()]);
 
         api.patch_status(
             &resource.name_unchecked(),
