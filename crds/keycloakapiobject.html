@@ -7,6 +7,99 @@
 
 
         <!-- Custom HTML head -->
+        <style>
+        #menu-version {
+        	position: relative;
+        	align-self: center;
+        }
+        #version-button {
+        	position: relative;
+        	display: flex;
+        	align-items: center;
+        	padding: 0 1em;
+        }
+        #version-button::after {
+        	padding-left: 0.5em;
+        	content: '▼';
+        }
+        #version-list {
+        	position: absolute;
+        	display: none;
+        	text-decoration: none;
+        	right: 0;
+        	top: 100%;
+        	min-width: 100%;
+        	z-index: 1001;
+        	background-color: var(--sidebar-bg);
+        }
+        #version-button-state {
+        	display: none;
+        }
+        #version-button-state:checked ~ #version-list {
+        	display: block;
+        }
+        #version-list a {
+        	display: block;
+        	padding: 0.5em 1em;
+        	text-decoration: none;
+        }
+        #version-deselector {
+        	display: none;
+        	position: fixed;
+        	top: -1000000px;
+        	left: -1000000px;
+        	bottom: -1000000px;
+        	right: -1000000px;
+        	display: none;
+        }
+        #version-button-state:checked ~ #version-deselector {
+        	display: block;
+        	z-index: 1000;
+        }
+        </style>
+        <script>
+        window.addEventListener('DOMContentLoaded', async function () {
+        	const dropdown = document.createElement('div');
+        	const menubar = document.getElementById('menu-bar');
+        
+        	const versions_res = await fetch(`${path_to_root}/../versions.txt`)
+        	if (!versions_res.ok) {
+        		console.error('Failed to fetch versions.txt');
+        		return;
+        	}
+        	const base = versions_res.url.split('/').slice(0, -1).join('/');
+        	const versions = await versions_res.text().then(x => x.trim().split('\n'));
+        
+        	const current_version = versions
+        		.find(x => window.location.href.startsWith(`${base}/${x}`))
+        
+        	const list = versions
+        		.filter(x => x)
+        		.map(
+        			version => {
+        				var a = document.createElement('a');
+        				a.href = `${base}/${version}`;
+        				a.textContent = version;
+        				return a.outerHTML;
+        			}
+        		)
+        	dropdown.innerHTML = `
+        		<input type="checkbox" id=version-button-state>
+        		<label id="version-button" for=version-button-state>
+        			${new Option(String(current_version)).textContent}
+        		</label>
+        		<div id="version-list">
+        			${list.join('')}
+        		</div>
+        		<label id=version-deselector for=version-button-state></label>
+        	`;
+        
+        	menubar.appendChild(dropdown);
+        
+        	dropdown.id = "menu-version";
+        
+        });
+        </script>
 
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -159,14 +252,16 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="keycloakapiobject"><a class="header" href="#keycloakapiobject">KeycloakApiObject</a></h1>
-<h2 id="v1"><a class="header" href="#v1">v1</a></h2>
+<h2 id="v1beta1"><a class="header" href="#v1beta1">v1beta1</a></h2>
 <p>Custom Resource for Keycloak API requests. The user should not use this resource directly.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specendpoint">spec.endpoint</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="#specendpointinstanceref">spec.endpoint.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointclusterinstanceref">spec.endpoint.clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointinstanceref">spec.endpoint.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specendpointparent">spec.endpoint.parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specendpointparentparentref">spec.endpoint.parent.parent_ref</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentclusterparentref">spec.endpoint.parent.clusterParentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentparentref">spec.endpoint.parent.parentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specendpointparentsubpath">spec.endpoint.parent.sub_path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specendpointpath">spec.endpoint.path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specimmutablepayload">spec.immutablePayload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
@@ -198,7 +293,9 @@
 <tr><td style="text-align: left"><a href="#statusconditionsreason">status.conditions[].reason</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionsstatus">status.conditions[].status</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionstype">status.conditions[].type</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="#statusinstanceref">status.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusinstance">status.instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusinstanceclusterinstanceref">status.instance.clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -221,12 +318,21 @@
 <h3 id="specendpoint"><a class="header" href="#specendpoint">spec.endpoint</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="#specendpointinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointclusterinstanceref">clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specendpointparent">parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specendpointpath">path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
+<hr />
+<h3 id="specendpointclusterinstanceref"><a class="header" href="#specendpointclusterinstanceref">spec.endpoint.clusterInstanceRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster instance to which this object belongs to.</p>
 <hr />
 <h3 id="specendpointinstanceref"><a class="header" href="#specendpointinstanceref">spec.endpoint.instanceRef</a></h3>
 <p>Type: string</p>
@@ -234,24 +340,33 @@
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>The name of the namespaced instance to which this object belongs to.</p>
 <hr />
 <h3 id="specendpointparent"><a class="header" href="#specendpointparent">spec.endpoint.parent</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="#specendpointparentparentref">parent_ref</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentclusterparentref">clusterParentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentparentref">parentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specendpointparentsubpath">sub_path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
 <hr />
-<h3 id="specendpointparentparent_ref"><a class="header" href="#specendpointparentparent_ref">spec.endpoint.parent.parent_ref</a></h3>
+<h3 id="specendpointparentclusterparentref"><a class="header" href="#specendpointparentclusterparentref">spec.endpoint.parent.clusterParentRef</a></h3>
 <p>Type: string</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>The name of the cluster API Object to which this object belongs to.</p>
+<hr />
+<h3 id="specendpointparentparentref"><a class="header" href="#specendpointparentparentref">spec.endpoint.parent.parentRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the API Object to which this object belongs to.</p>
 <hr />
 <h3 id="specendpointparentsub_path"><a class="header" href="#specendpointparentsub_path">spec.endpoint.parent.sub_path</a></h3>
 <p>Type: string</p>
@@ -401,7 +516,7 @@
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="#statusconditions">conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#statusinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -442,9 +557,30 @@
 <p>Type: string</p>
 <p><em>missing</em></p>
 <hr />
-<h3 id="statusinstanceref"><a class="header" href="#statusinstanceref">status.instanceRef</a></h3>
-<p>Type: string</p>
+<h3 id="statusinstance"><a class="header" href="#statusinstance">status.instance</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#statusinstanceclusterinstanceref">clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusinstanceinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
 <p><em>missing</em></p>
+<hr />
+<h3 id="statusinstanceclusterinstanceref"><a class="header" href="#statusinstanceclusterinstanceref">status.instance.clusterInstanceRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster instance to which this object belongs to.</p>
+<hr />
+<h3 id="statusinstanceinstanceref"><a class="header" href="#statusinstanceinstanceref">status.instance.instanceRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the namespaced instance to which this object belongs to.</p>
 <hr />
 <h3 id="statusmessage"><a class="header" href="#statusmessage">status.message</a></h3>
 <p>Type: string</p>
@@ -466,11 +602,11 @@
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../crds/keycloakinstance.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../crds/clusterkeycloakinstance.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../crds/keycloakauthenticationflow.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../crds/keycloakclientcredential.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -480,11 +616,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../crds/keycloakinstance.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../crds/clusterkeycloakinstance.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../crds/keycloakauthenticationflow.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../crds/keycloakclientcredential.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

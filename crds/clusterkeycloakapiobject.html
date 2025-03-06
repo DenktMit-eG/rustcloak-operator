@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>KeycloakProtocolMapper - Rustcloak Operator</title>
+        <title>ClusterKeycloakApiObject - Rustcloak Operator</title>
 
 
         <!-- Custom HTML head -->
@@ -222,7 +222,7 @@
                         <a href="https://github.com/withlazers/rustcloak-operator/" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/withlazers/rustcloak-operator/edit/main/docs/src/crds/keycloakprotocolmapper.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/withlazers/rustcloak-operator/edit/main/docs/src/crds/clusterkeycloakapiobject.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -251,23 +251,41 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="keycloakprotocolmapper"><a class="header" href="#keycloakprotocolmapper">KeycloakProtocolMapper</a></h1>
+                        <h1 id="clusterkeycloakapiobject"><a class="header" href="#clusterkeycloakapiobject">ClusterKeycloakApiObject</a></h1>
 <h2 id="v1beta1"><a class="header" href="#v1beta1">v1beta1</a></h2>
-<p>resource to define a Protocol Mapper within either a <a href="./keycloakclient.html">KeycloakClient</a> or a <a href="./keycloakclientscope.html">KeycloakClientScope</a></p>
+<p>Custom Resource for Keycloak API requests. The user should not use this resource directly.</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="#specclientref">spec.clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specclientscoperef">spec.clientScopeRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinition">spec.definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconfig">spec.definition.config</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconsentrequired">spec.definition.consentRequired</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconsenttext">spec.definition.consentText</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionid">spec.definition.id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionname">spec.definition.name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionprotocol">spec.definition.protocol</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionprotocolmapper">spec.definition.protocolMapper</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpoint">spec.endpoint</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointclusterinstanceref">spec.endpoint.clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointinstanceref">spec.endpoint.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparent">spec.endpoint.parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentclusterparentref">spec.endpoint.parent.clusterParentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentparentref">spec.endpoint.parent.parentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentsubpath">spec.endpoint.parent.sub_path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpointpath">spec.endpoint.path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specimmutablepayload">spec.immutablePayload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpayload">spec.payload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvars">spec.vars[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsname">spec.vars[].name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvalue">spec.vars[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefrom">spec.vars[].valueFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromconfigmapkeyref">spec.vars[].valueFrom.configMapKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromconfigmapkeyrefkey">spec.vars[].valueFrom.configMapKeyRef.key</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromconfigmapkeyrefname">spec.vars[].valueFrom.configMapKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromconfigmapkeyrefoptional">spec.vars[].valueFrom.configMapKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromfieldref">spec.vars[].valueFrom.fieldRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromfieldrefapiversion">spec.vars[].valueFrom.fieldRef.apiVersion</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromfieldreffieldpath">spec.vars[].valueFrom.fieldRef.fieldPath</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromresourcefieldref">spec.vars[].valueFrom.resourceFieldRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromresourcefieldrefcontainername">spec.vars[].valueFrom.resourceFieldRef.containerName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromresourcefieldrefdivisor">spec.vars[].valueFrom.resourceFieldRef.divisor</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromresourcefieldrefresource">spec.vars[].valueFrom.resourceFieldRef.resource</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromsecretkeyref">spec.vars[].valueFrom.secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromsecretkeyrefkey">spec.vars[].valueFrom.secretKeyRef.key</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromsecretkeyrefname">spec.vars[].valueFrom.secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromsecretkeyrefoptional">spec.vars[].valueFrom.secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -288,65 +306,69 @@
 <h3 id="spec"><a class="header" href="#spec">spec</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="#specclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specclientscoperef">clientScopeRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specendpoint">endpoint</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specimmutablepayload">immutablePayload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpayload">payload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvars">vars[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
-<p>the KeycloakProtocolMapper resource</p>
+<p>defines an API request to the Keycloak Admin API.</p>
 <hr />
-<h3 id="specclientref"><a class="header" href="#specclientref">spec.clientRef</a></h3>
-<p>Type: string</p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
-<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
-</tbody></table>
-</div>
-<p><em>missing</em></p>
-<hr />
-<h3 id="specclientscoperef"><a class="header" href="#specclientscoperef">spec.clientScopeRef</a></h3>
-<p>Type: string</p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
-<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
-</tbody></table>
-</div>
-<p><em>missing</em></p>
-<hr />
-<h3 id="specdefinition"><a class="header" href="#specdefinition">spec.definition</a></h3>
+<h3 id="specendpoint"><a class="header" href="#specendpoint">spec.endpoint</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="#specdefinitionconfig">config</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconsentrequired">consentRequired</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconsenttext">consentText</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionid">id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionname">name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionprotocol">protocol</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionprotocolmapper">protocolMapper</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointclusterinstanceref">clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparent">parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointpath">path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
-<p> </p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
-<tr><td style="text-align: left">has(self.id) == has(oldSelf.id)</td><td style="text-align: left">Value is immutable</td></tr>
-</tbody></table>
-</div>
-<p>ProtocolMapperRepresentation</p>
-<details><summary>JSON schema</summary>
-<p><code>json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } }, "additionalProperties": false } </code> </details></p>
-<hr />
-<h3 id="specdefinitionconfig"><a class="header" href="#specdefinitionconfig">spec.definition.config</a></h3>
-<p>Type: object</p>
 <p><em>missing</em></p>
 <hr />
-<h3 id="specdefinitionconsentrequired"><a class="header" href="#specdefinitionconsentrequired">spec.definition.consentRequired</a></h3>
-<p>Type: boolean</p>
-<p><em>missing</em></p>
-<hr />
-<h3 id="specdefinitionconsenttext"><a class="header" href="#specdefinitionconsenttext">spec.definition.consentText</a></h3>
+<h3 id="specendpointclusterinstanceref"><a class="header" href="#specendpointclusterinstanceref">spec.endpoint.clusterInstanceRef</a></h3>
 <p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster instance to which this object belongs to.</p>
+<hr />
+<h3 id="specendpointinstanceref"><a class="header" href="#specendpointinstanceref">spec.endpoint.instanceRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the namespaced instance to which this object belongs to.</p>
+<hr />
+<h3 id="specendpointparent"><a class="header" href="#specendpointparent">spec.endpoint.parent</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specendpointparentclusterparentref">clusterParentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentparentref">parentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specendpointparentsubpath">sub_path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+</tbody></table>
+</div>
 <p><em>missing</em></p>
 <hr />
-<h3 id="specdefinitionid"><a class="header" href="#specdefinitionid">spec.definition.id</a></h3>
+<h3 id="specendpointparentclusterparentref"><a class="header" href="#specendpointparentclusterparentref">spec.endpoint.parent.clusterParentRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster API Object to which this object belongs to.</p>
+<hr />
+<h3 id="specendpointparentparentref"><a class="header" href="#specendpointparentparentref">spec.endpoint.parent.parentRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the API Object to which this object belongs to.</p>
+<hr />
+<h3 id="specendpointparentsub_path"><a class="header" href="#specendpointparentsub_path">spec.endpoint.parent.sub_path</a></h3>
 <p>Type: string</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
@@ -354,27 +376,141 @@
 </div>
 <p><em>missing</em></p>
 <hr />
-<h3 id="specdefinitionname"><a class="header" href="#specdefinitionname">spec.definition.name</a></h3>
+<h3 id="specendpointpath"><a class="header" href="#specendpointpath">spec.endpoint.path</a></h3>
 <p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
 <p><em>missing</em></p>
 <hr />
-<h3 id="specdefinitionprotocol"><a class="header" href="#specdefinitionprotocol">spec.definition.protocol</a></h3>
+<h3 id="specimmutablepayload"><a class="header" href="#specimmutablepayload">spec.immutablePayload</a></h3>
 <p>Type: string</p>
-<p>ProtocolMapperRepresentationProtocol</p>
-<details><summary>JSON schema</summary>
-<p><code>json { "type": "string", "enum": [ "openid-connect", "saml" ] } </code> </details></p>
-<hr />
-<h3 id="specdefinitionprotocolmapper"><a class="header" href="#specdefinitionprotocolmapper">spec.definition.protocolMapper</a></h3>
-<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
 <p><em>missing</em></p>
 <hr />
 <h3 id="specoptions"><a class="header" href="#specoptions">spec.options</a></h3>
 <p>Type: object</p>
 <p>Options for the request to the Keycloak Admin API.</p>
 <hr />
-<h3 id="specpatchfrom"><a class="header" href="#specpatchfrom">spec.patchFrom</a></h3>
+<h3 id="specpayload"><a class="header" href="#specpayload">spec.payload</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specvars"><a class="header" href="#specvars">spec.vars[]</a></h3>
 <p>Type: object</p>
-<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="../configuration/patches.html">the patches documentation</a>.</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specvarsname">name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefrom">valueFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>EnvVar represents an environment variable present in a Container.</p>
+<hr />
+<h3 id="specvarsname"><a class="header" href="#specvarsname">spec.vars[].name</a></h3>
+<p>Type: string</p>
+<p>Name of the environment variable. Must be a C_IDENTIFIER.</p>
+<hr />
+<h3 id="specvarsvalue"><a class="header" href="#specvarsvalue">spec.vars[].value</a></h3>
+<p>Type: string</p>
+<p>Variable references $(VAR_NAME) are expanded using the previously defined environment variables in the container and any service environment variables. If a variable cannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced to a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will produce the string literal "$(VAR_NAME)". Escaped references will never be expanded, regardless of whether the variable exists or not. Defaults to "".</p>
+<hr />
+<h3 id="specvarsvaluefrom"><a class="header" href="#specvarsvaluefrom">spec.vars[].valueFrom</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromconfigmapkeyref">configMapKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromfieldref">fieldRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromresourcefieldref">resourceFieldRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Source for the environment variable's value. Cannot be used if value is not empty.</p>
+<hr />
+<h3 id="specvarsvaluefromconfigmapkeyref"><a class="header" href="#specvarsvaluefromconfigmapkeyref">spec.vars[].valueFrom.configMapKeyRef</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromconfigmapkeyrefkey">key</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromconfigmapkeyrefname">name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromconfigmapkeyrefoptional">optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Selects a key of a ConfigMap.</p>
+<hr />
+<h3 id="specvarsvaluefromconfigmapkeyrefkey"><a class="header" href="#specvarsvaluefromconfigmapkeyrefkey">spec.vars[].valueFrom.configMapKeyRef.key</a></h3>
+<p>Type: string</p>
+<p>The key to select.</p>
+<hr />
+<h3 id="specvarsvaluefromconfigmapkeyrefname"><a class="header" href="#specvarsvaluefromconfigmapkeyrefname">spec.vars[].valueFrom.configMapKeyRef.name</a></h3>
+<p>Type: string</p>
+<p>Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names</p>
+<hr />
+<h3 id="specvarsvaluefromconfigmapkeyrefoptional"><a class="header" href="#specvarsvaluefromconfigmapkeyrefoptional">spec.vars[].valueFrom.configMapKeyRef.optional</a></h3>
+<p>Type: boolean</p>
+<p>Specify whether the ConfigMap or its key must be defined</p>
+<hr />
+<h3 id="specvarsvaluefromfieldref"><a class="header" href="#specvarsvaluefromfieldref">spec.vars[].valueFrom.fieldRef</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromfieldrefapiversion">apiVersion</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromfieldreffieldpath">fieldPath</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+</tbody></table>
+</div>
+<p>Selects a field of the pod: supports metadata.name, metadata.namespace, <code>metadata.labels['&lt;KEY&gt;']</code>, <code>metadata.annotations['&lt;KEY&gt;']</code>, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.</p>
+<hr />
+<h3 id="specvarsvaluefromfieldrefapiversion"><a class="header" href="#specvarsvaluefromfieldrefapiversion">spec.vars[].valueFrom.fieldRef.apiVersion</a></h3>
+<p>Type: string</p>
+<p>Version of the schema the FieldPath is written in terms of, defaults to "v1".</p>
+<hr />
+<h3 id="specvarsvaluefromfieldreffieldpath"><a class="header" href="#specvarsvaluefromfieldreffieldpath">spec.vars[].valueFrom.fieldRef.fieldPath</a></h3>
+<p>Type: string</p>
+<p>Path of the field to select in the specified API version.</p>
+<hr />
+<h3 id="specvarsvaluefromresourcefieldref"><a class="header" href="#specvarsvaluefromresourcefieldref">spec.vars[].valueFrom.resourceFieldRef</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromresourcefieldrefcontainername">containerName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromresourcefieldrefdivisor">divisor</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromresourcefieldrefresource">resource</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+</tbody></table>
+</div>
+<p>Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.</p>
+<hr />
+<h3 id="specvarsvaluefromresourcefieldrefcontainername"><a class="header" href="#specvarsvaluefromresourcefieldrefcontainername">spec.vars[].valueFrom.resourceFieldRef.containerName</a></h3>
+<p>Type: string</p>
+<p>Container name: required for volumes, optional for env vars</p>
+<hr />
+<h3 id="specvarsvaluefromresourcefieldrefdivisor"><a class="header" href="#specvarsvaluefromresourcefieldrefdivisor">spec.vars[].valueFrom.resourceFieldRef.divisor</a></h3>
+<p>Type: string</p>
+<p>Specifies the output format of the exposed resources, defaults to "1"</p>
+<hr />
+<h3 id="specvarsvaluefromresourcefieldrefresource"><a class="header" href="#specvarsvaluefromresourcefieldrefresource">spec.vars[].valueFrom.resourceFieldRef.resource</a></h3>
+<p>Type: string</p>
+<p>Required: resource to select</p>
+<hr />
+<h3 id="specvarsvaluefromsecretkeyref"><a class="header" href="#specvarsvaluefromsecretkeyref">spec.vars[].valueFrom.secretKeyRef</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromsecretkeyrefkey">key</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromsecretkeyrefname">name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specvarsvaluefromsecretkeyrefoptional">optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Selects a key of a secret in the pod's namespace</p>
+<hr />
+<h3 id="specvarsvaluefromsecretkeyrefkey"><a class="header" href="#specvarsvaluefromsecretkeyrefkey">spec.vars[].valueFrom.secretKeyRef.key</a></h3>
+<p>Type: string</p>
+<p>The key of the secret to select from.  Must be a valid secret key.</p>
+<hr />
+<h3 id="specvarsvaluefromsecretkeyrefname"><a class="header" href="#specvarsvaluefromsecretkeyrefname">spec.vars[].valueFrom.secretKeyRef.name</a></h3>
+<p>Type: string</p>
+<p>Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names</p>
+<hr />
+<h3 id="specvarsvaluefromsecretkeyrefoptional"><a class="header" href="#specvarsvaluefromsecretkeyrefoptional">spec.vars[].valueFrom.secretKeyRef.optional</a></h3>
+<p>Type: boolean</p>
+<p>Specify whether the Secret or its key must be defined</p>
 <hr />
 <h3 id="status"><a class="header" href="#status">status</a></h3>
 <p>Type: object</p>
@@ -466,11 +602,11 @@
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../crds/keycloakorganization.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../crds/keycloakuser.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../crds/keycloakrealm.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../crds/clusterkeycloakinstance.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -480,11 +616,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../crds/keycloakorganization.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../crds/keycloakuser.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../crds/keycloakrealm.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../crds/clusterkeycloakinstance.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

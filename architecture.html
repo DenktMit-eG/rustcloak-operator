@@ -7,6 +7,99 @@
 
 
         <!-- Custom HTML head -->
+        <style>
+        #menu-version {
+        	position: relative;
+        	align-self: center;
+        }
+        #version-button {
+        	position: relative;
+        	display: flex;
+        	align-items: center;
+        	padding: 0 1em;
+        }
+        #version-button::after {
+        	padding-left: 0.5em;
+        	content: '▼';
+        }
+        #version-list {
+        	position: absolute;
+        	display: none;
+        	text-decoration: none;
+        	right: 0;
+        	top: 100%;
+        	min-width: 100%;
+        	z-index: 1001;
+        	background-color: var(--sidebar-bg);
+        }
+        #version-button-state {
+        	display: none;
+        }
+        #version-button-state:checked ~ #version-list {
+        	display: block;
+        }
+        #version-list a {
+        	display: block;
+        	padding: 0.5em 1em;
+        	text-decoration: none;
+        }
+        #version-deselector {
+        	display: none;
+        	position: fixed;
+        	top: -1000000px;
+        	left: -1000000px;
+        	bottom: -1000000px;
+        	right: -1000000px;
+        	display: none;
+        }
+        #version-button-state:checked ~ #version-deselector {
+        	display: block;
+        	z-index: 1000;
+        }
+        </style>
+        <script>
+        window.addEventListener('DOMContentLoaded', async function () {
+        	const dropdown = document.createElement('div');
+        	const menubar = document.getElementById('menu-bar');
+        
+        	const versions_res = await fetch(`${path_to_root}/../versions.txt`)
+        	if (!versions_res.ok) {
+        		console.error('Failed to fetch versions.txt');
+        		return;
+        	}
+        	const base = versions_res.url.split('/').slice(0, -1).join('/');
+        	const versions = await versions_res.text().then(x => x.trim().split('\n'));
+        
+        	const current_version = versions
+        		.find(x => window.location.href.startsWith(`${base}/${x}`))
+        
+        	const list = versions
+        		.filter(x => x)
+        		.map(
+        			version => {
+        				var a = document.createElement('a');
+        				a.href = `${base}/${version}`;
+        				a.textContent = version;
+        				return a.outerHTML;
+        			}
+        		)
+        	dropdown.innerHTML = `
+        		<input type="checkbox" id=version-button-state>
+        		<label id="version-button" for=version-button-state>
+        			${new Option(String(current_version)).textContent}
+        		</label>
+        		<div id="version-list">
+        			${list.join('')}
+        		</div>
+        		<label id=version-deselector for=version-button-state></label>
+        	`;
+        
+        	menubar.appendChild(dropdown);
+        
+        	dropdown.id = "menu-version";
+        
+        });
+        </script>
 
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -165,7 +258,7 @@
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="crds/keycloakuser.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="crds/keycloakusercredential.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
@@ -176,7 +269,7 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="crds/keycloakuser.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="crds/keycloakusercredential.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
