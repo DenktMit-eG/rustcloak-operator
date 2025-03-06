@@ -2,7 +2,8 @@ use super::should_handle_prudent;
 use crate::{
     app_id,
     controller::controller_runner::LifecycleController,
-    error::{Error, Result},
+    error::Result,
+    util::{ApiExt, ApiFactory},
 };
 use async_trait::async_trait;
 use keycloak_crd::ExternalKeycloak as LegacyInstance;
@@ -59,14 +60,13 @@ impl LifecycleController for LegacyInstanceController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let name = resource.name_unchecked();
-        let namespace = resource.namespace().ok_or(Error::NoNamespace)?;
+        let ns = resource.namespace();
         let owner_ref = resource.owner_ref(&()).unwrap();
-        let api =
-            Api::<KeycloakInstance>::namespaced(client.clone(), &namespace);
+        let api = ApiExt::<KeycloakInstance>::api(client.clone(), &ns);
         let instance = KeycloakInstance {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
-                namespace: Some(namespace),
+                namespace: ns.clone(),
                 owner_references: Some(vec![owner_ref]),
                 labels: resource.meta().labels.clone(),
                 annotations: resource.meta().annotations.clone(),

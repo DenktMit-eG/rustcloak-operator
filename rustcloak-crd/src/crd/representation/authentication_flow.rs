@@ -1,8 +1,9 @@
+use super::RealmRef;
 use crate::keycloak_types::AuthenticationFlowRepresentation;
 use crate::{
-    ImmutableString, KeycloakApiObjectOptions, KeycloakApiStatus,
-    KeycloakRealm, crd::patches::KeycloakApiPatchList, impl_object,
-    macros::namespace_scope, schema_patch, traits::impl_instance_ref,
+    KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
+    crd::patches::KeycloakApiPatchList, impl_object, schema_patch,
+    traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -13,35 +14,17 @@ namespace_scope! {
         #[kube(
             doc = "resource to define an Authentication Flow within a [KeycloakRealm](./keycloakrealm.md)",
             group = "rustcloak.k8s.eboland.de",
-            version = "v1",
+            version = "v1beta1",
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",
-            printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Age",
-                    "type":"date",
-                    "description":"time since the realm was created",
-                    "jsonPath":".metadata.creationTimestamp"
-                }"#
         )]
         /// the KeycloakAuthenticationFlow resource
         pub struct KeycloakAuthenticationFlowSpec {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub options: Option<KeycloakApiObjectOptions>,
-            /// the name of the kubernetes object that created the realm.
-            pub realm_ref: ImmutableString,
+            #[serde(flatten)]
+            pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
             pub definition: AuthenticationFlowRepresentation,
             #[serde(default, flatten)]
@@ -50,8 +33,8 @@ namespace_scope! {
     }
 }
 
-impl_object!("authflow" <realm_ref: String => KeycloakRealm> / |_d| {"authentication/flows"} / id for KeycloakAuthenticationFlowSpec => AuthenticationFlowRepresentation);
+impl_object!("authflow" <RealmRef> / |_d| {"authentication/flows"} / "id" for KeycloakAuthenticationFlowSpec => AuthenticationFlowRepresentation);
 
-impl_instance_ref!(KeycloakAuthenticationFlow);
+impl_endpoint!(KeycloakAuthenticationFlow);
 
 schema_patch!(KeycloakAuthenticationFlowSpec);

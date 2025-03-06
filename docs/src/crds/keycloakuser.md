@@ -1,12 +1,13 @@
 # KeycloakUser
 
-## v1
+## v1beta1
 
 resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)
 
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
+|[spec.clusterRealmRef](#specclusterrealmref)|string||
 |[spec.definition](#specdefinition)|object|✅|
 |[spec.definition.access](#specdefinitionaccess)|object||
 |[spec.definition.applicationRoles](#specdefinitionapplicationroles)|object||
@@ -80,8 +81,9 @@ resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)
 |[spec.definition.username](#specdefinitionusername)|string||
 |[spec.options](#specoptions)|object||
 |[spec.patchFrom](#specpatchfrom)|object||
-|[spec.realmRef](#specrealmref)|string|✅|
+|[spec.realmRef](#specrealmref)|string||
 |[spec.userSecret](#specusersecret)|object||
+|[spec.userSecret.emailKey](#specusersecretemailkey)|string||
 |[spec.userSecret.passwordKey](#specusersecretpasswordkey)|string||
 |[spec.userSecret.secretName](#specusersecretsecretname)|string|✅|
 |[spec.userSecret.usernameKey](#specusersecretusernamekey)|string||
@@ -92,7 +94,9 @@ resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)
 |[status.conditions[].reason](#statusconditionsreason)|string||
 |[status.conditions[].status](#statusconditionsstatus)|string|✅|
 |[status.conditions[].type](#statusconditionstype)|string|✅|
-|[status.instanceRef](#statusinstanceref)|string||
+|[status.instance](#statusinstance)|object||
+|[status.instance.clusterInstanceRef](#statusinstanceclusterinstanceref)|string||
+|[status.instance.instanceRef](#statusinstanceinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
 |[status.resourcePath](#statusresourcepath)|string||
@@ -106,13 +110,26 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[clusterRealmRef](#specclusterrealmref)|string||
 |[definition](#specdefinition)|object|✅|
 |[options](#specoptions)|object||
 |[patchFrom](#specpatchfrom)|object||
-|[realmRef](#specrealmref)|string|✅|
+|[realmRef](#specrealmref)|string||
 |[userSecret](#specusersecret)|object||
 
 the KeycloakUser resource
+
+---
+
+### spec.clusterRealmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster realm to which this object belongs to
 
 ---
 
@@ -844,7 +861,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-the name of the kubernetes object that created the realm.
+The name of the realm to which this object belongs to
 
 ---
 
@@ -854,9 +871,18 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[emailKey](#specusersecretemailkey)|string||
 |[passwordKey](#specusersecretpasswordkey)|string||
 |[secretName](#specusersecretsecretname)|string|✅|
 |[usernameKey](#specusersecretusernamekey)|string||
+
+*missing*
+
+---
+
+### spec.userSecret.emailKey
+
+Type: string
 
 *missing*
 
@@ -893,7 +919,7 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[conditions[]](#statusconditions)|object||
-|[instanceRef](#statusinstanceref)|string||
+|[instance](#statusinstance)|object||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
 |[resourcePath](#statusresourcepath)|string||
@@ -959,11 +985,40 @@ Type: string
 
 ---
 
-### status.instanceRef
+### status.instance
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[clusterInstanceRef](#statusinstanceclusterinstanceref)|string||
+|[instanceRef](#statusinstanceinstanceref)|string||
+
+*missing*
+
+---
+
+### status.instance.clusterInstanceRef
 
 Type: string
 
-*missing*
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
+
+---
+
+### status.instance.instanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the namespaced instance to which this object belongs to.
 
 ---
 

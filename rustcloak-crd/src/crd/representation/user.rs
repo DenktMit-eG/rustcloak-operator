@@ -1,19 +1,22 @@
 use crate::keycloak_types::UserRepresentation;
+use crate::refs::ref_type;
 use crate::{
-    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
-    KeycloakApiStatus, KeycloakRealm, impl_object,
-    macros::namespace_scope,
-    schema_patch,
-    traits::{SecretKeyNames, impl_instance_ref},
+    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+    crd::namespace_scope,
+    impl_object, schema_patch,
+    traits::{SecretKeyNames, impl_endpoint},
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+use super::RealmRef;
+
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakUserSecretReference {
     pub secret_name: String,
+    pub email_key: Option<String>,
     pub username_key: Option<String>,
     pub password_key: Option<String>,
 }
@@ -23,35 +26,17 @@ namespace_scope! {
         #[kube(
             doc = "resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)",
             group = "rustcloak.k8s.eboland.de",
-            version = "v1",
+            version = "v1beta1",
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",
-            printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Age",
-                    "type":"date",
-                    "description":"time since the realm was created",
-                    "jsonPath":".metadata.creationTimestamp"
-                }"#
         )]
         /// the KeycloakUser resource
         pub struct KeycloakUserSpec {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub options: Option<KeycloakApiObjectOptions>,
-            /// the name of the kubernetes object that created the realm.
-            pub realm_ref: ImmutableString,
+            #[serde(flatten)]
+            pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
             pub definition: UserRepresentation,
             #[serde(default, flatten)]
@@ -61,16 +46,23 @@ namespace_scope! {
     }
 }
 
-impl SecretKeyNames<2> for Option<KeycloakUserSecretReference> {
-    const DEFAULTS: [&'static str; 2] = ["username", "password"];
+impl SecretKeyNames<3> for KeycloakUserSecretReference {
+    const DEFAULTS: [&'static str; 3] = ["username", "password", "email"];
 
-    fn secret_key_names_opts(&self) -> Option<[&Option<String>; 2]> {
-        self.as_ref().map(|s| [&s.username_key, &s.password_key])
+    fn secret_key_names_opts(&self) -> [&Option<String>; 3] {
+        [&self.username_key, &self.password_key, &self.email_key]
     }
 }
 
-impl_object!("user" <realm_ref: String => KeycloakRealm> / |_d| {"users"} / id for KeycloakUserSpec => UserRepresentation);
+ref_type!(
+    UserRef,
+    user_ref,
+    KeycloakUser,
+    "The name of a KeycloakUser resource"
+);
 
-impl_instance_ref!(KeycloakUser);
+impl_object!("user" <RealmRef> / |_d| {"users"} / "id" for KeycloakUserSpec => UserRepresentation);
+
+impl_endpoint!(KeycloakUser);
 
 schema_patch!(KeycloakUserSpec);

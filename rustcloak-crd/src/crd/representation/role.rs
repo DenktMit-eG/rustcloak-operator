@@ -1,46 +1,24 @@
+use super::{ClientRef, RealmRef};
+use crate::either::UntaggedEither;
 use crate::keycloak_types::RoleRepresentation;
+use crate::refs::ref_type;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    impl_object,
-    macros::namespace_scope,
-    refs::{ClientRef, RealmRef},
-    schema_patch,
-    traits::impl_instance_ref,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
-use either::Either;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
-use super::{KeycloakClient, KeycloakRealm};
 
 namespace_scope! {
     "KeycloakRole", "kcr" {
         #[kube(
             doc = "resource to define a Protocol Mapper within either a [KeycloakRealm](./keycloakrealm.md) or a [KeycloakClient](./keycloakclient.md)",
             group = "rustcloak.k8s.eboland.de",
-            version = "v1",
+            version = "v1beta1",
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",
-            printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Age",
-                    "type":"date",
-                    "description":"time since the realm was created",
-                    "jsonPath":".metadata.creationTimestamp"
-                }"#
         )]
         /// the KeycloakRole resource
         pub struct KeycloakRoleSpec {
@@ -56,11 +34,17 @@ namespace_scope! {
     }
 }
 
-type ParentRef = Either<RealmRef, ClientRef>;
-type Parents = Either<KeycloakRealm, KeycloakClient>;
+type ParentRef = UntaggedEither<RealmRef, ClientRef>;
 
-impl_object!("role" <parent_ref: ParentRef => Parents> / |_d| {"roles"} / name for KeycloakRoleSpec => RoleRepresentation);
+impl_object!("role" <ParentRef> / |_d| {"roles"} / "name" for KeycloakRoleSpec => RoleRepresentation);
 
-impl_instance_ref!(KeycloakRole);
+ref_type!(
+    RoleRef,
+    role_ref,
+    KeycloakRole,
+    "A reference to a KeycloakRole"
+);
+
+impl_endpoint!(KeycloakRole);
 
 schema_patch!(KeycloakRoleSpec);

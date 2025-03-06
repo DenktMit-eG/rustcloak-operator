@@ -2,9 +2,11 @@ use super::{find_name, should_handle_prudent};
 use crate::{
     app_id,
     controller::controller_runner::LifecycleController,
-    error::{Error, Result},
+    error::Result,
+    util::{ApiExt, ApiFactory},
 };
 use async_trait::async_trait;
+use either::Either;
 use k8s_openapi::{ByteString, api::core::v1::Secret, serde_json};
 use keycloak_crd::KeycloakUser as LegacyUser;
 use kube::api::{ObjectMeta, Patch, PatchParams};
@@ -16,6 +18,7 @@ use kube::{
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::{
     KeycloakRealm, KeycloakUser, KeycloakUserSecretReference, KeycloakUserSpec,
+    either::UntaggedEither,
 };
 use std::sync::Arc;
 
@@ -48,9 +51,9 @@ async fn make_secret(
     }
 
     let name = resource.name_unchecked();
-    let namespace = resource.namespace().ok_or(Error::NoNamespace)?;
+    let namespace = resource.namespace();
     let owner_ref = resource.owner_ref(&()).unwrap();
-    let api = Api::<Secret>::namespaced(client.clone(), &namespace);
+    let api = ApiExt::<Secret>::api(client.clone(), &namespace);
     let Some(username) = resource.spec.user.username.clone() else {
         return Ok(None);
     };
@@ -87,6 +90,7 @@ async fn make_secret(
         secret_name: name,
         username_key: Some(username_key),
         password_key: Some(password_key),
+        email_key: None,
     }))
 }
 
@@ -120,9 +124,9 @@ impl LifecycleController for LegacyUserController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let name = resource.name_unchecked();
-        let namespace = resource.namespace().ok_or(Error::NoNamespace)?;
+        let namespace = resource.namespace();
         let owner_ref = resource.owner_ref(&()).unwrap();
-        let api = Api::<KeycloakUser>::namespaced(client.clone(), &namespace);
+        let api = ApiExt::<KeycloakUser>::api(client.clone(), &namespace);
         let mut resource = Arc::unwrap_or_clone(resource);
         let user_secret = make_secret(client, &mut resource).await?;
 
@@ -130,7 +134,7 @@ impl LifecycleController for LegacyUserController {
         let instance = KeycloakUser {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
-                namespace: Some(namespace.clone()),
+                namespace: namespace.clone(),
                 owner_references: Some(vec![owner_ref]),
                 labels: resource.meta().labels.clone(),
                 annotations: resource.meta().annotations.clone(),
@@ -138,15 +142,19 @@ impl LifecycleController for LegacyUserController {
             },
             spec: KeycloakUserSpec {
                 options: None,
-                realm_ref: find_name::<KeycloakRealm>(
-                    client,
-                    &namespace,
-                    &resource.spec.realm_selector,
-                    &resource.metadata,
-                    "realm_ref",
-                )
-                .await?
-                .into(),
+                parent_ref: UntaggedEither {
+                    inner: Either::Left(
+                        find_name::<KeycloakRealm>(
+                            client,
+                            &namespace,
+                            &resource.spec.realm_selector,
+                            &resource.metadata,
+                            "realm_ref",
+                        )
+                        .await?
+                        .into(),
+                    ),
+                },
                 definition: serde_json::from_value(definition)?,
                 patches: None,
                 user_secret,

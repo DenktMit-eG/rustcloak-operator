@@ -1,47 +1,30 @@
 use crate::keycloak_types::RequiredActionProviderRepresentation;
 use crate::{
-    ImmutableString, KeycloakApiObjectOptions, KeycloakApiPatchList,
-    KeycloakApiStatus, KeycloakRealm, impl_object, macros::namespace_scope,
-    schema_patch, traits::impl_instance_ref,
+    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+
+use super::RealmRef;
 
 namespace_scope! {
     "KeycloakRequiredActionProvider", "kcrap" {
         #[kube(
             doc = "resource to define an Required Action Provider within a [KeyclaokRealm](./keycloakrealm.md)",
             group = "rustcloak.k8s.eboland.de",
-            version = "v1",
+            version = "v1beta1",
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",
-            printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Age",
-                    "type":"date",
-                    "description":"time since the realm was created",
-                    "jsonPath":".metadata.creationTimestamp"
-                }"#
         )]
         /// the KeycloakRequiredActionProvider resource
         pub struct KeycloakRequiredActionProviderSpec {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub options: Option<KeycloakApiObjectOptions>,
-            /// the name of the kubernetes object that created the realm.
-            pub realm_ref: ImmutableString,
+            #[serde(flatten)]
+            pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
             pub definition: RequiredActionProviderRepresentation,
             #[serde(default, flatten)]
@@ -50,8 +33,8 @@ namespace_scope! {
     }
 }
 
-impl_object!("rap" <realm_ref: String => KeycloakRealm> / |_d| {"authentication/required-actions"} / alias for KeycloakRequiredActionProviderSpec => RequiredActionProviderRepresentation);
+impl_object!("rap" <RealmRef> / |_d| {"authentication/required-actions"} / "alias" for KeycloakRequiredActionProviderSpec => RequiredActionProviderRepresentation);
 
-impl_instance_ref!(KeycloakRequiredActionProvider);
+impl_endpoint!(KeycloakRequiredActionProvider);
 
 schema_patch!(KeycloakRequiredActionProviderSpec);

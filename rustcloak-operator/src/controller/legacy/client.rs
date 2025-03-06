@@ -1,9 +1,10 @@
 use super::super::controller_runner::LifecycleController;
 use super::{find_name, should_handle_prudent};
 use crate::app_id;
-use crate::error::Error;
 use crate::error::Result;
+use crate::util::{ApiExt, ApiFactory};
 use async_trait::async_trait;
+use either::Either;
 use k8s_openapi::serde_json;
 use keycloak_crd::KeycloakClient as LegacyClient;
 use kube::api::{ObjectMeta, Patch, PatchParams};
@@ -13,6 +14,7 @@ use kube::{
     runtime::{Controller, controller::Action},
 };
 use kube::{Resource, ResourceExt};
+use rustcloak_crd::either::UntaggedEither;
 use rustcloak_crd::{
     KeycloakClient, KeycloakClientSecretReference, KeycloakClientSpec,
     KeycloakRealm,
@@ -60,14 +62,14 @@ impl LifecycleController for LegacyClientController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let name = resource.name_unchecked();
-        let namespace = resource.namespace().ok_or(Error::NoNamespace)?;
+        let ns = resource.namespace();
         let owner_ref = resource.owner_ref(&()).unwrap();
-        let api = Api::<KeycloakClient>::namespaced(client.clone(), &namespace);
+        let api = ApiExt::<KeycloakClient>::api(client.clone(), &ns);
         let definition = serde_json::to_value(&resource.spec.client)?;
         let instance = KeycloakClient {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
-                namespace: Some(namespace.clone()),
+                namespace: ns.clone(),
                 owner_references: Some(vec![owner_ref]),
                 labels: resource.meta().labels.clone(),
                 annotations: resource.meta().annotations.clone(),
@@ -75,15 +77,19 @@ impl LifecycleController for LegacyClientController {
             },
             spec: KeycloakClientSpec {
                 options: None,
-                realm_ref: find_name::<KeycloakRealm>(
-                    client,
-                    &namespace,
-                    &resource.spec.realm_selector,
-                    &resource.metadata,
-                    "realm_ref",
-                )
-                .await?
-                .into(),
+                parent_ref: UntaggedEither {
+                    inner: Either::Left(
+                        find_name::<KeycloakRealm>(
+                            client,
+                            &ns,
+                            &resource.spec.realm_selector,
+                            &resource.metadata,
+                            "realm_ref",
+                        )
+                        .await?
+                        .into(),
+                    ),
+                },
                 definition: serde_json::from_value(definition)?,
                 client_secret: Some(KeycloakClientSecretReference {
                     secret_name: format!("keycloak-client-secret-{}", name),

@@ -1,15 +1,23 @@
-use crate::{ImmutableString, KeycloakApiStatus, macros::both_scopes};
+use crate::{
+    ImmutableString, KeycloakApiStatus,
+    crd::both_scopes,
+    either::UntaggedEither,
+    marker::{HasMarker, ResourceMarker},
+    refs::{HasParent, ref_type},
+};
 use k8s_openapi::api::core::v1::EnvVar;
-use kube::CustomResource;
+use kube::{CustomResource, Resource};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+
+use super::InstanceRef;
 
 both_scopes! {
     "KeycloakApiObject", "kcapi", "ClusterKeycloakApiObject", "ckcapi", ClusterKeycloakApiObjectSpec {
         #[kube(
             doc = "Custom Resource for Keycloak API requests. The user should not use this resource directly.",
             group = "rustcloak.k8s.eboland.de",
-            version = "v1",
+            version = "v1beta1",
             status = "KeycloakApiStatus",
             category = "keycloak",
             category = "all",
@@ -50,7 +58,20 @@ both_scopes! {
         }
     }
 }
+impl HasMarker for KeycloakApiObject {
+    type Marker = ResourceMarker<<Self as Resource>::Scope>;
+}
 
+impl HasMarker for ClusterKeycloakApiObject {
+    type Marker = ResourceMarker<<Self as Resource>::Scope>;
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+pub struct KeycloakApiEndpointParent {
+    #[serde(flatten)]
+    pub parent_ref: ApiObjectRef,
+    pub sub_path: ImmutableString,
+}
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 pub enum KeycloakApiEndpointPath {
     // BUG: while the values of Path and Parent variants are both ImmutableString, there's
@@ -59,30 +80,51 @@ pub enum KeycloakApiEndpointPath {
     #[serde(rename = "path")]
     Path(ImmutableString),
     #[serde(rename = "parent")]
-    Parent {
-        parent_ref: ImmutableString,
-        sub_path: ImmutableString,
-    },
+    Parent(KeycloakApiEndpointParent),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakApiEndpoint {
-    pub instance_ref: ImmutableString,
+    #[serde(flatten)]
+    pub instance_ref: InstanceRef,
     #[serde(flatten)]
     pub path_def: KeycloakApiEndpointPath,
 }
 
 impl KeycloakApiEndpoint {
-    pub fn new(instance_ref: &str, path: &str) -> Self {
-        let instance_ref = instance_ref.to_string().into();
+    pub fn new(instance_ref: &InstanceRef, path: &str) -> Self {
         let path = path.to_string().into();
+        let instance_ref = instance_ref.clone();
         Self {
             instance_ref,
             path_def: KeycloakApiEndpointPath::Path(path),
         }
     }
 }
+
+impl HasParent for KeycloakApiEndpointParent {
+    type ParentRef = ApiObjectRef;
+
+    fn parent_ref(&self) -> &Self::ParentRef {
+        &self.parent_ref
+    }
+}
+
+ref_type!(
+    NamespacedApiObjectRef,
+    parent_ref,
+    KeycloakApiObject,
+    "The name of the API Object to which this object belongs to."
+);
+ref_type!(
+    ClusterApiObjectRef,
+    cluster_parent_ref,
+    ClusterKeycloakApiObject,
+    "The name of the cluster API Object to which this object belongs to."
+);
+pub type ApiObjectRef =
+    UntaggedEither<NamespacedApiObjectRef, ClusterApiObjectRef>;
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]

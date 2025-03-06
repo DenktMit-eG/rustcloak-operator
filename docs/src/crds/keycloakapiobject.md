@@ -1,6 +1,6 @@
 # KeycloakApiObject
 
-## v1
+## v1beta1
 
 Custom Resource for Keycloak API requests. The user should not use this resource directly.
 
@@ -8,9 +8,11 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
 |[spec.endpoint](#specendpoint)|object|✅|
-|[spec.endpoint.instanceRef](#specendpointinstanceref)|string|✅|
+|[spec.endpoint.clusterInstanceRef](#specendpointclusterinstanceref)|string||
+|[spec.endpoint.instanceRef](#specendpointinstanceref)|string||
 |[spec.endpoint.parent](#specendpointparent)|object||
-|[spec.endpoint.parent.parent_ref](#specendpointparentparentref)|string|✅|
+|[spec.endpoint.parent.clusterParentRef](#specendpointparentclusterparentref)|string||
+|[spec.endpoint.parent.parentRef](#specendpointparentparentref)|string||
 |[spec.endpoint.parent.sub_path](#specendpointparentsubpath)|string|✅|
 |[spec.endpoint.path](#specendpointpath)|string||
 |[spec.immutablePayload](#specimmutablepayload)|string|✅|
@@ -42,7 +44,9 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |[status.conditions[].reason](#statusconditionsreason)|string||
 |[status.conditions[].status](#statusconditionsstatus)|string|✅|
 |[status.conditions[].type](#statusconditionstype)|string|✅|
-|[status.instanceRef](#statusinstanceref)|string||
+|[status.instance](#statusinstance)|object||
+|[status.instance.clusterInstanceRef](#statusinstanceclusterinstanceref)|string||
+|[status.instance.instanceRef](#statusinstanceinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
 |[status.resourcePath](#statusresourcepath)|string||
@@ -72,11 +76,24 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[instanceRef](#specendpointinstanceref)|string|✅|
+|[clusterInstanceRef](#specendpointclusterinstanceref)|string||
+|[instanceRef](#specendpointinstanceref)|string||
 |[parent](#specendpointparent)|object||
 |[path](#specendpointpath)|string||
 
 *missing*
+
+---
+
+### spec.endpoint.clusterInstanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
 
 ---
 
@@ -88,7 +105,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-*missing*
+The name of the namespaced instance to which this object belongs to.
 
 ---
 
@@ -98,14 +115,15 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[parent_ref](#specendpointparentparentref)|string|✅|
+|[clusterParentRef](#specendpointparentclusterparentref)|string||
+|[parentRef](#specendpointparentparentref)|string||
 |[sub_path](#specendpointparentsubpath)|string|✅|
 
 *missing*
 
 ---
 
-### spec.endpoint.parent.parent_ref
+### spec.endpoint.parent.clusterParentRef
 
 Type: string
 
@@ -113,7 +131,19 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-*missing*
+The name of the cluster API Object to which this object belongs to.
+
+---
+
+### spec.endpoint.parent.parentRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the API Object to which this object belongs to.
 
 ---
 
@@ -364,7 +394,7 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[conditions[]](#statusconditions)|object||
-|[instanceRef](#statusinstanceref)|string||
+|[instance](#statusinstance)|object||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
 |[resourcePath](#statusresourcepath)|string||
@@ -430,11 +460,40 @@ Type: string
 
 ---
 
-### status.instanceRef
+### status.instance
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[clusterInstanceRef](#statusinstanceclusterinstanceref)|string||
+|[instanceRef](#statusinstanceinstanceref)|string||
+
+*missing*
+
+---
+
+### status.instance.clusterInstanceRef
 
 Type: string
 
-*missing*
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
+
+---
+
+### status.instance.instanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the namespaced instance to which this object belongs to.
 
 ---
 

@@ -3,10 +3,9 @@ use std::{sync::Arc, time::Duration};
 use crate::{
     app_id,
     error::Result,
-    util::{FromError, wait_for_crd},
+    util::{ApiExt, ApiFactory, FromError, wait_for_crd},
 };
 use async_trait::async_trait;
-use k8s_openapi::NamespaceResourceScope;
 use k8s_openapi::serde_json::json;
 use kube::{
     Api, Resource as KubeResource, ResourceExt,
@@ -68,7 +67,7 @@ pub struct ControllerRunner<C> {
 impl<C> ControllerRunner<C>
 where
     C: LifecycleController + Sync + Send + 'static,
-    C::Resource: KubeResource<Scope = NamespaceResourceScope>
+    C::Resource: KubeResource<DynamicType = ()>
         + Clone
         + HasStatus<Status: FromError + Serialize + Send + Sync>
         + Debug
@@ -80,6 +79,7 @@ where
         + Debug,
     <C::Resource as KubeResource>::DynamicType:
         Default + Eq + Hash + Clone + Debug + Unpin + From<()>,
+    ApiExt<C::Resource>: ApiFactory<Resource = C::Resource>,
 {
     pub fn new(controller: C, client: &kube::Client) -> Self {
         let client = client.clone();
@@ -89,8 +89,7 @@ where
     pub async fn run(self) -> Result<()> {
         let api = Api::<C::Resource>::all(self.client.clone());
         let config = controller::Config::default().concurrency(2);
-        let dt = ().into();
-        let kind = C::Resource::kind(&dt);
+        let kind = C::Resource::kind(&());
 
         wait_for_crd::<C::Resource, C>(&self.client).await?;
 
@@ -107,14 +106,14 @@ where
                     Ok((o, _)) => {
                         info!(target: C::MODULE_PATH,
                             kind = kind,
-                            namespace = o.namespace.unwrap(),
+                            namespace = o.namespace,
                             name = o.name;
                             "reconciled"
                         )
                     }
                     Err(controller::Error::ReconcilerFailed(e, o)) => {
                         warn!(target: C::MODULE_PATH,
-                            namespace = o.namespace.unwrap(),
+                            namespace = o.namespace,
                             name = o.name,
                             kind = kind;
                             "reconciling failed: {e}",
@@ -139,16 +138,11 @@ where
         resource: Arc<C::Resource>,
         ctx: Arc<Self>,
     ) -> Result<Action> {
-        let ns = resource
-            .meta()
-            .namespace
-            .as_deref()
-            .ok_or(Error::NoNamespace)?;
+        let ns = resource.namespace();
         let name = resource.name_unchecked();
-        let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
+        let api = ApiExt::<C::Resource>::api(ctx.client.clone(), &ns);
         let client = ctx.client.clone();
-        let dt = ().into();
-        let kind = C::Resource::kind(&dt);
+        let kind = C::Resource::kind(&());
 
         debug!(
             kind = kind,
@@ -162,23 +156,22 @@ where
             .before_finalizer(&client, resource.clone())
             .await
         {
-            Ok(should_handle) => {
-                if should_handle {
-                    debug!(
-                        kind = kind,
-                        namespace = ns,
-                        name = name;
-                        "handling resource, before_finalizer returned true"
-                    )
-                } else {
-                    debug!(
-                        kind = kind,
-                        namespace = ns,
-                        name = name;
-                        "skipping resource, before_finalizer returned false"
-                    );
-                    return Ok(Action::await_change());
-                }
+            Ok(true) => {
+                debug!(
+                    kind = kind,
+                    namespace = ns,
+                    name = name;
+                    "handling resource, before_finalizer returned true"
+                )
+            }
+            Ok(false) => {
+                debug!(
+                    kind = kind,
+                    namespace = ns,
+                    name = name;
+                    "skipping resource, before_finalizer returned false"
+                );
+                return Ok(Action::await_change());
             }
             Err(e) => {
                 Self::handle_error(ctx.clone(), &resource, &e).await?;
@@ -218,14 +211,16 @@ where
         resource: &C::Resource,
         e: &Error,
     ) -> Result<()> {
-        let ns = resource
-            .meta()
-            .namespace
-            .as_deref()
-            .ok_or(Error::NoNamespace)?;
+        let ns = resource.namespace();
         let name = resource.name_unchecked();
-        let api: Api<C::Resource> = Api::namespaced(ctx.client.clone(), ns);
+        let api: Api<C::Resource> = ApiExt::api(ctx.client.clone(), &ns);
         let status = <C::Resource as HasStatus>::Status::from_error(e);
+        log::error!(
+            kind = C::Resource::kind(&()),
+            namespace = resource.namespace().unwrap_or_default(),
+            name = name;
+            "error: {e}"
+        );
         let patch = Patch::Merge(json!({
             "status": status,
         }));

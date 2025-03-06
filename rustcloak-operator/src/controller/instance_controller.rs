@@ -4,7 +4,9 @@ use crate::{
     app_id,
     controller::controller_runner::LifecycleController,
     error::{Error, Result},
-    util::{K8sKeycloakRefreshManager, RefWatcher, ToPatch},
+    util::{
+        ApiExt, ApiFactory, K8sKeycloakRefreshManager, RefWatcher, ToPatch,
+    },
 };
 use async_trait::async_trait;
 use chrono::{Duration, Utc};
@@ -12,33 +14,64 @@ use k8s_openapi::{ByteString, api::core::v1::Secret};
 use kube::{
     Api, Resource, ResourceExt,
     api::{ListParams, ObjectMeta, PatchParams, PostParams},
+    core::object::HasStatus,
     runtime::{Controller, controller::Action, watcher},
 };
-use rustcloak_crd::{
-    KeycloakApiObject, KeycloakApiStatus, KeycloakInstance,
-    traits::SecretKeyNames,
-};
-
 use log::warn;
 use randstr::randstr;
+use rustcloak_crd::{
+    KeycloakApiObject, KeycloakApiStatus, KeycloakInstanceSpec,
+    inner_spec::HasInnerSpec, traits::SecretKeyNames,
+};
+use serde::de::DeserializeOwned;
 
-#[derive(Debug, Default)]
-pub struct KeycloakInstanceController {
-    manager: K8sKeycloakRefreshManager,
-    secret_refs: Arc<RefWatcher<KeycloakInstance, Secret>>,
+shorter_bounds::alias!(
+    pub trait Instance: Resource<DynamicType = ()>
+        + HasStatus<Status = KeycloakApiStatus>
+        + HasInnerSpec<InnerSpec = KeycloakInstanceSpec>
+        + Send
+        + Sync
+        + std::fmt::Debug
+        + Clone
+        + DeserializeOwned
+        + 'static
+);
+
+#[derive(Debug)]
+pub struct InstanceController<R>
+where
+    R: Instance,
+{
+    manager: K8sKeycloakRefreshManager<R>,
+    secret_refs: Arc<RefWatcher<R, Secret>>,
 }
 
-impl KeycloakInstanceController {
+impl<R> Default for InstanceController<R>
+where
+    R: Instance,
+{
+    fn default() -> Self {
+        Self {
+            manager: K8sKeycloakRefreshManager::default(),
+            secret_refs: Arc::new(RefWatcher::default()),
+        }
+    }
+}
+
+impl<R> InstanceController<R>
+where
+    R: Instance,
+{
     async fn create_secret(
         &self,
         client: &kube::Client,
-        resource: Arc<KeycloakInstance>,
+        resource: Arc<R>,
     ) -> Result<()> {
-        let secret_name = &resource.spec.credentials.secret_name;
-        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let secret_api = Api::<Secret>::namespaced(client.clone(), &ns);
-        let [username_key, password_key] =
-            resource.spec.credentials.secret_key_names();
+        let spec = resource.inner_spec();
+        let secret_name = &spec.credentials.secret_name;
+        let ns = resource.namespace();
+        let secret_api = ApiExt::<Secret>::api(client.clone(), &ns);
+        let [username_key, password_key] = spec.credentials.secret_key_names();
 
         let username = "rustcloak-admin".to_string();
         let password = randstr()
@@ -60,7 +93,7 @@ impl KeycloakInstanceController {
             data: Some(data),
             metadata: ObjectMeta {
                 name: Some(secret_name.to_string()),
-                namespace: Some(ns),
+                namespace: ns,
                 owner_references: Some(vec![owner_ref]),
                 ..Default::default()
             },
@@ -74,8 +107,12 @@ impl KeycloakInstanceController {
 }
 
 #[async_trait]
-impl LifecycleController for KeycloakInstanceController {
-    type Resource = KeycloakInstance;
+impl<R> LifecycleController for InstanceController<R>
+where
+    R: Instance,
+    ApiExt<R>: ApiFactory,
+{
+    type Resource = R;
     const MODULE_PATH: &'static str = module_path!();
 
     fn prepare(
@@ -97,13 +134,14 @@ impl LifecycleController for KeycloakInstanceController {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<bool> {
+        let spec = resource.inner_spec();
         match self
             .manager
             .schedule_refresh(&resource, client.clone())
             .await
         {
             Err(Error::NoCredentialSecret(x, y)) => {
-                if resource.spec.credentials.create.unwrap_or(false) {
+                if spec.credentials.create.unwrap_or(false) {
                     self.create_secret(client, resource.clone()).await?;
                 } else {
                     Err(Error::NoCredentialSecret(x, y))?;
@@ -120,11 +158,12 @@ impl LifecycleController for KeycloakInstanceController {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
-        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let api = Api::<Self::Resource>::namespaced(client.clone(), &ns);
+        let ns = resource.namespace();
+        let spec = resource.inner_spec();
+        let api = ApiExt::<Self::Resource>::api(client.clone(), &ns);
 
         self.secret_refs
-            .add(&resource, [resource.credential_secret_name()]);
+            .add(&resource, [spec.credential_secret_name()]);
 
         api.patch_status(
             &resource.name_unchecked(),
@@ -141,14 +180,14 @@ impl LifecycleController for KeycloakInstanceController {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
+        let ns = resource.namespace();
         let grace_period = Duration::minutes(3);
         let deletion_time =
             resource.meta().deletion_timestamp.as_ref().unwrap().0;
 
         let selector =
             format!("{}={}", app_id!("instanceRef"), resource.name_unchecked());
-        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let api = Api::<KeycloakApiObject>::namespaced(client.clone(), &ns);
+        let api = ApiExt::<KeycloakApiObject>::api(client.clone(), &ns);
         let list = api
             .list_metadata(&ListParams::default().labels(&selector))
             .await?;

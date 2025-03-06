@@ -1,55 +1,61 @@
-macro_rules! both_scopes {
-    ($kind:literal, $shortname:literal, $cluster_kind:literal, $cluster_shortname:literal, $cluster_name:ident { $(#[$meta:meta])* pub struct $name:ident { $($(#[$field_meta:meta])* $vis:vis $field:ident : $type:ty),* $(,)? } }) => {
-        #[derive(
-            CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema,
-        )]
-        #[serde(rename_all = "camelCase")]
-        #[kube(kind = $cluster_kind, shortname = $cluster_shortname)]
-        $(#[$meta])*
-        pub struct $cluster_name {
-            #[serde(flatten)]
-            pub spec: $name,
-        }
-
-        impl $crate::inner_spec::HasInnerSpec for $cluster_name {
-            type InnerSpec = $name;
-
-            fn inner_spec(&self) -> &Self::InnerSpec {
-                &self.spec
-            }
-        }
-
-        $crate::macros::namespace_scope!{
-            $kind, $shortname {
-                $(#[$meta])* pub struct $name {
-                    $($(#[$field_meta])* $vis $field: $type),*
-                }
+macro_rules! meta_map_crds {
+    { $meta_name:ident: $($meta_type_name:ident,)* } => {
+        #[macro_export]
+        macro_rules! $meta_name {
+            { $type_name:ident => $type_expression:expr } => {
+                [
+                    $(
+                        {
+                            type $type_name = $crate::$meta_type_name;
+                            $type_expression
+                        },
+                    )*
+                ]
             }
         }
     };
 }
 
-macro_rules! namespace_scope {
-    ($kind: literal, $shortname:literal { $(#[$meta:meta])* pub struct $name:ident { $($(#[$field_meta:meta])* $vis:vis $field:ident : $type:ty),* $(,)? } }) => {
-        #[derive(
-            CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema,
-        )]
-        #[serde(rename_all = "camelCase")]
-        $(#[$meta])*
-        #[kube(kind = $kind, shortname = $shortname, namespaced)]
-        pub struct $name {
-            $( $(#[$field_meta])* $vis $field: $type),*
-        }
-
-        impl $crate::inner_spec::HasInnerSpec for $name {
-            type InnerSpec = $name;
-
-            fn inner_spec(&self) -> &Self::InnerSpec {
-                &self
-            }
-        }
+#[macro_export]
+macro_rules! map_all_crds {
+    { $type_name:ident => $type_expression:expr } => {
+            $crate::map_rest_crds!($type_name => $type_expression).into_iter()
+                .chain(
+                    $crate::map_plumbing_crds!($type_name => $type_expression)
+                )
     };
 }
 
-pub(crate) use both_scopes;
-pub(crate) use namespace_scope;
+meta_map_crds!(map_plumbing_crds:
+    ClusterKeycloakApiObject,
+    ClusterKeycloakInstance,
+    KeycloakApiObject,
+    KeycloakClientCredential,
+    KeycloakInstance,
+    KeycloakRoleMapping,
+    KeycloakUserCredential,
+);
+
+meta_map_crds!(map_rest_crds:
+    ClusterKeycloakRealm,
+    KeycloakAuthenticationFlow,
+    KeycloakAuthenticatorConfig,
+    KeycloakClient,
+    KeycloakClientScope,
+    KeycloakComponent,
+    KeycloakGroup,
+    KeycloakIdentityProvider,
+    KeycloakIdentityProviderMapper,
+    KeycloakOrganization,
+    KeycloakProtocolMapper,
+    KeycloakRealm,
+    KeycloakRequiredActionProvider,
+    KeycloakResource,
+    KeycloakRole,
+    KeycloakScope,
+    KeycloakUser,
+);
+
+pub use map_all_crds;
+pub use map_plumbing_crds;
+pub use map_rest_crds;

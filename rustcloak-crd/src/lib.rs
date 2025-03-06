@@ -1,8 +1,9 @@
 mod crd;
-mod either;
+pub mod either;
 pub mod immutable;
 pub mod inner_spec;
 pub mod macros;
+pub mod marker;
 mod object;
 pub mod refs;
 mod schema;

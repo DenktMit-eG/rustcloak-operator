@@ -32,7 +32,19 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
-    name: v1
+    - description: true if the realm is ready
+      jsonPath: .status.ready
+      name: Ready
+      type: boolean
+    - description: Status String of the resource
+      jsonPath: .status.status
+      name: Status
+      type: string
+    - description: time since the realm was created
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
     schema:
       openAPIV3Schema:
         description: Custom Resource for Keycloak API requests. The user should not use this resource directly.
@@ -41,20 +53,44 @@ spec:
             description: defines an API request to the Keycloak Admin API.
             properties:
               endpoint:
+                anyOf:
+                - required:
+                  - instanceRef
+                - required:
+                  - clusterInstanceRef
                 oneOf:
                 - required:
                   - path
                 - required:
                   - parent
                 properties:
+                  clusterInstanceRef:
+                    description: The name of the cluster instance to which this object belongs to.
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
                   instanceRef:
+                    description: The name of the namespaced instance to which this object belongs to.
                     type: string
                     x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
                   parent:
+                    anyOf:
+                    - required:
+                      - parentRef
+                    - required:
+                      - clusterParentRef
                     properties:
-                      parent_ref:
+                      clusterParentRef:
+                        description: The name of the cluster API Object to which this object belongs to.
+                        type: string
+                        x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                      parentRef:
+                        description: The name of the API Object to which this object belongs to.
                         type: string
                         x-kubernetes-validations:
                         - message: Value is immutable
@@ -65,7 +101,6 @@ spec:
                         - message: Value is immutable
                           rule: self == oldSelf
                     required:
-                    - parent_ref
                     - sub_path
                     type: object
                   path:
@@ -73,8 +108,6 @@ spec:
                     x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
-                required:
-                - instanceRef
                 type: object
               immutablePayload:
                 type: string
@@ -195,8 +228,26 @@ spec:
                   - type
                   type: object
                 type: array
-              instanceRef:
-                type: string
+              instance:
+                anyOf:
+                - required:
+                  - instanceRef
+                - required:
+                  - clusterInstanceRef
+                properties:
+                  clusterInstanceRef:
+                    description: The name of the cluster instance to which this object belongs to.
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  instanceRef:
+                    description: The name of the namespaced instance to which this object belongs to.
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                type: object
               message:
                 type: string
               ready:

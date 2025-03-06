@@ -1,28 +1,42 @@
-use crate::KeycloakApiStatusEndpoint;
+use crate::{InstanceRef, KeycloakApiStatusEndpoint};
 use std::iter;
 
 pub trait SecretKeyNames<const N: usize> {
     const DEFAULTS: [&'static str; N];
-    fn secret_key_names_opts(&self) -> Option<[&Option<String>; N]>;
+    fn secret_key_names_opts(&self) -> [&Option<String>; N];
     fn secret_key_names(&self) -> [&str; N] {
-        if let Some(key_names) = self.secret_key_names_opts() {
-            let mut iter = iter::zip(key_names, Self::DEFAULTS);
-            [(); N]
-                .map(|_| iter.next().unwrap())
-                .map(|(opt, def)| opt.as_ref().map_or(def, |s| s))
+        let mut iter = iter::zip(self.secret_key_names_opts(), Self::DEFAULTS);
+        [(); N]
+            .map(|_| iter.next().unwrap())
+            .map(|(opt, def)| opt.as_ref().map_or(def, |s| s))
+    }
+}
+
+impl<T, const N: usize> SecretKeyNames<N> for Option<T>
+where
+    T: SecretKeyNames<N>,
+{
+    const DEFAULTS: [&'static str; N] = T::DEFAULTS;
+    fn secret_key_names_opts(&self) -> [&Option<String>; N] {
+        if let Some(s) = self.as_ref() {
+            s.secret_key_names_opts()
         } else {
-            Self::DEFAULTS
+            [&None; N]
         }
     }
 }
 
 pub trait Endpoint {
     fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint>;
-    fn instance_ref(&self) -> Option<&str>;
-    fn resource_path(&self) -> Option<&str>;
+    fn instance_ref(&self) -> Option<&InstanceRef> {
+        self.endpoint().map(|e| &e.instance)
+    }
+    fn resource_path(&self) -> Option<&str> {
+        self.endpoint().map(|e| e.resource_path.as_str())
+    }
 }
 
-macro_rules! impl_instance_ref {
+macro_rules! impl_endpoint {
     ($type:ident, $cluster_type:ident) => {
         impl_instance_ref!($type);
         impl_instance_ref!($cluster_type);
@@ -32,14 +46,13 @@ macro_rules! impl_instance_ref {
             fn endpoint(&self) -> Option<&$crate::KeycloakApiStatusEndpoint> {
                 self.status.as_ref().and_then(|s| s.endpoint.as_ref())
             }
-            fn instance_ref(&self) -> Option<&str> {
-                self.endpoint().map(|e| e.instance_ref.as_str())
-            }
-            fn resource_path(&self) -> Option<&str> {
-                self.endpoint().map(|e| e.resource_path.as_str())
-            }
+        }
+        impl $crate::marker::HasMarker for $type {
+            type Marker = $crate::marker::ResourceMarker<
+                <$type as ::kube::Resource>::Scope,
+            >;
         }
     };
 }
 
-pub(crate) use impl_instance_ref;
+pub(crate) use impl_endpoint;

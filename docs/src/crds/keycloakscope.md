@@ -1,6 +1,6 @@
 # KeycloakScope
 
-## v1
+## v1beta1
 
 resource to define a Scope within a [KeyclaokClient](./keycloakclient.md)
 
@@ -61,7 +61,9 @@ resource to define a Scope within a [KeyclaokClient](./keycloakclient.md)
 |[status.conditions[].reason](#statusconditionsreason)|string||
 |[status.conditions[].status](#statusconditionsstatus)|string|✅|
 |[status.conditions[].type](#statusconditionstype)|string|✅|
-|[status.instanceRef](#statusinstanceref)|string||
+|[status.instance](#statusinstance)|object||
+|[status.instance.clusterInstanceRef](#statusinstanceclusterinstanceref)|string||
+|[status.instance.instanceRef](#statusinstanceinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
 |[status.resourcePath](#statusresourcepath)|string||
@@ -92,7 +94,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-the name of the kubernetes object that created the client.
+*missing*
 
 ---
 
@@ -574,7 +576,7 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[conditions[]](#statusconditions)|object||
-|[instanceRef](#statusinstanceref)|string||
+|[instance](#statusinstance)|object||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
 |[resourcePath](#statusresourcepath)|string||
@@ -640,11 +642,40 @@ Type: string
 
 ---
 
-### status.instanceRef
+### status.instance
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[clusterInstanceRef](#statusinstanceclusterinstanceref)|string||
+|[instanceRef](#statusinstanceinstanceref)|string||
+
+*missing*
+
+---
+
+### status.instance.clusterInstanceRef
 
 Type: string
 
-*missing*
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
+
+---
+
+### status.instance.instanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the namespaced instance to which this object belongs to.
 
 ---
 

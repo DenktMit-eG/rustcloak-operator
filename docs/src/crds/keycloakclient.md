@@ -1,6 +1,6 @@
 # KeycloakClient
 
-## v1
+## v1beta1
 
 resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
 
@@ -11,6 +11,7 @@ resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.clientSecret.clientIdKey](#specclientsecretclientidkey)|string||
 |[spec.clientSecret.clientSecretKey](#specclientsecretclientsecretkey)|string||
 |[spec.clientSecret.secretName](#specclientsecretsecretname)|string|✅|
+|[spec.clusterRealmRef](#specclusterrealmref)|string||
 |[spec.definition](#specdefinition)|object|✅|
 |[spec.definition.access](#specdefinitionaccess)|object||
 |[spec.definition.adminUrl](#specdefinitionadminurl)|string||
@@ -255,7 +256,7 @@ resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
 |[spec.definition.webOrigins[]](#specdefinitionweborigins)|string||
 |[spec.options](#specoptions)|object||
 |[spec.patchFrom](#specpatchfrom)|object||
-|[spec.realmRef](#specrealmref)|string|✅|
+|[spec.realmRef](#specrealmref)|string||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
@@ -263,7 +264,9 @@ resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
 |[status.conditions[].reason](#statusconditionsreason)|string||
 |[status.conditions[].status](#statusconditionsstatus)|string|✅|
 |[status.conditions[].type](#statusconditionstype)|string|✅|
-|[status.instanceRef](#statusinstanceref)|string||
+|[status.instance](#statusinstance)|object||
+|[status.instance.clusterInstanceRef](#statusinstanceclusterinstanceref)|string||
+|[status.instance.instanceRef](#statusinstanceinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
 |[status.resourcePath](#statusresourcepath)|string||
@@ -278,10 +281,11 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[clientSecret](#specclientsecret)|object||
+|[clusterRealmRef](#specclusterrealmref)|string||
 |[definition](#specdefinition)|object|✅|
 |[options](#specoptions)|object||
 |[patchFrom](#specpatchfrom)|object||
-|[realmRef](#specrealmref)|string|✅|
+|[realmRef](#specrealmref)|string||
 
 the KeycloakClient resource
 
@@ -322,6 +326,18 @@ Type: string
 Type: string
 
 *missing*
+
+---
+
+### spec.clusterRealmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster realm to which this object belongs to
 
 ---
 
@@ -2762,7 +2778,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-the name of the kubernetes object that created the realm.
+The name of the realm to which this object belongs to
 
 ---
 
@@ -2773,7 +2789,7 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[conditions[]](#statusconditions)|object||
-|[instanceRef](#statusinstanceref)|string||
+|[instance](#statusinstance)|object||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
 |[resourcePath](#statusresourcepath)|string||
@@ -2839,11 +2855,40 @@ Type: string
 
 ---
 
-### status.instanceRef
+### status.instance
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[clusterInstanceRef](#statusinstanceclusterinstanceref)|string||
+|[instanceRef](#statusinstanceinstanceref)|string||
+
+*missing*
+
+---
+
+### status.instance.clusterInstanceRef
 
 Type: string
 
-*missing*
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster instance to which this object belongs to.
+
+---
+
+### status.instance.instanceRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the namespaced instance to which this object belongs to.
 
 ---
 

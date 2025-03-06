@@ -28,14 +28,25 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
-    name: v1
+    name: v1beta1
     schema:
       openAPIV3Schema:
         description: resource to define an Required Action Provider within a [KeyclaokRealm](./keycloakrealm.md)
         properties:
           spec:
+            anyOf:
+            - required:
+              - realmRef
+            - required:
+              - clusterRealmRef
             description: the KeycloakRequiredActionProvider resource
             properties:
+              clusterRealmRef:
+                description: The name of the cluster realm to which this object belongs to
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               definition:
                 description: |-
                   RequiredActionProviderRepresentation
@@ -155,14 +166,13 @@ spec:
                 description: Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
                 type: object
               realmRef:
-                description: the name of the kubernetes object that created the realm.
+                description: The name of the realm to which this object belongs to
                 type: string
                 x-kubernetes-validations:
                 - message: Value is immutable
                   rule: self == oldSelf
             required:
             - definition
-            - realmRef
             type: object
           status:
             nullable: true
@@ -190,8 +200,26 @@ spec:
                   - type
                   type: object
                 type: array
-              instanceRef:
-                type: string
+              instance:
+                anyOf:
+                - required:
+                  - instanceRef
+                - required:
+                  - clusterInstanceRef
+                properties:
+                  clusterInstanceRef:
+                    description: The name of the cluster instance to which this object belongs to.
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  instanceRef:
+                    description: The name of the namespaced instance to which this object belongs to.
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                type: object
               message:
                 type: string
               ready:

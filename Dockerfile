@@ -14,9 +14,16 @@ RUN \
 		--root /app \
 		--bin rustcloak
 
+FROM alpine:3.21 AS upx
+COPY --from=build /app/bin/rustcloak /
+
+RUN \
+	apk add upx && \
+	upx /rustcloak
+
 FROM gcr.io/distroless/static:nonroot
 
-COPY --from=build /app/bin/rustcloak /
+COPY --from=upx /rustcloak /
 
 EXPOSE 8080
 
