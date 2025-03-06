@@ -89,8 +89,7 @@ where
     pub async fn run(self) -> Result<()> {
         let api = Api::<C::Resource>::all(self.client.clone());
         let config = controller::Config::default().concurrency(2);
-        let dt = ().into();
-        let kind = C::Resource::kind(&dt);
+        let kind = C::Resource::kind(&());
 
         wait_for_crd::<C::Resource, C>(&self.client).await?;
 
@@ -143,8 +142,7 @@ where
         let name = resource.name_unchecked();
         let api = ApiExt::<C::Resource>::api(ctx.client.clone(), &ns);
         let client = ctx.client.clone();
-        let dt = ().into();
-        let kind = C::Resource::kind(&dt);
+        let kind = C::Resource::kind(&());
 
         debug!(
             kind = kind,

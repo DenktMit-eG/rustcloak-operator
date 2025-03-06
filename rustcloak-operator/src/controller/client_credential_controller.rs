@@ -88,7 +88,7 @@ impl LifecycleController for ClientCredentialController {
 
         debug!("fetching client from {}", resource_path);
         let client =
-            keycloak.get::<ClientRepresentation>(&resource_path).await?;
+            keycloak.get::<ClientRepresentation>(resource_path).await?;
         let Some(client_id) = client.client_id else {
             return Err(Error::MissingClientId)?;
         };

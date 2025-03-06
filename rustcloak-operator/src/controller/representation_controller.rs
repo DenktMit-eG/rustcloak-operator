@@ -233,7 +233,7 @@ where
             .await?;
 
         if let Some(api_status) =
-            admin_api.get_status(&api_name).await?.status().clone()
+            admin_api.get_status(&api_name).await?.status()
         {
             let api = ApiExt::<Self::Resource>::api(client.clone(), &ns);
             api.patch_status(

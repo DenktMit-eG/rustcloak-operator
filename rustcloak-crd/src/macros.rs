@@ -22,7 +22,6 @@ macro_rules! map_all_crds {
             $crate::map_rest_crds!($type_name => $type_expression).into_iter()
                 .chain(
                     $crate::map_plumbing_crds!($type_name => $type_expression)
-                        .into_iter()
                 )
     };
 }

@@ -32,20 +32,9 @@ pub trait ConvertTo<T> {
 
 impl ConvertTo<KeycloakUserCredential> for KeycloakUser {
     fn convert(self) -> Option<KeycloakUserCredential> {
-        let Some(resource_path) = self.resource_path() else {
-            return None;
-        };
-        let resource_path = resource_path.to_string();
-
-        let Some(instance_ref) = self.instance_ref() else {
-            return None;
-        };
-        let instance_ref = instance_ref.clone();
-
-        let Some(user_secret) = &self.spec.user_secret else {
-            return None;
-        };
-        let user_secret = user_secret.clone();
+        let resource_path = self.resource_path()?.to_string();
+        let instance_ref = self.instance_ref()?.clone();
+        let user_secret = self.spec.user_secret.as_ref()?.clone();
 
         let owner_ref = self.owner_ref(&()).unwrap();
         Some(KeycloakUserCredential {
@@ -67,20 +56,9 @@ impl ConvertTo<KeycloakUserCredential> for KeycloakUser {
 
 impl ConvertTo<KeycloakClientCredential> for KeycloakClient {
     fn convert(self) -> Option<KeycloakClientCredential> {
-        let Some(resource_path) = self.resource_path() else {
-            return None;
-        };
-        let resource_path = resource_path.to_string();
-
-        let Some(instance_ref) = self.instance_ref() else {
-            return None;
-        };
-        let instance_ref = instance_ref.clone();
-
-        let Some(client_secret) = &self.spec.client_secret else {
-            return None;
-        };
-        let client_secret = client_secret.clone();
+        let resource_path = self.resource_path()?.to_string();
+        let instance_ref = self.instance_ref()?.clone();
+        let client_secret = self.spec.client_secret.as_ref()?.clone();
 
         let owner_ref = self.owner_ref(&()).unwrap();
         Some(KeycloakClientCredential {

@@ -11,14 +11,14 @@ impl<L: Ref, R: Ref> Ref for UntaggedEither<L, R> {
 }
 
 macro_rules! ref_type {
-    ($name:ident, $field:ident, $target:ty) => {
-        ref_type!($name, $field, $target, "");
-    };
-    ($name:ident, $field:ident, $target:ty, $doc:literal) => {
+    //($name:ident, $field:ident, $target:ty) => {
+    //    ref_type!($name, $field, $target, "");
+    //};
+    ($name:ident, $field:ident, $target:ty $(, $doc:literal)?) => {
         #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
         #[serde(rename_all = "camelCase")]
         pub struct $name {
-            #[doc = $doc]
+            $(#[doc = $doc])?
             pub $field: crate::ImmutableString,
         }
         impl From<$name> for String {
