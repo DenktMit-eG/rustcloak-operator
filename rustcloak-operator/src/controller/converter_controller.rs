@@ -133,7 +133,7 @@ where
                 match res {
                     Ok((o, _)) => {
                         info!(
-                            namespace = o.namespace.unwrap(),
+                            namespace = o.namespace,
                             name = o.name,
                             kind = kind;
                             "reconciled",
@@ -141,7 +141,7 @@ where
                     }
                     Err(controller::Error::ReconcilerFailed(e, o)) => {
                         warn!(
-                            namespace = o.namespace.unwrap(),
+                            namespace = o.namespace,
                             name = o.name,
                             kind = kind;
                             "{e}",

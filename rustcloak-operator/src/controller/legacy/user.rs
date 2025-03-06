@@ -2,7 +2,7 @@ use super::{find_name, should_handle_prudent};
 use crate::{
     app_id,
     controller::controller_runner::LifecycleController,
-    error::{Error, Result},
+    error::Result, util::{ApiExt, ApiFactory},
 };
 use async_trait::async_trait;
 use either::Either;
@@ -50,9 +50,9 @@ async fn make_secret(
     }
 
     let name = resource.name_unchecked();
-    let namespace = resource.namespace().ok_or(Error::NoNamespace)?;
+    let namespace = resource.namespace();
     let owner_ref = resource.owner_ref(&()).unwrap();
-    let api = Api::<Secret>::namespaced(client.clone(), &namespace);
+    let api = ApiExt::<Secret>::api(client.clone(), &namespace);
     let Some(username) = resource.spec.user.username.clone() else {
         return Ok(None);
     };
@@ -123,9 +123,9 @@ impl LifecycleController for LegacyUserController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let name = resource.name_unchecked();
-        let namespace = resource.namespace().ok_or(Error::NoNamespace)?;
+        let namespace = resource.namespace();
         let owner_ref = resource.owner_ref(&()).unwrap();
-        let api = Api::<KeycloakUser>::namespaced(client.clone(), &namespace);
+        let api = ApiExt::<KeycloakUser>::api(client.clone(), &namespace);
         let mut resource = Arc::unwrap_or_clone(resource);
         let user_secret = make_secret(client, &mut resource).await?;
 
@@ -133,7 +133,7 @@ impl LifecycleController for LegacyUserController {
         let instance = KeycloakUser {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
-                namespace: Some(namespace.clone()),
+                namespace: namespace.clone(),
                 owner_references: Some(vec![owner_ref]),
                 labels: resource.meta().labels.clone(),
                 annotations: resource.meta().annotations.clone(),

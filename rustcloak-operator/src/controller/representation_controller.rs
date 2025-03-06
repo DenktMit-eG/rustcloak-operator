@@ -18,6 +18,7 @@ use kube::{
 };
 use log::debug;
 use rustcloak_crd::{
+    ClusterKeycloakApiObject, ClusterKeycloakApiObjectSpec,
     KeycloakApiEndpoint, KeycloakApiEndpointPath, KeycloakApiStatus,
     KeycloakRestObject,
 };
@@ -79,7 +80,7 @@ impl ApiObjectHelper for NamespaceResourceScope {
 }
 
 impl ApiObjectHelper for ClusterResourceScope {
-    type ApiObject = KeycloakApiObject;
+    type ApiObject = ClusterKeycloakApiObject;
 
     fn create(
         meta: ObjectMeta,
@@ -87,7 +88,7 @@ impl ApiObjectHelper for ClusterResourceScope {
     ) -> Self::ApiObject {
         Self::ApiObject {
             metadata: meta,
-            spec,
+            spec: ClusterKeycloakApiObjectSpec { spec },
             status: None,
         }
     }

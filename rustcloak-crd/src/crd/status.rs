@@ -18,8 +18,7 @@ pub struct KeycloakApiCondition {
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakApiStatusEndpoint {
     pub resource_path: String,
-    #[serde(flatten)]
-    pub instance_ref: InstanceRef,
+    pub instance: InstanceRef,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]

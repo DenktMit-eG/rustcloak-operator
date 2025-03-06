@@ -1,21 +1,16 @@
 use k8s_openapi::api::core::v1::{ConfigMapKeySelector, SecretKeySelector};
+use rustcloak_crd::InstanceRef;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum Error {
     #[error("Keycloak Error: {0}")]
     KeycloakClient(#[from] keycloak_client::Error),
-    #[error("No Parent: {0}/{1}")]
-    NoParent(String, String),
-    #[error("No Name")]
-    NoName,
-    #[error("No Namespace")]
-    NoNamespace,
     #[error("{0}")]
     FromUtf8Error(#[from] std::string::FromUtf8Error),
     #[error("{0}")]
     Other(#[from] Box<dyn std::error::Error + Send + Sync>),
-    #[error("Missing Field: {0}")]
+    #[error("Missing Field in Resource: {0}")]
     MissingField(String),
     #[error("Missing Resource Path")]
     MissingResourcePath,
@@ -43,8 +38,8 @@ pub enum Error {
     BorrowError(#[from] std::cell::BorrowError),
     #[error("Send error: {0}")]
     SendError(#[from] tokio::sync::mpsc::error::SendError<()>),
-    #[error("No Instance in namespace {0} with name {1} found")]
-    NoInstance(String, String),
+    #[error("No Instance in namespace {0:?} with name {1:?} found")]
+    NoInstance(Option<String>, InstanceRef),
     #[error("No Credential Secret in namespace {0} with name {1} found")]
     NoCredentialSecret(String, String),
     #[error("No Token Secret in namespace {0} with name {1} found")]

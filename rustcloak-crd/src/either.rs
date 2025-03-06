@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::{fmt::{self, Display, Formatter}, ops::Deref};
 
 use crate::{InstanceRef, traits::Endpoint};
 use either::{Either, for_both};
@@ -24,6 +24,16 @@ where
 {
     fn as_ref(&self) -> &str {
         for_both!(self.inner, ref s => s.as_ref())
+    }
+}
+
+impl<L, R> Display for UntaggedEither<L, R>
+where
+    L: Serialize + DeserializeOwned + JsonSchema + Display,
+    R: Serialize + DeserializeOwned + JsonSchema + Display,
+{
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        for_both!(self.inner, ref s => write!(f, "{}", s))
     }
 }
 

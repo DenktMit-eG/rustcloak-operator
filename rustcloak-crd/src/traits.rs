@@ -29,7 +29,7 @@ where
 pub trait Endpoint {
     fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint>;
     fn instance_ref(&self) -> Option<&InstanceRef> {
-        self.endpoint().map(|e| &e.instance_ref)
+        self.endpoint().map(|e| &e.instance)
     }
     fn resource_path(&self) -> Option<&str> {
         self.endpoint().map(|e| e.resource_path.as_str())

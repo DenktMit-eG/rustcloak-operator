@@ -2,10 +2,11 @@ use std::collections::BTreeMap;
 
 use crate::app_id;
 use crate::error::Error;
+use crate::util::ApiExt;
+use crate::util::ApiFactory;
 use case_style::CaseStyle;
 use k8s_openapi::NamespaceResourceScope;
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::LabelSelector;
-use kube::Api;
 use kube::Resource;
 use kube::ResourceExt;
 use kube::api::ListParams;
@@ -39,7 +40,7 @@ fn find_variants(
 
 pub async fn find_name<T>(
     client: &kube::Client,
-    namespace: &str,
+    namespace: &Option<String>,
     selector: &LabelSelector,
     meta: &ObjectMeta,
     parent_ref_ident: &str,
@@ -49,6 +50,7 @@ where
         + Clone
         + std::fmt::Debug
         + DeserializeOwned,
+    ApiExt<T>: ApiFactory<Resource = T>,
 {
     if let Some(name) = meta
         .annotations
@@ -58,7 +60,7 @@ where
         return Ok(name.clone());
     }
 
-    let api = Api::<T>::namespaced(client.clone(), namespace);
+    let api = ApiExt::<T>::api(client.clone(), namespace);
     let selector = selector.clone().try_into()?;
     let list = api
         .list_metadata(

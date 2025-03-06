@@ -14,7 +14,7 @@ pub trait SecretUtils {
     ) -> Result<[String; N]>;
 }
 
-fn extract<const N: usize>(
+fn extract_inner<const N: usize>(
     secret: Secret,
     key_names: &impl SecretKeyNames<N>,
 ) -> [Result<String>; N] {
@@ -35,7 +35,7 @@ impl SecretUtils for Secret {
         self,
         key_names: &impl SecretKeyNames<N>,
     ) -> Result<[String; N]> {
-        extract(self, key_names)
+        extract_inner(self, key_names)
             .into_iter()
             .collect::<Result<Vec<_>>>()
             .map(|x| x.try_into().unwrap())
@@ -45,6 +45,6 @@ impl SecretUtils for Secret {
         self,
         key_names: &impl SecretKeyNames<N>,
     ) -> [Option<String>; N] {
-        extract(self, key_names).map(|r| r.ok())
+        extract_inner(self, key_names).map(|r| r.ok())
     }
 }

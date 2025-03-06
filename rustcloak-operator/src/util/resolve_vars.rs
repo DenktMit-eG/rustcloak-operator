@@ -1,11 +1,12 @@
 use std::collections::HashMap;
 
+use super::{ApiExt, ApiFactory};
 use crate::error::{Error, Result};
 use k8s_openapi::{
     api::core::v1::{ConfigMap, ConfigMapKeySelector, EnvVarSource, Secret},
     serde_json::{self, Value},
 };
-use kube::{Api, Client};
+use kube::Client;
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::KeycloakApiObjectSpec;
 use rustcloak_crd::inner_spec::HasInnerSpec;
@@ -26,7 +27,7 @@ impl Resolver<'_> {
         Ok(match value {
             Object(obj) => {
                 if obj.len() != 1 {
-                    self.visit_object(obj)
+                    self.visit_object(obj)?
                 } else if let Some(String(str)) = obj.get("$str") {
                     String(
                         vars.get(str).ok_or(Error::NoVar(str.clone()))?.clone(),
@@ -46,7 +47,7 @@ impl Resolver<'_> {
                         vars.get(obj).ok_or(Error::NoVar(obj.clone()))?,
                     )?)
                 } else {
-                    self.visit_object(obj)
+                    self.visit_object(obj)?
                 }
             }
             Array(arr) => Array(
@@ -58,12 +59,15 @@ impl Resolver<'_> {
         })
     }
 
-    fn visit_object(&self, obj: serde_json::Map<String, Value>) -> Value {
+    fn visit_object(
+        &self,
+        obj: serde_json::Map<String, Value>,
+    ) -> Result<Value> {
         let mut new_obj = serde_json::Map::with_capacity(obj.len());
         for (k, v) in obj.into_iter() {
-            new_obj.insert(k, self.visit(v).unwrap());
+            new_obj.insert(k, self.visit(v)?);
         }
-        Value::Object(new_obj)
+        Ok(Value::Object(new_obj))
     }
 
     async fn resolve_from(
@@ -88,8 +92,8 @@ impl Resolver<'_> {
         &mut self,
         r: &ConfigMapKeySelector,
     ) -> Result<String> {
-        let ns = self.namespace.as_ref().ok_or(Error::NoNamespace)?;
-        let api = Api::<ConfigMap>::namespaced(self.client.clone(), ns);
+        let ns = &self.namespace;
+        let api = ApiExt::<ConfigMap>::api(self.client.clone(), ns);
         let config_map =
             if let Some(config_map) = self.config_map_cache.get(&r.name) {
                 config_map
@@ -97,7 +101,10 @@ impl Resolver<'_> {
                 self.config_map_cache.insert(r.name.clone(), config_map);
                 self.config_map_cache.get(&r.name).unwrap()
             } else {
-                return Err(Error::NoConfigMap(ns.to_string(), r.name.clone()));
+                return Err(Error::NoConfigMap(
+                    ns.clone().unwrap_or_default(),
+                    r.name.clone(),
+                ));
             };
         Ok(config_map
             .data
@@ -111,15 +118,18 @@ impl Resolver<'_> {
         &mut self,
         r: &k8s_openapi::api::core::v1::SecretKeySelector,
     ) -> Result<String> {
-        let ns = self.namespace.as_ref().ok_or(Error::NoNamespace)?;
-        let api = Api::<Secret>::namespaced(self.client.clone(), ns);
+        let ns = &self.namespace;
+        let api = ApiExt::<Secret>::api(self.client.clone(), ns);
         let secret = if let Some(secret) = self.secret_cache.get(&r.name) {
             secret
         } else if let Some(secret) = api.get_opt(&r.name).await? {
             self.secret_cache.insert(r.name.clone(), secret);
             self.secret_cache.get(&r.name).unwrap()
         } else {
-            return Err(Error::NoConfigMap(ns.to_string(), r.name.clone()));
+            return Err(Error::NoConfigMap(
+                ns.clone().unwrap_or_default(),
+                r.name.clone(),
+            ));
         };
         Ok(secret
             .data

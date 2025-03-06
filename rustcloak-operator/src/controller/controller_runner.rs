@@ -106,14 +106,14 @@ where
                     Ok((o, _)) => {
                         info!(target: C::MODULE_PATH,
                             kind = kind,
-                            namespace = o.namespace.unwrap(),
+                            namespace = o.namespace,
                             name = o.name;
                             "reconciled"
                         )
                     }
                     Err(controller::Error::ReconcilerFailed(e, o)) => {
                         warn!(target: C::MODULE_PATH,
-                            namespace = o.namespace.unwrap(),
+                            namespace = o.namespace,
                             name = o.name,
                             kind = kind;
                             "reconciling failed: {e}",
@@ -186,7 +186,6 @@ where
             |event| async {
                 match event {
                     Event::Apply(resource) => {
-                        println!("aaaaa {}", std::any::type_name_of_val(&api));
                         ctx.controller.apply(&client, resource).await
                     }
                     Event::Cleanup(resource) => {

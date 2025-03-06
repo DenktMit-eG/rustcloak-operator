@@ -69,8 +69,8 @@ where
     ) -> Result<()> {
         let spec = resource.inner_spec();
         let secret_name = &spec.credentials.secret_name;
-        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let secret_api = Api::<Secret>::namespaced(client.clone(), &ns);
+        let ns = resource.namespace();
+        let secret_api = ApiExt::<Secret>::api(client.clone(), &ns);
         let [username_key, password_key] = spec.credentials.secret_key_names();
 
         let username = "rustcloak-admin".to_string();
@@ -93,7 +93,7 @@ where
             data: Some(data),
             metadata: ObjectMeta {
                 name: Some(secret_name.to_string()),
-                namespace: Some(ns),
+                namespace: ns,
                 owner_references: Some(vec![owner_ref]),
                 ..Default::default()
             },
@@ -180,14 +180,14 @@ where
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
+        let ns = resource.namespace();
         let grace_period = Duration::minutes(3);
         let deletion_time =
             resource.meta().deletion_timestamp.as_ref().unwrap().0;
 
         let selector =
             format!("{}={}", app_id!("instanceRef"), resource.name_unchecked());
-        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let api = Api::<KeycloakApiObject>::namespaced(client.clone(), &ns);
+        let api = ApiExt::<KeycloakApiObject>::api(client.clone(), &ns);
         let list = api
             .list_metadata(&ListParams::default().labels(&selector))
             .await?;

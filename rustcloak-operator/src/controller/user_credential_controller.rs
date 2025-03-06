@@ -1,18 +1,14 @@
 use crate::{
-    controller::controller_runner::LifecycleController,
-    error::{Error, Result},
-    util::{
+    app_id, controller::controller_runner::LifecycleController, error::{Error, Result}, util::{
         ApiExt, ApiFactory, K8sKeycloakBuilder, RefWatcher, Retrieve,
         Retriever, SecretUtils,
-    },
+    }
 };
 use async_trait::async_trait;
 use either::for_both;
 use k8s_openapi::{ByteString, api::core::v1::Secret};
 use kube::{
-    Api, Resource, ResourceExt,
-    api::{ObjectMeta, PostParams},
-    runtime::{Controller, controller::Action, watcher},
+    api::{ObjectMeta, Patch, PatchParams}, runtime::{controller::Action, watcher, Controller}, Api, Resource, ResourceExt
 };
 use randstr::randstr;
 use rustcloak_crd::{
@@ -78,10 +74,21 @@ impl LifecycleController for UserCredentialController {
             .await?;
 
         self.secret_refs.add(&resource, [&secret_name]);
-        let secret = if let Some(secret) =
-            secret_api.get_opt(secret_name).await?
-        {
-            secret
+        let password =
+            if let Some(secret) = secret_api.get_opt(secret_name).await? {
+                if let Ok([_, password, _]) =
+                    secret.extract(&Some(resource.spec.user_secret.clone()))
+                {
+                    Some(password)
+                } else {
+                    None
+                }
+            } else {
+                None
+            };
+
+        let password = if let Some(password) = password {
+            password
         } else {
             let user =
                 keycloak.get::<UserRepresentation>(resource_path).await?;
@@ -98,7 +105,10 @@ impl LifecycleController for UserCredentialController {
                 .generate();
             let data = [
                 (username_key.to_string(), ByteString(username.into_bytes())),
-                (password_key.to_string(), ByteString(password.into_bytes())),
+                (
+                    password_key.to_string(),
+                    ByteString(password.clone().into_bytes()),
+                ),
                 (
                     email_key.to_string(),
                     ByteString(email.unwrap_or_default().into_bytes()),
@@ -119,11 +129,9 @@ impl LifecycleController for UserCredentialController {
                 ..Default::default()
             };
 
-            secret_api.create(&PostParams::default(), &secret).await?
+            secret_api.patch(secret_name, &PatchParams::apply(app_id!()), &Patch::Apply(secret)).await?;
+            password
         };
-
-        let [_, password, _] =
-            secret.extract(&Some(resource.spec.user_secret.clone()))?;
 
         let path = format!("{}/reset-password", resource_path);
         let credential = CredentialRepresentation {

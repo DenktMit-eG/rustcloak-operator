@@ -83,6 +83,7 @@ where
         reference: &Self::Ref,
         ns: &Option<String>,
     ) -> Result<<Self::Ref as Ref>::Target> {
+        println!("Retrieving {:?}", reference);
         let api = ApiExt::<R::Target>::api(client, ns);
         Ok(api.get(reference.as_ref()).await?)
     }
@@ -102,6 +103,7 @@ where
         reference: &Self::Ref,
         ns: &Option<String>,
     ) -> Result<<Self::Ref as Ref>::Target> {
+        println!("Retrieving {:?}", reference);
         let api = ApiExt::<R::Target>::api(client, ns);
         Ok(api.get(reference.as_ref()).await?)
     }

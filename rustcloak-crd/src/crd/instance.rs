@@ -143,7 +143,12 @@ impl HasMarker for ClusterKeycloakInstance {
     type Marker = ResourceMarker<<Self as Resource>::Scope>;
 }
 
-ref_type!(NamespacedInstanceRef, instance_ref, KeycloakInstance);
+ref_type!(
+    NamespacedInstanceRef,
+    instance_ref,
+    KeycloakInstance,
+    "The name of the namespaced instance to which this object belongs to."
+);
 ref_type!(
     ClusterInstanceRef,
     cluster_instance_ref,

@@ -26,9 +26,9 @@ use kube::{
 };
 use log::warn;
 use rustcloak_crd::{
-    ApiObjectRef, KeycloakApiEndpointParent, KeycloakApiEndpointPath,
-    KeycloakApiObjectSpec, KeycloakApiStatus, KeycloakApiStatusEndpoint,
-    KeycloakInstance, inner_spec::HasInnerSpec,
+    ApiObjectRef, InstanceRef, KeycloakApiEndpointParent,
+    KeycloakApiEndpointPath, KeycloakApiObjectSpec, KeycloakApiStatus,
+    KeycloakApiStatusEndpoint, inner_spec::HasInnerSpec,
 };
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
@@ -103,17 +103,16 @@ where
         client: &kube::Client,
         resource: &R,
     ) -> Result<ApiClient> {
-        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
-        let instance_api =
-            Api::<KeycloakInstance>::namespaced(client.clone(), &ns);
+        let ns = resource.namespace();
 
-        let instance_ref = &resource.inner_spec().endpoint.instance_ref;
-        let instance = instance_api
-            .get_opt(instance_ref.as_ref())
-            .await?
-            .ok_or(Error::NoInstance(ns, instance_ref.as_ref().to_string()))?;
+        let instance = Retriever::<InstanceRef>::get(
+            client.clone(),
+            &resource.inner_spec().endpoint.instance_ref,
+            &ns,
+        )
+        .await?;
 
-        K8sKeycloakBuilder::new(&instance, client)
+        for_both!(instance, ref instance => K8sKeycloakBuilder::new(instance, client))
             .with_token()
             .await
     }
@@ -220,7 +219,7 @@ where
             let mut status = resource.status().cloned().unwrap_or_default();
             status.endpoint = Some(KeycloakApiStatusEndpoint {
                 resource_path,
-                instance_ref: resource
+                instance: resource
                     .inner_spec()
                     .endpoint
                     .instance_ref
@@ -258,7 +257,7 @@ where
     ) -> Result<Action> {
         let kind = R::kind(&());
         let name = resource.name_unchecked();
-        let ns = resource.namespace().ok_or(Error::NoNamespace)?;
+        let ns = resource.namespace();
         let Some(endpoint) =
             resource.status().as_ref().and_then(|s| s.endpoint.as_ref())
         else {
