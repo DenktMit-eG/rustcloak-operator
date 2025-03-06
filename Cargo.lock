@@ -2243,7 +2243,7 @@ dependencies = [
 
 [[package]]
 name = "rustcloak-operator"
-version = "0.1.13"
+version = "0.2.0"
 dependencies = [
  "actix-web",
  "async-trait",

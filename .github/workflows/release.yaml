@@ -15,9 +15,10 @@ jobs:
     # Check Versions
     - name: Check If Versions Match
       run: |
-        cargo_version=$(cargo pkgid | cut -d'#' -f 2)
         helm_version=$(yq .version charts/rustcloak-operator/Chart.yaml)
         helm_appversion=$(yq .appVersion charts/rustcloak-operator/Chart.yaml)
+        cd rustcloak-operator
+        cargo_version=$(cargo pkgid | cut -d'#' -f 2)
 
         set -x
         test "${cargo_version}"   = "${GITHUB_REF_NAME#v}"
