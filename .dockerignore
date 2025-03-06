@@ -1,4 +1,7 @@
+Dockerfile
 README.md
 charts
 docs
-LICENSE
+examples
+icon.svg
+rustfmt.toml

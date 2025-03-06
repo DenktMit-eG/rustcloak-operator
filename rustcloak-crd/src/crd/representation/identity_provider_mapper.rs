@@ -34,7 +34,7 @@ namespace_scope! {
     }
 }
 
-impl_object!("ipm" <IdentityProviderRef> / |_d| {"mappers"} / id for KeycloakIdentityProviderMapperSpec => IdentityProviderMapperRepresentation);
+impl_object!("ipm" <IdentityProviderRef> / |_d| {"mappers"} / "id" for KeycloakIdentityProviderMapperSpec => IdentityProviderMapperRepresentation);
 
 impl_endpoint!(KeycloakIdentityProviderMapper);
 

@@ -1,4 +1,5 @@
 use crate::keycloak_types::UserRepresentation;
+use crate::refs::ref_type;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
     crd::namespace_scope,
@@ -53,7 +54,14 @@ impl SecretKeyNames<3> for KeycloakUserSecretReference {
     }
 }
 
-impl_object!("user" <RealmRef> / |_d| {"users"} / id for KeycloakUserSpec => UserRepresentation);
+ref_type!(
+    UserRef,
+    user_ref,
+    KeycloakUser,
+    "The name of a KeycloakUser resource"
+);
+
+impl_object!("user" <RealmRef> / |_d| {"users"} / "id" for KeycloakUserSpec => UserRepresentation);
 
 impl_endpoint!(KeycloakUser);
 

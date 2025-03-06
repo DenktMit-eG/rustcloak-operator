@@ -43,7 +43,7 @@ impl_object!("group" <ParentRef> / |d| {
     } else {
         "children"
     }
-} / id for KeycloakGroupSpec => GroupRepresentation);
+} / "id" for KeycloakGroupSpec => GroupRepresentation);
 
 impl_endpoint!(KeycloakGroup);
 
@@ -51,3 +51,9 @@ schema_patch!(KeycloakGroupSpec: |s| {
     s.remove("subGroups");
 });
 ref_type!(SubGroupRef, parent_group_ref, KeycloakGroup);
+ref_type!(
+    GroupRef,
+    group_ref,
+    KeycloakGroup,
+    "The name of a KeycloakGroup resource"
+);

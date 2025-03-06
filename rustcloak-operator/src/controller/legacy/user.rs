@@ -2,7 +2,8 @@ use super::{find_name, should_handle_prudent};
 use crate::{
     app_id,
     controller::controller_runner::LifecycleController,
-    error::Result, util::{ApiExt, ApiFactory},
+    error::Result,
+    util::{ApiExt, ApiFactory},
 };
 use async_trait::async_trait;
 use either::Either;

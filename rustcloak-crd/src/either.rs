@@ -1,4 +1,7 @@
-use std::{fmt::{self, Display, Formatter}, ops::Deref};
+use std::{
+    fmt::{self, Display, Formatter},
+    ops::Deref,
+};
 
 use crate::{InstanceRef, traits::Endpoint};
 use either::{Either, for_both};

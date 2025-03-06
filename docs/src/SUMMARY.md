@@ -27,5 +27,8 @@
     - [ClusterKeycloakApiObject](crds/clusterkeycloakapiobject.md)
     - [ClusterKeycloakInstance](crds/clusterkeycloakinstance.md)
     - [KeycloakApiObject](crds/keycloakapiobject.md)
+    - [KeycloakClientCredential](crds/keycloakclientcredential.md)
     - [KeycloakInstance](crds/keycloakinstance.md)
+    - [KeycloakRoleMapping](crds/keycloakrolemapping.md)
+    - [KeycloakUserCredential](crds/keycloakusercredential.md)
 - [Architecture](./architecture.md)

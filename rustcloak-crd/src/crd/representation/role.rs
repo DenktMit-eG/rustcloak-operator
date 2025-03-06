@@ -1,6 +1,7 @@
 use super::{ClientRef, RealmRef};
 use crate::either::UntaggedEither;
 use crate::keycloak_types::RoleRepresentation;
+use crate::refs::ref_type;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
     crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
@@ -35,7 +36,14 @@ namespace_scope! {
 
 type ParentRef = UntaggedEither<RealmRef, ClientRef>;
 
-impl_object!("role" <ParentRef> / |_d| {"roles"} / name for KeycloakRoleSpec => RoleRepresentation);
+impl_object!("role" <ParentRef> / |_d| {"roles"} / "name" for KeycloakRoleSpec => RoleRepresentation);
+
+ref_type!(
+    RoleRef,
+    role_ref,
+    KeycloakRole,
+    "A reference to a KeycloakRole"
+);
 
 impl_endpoint!(KeycloakRole);
 

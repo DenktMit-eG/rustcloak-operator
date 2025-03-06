@@ -34,7 +34,7 @@ namespace_scope! {
     }
 }
 
-impl_object!("component" <RealmRef> / |_d| {"components"} / id for KeycloakComponentSpec => ComponentRepresentation);
+impl_object!("component" <RealmRef> / |_d| {"components"} / "id" for KeycloakComponentSpec => ComponentRepresentation);
 
 impl_endpoint!(KeycloakComponent);
 

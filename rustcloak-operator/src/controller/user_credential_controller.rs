@@ -1,14 +1,19 @@
 use crate::{
-    app_id, controller::controller_runner::LifecycleController, error::{Error, Result}, util::{
+    app_id,
+    controller::controller_runner::LifecycleController,
+    error::{Error, Result},
+    util::{
         ApiExt, ApiFactory, K8sKeycloakBuilder, RefWatcher, Retrieve,
         Retriever, SecretUtils,
-    }
+    },
 };
 use async_trait::async_trait;
 use either::for_both;
 use k8s_openapi::{ByteString, api::core::v1::Secret};
 use kube::{
-    api::{ObjectMeta, Patch, PatchParams}, runtime::{controller::Action, watcher, Controller}, Api, Resource, ResourceExt
+    Api, Resource, ResourceExt,
+    api::{ObjectMeta, Patch, PatchParams},
+    runtime::{Controller, controller::Action, watcher},
 };
 use randstr::randstr;
 use rustcloak_crd::{
@@ -129,7 +134,13 @@ impl LifecycleController for UserCredentialController {
                 ..Default::default()
             };
 
-            secret_api.patch(secret_name, &PatchParams::apply(app_id!()), &Patch::Apply(secret)).await?;
+            secret_api
+                .patch(
+                    secret_name,
+                    &PatchParams::apply(app_id!()),
+                    &Patch::Apply(secret),
+                )
+                .await?;
             password
         };
 

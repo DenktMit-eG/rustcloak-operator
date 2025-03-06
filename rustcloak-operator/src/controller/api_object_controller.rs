@@ -219,11 +219,7 @@ where
             let mut status = resource.status().cloned().unwrap_or_default();
             status.endpoint = Some(KeycloakApiStatusEndpoint {
                 resource_path,
-                instance: resource
-                    .inner_spec()
-                    .endpoint
-                    .instance_ref
-                    .clone(),
+                instance: resource.inner_spec().endpoint.instance_ref.clone(),
             });
 
             api.patch_status(

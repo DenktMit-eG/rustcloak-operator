@@ -33,7 +33,7 @@ namespace_scope! {
     }
 }
 
-impl_object!("rap" <RealmRef> / |_d| {"authentication/required-actions"} / alias for KeycloakRequiredActionProviderSpec => RequiredActionProviderRepresentation);
+impl_object!("rap" <RealmRef> / |_d| {"authentication/required-actions"} / "alias" for KeycloakRequiredActionProviderSpec => RequiredActionProviderRepresentation);
 
 impl_endpoint!(KeycloakRequiredActionProvider);
 

@@ -38,7 +38,7 @@ both_scopes! {
     }
 }
 
-impl_object!("realm" <InstanceRef> / |_d| {"admin/realms"} / realm for KeycloakRealmSpec => RealmRepresentation);
+impl_object!("realm" <InstanceRef> / |_d| {"admin/realms"} / "realm" for KeycloakRealmSpec => RealmRepresentation);
 
 impl Endpoint for KeycloakRealm {
     fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {

@@ -33,7 +33,7 @@ namespace_scope! {
     }
 }
 
-impl_object!("authflow" <RealmRef> / |_d| {"authentication/flows"} / id for KeycloakAuthenticationFlowSpec => AuthenticationFlowRepresentation);
+impl_object!("authflow" <RealmRef> / |_d| {"authentication/flows"} / "id" for KeycloakAuthenticationFlowSpec => AuthenticationFlowRepresentation);
 
 impl_endpoint!(KeycloakAuthenticationFlow);
 

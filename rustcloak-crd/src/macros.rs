@@ -32,6 +32,7 @@ meta_map_crds!(map_plumbing_crds:
     KeycloakApiObject,
     KeycloakClientCredential,
     KeycloakInstance,
+    KeycloakRoleMapping,
     KeycloakUserCredential,
 );
 

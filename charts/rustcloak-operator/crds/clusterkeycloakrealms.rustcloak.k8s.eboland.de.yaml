@@ -2511,6 +2511,7 @@ spec:
                 - message: Value is immutable
                   rule: has(self.realm) == has(oldSelf.realm)
               instanceRef:
+                description: The name of the namespaced instance to which this object belongs to.
                 type: string
                 x-kubernetes-validations:
                 - message: Value is immutable
@@ -2599,19 +2600,8 @@ spec:
             - definition
             type: object
           status:
-            anyOf:
-            - required:
-              - instanceRef
-            - required:
-              - clusterInstanceRef
             nullable: true
             properties:
-              clusterInstanceRef:
-                description: The name of the cluster instance to which this object belongs to.
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
               conditions:
                 items:
                   properties:
@@ -2635,11 +2625,26 @@ spec:
                   - type
                   type: object
                 type: array
-              instanceRef:
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
+              instance:
+                anyOf:
+                - required:
+                  - instanceRef
+                - required:
+                  - clusterInstanceRef
+                properties:
+                  clusterInstanceRef:
+                    description: The name of the cluster instance to which this object belongs to.
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  instanceRef:
+                    description: The name of the namespaced instance to which this object belongs to.
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                type: object
               message:
                 type: string
               ready:

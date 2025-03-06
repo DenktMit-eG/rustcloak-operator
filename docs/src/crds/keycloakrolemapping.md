@@ -1,24 +1,15 @@
-# KeycloakRequiredActionProvider
+# KeycloakRoleMapping
 
 ## v1beta1
 
-resource to define an Required Action Provider within a [KeyclaokRealm](./keycloakrealm.md)
+represents a mapping between a user or group and a client
 
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
-|[spec.clusterRealmRef](#specclusterrealmref)|string||
-|[spec.definition](#specdefinition)|object|✅|
-|[spec.definition.alias](#specdefinitionalias)|string||
-|[spec.definition.config](#specdefinitionconfig)|object||
-|[spec.definition.defaultAction](#specdefinitiondefaultaction)|boolean||
-|[spec.definition.enabled](#specdefinitionenabled)|boolean||
-|[spec.definition.name](#specdefinitionname)|string||
-|[spec.definition.priority](#specdefinitionpriority)|integer||
-|[spec.definition.providerId](#specdefinitionproviderid)|string||
-|[spec.options](#specoptions)|object||
-|[spec.patchFrom](#specpatchfrom)|object||
-|[spec.realmRef](#specrealmref)|string||
+|[spec.clientRef](#specclientref)|string||
+|[spec.roleRef](#specroleref)|string||
+|[spec.role_name](#specrolename)|string||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
@@ -42,57 +33,15 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[clusterRealmRef](#specclusterrealmref)|string||
-|[definition](#specdefinition)|object|✅|
-|[options](#specoptions)|object||
-|[patchFrom](#specpatchfrom)|object||
-|[realmRef](#specrealmref)|string||
+|[clientRef](#specclientref)|string||
+|[roleRef](#specroleref)|string||
+|[role_name](#specrolename)|string||
 
-the KeycloakRequiredActionProvider resource
+*missing*
 
 ---
 
-### spec.clusterRealmRef
-
-Type: string
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|self == oldSelf|Value is immutable|
-
-The name of the cluster realm to which this object belongs to
-
----
-
-### spec.definition
-
-Type: object
-
-|Property|Type|Required|
-|:-------|:---|:------:|
-|[alias](#specdefinitionalias)|string||
-|[config](#specdefinitionconfig)|object||
-|[defaultAction](#specdefinitiondefaultaction)|boolean||
-|[enabled](#specdefinitionenabled)|boolean||
-|[name](#specdefinitionname)|string||
-|[priority](#specdefinitionpriority)|integer||
-|[providerId](#specdefinitionproviderid)|string||
-
-&nbsp;
-
-|Validation Rule|Error Message|
-|:--------------|:------------|
-|has(self.alias) == has(oldSelf.alias)|Value is immutable|
-
-RequiredActionProviderRepresentation
-
-<details><summary>JSON schema</summary>
-
-```json { "type": "object", "properties": { "alias": { "type": "string" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "defaultAction": { "type": "boolean" }, "enabled": { "type": "boolean" }, "name": { "type": "string" }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "providerId": { "type": "string" } }, "additionalProperties": false } ``` </details>
-
----
-
-### spec.definition.alias
+### spec.clientRef
 
 Type: string
 
@@ -104,71 +53,7 @@ Type: string
 
 ---
 
-### spec.definition.config
-
-Type: object
-
-*missing*
-
----
-
-### spec.definition.defaultAction
-
-Type: boolean
-
-*missing*
-
----
-
-### spec.definition.enabled
-
-Type: boolean
-
-*missing*
-
----
-
-### spec.definition.name
-
-Type: string
-
-*missing*
-
----
-
-### spec.definition.priority
-
-Type: integer
-
-*missing*
-
----
-
-### spec.definition.providerId
-
-Type: string
-
-*missing*
-
----
-
-### spec.options
-
-Type: object
-
-Options for the request to the Keycloak Admin API.
-
----
-
-### spec.patchFrom
-
-Type: object
-
-Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see [the patches documentation](../configuration/patches.md).
-
----
-
-### spec.realmRef
+### spec.roleRef
 
 Type: string
 
@@ -176,7 +61,15 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-The name of the realm to which this object belongs to
+A reference to a KeycloakRole
+
+---
+
+### spec.role_name
+
+Type: string
+
+*missing*
 
 ---
 

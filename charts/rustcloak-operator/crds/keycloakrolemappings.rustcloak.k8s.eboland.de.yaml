@@ -1,21 +1,33 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: clusterkeycloakinstances.rustcloak.k8s.eboland.de
+  name: keycloakrolemappings.rustcloak.k8s.eboland.de
 spec:
   group: rustcloak.k8s.eboland.de
   names:
     categories:
     - keycloak
     - all
-    kind: ClusterKeycloakInstance
-    plural: clusterkeycloakinstances
+    kind: KeycloakRoleMapping
+    plural: keycloakrolemappings
     shortNames:
-    - ckci
-    singular: clusterkeycloakinstance
-  scope: Cluster
+    - krmp
+    singular: keycloakrolemapping
+  scope: Namespaced
   versions:
   - additionalPrinterColumns:
+    - description: true if the realm is ready
+      jsonPath: .status.ready
+      name: Ready
+      type: boolean
+    - description: Path to the resource
+      jsonPath: .spec.resourcePath
+      name: Path
+      type: string
+    - description: Status String of the resource
+      jsonPath: .status.status
+      name: Status
+      type: string
     - description: true if the realm is ready
       jsonPath: .status.ready
       name: Ready
@@ -28,73 +40,31 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
-    - description: The base URL of the Keycloak instance
-      jsonPath: .spec.baseUrl
-      name: Base URL
-      type: string
-    - description: true if the realm is ready
-      jsonPath: .status.ready
-      name: Ready
-      type: boolean
-    - description: Status String of the resource
-      jsonPath: .status.status
-      name: Status
-      type: string
     name: v1beta1
     schema:
       openAPIV3Schema:
-        description: This resource makes a Keycloak instance known to the operator
+        description: represents a mapping between a user or group and a client
         properties:
           spec:
+            anyOf:
+            - required:
+              - roleRef
+            - required:
+              - role_name
             properties:
-              baseUrl:
+              clientRef:
                 type: string
-              client:
-                nullable: true
-                properties:
-                  id:
-                    type: string
-                  secret:
-                    nullable: true
-                    type: string
-                required:
-                - id
-                type: object
-              credentials:
-                properties:
-                  create:
-                    nullable: true
-                    type: boolean
-                  passwordKey:
-                    nullable: true
-                    type: string
-                  secretName:
-                    type: string
-                  usernameKey:
-                    nullable: true
-                    type: string
-                required:
-                - secretName
-                type: object
-              realm:
-                nullable: true
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              roleRef:
+                description: A reference to a KeycloakRole
                 type: string
-              token:
-                nullable: true
-                properties:
-                  expiresKey:
-                    nullable: true
-                    type: string
-                  secretName:
-                    nullable: true
-                    type: string
-                  tokenKey:
-                    nullable: true
-                    type: string
-                type: object
-            required:
-            - baseUrl
-            - credentials
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              role_name:
+                type: string
             type: object
           status:
             nullable: true
@@ -155,7 +125,7 @@ spec:
             type: object
         required:
         - spec
-        title: ClusterKeycloakInstance
+        title: KeycloakRoleMapping
         type: object
     served: true
     storage: true

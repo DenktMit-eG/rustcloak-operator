@@ -45,7 +45,7 @@ impl_object!("scope" <RealmRef> / |d| {
     } else {
         "client-templates"
     }
-} / id for KeycloakClientScopeSpec => ClientScopeRepresentation);
+} / "id" for KeycloakClientScopeSpec => ClientScopeRepresentation);
 
 schema_patch!(KeycloakClientScopeSpec);
 

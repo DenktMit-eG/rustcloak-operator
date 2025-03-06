@@ -33,7 +33,7 @@ namespace_scope! {
     }
 }
 
-impl_object!("resource" <ClientRef> / |_d| {"authz/resource-server/resource"} / (id => "_id") for KeycloakResourceSpec => ResourceRepresentation);
+impl_object!("resource" <ClientRef> / |_d| {"authz/resource-server/resource"} / "_id" for KeycloakResourceSpec => ResourceRepresentation);
 
 impl_endpoint!(KeycloakResource);
 

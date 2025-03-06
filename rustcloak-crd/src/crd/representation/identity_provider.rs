@@ -34,7 +34,7 @@ namespace_scope! {
     }
 }
 
-impl_object!("idp" <RealmRef> / |_d| {"identity-provider/instances"} / alias for KeycloakIdentityProviderSpec => IdentityProviderRepresentation);
+impl_object!("idp" <RealmRef> / |_d| {"identity-provider/instances"} / "alias" for KeycloakIdentityProviderSpec => IdentityProviderRepresentation);
 
 impl_endpoint!(KeycloakIdentityProvider);
 

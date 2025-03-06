@@ -9,7 +9,8 @@ use rustcloak_operator::{
         ApiObjectController, ClientCredentialController, ControllerRunner,
         ConverterController, InstanceController, LegacyClientController,
         LegacyInstanceController, LegacyRealmController, LegacyUserController,
-        RepresentationController, UserCredentialController,
+        RepresentationController, RoleMappingController,
+        UserCredentialController,
     },
     crd::*,
     error::Result,
@@ -135,9 +136,18 @@ async fn main() -> Result<()> {
         .contains(&KeycloakClientCredential::kind(&()).to_string())
     {
         controllers.extend([
-            ControllerRunner::new(ClientCredentialController::default(), &client) .run() .boxed(),
+            ControllerRunner::new(ClientCredentialController::default(), &client).run().boxed(),
             ConverterController::<KeycloakClient, KeycloakClientCredential>::new(&client).run().boxed()
         ])
+    }
+
+    // RoleMapping CRDs
+    if controllers_str.contains(&KeycloakRoleMapping::kind(&()).to_string()) {
+        controllers.push(
+            ControllerRunner::new(RoleMappingController::default(), &client)
+                .run()
+                .boxed(),
+        );
     }
 
     // Legacy CRDs
