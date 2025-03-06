@@ -3,7 +3,7 @@ kind: KeycloakRealm
 metadata:
   name: example-keycloakrealm
 spec:
-  instanceRef: keycloak-instance
+  clusterInstanceRef: keycloak-instance
   definition:
     realm: an-example-realm
     displayName: "Hello World"

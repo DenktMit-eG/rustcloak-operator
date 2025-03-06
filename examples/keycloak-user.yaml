@@ -3,7 +3,7 @@ kind: KeycloakUser
 metadata:
   name: example-keycloakuser
 spec:
-  realmRef: example-keycloakrealm
+  clusterRealmRef: example-keycloakrealm
   definition:
     username: awesome-user
     email: mail@example.com

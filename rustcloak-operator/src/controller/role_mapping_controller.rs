@@ -33,11 +33,11 @@ impl RoleMappingController {
         ns: &Option<String>,
     ) -> Result<ApiClient> {
         let instance =
-            Retriever::<InstanceRef>::get(client.clone(), instance_ref, &ns)
+            Retriever::<InstanceRef>::get(client.clone(), instance_ref, ns)
                 .await?;
-        Ok(for_both!(&instance, instance => K8sKeycloakBuilder::new(instance, client))
+        for_both!(&instance, instance => K8sKeycloakBuilder::new(instance, client))
             .with_token()
-            .await?)
+            .await
     }
     async fn mapping_path(
         &self,
@@ -51,13 +51,12 @@ impl RoleMappingController {
             return Ok(format!("{parent_path}/role-mappings/realm"));
         };
         let client =
-            Retriever::<ClientRef>::get(client.clone(), client_ref, &ns)
-                .await?;
+            Retriever::<ClientRef>::get(client.clone(), client_ref, ns).await?;
         let client_path =
             client.resource_path().ok_or(Error::MissingResourcePath)?;
         // TODO: correct error code
         let client_id = keycloak
-            .get::<UserRepresentation>(&client_path)
+            .get::<UserRepresentation>(client_path)
             .await?
             .id
             .ok_or(Error::MissingField("id".to_string()))?;
@@ -75,11 +74,11 @@ impl RoleMappingController {
         match &resource.spec.role_ref {
             RoleNameOrRef::Ref(role_ref) => {
                 let role =
-                    Retriever::<RoleRef>::get(client.clone(), role_ref, &ns)
+                    Retriever::<RoleRef>::get(client.clone(), role_ref, ns)
                         .await?;
                 let path =
                     role.resource_path().ok_or(Error::MissingResourcePath)?;
-                Ok(keycloak.get::<RoleRepresentation>(&path).await?)
+                Ok(keycloak.get::<RoleRepresentation>(path).await?)
             }
             RoleNameOrRef::Name { role_name } => {
                 let available_path = format!("{resource_path}/available");
@@ -126,7 +125,7 @@ impl LifecycleController for RoleMappingController {
         let parent_ref = &resource.spec.parent_ref;
         let parent = Retriever::<RoleMappingParentRef>::get(
             client.clone(),
-            &parent_ref,
+            parent_ref,
             &ns,
         )
         .await?;
@@ -144,7 +143,7 @@ impl LifecycleController for RoleMappingController {
         let parent_path =
             parent.resource_path().ok_or(Error::MissingResourcePath)?;
         let resource_path = self
-            .mapping_path(&parent_path, &resource, &keycloak, client, &ns)
+            .mapping_path(parent_path, &resource, &keycloak, client, &ns)
             .await?;
 
         let role_representation = self
