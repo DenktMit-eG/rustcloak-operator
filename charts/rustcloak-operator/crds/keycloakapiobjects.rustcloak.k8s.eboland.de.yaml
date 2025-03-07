@@ -70,6 +70,11 @@ spec:
                     x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
+                  initWorkflow:
+                    enum:
+                    - GET
+                    - POST
+                    type: string
                   instanceRef:
                     description: The name of the namespaced instance to which this object belongs to.
                     type: string

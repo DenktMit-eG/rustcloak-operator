@@ -1,4 +1,4 @@
-use crate::refs::HasParent;
+use crate::{InitWorkflow, refs::HasParent};
 
 pub trait KeycloakRestObject: HasParent {
     type ParentObject;
@@ -6,8 +6,7 @@ pub trait KeycloakRestObject: HasParent {
     const ID_FIELD: &'static str;
     const API_PREFIX: &'static str;
 
-    //fn id(&self) -> Option<&str>;
-    fn mount_path(&self) -> &str;
+    fn init_workflow(&self) -> InitWorkflow;
     fn definition(&self) -> &Self::Definition;
     fn patches(&self) -> Option<&KeycloakApiPatchList>;
     fn options(&self) -> Option<&KeycloakApiObjectOptions>;
@@ -22,9 +21,9 @@ macro_rules! impl_object {
             const ID_FIELD: &'static str = $id_lit;
             const API_PREFIX: &'static str = $api_prefix;
 
-            fn mount_path(&self) -> &str {
+            fn init_workflow(&self) -> $crate::InitWorkflow {
                 let $def_v = self;
-                $mount_path
+                $mount_path.into()
             }
 
             fn definition(&self) -> &Self::Definition {

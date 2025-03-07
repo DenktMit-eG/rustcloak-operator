@@ -9,6 +9,7 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |[spec](#spec)|object|✅|
 |[spec.endpoint](#specendpoint)|object|✅|
 |[spec.endpoint.clusterInstanceRef](#specendpointclusterinstanceref)|string||
+|[spec.endpoint.initWorkflow](#specendpointinitworkflow)|string||
 |[spec.endpoint.instanceRef](#specendpointinstanceref)|string||
 |[spec.endpoint.parent](#specendpointparent)|object||
 |[spec.endpoint.parent.clusterParentRef](#specendpointparentclusterparentref)|string||
@@ -77,6 +78,7 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[clusterInstanceRef](#specendpointclusterinstanceref)|string||
+|[initWorkflow](#specendpointinitworkflow)|string||
 |[instanceRef](#specendpointinstanceref)|string||
 |[parent](#specendpointparent)|object||
 |[path](#specendpointpath)|string||
@@ -94,6 +96,14 @@ Type: string
 |self == oldSelf|Value is immutable|
 
 The name of the cluster instance to which this object belongs to.
+
+---
+
+### spec.endpoint.initWorkflow
+
+Type: string
+
+*missing*
 
 ---
 

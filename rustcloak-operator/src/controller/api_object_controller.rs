@@ -28,7 +28,8 @@ use log::warn;
 use rustcloak_crd::{
     ApiObjectRef, InstanceRef, KeycloakApiEndpointParent,
     KeycloakApiEndpointPath, KeycloakApiObjectSpec, KeycloakApiStatus,
-    KeycloakApiStatusEndpoint, inner_spec::HasInnerSpec,
+    KeycloakApiStatusEndpoint, KeycloakRestObject, KeycloakUserSpec,
+    inner_spec::HasInnerSpec, keycloak_types::UserRepresentation,
 };
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
@@ -67,7 +68,8 @@ where
         + Clone
         + Debug
         + HasStatus<Status = KeycloakApiStatus>
-        + DeserializeOwned,
+        + DeserializeOwned
+        + 'static,
 {
     async fn resolve_path(
         &self,
@@ -115,6 +117,48 @@ where
         for_both!(instance, ref instance => K8sKeycloakBuilder::new(instance, client))
             .with_token()
             .await
+    }
+
+    async fn get_workflow(
+        &self,
+        keycloak: ApiClient,
+        _resource: &R,
+        path: &str,
+        _payload: &Value,
+    ) -> Result<String> {
+        // TODO: The only instance where the get workflow is used is for
+        // service-users of clients. So this is tailored to that use case
+        // and not generic
+        if !path.starts_with("/admin/realms/")
+            || !path.ends_with("/service-account-user")
+        {
+            return Err(Error::UnsupportedWorkflowMethod);
+        }
+        let user = keycloak.get::<UserRepresentation>(path).await?;
+        let Some(user_id) = user.id.as_ref() else {
+            return Err(Error::MissingField(
+                KeycloakUserSpec::ID_FIELD.to_string(),
+            ));
+        };
+
+        // (0)/(1)admin/(2)realms/(3)<realm_name>/(_)clients/(_)<client_id>/(_)service-account-user
+        // =>
+        // /admin/realms/<realm_name>/users/<user_id>
+        let realm_path = path.split('/').take(4).collect::<Vec<_>>().join("/");
+        let resource_path = format!("{}/users/{user_id}", realm_path);
+
+        keycloak.put(&resource_path, &user).await?;
+
+        Ok(resource_path)
+    }
+
+    async fn post_workflow(
+        &self,
+        keycloak: ApiClient,
+        path: &str,
+        payload: &Value,
+    ) -> Result<String> {
+        Ok(keycloak.post_location(path, &payload).await?)
     }
 }
 
@@ -214,8 +258,17 @@ where
 
         if !success {
             let path = self.resolve_path(client, &ns, &resource).await?;
-            warn!("path: {}", path);
-            let resource_path = keycloak.post_location(&path, &payload).await?;
+            let resource_path =
+                match resource.inner_spec().endpoint.init_workflow {
+                    Some(keycloak_client::Method::GET) => {
+                        self.get_workflow(keycloak, &resource, &path, &payload)
+                            .await?
+                    }
+                    Some(keycloak_client::Method::POST) | None => {
+                        self.post_workflow(keycloak, &path, &payload).await?
+                    }
+                    _ => Err(Error::UnsupportedWorkflowMethod)?,
+                };
             let mut status = resource.status().cloned().unwrap_or_default();
             status.endpoint = Some(KeycloakApiStatusEndpoint {
                 resource_path,

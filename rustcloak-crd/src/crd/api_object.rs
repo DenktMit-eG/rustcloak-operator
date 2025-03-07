@@ -7,8 +7,10 @@ use crate::{
 };
 use k8s_openapi::api::core::v1::EnvVar;
 use kube::{CustomResource, Resource};
-use schemars::JsonSchema;
+use schemars::{JsonSchema, SchemaGenerator, schema::Schema};
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
+use serde_with::DisplayFromStr;
 
 use super::InstanceRef;
 
@@ -83,13 +85,30 @@ pub enum KeycloakApiEndpointPath {
     Parent(KeycloakApiEndpointParent),
 }
 
+#[serde_with::serde_as]
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakApiEndpoint {
+    #[serde_as(as = "Option<DisplayFromStr>")]
+    #[schemars(schema_with = "http_method_schema")]
+    pub init_workflow: Option<http::Method>,
+
     #[serde(flatten)]
     pub instance_ref: InstanceRef,
     #[serde(flatten)]
     pub path_def: KeycloakApiEndpointPath,
+}
+fn http_method_schema(generator: &mut SchemaGenerator) -> Schema {
+    let mut schema = String::json_schema(generator);
+    let Schema::Object(ref mut schema_obj) = schema else {
+        unreachable!();
+    };
+    schema_obj.enum_values = Some(vec![
+        Value::String(http::Method::GET.to_string()),
+        Value::String(http::Method::POST.to_string()),
+    ]);
+
+    schema
 }
 
 impl KeycloakApiEndpoint {
@@ -98,6 +117,7 @@ impl KeycloakApiEndpoint {
         let instance_ref = instance_ref.clone();
         Self {
             instance_ref,
+            init_workflow: Some(http::Method::POST),
             path_def: KeycloakApiEndpointPath::Path(path),
         }
     }

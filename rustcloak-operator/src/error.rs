@@ -68,6 +68,8 @@ pub enum Error {
     NoConfigMap(String, String),
     #[error("No Resource Path")]
     NoResourcePath,
+    #[error("Unsupported Workflow Method")]
+    UnsupportedWorkflowMethod,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

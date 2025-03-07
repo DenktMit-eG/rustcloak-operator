@@ -35,6 +35,9 @@ impl ConvertTo<KeycloakUserCredential> for KeycloakUser {
         let resource_path = self.resource_path()?.to_string();
         let instance_ref = self.instance_ref()?.clone();
         let user_secret = self.spec.user_secret.as_ref()?.clone();
+        if self.spec.parent_ref.is_right() {
+            return None;
+        }
 
         let owner_ref = self.owner_ref(&()).unwrap();
         Some(KeycloakUserCredential {
@@ -171,6 +174,7 @@ where
         let ns = resource.namespace();
         let to_api = ApiExt::<T>::api(ctx.client.clone(), &ns);
         let name = resource.name_unchecked();
+        let kind = F::kind(&());
 
         if let Some(converted) = Arc::unwrap_or_clone(resource).convert() {
             to_api
@@ -181,7 +185,22 @@ where
                 )
                 .await?;
         } else {
-            to_api.delete(&name, &DeleteParams::default()).await?;
+            match to_api.delete(&name, &DeleteParams::default()).await {
+                Err(kube::Error::Api(kube::core::ErrorResponse {
+                    code: 404,
+                    message: m,
+                    ..
+                })) => {
+                    warn!(
+                    kind = kind,
+                    name = name,
+                    namespace = ns;
+                    "Resource not found, assuming it's already deleted. Message: {}", m);
+                }
+                x => {
+                    x?;
+                }
+            }
         }
 
         Ok(Action::await_change())

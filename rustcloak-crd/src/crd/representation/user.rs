@@ -1,3 +1,5 @@
+use crate::InitWorkflow;
+use crate::either::UntaggedEither;
 use crate::keycloak_types::UserRepresentation;
 use crate::refs::ref_type;
 use crate::{
@@ -10,7 +12,7 @@ use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use super::RealmRef;
+use super::{ClientRef, RealmRef};
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
@@ -36,7 +38,7 @@ namespace_scope! {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub options: Option<KeycloakApiObjectOptions>,
             #[serde(flatten)]
-            pub parent_ref: RealmRef,
+            pub parent_ref: ParentRef,
             #[schemars(schema_with = "schema")]
             pub definition: UserRepresentation,
             #[serde(default, flatten)]
@@ -61,7 +63,14 @@ ref_type!(
     "The name of a KeycloakUser resource"
 );
 
-impl_object!("user" <RealmRef> / |_d| {"users"} / "id" for KeycloakUserSpec => UserRepresentation);
+type ParentRef = UntaggedEither<RealmRef, ClientRef>;
+impl_object!("user" <ParentRef> / |d| {
+    if d.parent_ref.is_left() {
+        "users".into()
+    } else {
+        InitWorkflow { workflow: http::Method::GET, mount_path: "service-account-user"}
+    }
+} / "id" for KeycloakUserSpec => UserRepresentation);
 
 impl_endpoint!(KeycloakUser);
 
