@@ -8,8 +8,10 @@ mod object;
 pub mod refs;
 mod schema;
 pub mod traits;
+pub mod workflow;
 
 pub use crd::*;
 pub use immutable::*;
 pub use keycloak_types;
 pub use object::*;
+pub use workflow::*;

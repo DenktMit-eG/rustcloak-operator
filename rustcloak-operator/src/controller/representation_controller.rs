@@ -18,9 +18,8 @@ use kube::{
 };
 use log::debug;
 use rustcloak_crd::{
-    ClusterKeycloakApiObject, ClusterKeycloakApiObjectSpec,
-    KeycloakApiEndpoint, KeycloakApiEndpointPath, KeycloakApiStatus,
-    KeycloakRestObject,
+    ClusterKeycloakApiObject, KeycloakApiEndpoint, KeycloakApiEndpointPath,
+    KeycloakApiStatus, KeycloakRestObject,
 };
 use rustcloak_crd::{
     KeycloakApiObject, KeycloakApiObjectSpec,
@@ -60,43 +59,33 @@ trait ApiObjectHelper {
     fn api(client: kube::Client, ns: &Option<String>) -> Api<Self::ApiObject>;
 }
 
-impl ApiObjectHelper for NamespaceResourceScope {
-    type ApiObject = KeycloakApiObject;
+macro_rules! impl_api_object_helper {
+    ($scope:ident, $type:ident) => {
+        impl ApiObjectHelper for $scope {
+            type ApiObject = $type;
 
-    fn create(
-        meta: ObjectMeta,
-        spec: KeycloakApiObjectSpec,
-    ) -> Self::ApiObject {
-        Self::ApiObject {
-            metadata: meta,
-            spec,
-            status: None,
+            fn create(
+                meta: ObjectMeta,
+                spec: KeycloakApiObjectSpec,
+            ) -> Self::ApiObject {
+                Self::ApiObject {
+                    metadata: meta,
+                    spec: spec.into(),
+                    status: None,
+                }
+            }
+
+            fn api(
+                client: kube::Client,
+                ns: &Option<String>,
+            ) -> Api<Self::ApiObject> {
+                ApiExt::<Self::ApiObject>::api(client, ns)
+            }
         }
-    }
-
-    fn api(client: kube::Client, ns: &Option<String>) -> Api<Self::ApiObject> {
-        ApiExt::<Self::ApiObject>::api(client, ns)
-    }
+    };
 }
-
-impl ApiObjectHelper for ClusterResourceScope {
-    type ApiObject = ClusterKeycloakApiObject;
-
-    fn create(
-        meta: ObjectMeta,
-        spec: KeycloakApiObjectSpec,
-    ) -> Self::ApiObject {
-        Self::ApiObject {
-            metadata: meta,
-            spec: ClusterKeycloakApiObjectSpec { spec },
-            status: None,
-        }
-    }
-
-    fn api(client: kube::Client, ns: &Option<String>) -> Api<Self::ApiObject> {
-        ApiExt::<Self::ApiObject>::api(client, ns)
-    }
-}
+impl_api_object_helper!(ClusterResourceScope, ClusterKeycloakApiObject);
+impl_api_object_helper!(NamespaceResourceScope, KeycloakApiObject);
 
 #[async_trait::async_trait]
 impl<R> LifecycleController for RepresentationController<R>
@@ -184,14 +173,16 @@ where
                 .instance_ref()
                 .ok_or(Error::MissingInstanceReference)?
         };
+        let init_workflow = resource.inner_spec().init_workflow();
         let resource_path = format!(
             "{}/{}",
             parent.resource_path().ok_or(Error::MissingResourcePath)?,
-            resource.inner_spec().mount_path()
+            init_workflow.mount_path
         );
 
         let endpoint = KeycloakApiEndpoint {
             instance_ref: instance_ref.clone(),
+            init_workflow: Some(init_workflow.workflow),
             path_def: KeycloakApiEndpointPath::Path(resource_path.into()),
         };
         debug!(

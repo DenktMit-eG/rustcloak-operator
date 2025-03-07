@@ -35,12 +35,20 @@ spec:
         properties:
           spec:
             anyOf:
+            - anyOf:
+              - required:
+                - realmRef
+              - required:
+                - clusterRealmRef
             - required:
-              - realmRef
-            - required:
-              - clusterRealmRef
+              - clientRef
             description: the KeycloakUser resource
             properties:
+              clientRef:
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               clusterRealmRef:
                 description: The name of the cluster realm to which this object belongs to
                 type: string

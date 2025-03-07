@@ -12,3 +12,5 @@ serde_json = "1.0.140"
 keycloak-types = { git = "https://github.com/Gottox/keycloak-client.rs" }
 either = { version = "1.15.0", features = ["serde"] }
 randstr = { git = "https://github.com/Gottox/randstr", branch = "main" }
+http = { version = "1.2.0", default-features = false }
+serde_with = "3.12.0"

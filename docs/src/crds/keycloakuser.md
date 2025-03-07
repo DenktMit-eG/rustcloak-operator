@@ -7,6 +7,7 @@ resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
+|[spec.clientRef](#specclientref)|string||
 |[spec.clusterRealmRef](#specclusterrealmref)|string||
 |[spec.definition](#specdefinition)|object|✅|
 |[spec.definition.access](#specdefinitionaccess)|object||
@@ -110,6 +111,7 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[clientRef](#specclientref)|string||
 |[clusterRealmRef](#specclusterrealmref)|string||
 |[definition](#specdefinition)|object|✅|
 |[options](#specoptions)|object||
@@ -118,6 +120,18 @@ Type: object
 |[userSecret](#specusersecret)|object||
 
 the KeycloakUser resource
+
+---
+
+### spec.clientRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+*missing*
 
 ---
 

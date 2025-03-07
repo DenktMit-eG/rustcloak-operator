@@ -143,17 +143,19 @@ impl LifecycleController for LegacyUserController {
             spec: KeycloakUserSpec {
                 options: None,
                 parent_ref: UntaggedEither {
-                    inner: Either::Left(
-                        find_name::<KeycloakRealm>(
-                            client,
-                            &namespace,
-                            &resource.spec.realm_selector,
-                            &resource.metadata,
-                            "realm_ref",
-                        )
-                        .await?
-                        .into(),
-                    ),
+                    inner: Either::Left(UntaggedEither {
+                        inner: Either::Left(
+                            find_name::<KeycloakRealm>(
+                                client,
+                                &namespace,
+                                &resource.spec.realm_selector,
+                                &resource.metadata,
+                                "realm_ref",
+                            )
+                            .await?
+                            .into(),
+                        ),
+                    }),
                 },
                 definition: serde_json::from_value(definition)?,
                 patches: None,

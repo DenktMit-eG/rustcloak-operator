@@ -56,6 +56,18 @@ macro_rules! both_scopes {
             }
         }
 
+        impl From<$name> for $cluster_name {
+            fn from(spec: $name) -> Self {
+                Self { spec }
+            }
+        }
+
+        impl From<$cluster_name> for $name {
+            fn from(from: $cluster_name) -> Self {
+                from.spec
+            }
+        }
+
         $crate::crd::namespace_scope!{
             $kind, $shortname {
                 $(#[$meta])* pub struct $name {

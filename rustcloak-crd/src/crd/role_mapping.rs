@@ -1,4 +1,4 @@
-use super::{ClientRef, GroupRef, RoleRef, namespace_scope};
+use super::{ClientRef, GroupRef, RoleRef, UserRef, namespace_scope};
 use crate::{KeycloakApiStatus, either::UntaggedEither, traits::impl_endpoint};
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -50,6 +50,6 @@ namespace_scope! {
     }
 }
 
-pub type RoleMappingParentRef = UntaggedEither<ClientRef, GroupRef>;
+pub type RoleMappingParentRef = UntaggedEither<UserRef, GroupRef>;
 
 impl_endpoint!(KeycloakRoleMapping);
