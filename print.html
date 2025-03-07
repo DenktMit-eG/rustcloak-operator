@@ -13395,6 +13395,7 @@ spec:
 <p>resource to define a User within a <a href="crds/./keycloakrealm.html">KeyclaokRealm</a></p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#specclientref">spec.clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specclusterrealmref">spec.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinition">spec.definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitionaccess">spec.definition.access</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -13495,6 +13496,7 @@ spec:
 <h3 id="spec-16"><a class="header" href="#spec-16">spec</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#specclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -13504,6 +13506,14 @@ spec:
 </tbody></table>
 </div>
 <p>the KeycloakUser resource</p>
+<hr />
+<h3 id="specclientref-4"><a class="header" href="#specclientref-4">spec.clientRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p><em>missing</em></p>
 <hr />
 <h3 id="specclusterrealmref-10"><a class="header" href="#specclusterrealmref-10">spec.clusterRealmRef</a></h3>
 <p>Type: string</p>
@@ -14051,6 +14061,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpoint">spec.endpoint</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointclusterinstanceref">spec.endpoint.clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointinitworkflow">spec.endpoint.initWorkflow</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointinstanceref">spec.endpoint.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointparent">spec.endpoint.parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointparentclusterparentref">spec.endpoint.parent.clusterParentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -14112,6 +14123,7 @@ spec:
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointclusterinstanceref">clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointinitworkflow">initWorkflow</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointparent">parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointpath">path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -14126,6 +14138,10 @@ spec:
 </tbody></table>
 </div>
 <p>The name of the cluster instance to which this object belongs to.</p>
+<hr />
+<h3 id="specendpointinitworkflow"><a class="header" href="#specendpointinitworkflow">spec.endpoint.initWorkflow</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
 <hr />
 <h3 id="specendpointinstanceref"><a class="header" href="#specendpointinstanceref">spec.endpoint.instanceRef</a></h3>
 <p>Type: string</p>
@@ -14604,6 +14620,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpoint">spec.endpoint</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointclusterinstanceref">spec.endpoint.clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointinitworkflow">spec.endpoint.initWorkflow</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointinstanceref">spec.endpoint.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointparent">spec.endpoint.parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointparentclusterparentref">spec.endpoint.parent.clusterParentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -14665,6 +14682,7 @@ spec:
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointclusterinstanceref">clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointinitworkflow">initWorkflow</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointparent">parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointpath">path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -14679,6 +14697,10 @@ spec:
 </tbody></table>
 </div>
 <p>The name of the cluster instance to which this object belongs to.</p>
+<hr />
+<h3 id="specendpointinitworkflow-1"><a class="header" href="#specendpointinitworkflow-1">spec.endpoint.initWorkflow</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
 <hr />
 <h3 id="specendpointinstanceref-1"><a class="header" href="#specendpointinstanceref-1">spec.endpoint.instanceRef</a></h3>
 <p>Type: string</p>
@@ -15352,7 +15374,7 @@ spec:
 </div>
 <p><em>missing</em></p>
 <hr />
-<h3 id="specclientref-4"><a class="header" href="#specclientref-4">spec.clientRef</a></h3>
+<h3 id="specclientref-5"><a class="header" href="#specclientref-5">spec.clientRef</a></h3>
 <p>Type: string</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
