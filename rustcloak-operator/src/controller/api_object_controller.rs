@@ -129,7 +129,7 @@ where
         // TODO: The only instance where the get workflow is used is for
         // service-users of clients. So this is tailored to that use case
         // and not generic
-        if !path.starts_with("/admin/clients/")
+        if !path.starts_with("/admin/realms/")
             || !path.ends_with("/service-account-user")
         {
             return Err(Error::UnsupportedWorkflowMethod);
@@ -258,7 +258,6 @@ where
 
         if !success {
             let path = self.resolve_path(client, &ns, &resource).await?;
-            warn!("path: {}", path);
             let resource_path =
                 match resource.inner_spec().endpoint.init_workflow {
                     Some(keycloak_client::Method::GET) => {
