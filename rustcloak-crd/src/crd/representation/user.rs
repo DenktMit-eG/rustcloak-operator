@@ -18,8 +18,11 @@ use super::{ClientRef, RealmRef};
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakUserSecretReference {
     pub secret_name: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub email_key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub username_key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub password_key: Option<String>,
 }
 
