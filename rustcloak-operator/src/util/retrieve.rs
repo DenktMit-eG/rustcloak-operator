@@ -1,5 +1,4 @@
 use crate::error::Result;
-use crate::morph::Morph;
 use either::Either;
 use k8s_openapi::{ClusterResourceScope, NamespaceResourceScope};
 use kube::{Resource, core::object::HasStatus};
@@ -43,7 +42,6 @@ shorter_bounds::alias!(
         + Send
         + Sync
         + Debug
-        + Morph
         + Clone
         + DeserializeOwned
 );
