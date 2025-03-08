@@ -10,7 +10,7 @@ management interface for Keycloak instances.
 
 ## Goals
 
-* Manage Keycloak instances solely through kubernetes resources.[^1]
+* Manage Keycloak instances solely through kubernetes resources.
 
 * Provide a migration path for people that have been let down by Keycloak's own
   efforts to provide an operator.
@@ -20,10 +20,6 @@ management interface for Keycloak instances.
 * Manage the deployment of Keycloak instances.
 
 * Support other IdM solutions than Keycloak.
-
-[^1]: Most of the management interface can be already provisioned through rustcloak's CRDs
-      One notable exception are Subgroups. So currently Rustcloak can only handle a single
-      layer of groups.
 
 [1]: https://www.keycloak.org/docs-api/latest/rest-api/
 

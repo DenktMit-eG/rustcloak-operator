@@ -14,23 +14,11 @@ namespace_scope! {
             category = "keycloak",
             category = "all",
             printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
                     "name":"Path",
                     "type":"string",
                     "description":"Path to the resource",
                     "jsonPath":".spec.resourcePath"
                 }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#
         )]
         pub struct KeycloakUserCredentialSpec {
             #[serde(flatten)]

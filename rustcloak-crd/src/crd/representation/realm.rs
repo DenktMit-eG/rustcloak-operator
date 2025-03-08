@@ -31,7 +31,7 @@ both_scopes! {
             #[serde(flatten)]
             pub parent_ref: InstanceRef,
             #[schemars(schema_with = "schema")]
-            pub definition: RealmRepresentation,
+            pub definition: Option<RealmRepresentation>,
             #[serde(default, flatten)]
             pub patches: Option<KeycloakApiPatchList>,
         }

@@ -16,17 +16,13 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - description: true if the realm is ready
-      jsonPath: .status.ready
-      name: Ready
-      type: boolean
-    - description: Path to the resource
-      jsonPath: .spec.resourcePath
-      name: Path
+    - description: Role Name
+      jsonPath: .spec.roleRef
+      name: Role Name
       type: string
-    - description: Status String of the resource
-      jsonPath: .status.status
-      name: Status
+    - description: Role Ref
+      jsonPath: .spec.roleRef
+      name: Role Ref
       type: string
     - description: true if the realm is ready
       jsonPath: .status.ready

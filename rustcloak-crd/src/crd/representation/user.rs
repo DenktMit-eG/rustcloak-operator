@@ -18,8 +18,11 @@ use super::{ClientRef, RealmRef};
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakUserSecretReference {
     pub secret_name: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub email_key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub username_key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub password_key: Option<String>,
 }
 
@@ -40,7 +43,7 @@ namespace_scope! {
             #[serde(flatten)]
             pub parent_ref: ParentRef,
             #[schemars(schema_with = "schema")]
-            pub definition: UserRepresentation,
+            pub definition: Option<UserRepresentation>,
             #[serde(default, flatten)]
             pub patches: Option<KeycloakApiPatchList>,
             pub user_secret: Option<KeycloakUserSecretReference>,

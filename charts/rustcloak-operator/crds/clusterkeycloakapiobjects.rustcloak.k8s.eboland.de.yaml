@@ -16,18 +16,6 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - description: true if the realm is ready
-      jsonPath: .status.ready
-      name: Ready
-      type: boolean
-    - description: Status String of the resource
-      jsonPath: .status.status
-      name: Status
-      type: string
-    - description: time since the realm was created
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
     - description: Instance that API request is sent to
       jsonPath: .spec.endpoint.instanceRef
       name: Instance

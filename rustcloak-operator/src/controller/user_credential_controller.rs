@@ -4,7 +4,7 @@ use crate::{
     error::{Error, Result},
     util::{
         ApiExt, ApiFactory, K8sKeycloakBuilder, RefWatcher, Retrieve,
-        Retriever, SecretUtils,
+        Retriever, SecretUtils, ToPatch,
     },
 };
 use async_trait::async_trait;
@@ -17,7 +17,7 @@ use kube::{
 };
 use randstr::randstr;
 use rustcloak_crd::{
-    InstanceRef, KeycloakUserCredential,
+    InstanceRef, KeycloakApiStatus, KeycloakUserCredential,
     keycloak_types::{CredentialRepresentation, UserRepresentation},
     traits::SecretKeyNames,
 };
@@ -61,7 +61,9 @@ impl LifecycleController for UserCredentialController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let ns = resource.namespace();
+        let name = resource.name_unchecked();
 
+        let api = ApiExt::<Self::Resource>::api(client.clone(), &ns);
         let secret_api = ApiExt::<Secret>::api(client.clone(), &ns);
         let [username_key, password_key, email_key] =
             resource.spec.user_secret.secret_key_names();
@@ -153,6 +155,15 @@ impl LifecycleController for UserCredentialController {
         };
 
         keycloak.put(&path, &credential).await?;
+
+        let status = KeycloakApiStatus::ok("Applied");
+
+        api.patch_status(
+            &name,
+            &PatchParams::apply(app_id!()),
+            &status.to_patch(),
+        )
+        .await?;
 
         Ok(Action::await_change())
     }

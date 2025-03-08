@@ -30,7 +30,7 @@ namespace_scope! {
             #[serde(default, skip_serializing_if = "Option::is_none")]
             pub is_template: Option<bool>,
             #[schemars(schema_with = "schema")]
-            pub definition: ClientScopeRepresentation,
+            pub definition: Option<ClientScopeRepresentation>,
             #[serde(default, flatten)]
             pub patches: Option<KeycloakApiPatchList>,
         }

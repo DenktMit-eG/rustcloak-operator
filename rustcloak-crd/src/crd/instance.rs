@@ -64,18 +64,6 @@ both_scopes! {
                     "description":"The base URL of the Keycloak instance",
                     "jsonPath":".spec.baseUrl"
                 }"#,
-            printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#
         )]
         pub struct KeycloakInstanceSpec {
             pub base_url: String,

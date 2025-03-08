@@ -19,18 +19,6 @@ namespace_scope! {
                     "description":"Path to the resource",
                     "jsonPath":".spec.resourcePath"
                 }"#,
-            printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
-                }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#
         )]
         pub struct KeycloakClientCredentialSpec {
             #[serde(flatten)]

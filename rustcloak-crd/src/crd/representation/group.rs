@@ -28,7 +28,7 @@ namespace_scope! {
             #[serde(flatten)]
             pub parent_ref: ParentRef,
             #[schemars(schema_with = "schema")]
-            pub definition: GroupRepresentation,
+            pub definition: Option<GroupRepresentation>,
             #[serde(default, flatten)]
             pub patches: Option<KeycloakApiPatchList>,
         }

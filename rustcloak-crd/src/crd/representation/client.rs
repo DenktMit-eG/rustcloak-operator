@@ -18,7 +18,9 @@ use super::RealmRef;
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakClientSecretReference {
     pub secret_name: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub client_id_key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub client_secret_key: Option<String>,
 }
 
@@ -39,7 +41,7 @@ namespace_scope! {
             #[serde(flatten)]
             pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
-            pub definition: ClientRepresentation,
+            pub definition: Option<ClientRepresentation>,
             #[serde(default, flatten)]
             pub patches: Option<KeycloakApiPatchList>,
             pub client_secret: Option<KeycloakClientSecretReference>,
