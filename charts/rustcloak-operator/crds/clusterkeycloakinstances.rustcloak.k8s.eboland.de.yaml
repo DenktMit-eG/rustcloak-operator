@@ -16,18 +16,6 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - description: true if the realm is ready
-      jsonPath: .status.ready
-      name: Ready
-      type: boolean
-    - description: Status String of the resource
-      jsonPath: .status.status
-      name: Status
-      type: string
-    - description: time since the realm was created
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
     - description: The base URL of the Keycloak instance
       jsonPath: .spec.baseUrl
       name: Base URL
@@ -40,6 +28,10 @@ spec:
       jsonPath: .status.status
       name: Status
       type: string
+    - description: time since the realm was created
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
     name: v1beta1
     schema:
       openAPIV3Schema:

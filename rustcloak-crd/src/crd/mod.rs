@@ -22,6 +22,7 @@ macro_rules! both_scopes {
             CustomResource, Clone, Debug, Deserialize, Serialize, JsonSchema,
         )]
         #[serde(rename_all = "camelCase")]
+        $(#[$meta])*
         #[kube(kind = $cluster_kind, shortname = $cluster_shortname,
             printcolumn = r#"{
                     "name":"Ready",
@@ -42,7 +43,6 @@ macro_rules! both_scopes {
                     "jsonPath":".metadata.creationTimestamp"
                 }"#
         )]
-        $(#[$meta])*
         pub struct $cluster_name {
             #[serde(flatten)]
             pub spec: $name,

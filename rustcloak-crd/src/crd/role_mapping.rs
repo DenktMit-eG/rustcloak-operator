@@ -21,23 +21,18 @@ namespace_scope! {
             category = "keycloak",
             category = "all",
             printcolumn = r#"{
-                    "name":"Ready",
-                    "type":"boolean",
-                    "description":"true if the realm is ready",
-                    "jsonPath":".status.ready"
+                    "name":"Role Name",
+                    "type":"string",
+                    "description":"Role Name",
+                    "jsonPath":".spec.roleRef"
                 }"#,
             printcolumn = r#"{
-                    "name":"Path",
+                    "name":"Role Ref",
                     "type":"string",
-                    "description":"Path to the resource",
-                    "jsonPath":".spec.resourcePath"
+                    "description":"Role Ref",
+                    "jsonPath":".spec.roleRef"
                 }"#,
-            printcolumn = r#"{
-                    "name":"Status",
-                    "type":"string",
-                    "description":"Status String of the resource",
-                    "jsonPath":".status.status"
-                }"#
+
         )]
         pub struct KeycloakRoleMappingSpec {
             #[serde(flatten)]
