@@ -3,15 +3,13 @@ use crate::{
     controller::controller_runner::LifecycleController,
     error::{Error, Result},
     util::{
-        ApiExt, ApiFactory, K8sKeycloakBuilder, RefWatcher, Retrieve, Retriever,
+        ApiExt, ApiFactory, K8sKeycloakBuilder, RefWatcher, Retrieve,
+        Retriever, ToPatch,
     },
 };
 use async_trait::async_trait;
 use either::for_both;
-use k8s_openapi::{
-    api::core::v1::Secret,
-    serde_json::{self, json},
-};
+use k8s_openapi::{ByteString, api::core::v1::Secret};
 use kube::{
     Api, Resource, ResourceExt,
     api::{ObjectMeta, Patch, PatchParams},
@@ -19,11 +17,11 @@ use kube::{
 };
 use log::debug;
 use rustcloak_crd::{
-    InstanceRef, KeycloakClientCredential,
+    InstanceRef, KeycloakApiStatus, KeycloakClientCredential,
     keycloak_types::{ClientRepresentation, CredentialRepresentation},
     traits::SecretKeyNames,
 };
-use std::sync::Arc;
+use std::{collections::BTreeMap, sync::Arc};
 
 #[derive(Default)]
 pub struct ClientCredentialController {
@@ -63,12 +61,10 @@ impl LifecycleController for ClientCredentialController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let resource_path = &resource.spec.resource_path;
-
-        if resource.status.as_ref().is_none_or(|x| !x.ready) {
-            return Ok(Action::await_change());
-        }
+        let name = resource.name_unchecked();
         let ns = resource.namespace();
 
+        let api = ApiExt::<Self::Resource>::api(client.clone(), &ns);
         let secret_api = ApiExt::<Secret>::api(client.clone(), &ns);
         let [client_id_key, client_secret_key] =
             resource.spec.client_secret.secret_key_names();
@@ -111,11 +107,19 @@ impl LifecycleController for ClientCredentialController {
             return Ok(Action::await_change());
         };
         let owner_ref = resource.owner_ref(&()).unwrap();
+        let data: BTreeMap<String, ByteString> = [
+            (
+                client_id_key.to_string(),
+                ByteString(client_id.into_bytes()),
+            ),
+            (
+                client_secret_key.to_string(),
+                ByteString(client_secret.into_bytes()),
+            ),
+        ]
+        .into();
         let secret = Secret {
-            data: Some(serde_json::from_value(json!({
-                client_id_key: client_id,
-                client_secret_key: client_secret,
-            }))?),
+            data: Some(data),
             metadata: ObjectMeta {
                 name: Some(resource.spec.client_secret.secret_name.clone()),
                 namespace: ns.clone(),
@@ -133,6 +137,14 @@ impl LifecycleController for ClientCredentialController {
                 &Patch::Apply(secret),
             )
             .await?;
+        let status = KeycloakApiStatus::ok("Applied");
+
+        api.patch_status(
+            &name,
+            &PatchParams::apply(app_id!()),
+            &status.to_patch(),
+        )
+        .await?;
 
         Ok(Action::await_change())
     }

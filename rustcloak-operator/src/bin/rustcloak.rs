@@ -4,6 +4,7 @@ use actix_web::{
 use clap::Parser;
 use futures::{FutureExt, future};
 use kube::Resource;
+use rustcloak_crd::*;
 use rustcloak_operator::{
     controller::{
         ApiObjectController, ClientCredentialController, ControllerRunner,
@@ -12,7 +13,6 @@ use rustcloak_operator::{
         RepresentationController, RoleMappingController,
         UserCredentialController,
     },
-    crd::*,
     error::Result,
     opts::{LegacyMode, Opts, legacy_kinds},
 };

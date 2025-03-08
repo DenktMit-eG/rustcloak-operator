@@ -27,11 +27,11 @@ use serde::Serialize;
 use serde::de::DeserializeOwned;
 
 pub trait ConvertTo<T> {
-    fn convert(self) -> Option<T>;
+    fn convert(&self) -> Option<T>;
 }
 
 impl ConvertTo<KeycloakUserCredential> for KeycloakUser {
-    fn convert(self) -> Option<KeycloakUserCredential> {
+    fn convert(&self) -> Option<KeycloakUserCredential> {
         let resource_path = self.resource_path()?.to_string();
         let instance_ref = self.instance_ref()?.clone();
         let user_secret = self.spec.user_secret.as_ref()?.clone();
@@ -58,7 +58,7 @@ impl ConvertTo<KeycloakUserCredential> for KeycloakUser {
 }
 
 impl ConvertTo<KeycloakClientCredential> for KeycloakClient {
-    fn convert(self) -> Option<KeycloakClientCredential> {
+    fn convert(&self) -> Option<KeycloakClientCredential> {
         let resource_path = self.resource_path()?.to_string();
         let instance_ref = self.instance_ref()?.clone();
         let client_secret = self.spec.client_secret.as_ref()?.clone();
@@ -176,7 +176,7 @@ where
         let name = resource.name_unchecked();
         let kind = F::kind(&());
 
-        if let Some(converted) = Arc::unwrap_or_clone(resource).convert() {
+        if let Some(converted) = resource.convert() {
             to_api
                 .patch(
                     &name,
