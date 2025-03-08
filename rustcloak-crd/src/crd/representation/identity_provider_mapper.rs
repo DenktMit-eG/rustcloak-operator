@@ -27,7 +27,7 @@ namespace_scope! {
             #[serde(flatten)]
             pub parent_ref: IdentityProviderRef,
             #[schemars(schema_with = "schema")]
-            pub definition: IdentityProviderMapperRepresentation,
+            pub definition: Option<IdentityProviderMapperRepresentation>,
             #[serde(default, flatten)]
             pub patches: Option<KeycloakApiPatchList>,
         }

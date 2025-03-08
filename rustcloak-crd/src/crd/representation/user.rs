@@ -43,7 +43,7 @@ namespace_scope! {
             #[serde(flatten)]
             pub parent_ref: ParentRef,
             #[schemars(schema_with = "schema")]
-            pub definition: UserRepresentation,
+            pub definition: Option<UserRepresentation>,
             #[serde(default, flatten)]
             pub patches: Option<KeycloakApiPatchList>,
             pub user_secret: Option<KeycloakUserSecretReference>,

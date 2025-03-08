@@ -29,7 +29,7 @@ namespace_scope! {
             /// the name of the kubernetes object that created the parent resource.
             pub parent_ref: ParentRef,
             #[schemars(schema_with = "schema")]
-            pub definition: ProtocolMapperRepresentation,
+            pub definition: Option<ProtocolMapperRepresentation>,
             #[serde(default, flatten)]
             pub patches: Option<KeycloakApiPatchList>,
         }

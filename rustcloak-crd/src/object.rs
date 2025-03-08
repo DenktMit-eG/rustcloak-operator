@@ -7,7 +7,7 @@ pub trait KeycloakRestObject: HasParent {
     const API_PREFIX: &'static str;
 
     fn init_workflow(&self) -> InitWorkflow;
-    fn definition(&self) -> &Self::Definition;
+    fn definition(&self) -> Option<&Self::Definition>;
     fn patches(&self) -> Option<&KeycloakApiPatchList>;
     fn options(&self) -> Option<&KeycloakApiObjectOptions>;
 }
@@ -26,8 +26,8 @@ macro_rules! impl_object {
                 $mount_path.into()
             }
 
-            fn definition(&self) -> &Self::Definition {
-                &self.definition
+            fn definition(&self) -> Option<&Self::Definition> {
+                self.definition.as_ref()
             }
 
             fn patches(&self) -> Option<&$crate::KeycloakApiPatchList> {

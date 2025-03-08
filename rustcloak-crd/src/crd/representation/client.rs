@@ -41,7 +41,7 @@ namespace_scope! {
             #[serde(flatten)]
             pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
-            pub definition: ClientRepresentation,
+            pub definition: Option<ClientRepresentation>,
             #[serde(default, flatten)]
             pub patches: Option<KeycloakApiPatchList>,
             pub client_secret: Option<KeycloakClientSecretReference>,

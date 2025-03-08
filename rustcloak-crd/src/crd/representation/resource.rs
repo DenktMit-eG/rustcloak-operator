@@ -26,7 +26,7 @@ namespace_scope! {
             #[serde(flatten)]
             pub parent_ref: ClientRef,
             #[schemars(schema_with = "schema")]
-            pub definition: ResourceRepresentation,
+            pub definition: Option<ResourceRepresentation>,
             #[serde(default, flatten)]
             pub patches: Option<KeycloakApiPatchList>,
         }
