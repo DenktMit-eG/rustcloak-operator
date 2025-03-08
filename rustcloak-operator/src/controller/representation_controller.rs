@@ -1,6 +1,6 @@
 use crate::app_id;
 use crate::error::{Error, Result};
-use crate::morph::{Morph, Patcher};
+use crate::morph::Patcher;
 use crate::{
     controller::LifecycleController,
     util::{
@@ -8,7 +8,8 @@ use crate::{
         Retrieve, ToPatch,
     },
 };
-use k8s_openapi::serde_json::json;
+use k8s_openapi::api::core::v1::EnvVar;
+use k8s_openapi::serde_json::{self, Value, json};
 use k8s_openapi::{ClusterResourceScope, NamespaceResourceScope};
 use kube::{
     Api, Resource, ResourceExt,
@@ -44,7 +45,7 @@ impl<R> Default for RepresentationController<R> {
     }
 }
 
-trait ApiObjectHelper {
+pub trait ApiObjectHelper {
     type ApiObject: Resource<DynamicType = ()>
         + Clone
         + Debug
@@ -86,6 +87,29 @@ macro_rules! impl_api_object_helper {
 }
 impl_api_object_helper!(ClusterResourceScope, ClusterKeycloakApiObject);
 impl_api_object_helper!(NamespaceResourceScope, KeycloakApiObject);
+
+impl<R> RepresentationController<R>
+where
+    R: Representation + Endpoint,
+    ParentGetter<R>: ParentRetrieve<R>,
+    <<<R as HasInnerSpec>::InnerSpec as HasParent>::ParentRef as Ref>::Target:
+        Endpoint,
+    R::Scope: ApiObjectHelper,
+    ApiExt<R>: ApiFactory,
+{
+    fn patch(resource: &R, payload: Value) -> Result<(Value, Vec<EnvVar>)> {
+        let mut patcher = Patcher::new(payload);
+        for (path, patch) in resource
+            .inner_spec()
+            .patches()
+            .map(|x| x.patch_from.iter())
+            .unwrap_or_default()
+        {
+            patcher.patch(path, patch)?;
+        }
+        Ok((patcher.value, patcher.vars))
+    }
+}
 
 #[async_trait::async_trait]
 impl<R> LifecycleController for RepresentationController<R>
@@ -137,7 +161,13 @@ where
 
         let primary_key =
             <<R as HasInnerSpec>::InnerSpec as KeycloakRestObject>::ID_FIELD;
-        let mut payload = resource.inner_spec().payload()?;
+        let mut payload =
+            if let Some(payload) = resource.inner_spec().definition() {
+                serde_json::to_value(payload)?
+            } else {
+                serde_json::Value::Object(Default::default())
+            };
+
         let id = payload
             .as_object_mut()
             .as_mut()
@@ -151,17 +181,9 @@ where
             "{}".to_string()
         }
         .into();
-        let mut patcher = Patcher::new(payload);
-        for (path, patch) in resource
-            .inner_spec()
-            .patches()
-            .map(|x| x.patch_from.iter())
-            .unwrap_or_default()
-        {
-            patcher.patch(path, patch)?;
-        }
-        let vars = patcher.vars;
-        let payload = serde_yaml::to_string(&patcher.value)?;
+
+        let (payload, vars) = Self::patch(&resource, payload)?;
+        let payload = serde_yaml::to_string(&payload)?;
 
         let parent_ref = resource.inner_spec().parent_ref();
         let parent =
