@@ -14,9 +14,11 @@ use kube::{
     api::PatchParams,
     runtime::{Controller, controller::Action},
 };
+use log::warn;
 use rustcloak_crd::{
-    ClientRef, InstanceRef, KeycloakApiStatusEndpoint, KeycloakRoleMapping,
-    RoleMappingParentRef, RoleNameOrRef, RoleRef,
+    ClientRef, InstanceRef, KeycloakApiStatus, KeycloakApiStatusEndpoint,
+    KeycloakRoleMapping, RoleLink, RoleMappingParentRef, RoleNameOrRef,
+    RoleRef,
     keycloak_types::{RoleRepresentation, UserRepresentation},
     traits::Endpoint,
 };
@@ -39,57 +41,103 @@ impl RoleMappingController {
             .with_token()
             .await
     }
+
     async fn mapping_path(
         &self,
-        parent_path: &str,
         resource: &KeycloakRoleMapping,
         keycloak: &ApiClient,
         client: &kube::Client,
         ns: &Option<String>,
     ) -> Result<String> {
-        let Some(client_ref) = &resource.spec.client_ref else {
-            return Ok(format!("{parent_path}/role-mappings/realm"));
+        let client_ref = match &resource.spec.role_ref {
+            RoleNameOrRef::RoleRef(role_ref) => {
+                let role =
+                    Retriever::<RoleRef>::get(client.clone(), role_ref, ns)
+                        .await?;
+                role.spec.parent_ref.inner.right()
+            }
+            RoleNameOrRef::Role {
+                role: RoleLink { client_ref, .. },
+            } => client_ref.clone(),
         };
-        let client =
-            Retriever::<ClientRef>::get(client.clone(), client_ref, ns).await?;
-        let client_path =
-            client.resource_path().ok_or(Error::MissingResourcePath)?;
-        // TODO: correct error code
+        let Some(client_ref) = client_ref else {
+            return Ok("role-mappings/realm".to_string());
+        };
+
+        let client_resource =
+            Retriever::<ClientRef>::get(client.clone(), &client_ref, ns)
+                .await?;
+        let client_path = client_resource
+            .resource_path()
+            .ok_or(Error::MissingResourcePath)?;
         let client_id = keycloak
             .get::<UserRepresentation>(client_path)
             .await?
             .id
             .ok_or(Error::MissingField("id".to_string()))?;
-        Ok(format!("{parent_path}/role-mappings/clients/{client_id}"))
+        Ok(format!("role-mappings/clients/{client_id}"))
     }
 
-    async fn role_representation(
+    async fn role_from_available(
         &self,
         resource_path: &str,
         resource: &KeycloakRoleMapping,
         keycloak: &ApiClient,
         client: &kube::Client,
         ns: &Option<String>,
-    ) -> Result<RoleRepresentation> {
+    ) -> Result<Option<RoleRepresentation>> {
+        self.role_from(
+            "/available",
+            resource_path,
+            resource,
+            keycloak,
+            client,
+            ns,
+        )
+        .await
+    }
+
+    async fn role_from_applied(
+        &self,
+        resource_path: &str,
+        resource: &KeycloakRoleMapping,
+        keycloak: &ApiClient,
+        client: &kube::Client,
+        ns: &Option<String>,
+    ) -> Result<Option<RoleRepresentation>> {
+        self.role_from("", resource_path, resource, keycloak, client, ns)
+            .await
+    }
+
+    async fn role_from(
+        &self,
+        endpoint: &str,
+        resource_path: &str,
+        resource: &KeycloakRoleMapping,
+        keycloak: &ApiClient,
+        client: &kube::Client,
+        ns: &Option<String>,
+    ) -> Result<Option<RoleRepresentation>> {
         match &resource.spec.role_ref {
-            RoleNameOrRef::Ref(role_ref) => {
+            RoleNameOrRef::RoleRef(role_ref) => {
                 let role =
                     Retriever::<RoleRef>::get(client.clone(), role_ref, ns)
                         .await?;
                 let path =
                     role.resource_path().ok_or(Error::MissingResourcePath)?;
-                Ok(keycloak.get::<RoleRepresentation>(path).await?)
+                Ok(Some(keycloak.get::<RoleRepresentation>(path).await?))
             }
-            RoleNameOrRef::Name { role_name } => {
-                let available_path = format!("{resource_path}/available");
+            RoleNameOrRef::Role {
+                role: RoleLink { name, .. },
+            } => {
+                let available_path = format!("{resource_path}{endpoint}");
                 let available_roles = keycloak
                     .get::<Vec<RoleRepresentation>>(&available_path)
                     .await?;
 
                 Ok(available_roles
                     .into_iter()
-                    .find(|role| role.name.as_ref() == Some(role_name))
-                    .ok_or(Error::MissingField(role_name.to_string()))?)
+                    .find(|role| role.name.as_ref() == Some(name)))
             }
         }
     }
@@ -122,10 +170,10 @@ impl LifecycleController for RoleMappingController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let ns = resource.namespace();
-        let parent_ref = &resource.spec.parent_ref;
-        let parent = Retriever::<RoleMappingParentRef>::get(
+        let subject_ref = &resource.spec.subject;
+        let subject = Retriever::<RoleMappingParentRef>::get(
             client.clone(),
-            parent_ref,
+            subject_ref,
             &ns,
         )
         .await?;
@@ -133,28 +181,32 @@ impl LifecycleController for RoleMappingController {
         let instance_ref = if let Some(instance_ref) = resource.instance_ref() {
             instance_ref
         } else {
-            parent
+            subject
                 .instance_ref()
                 .ok_or(Error::MissingInstanceReference)?
         };
 
         let keycloak = self.keycloak(instance_ref, client, &ns).await?;
 
-        let parent_path =
-            parent.resource_path().ok_or(Error::MissingResourcePath)?;
-        let resource_path = self
-            .mapping_path(parent_path, &resource, &keycloak, client, &ns)
-            .await?;
+        let subject_path =
+            subject.resource_path().ok_or(Error::MissingResourcePath)?;
+        let sub_path =
+            self.mapping_path(&resource, &keycloak, client, &ns).await?;
+        let resource_path = format!("{subject_path}/{sub_path}");
 
-        let role_representation = self
-            .role_representation(
+        let Some(role_representation) = self
+            .role_from_available(
                 &resource_path,
                 &resource,
                 &keycloak,
                 client,
                 &ns,
             )
-            .await?;
+            .await?
+        else {
+            warn!("Role not found in available roles. skipping");
+            return Ok(Action::await_change());
+        };
 
         if role_representation.id.is_none() {
             return Err(Error::MissingField("id".to_string()));
@@ -163,11 +215,9 @@ impl LifecycleController for RoleMappingController {
             return Err(Error::MissingField("name".to_string()));
         }
 
-        keycloak
-            .post_location(&resource_path, role_representation)
-            .await?;
+        keycloak.post(&resource_path, [role_representation]).await?;
 
-        let mut status = resource.status.clone().unwrap_or_default();
+        let mut status = KeycloakApiStatus::ok("Applied");
         status.endpoint = Some(KeycloakApiStatusEndpoint {
             resource_path,
             instance: instance_ref.clone(),
@@ -196,18 +246,24 @@ impl LifecycleController for RoleMappingController {
         };
 
         let keycloak = self.keycloak(&endpoint.instance, client, &ns).await?;
-        let role = self
-            .role_representation(
+        let Some(role) = self
+            .role_from_applied(
                 &endpoint.resource_path,
                 &resource,
                 &keycloak,
                 client,
                 &ns,
             )
-            .await?;
+            .await?
+        else {
+            warn!(
+                "Role not found in applied roles. Assuming it's already removed"
+            );
+            return Ok(Action::await_change());
+        };
 
         keycloak
-            .delete_with_payload(&endpoint.resource_path, role)
+            .delete_with_payload(&endpoint.resource_path, [role])
             .await?;
         Ok(Action::await_change())
     }
