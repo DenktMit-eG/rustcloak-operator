@@ -118,9 +118,9 @@
         <link rel="stylesheet" href="fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -17430,9 +17430,13 @@ spec:
 <p>represents a mapping between a user or group and a client</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specclientref">spec.clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrole">spec.role</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleclientref">spec.role.clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrolename">spec.role.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleref">spec.roleRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrolename">spec.role_name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubject">spec.subject</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubjectgroupref">spec.subject.groupRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubjectuserref">spec.subject.userRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -17453,20 +17457,33 @@ spec:
 <h3 id="spec-22"><a class="header" href="#spec-22">spec</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrole">role</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleref">roleRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrolename">role_name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubject">subject</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
 <hr />
-<h3 id="specclientref-5"><a class="header" href="#specclientref-5">spec.clientRef</a></h3>
+<h3 id="specrole"><a class="header" href="#specrole">spec.role</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrolename">name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+</tbody></table>
+</div>
+<p>The name of the role in keycloak. Mutual exclusive with roleRef</p>
+<hr />
+<h3 id="specroleclientref"><a class="header" href="#specroleclientref">spec.role.clientRef</a></h3>
 <p>Type: string</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
+<hr />
+<h3 id="specrolename"><a class="header" href="#specrolename">spec.role.name</a></h3>
+<p>Type: string</p>
+<p>The name of the role in keycloak</p>
 <hr />
 <h3 id="specroleref"><a class="header" href="#specroleref">spec.roleRef</a></h3>
 <p>Type: string</p>
@@ -17474,11 +17491,32 @@ spec:
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p>A reference to a KeycloakRole</p>
+<p>The kubernetes resource name of a KeycloakRole object. Mutual exclusive with roleName</p>
 <hr />
-<h3 id="specrole_name"><a class="header" href="#specrole_name">spec.role_name</a></h3>
+<h3 id="specsubject"><a class="header" href="#specsubject">spec.subject</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubjectgroupref">groupRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubjectuserref">userRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>The object that the role mapping is for</p>
+<hr />
+<h3 id="specsubjectgroupref"><a class="header" href="#specsubjectgroupref">spec.subject.groupRef</a></h3>
 <p>Type: string</p>
-<p><em>missing</em></p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of a KeycloakGroup resource</p>
+<hr />
+<h3 id="specsubjectuserref"><a class="header" href="#specsubjectuserref">spec.subject.userRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of a KeycloakUser resource</p>
 <hr />
 <h3 id="status-22"><a class="header" href="#status-22">status</a></h3>
 <p>Type: object</p>
