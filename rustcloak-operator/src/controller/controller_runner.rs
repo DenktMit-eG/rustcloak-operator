@@ -93,7 +93,7 @@ where
 
         wait_for_crd::<C::Resource, C>(&self.client).await?;
 
-        info!(kind = kind; "starting controller");
+        info!(target: C::MODULE_PATH, kind = kind; "starting controller for {kind}");
 
         let controller = Controller::new(api, watcher::Config::default())
             .with_config(config)
