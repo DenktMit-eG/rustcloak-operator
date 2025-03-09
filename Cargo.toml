@@ -1,3 +1,9 @@
 [workspace]
 resolver = "2"
 members = ["rustcloak-operator", "rustcloak-crd", "utils"]
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+panic = "abort"
