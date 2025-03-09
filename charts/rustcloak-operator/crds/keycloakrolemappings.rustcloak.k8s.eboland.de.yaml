@@ -11,7 +11,7 @@ spec:
     kind: KeycloakRoleMapping
     plural: keycloakrolemappings
     shortNames:
-    - krmp
+    - kcrmp
     singular: keycloakrolemapping
   scope: Namespaced
   versions:
@@ -46,21 +46,51 @@ spec:
             - required:
               - roleRef
             - required:
-              - role_name
+              - role
             properties:
-              clientRef:
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
+              role:
+                description: The name of the role in keycloak. Mutual exclusive with roleRef
+                properties:
+                  clientRef:
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  name:
+                    description: The name of the role in keycloak
+                    type: string
+                required:
+                - name
+                type: object
               roleRef:
-                description: A reference to a KeycloakRole
+                description: The kubernetes resource name of a KeycloakRole object. Mutual exclusive with roleName
                 type: string
                 x-kubernetes-validations:
                 - message: Value is immutable
                   rule: self == oldSelf
-              role_name:
-                type: string
+              subject:
+                anyOf:
+                - required:
+                  - userRef
+                - required:
+                  - groupRef
+                description: The object that the role mapping is for
+                properties:
+                  groupRef:
+                    description: The name of a KeycloakGroup resource
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  userRef:
+                    description: The name of a KeycloakUser resource
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                type: object
+            required:
+            - subject
             type: object
           status:
             nullable: true

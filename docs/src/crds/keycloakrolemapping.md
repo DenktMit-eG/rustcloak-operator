@@ -7,9 +7,13 @@ represents a mapping between a user or group and a client
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
-|[spec.clientRef](#specclientref)|string||
+|[spec.role](#specrole)|object||
+|[spec.role.clientRef](#specroleclientref)|string||
+|[spec.role.name](#specrolename)|string|✅|
 |[spec.roleRef](#specroleref)|string||
-|[spec.role_name](#specrolename)|string||
+|[spec.subject](#specsubject)|object|✅|
+|[spec.subject.groupRef](#specsubjectgroupref)|string||
+|[spec.subject.userRef](#specsubjectuserref)|string||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
@@ -33,15 +37,28 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[clientRef](#specclientref)|string||
+|[role](#specrole)|object||
 |[roleRef](#specroleref)|string||
-|[role_name](#specrolename)|string||
+|[subject](#specsubject)|object|✅|
 
 *missing*
 
 ---
 
-### spec.clientRef
+### spec.role
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[clientRef](#specroleclientref)|string||
+|[name](#specrolename)|string|✅|
+
+The name of the role in keycloak. Mutual exclusive with roleRef
+
+---
+
+### spec.role.clientRef
 
 Type: string
 
@@ -50,6 +67,14 @@ Type: string
 |self == oldSelf|Value is immutable|
 
 *missing*
+
+---
+
+### spec.role.name
+
+Type: string
+
+The name of the role in keycloak
 
 ---
 
@@ -61,15 +86,44 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-A reference to a KeycloakRole
+The kubernetes resource name of a KeycloakRole object. Mutual exclusive with roleName
 
 ---
 
-### spec.role_name
+### spec.subject
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[groupRef](#specsubjectgroupref)|string||
+|[userRef](#specsubjectuserref)|string||
+
+The object that the role mapping is for
+
+---
+
+### spec.subject.groupRef
 
 Type: string
 
-*missing*
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of a KeycloakGroup resource
+
+---
+
+### spec.subject.userRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of a KeycloakUser resource
 
 ---
 
