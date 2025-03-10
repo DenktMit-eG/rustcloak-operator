@@ -1,6 +1,6 @@
-FROM gcr.io/distroless/static:nonroot
-
 ARG TARGETARCH
+
+FROM gcr.io/distroless/static-debian12:nonroot-${TARGETARCH}
 
 COPY artifacts/${TARGETARCH}-unknown-linux-musl/bin/rustcloak /rustcloak
 

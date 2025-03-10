@@ -71,7 +71,7 @@ jobs:
         password: ${{ secrets.DOCKER_TOKEN }}
         ref-tags: ${{ github.ref_name }}
         dockerfile: ./dev-scripts/Dockerfile.release
-        archs: "amd64 arm64"
+        archs: "amd64,arm64"
 
   release:
     if: contains(github.ref_name, 'snapshot') == false
