@@ -7,8 +7,8 @@ on:
 
 jobs:
   prepare:
+    if: contains(github.ref_name, 'snapshot') == false
     runs-on: 'ubuntu-latest'
-
     steps:
     - uses: actions/checkout@v4
 
