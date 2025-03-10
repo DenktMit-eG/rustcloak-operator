@@ -13,7 +13,7 @@ jobs:
 
     # Check Versions
     - name: Check If Versions Match
-      if: contains(github.ref_name, 'snapshot') == false
+      if: ${{ contains(github.ref_name, 'snapshot') == false }}
       run: |
         helm_version=$(yq .version charts/rustcloak-operator/Chart.yaml)
         helm_appversion=$(yq .appVersion charts/rustcloak-operator/Chart.yaml)
@@ -74,7 +74,7 @@ jobs:
         archs: "amd64,arm64"
 
   release:
-    if: contains(github.ref_name, 'snapshot') == false
+    if: ${{ contains(github.ref_name, 'snapshot') == false }}
     needs:
     - container
     - build
