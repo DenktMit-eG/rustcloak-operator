@@ -17,36 +17,51 @@ jobs:
       run: |
         helm_version=$(yq .version charts/rustcloak-operator/Chart.yaml)
         helm_appversion=$(yq .appVersion charts/rustcloak-operator/Chart.yaml)
-        cd rustcloak-operator
-        cargo_version=$(cargo pkgid | cut -d'#' -f 2)
+        cargo_version=$(cargo pkgid --manifest-path rustcloak-operator/Cargo.toml | cut -d'#' -f 2)
+        cargo_version=$(cargo pkgid --manifest-path rustcloak-crd/Cargo.toml | cut -d'#' -f 2)
 
         set -x
-        test "${cargo_version}"   = "${GITHUB_REF_NAME#v}"
-        test "${helm_version}"    = "${GITHUB_REF_NAME#v}"
-        test "${helm_appversion}" = "${GITHUB_REF_NAME}"
+        test "${cargo_crd_version}"   = "${GITHUB_REF_NAME#v}"
+        test "${cargo_version}"       = "${GITHUB_REF_NAME#v}"
+        test "${helm_version}"        = "${GITHUB_REF_NAME#v}"
+        test "${helm_appversion}"     = "${GITHUB_REF_NAME}"
 
   build:
-    if: contains(github.ref_name, 'snapshot') == false
     needs: prepare
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
         target:
-        - aarch64-unknown-linux-musl
         - x86_64-unknown-linux-musl
+        - aarch64-unknown-linux-musl
     steps:
     - uses: actions/checkout@v4
     - uses: ./.github/actions/rust-build
       name: Build
       with:
         target: ${{ matrix.target }}
-        use-cross: true
+        use-cross: false
+
+  build-apple:
+    needs: prepare
+    runs-on: 'macos-latest'
+    strategy:
+      matrix:
+        target:
+        - x86_64-apple-darwin
+        - aarch64-apple-darwin
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/actions/rust-build
+      name: Build Apple
+      with:
+        target: ${{ matrix.target }}
+        use-cross: false
 
   container:
     needs:
     - build
     runs-on: 'ubuntu-latest'
-
     steps:
     - uses: actions/checkout@v4
     - uses: withlazers/container-action@main
@@ -55,17 +70,16 @@ jobs:
         username: gottox
         password: ${{ secrets.DOCKER_TOKEN }}
         ref-tags: ${{ github.ref_name }}
-        dockerfile: ./Dockerfile
-        archs: "amd64"
-
+        dockerfile: ./dev-scripts/Dockerfile.release
+        archs: "amd64 arm64"
 
   release:
     if: contains(github.ref_name, 'snapshot') == false
     needs:
     - container
     - build
+    - build-apple
     runs-on: 'ubuntu-latest'
-
     steps:
     - uses: actions/checkout@v4
     - uses: withlazers/release-action@main
