@@ -18,7 +18,7 @@ jobs:
         helm_version=$(yq .version charts/rustcloak-operator/Chart.yaml)
         helm_appversion=$(yq .appVersion charts/rustcloak-operator/Chart.yaml)
         cargo_version=$(cargo pkgid --manifest-path rustcloak-operator/Cargo.toml | cut -d'#' -f 2)
-        cargo_version=$(cargo pkgid --manifest-path rustcloak-crd/Cargo.toml | cut -d'#' -f 2)
+        cargo_crd_version=$(cargo pkgid --manifest-path rustcloak-crd/Cargo.toml | cut -d'#' -f 2)
 
         set -x
         test "${cargo_crd_version}"   = "${GITHUB_REF_NAME#v}"
