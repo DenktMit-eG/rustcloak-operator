@@ -1,0 +1,7 @@
+FROM gcr.io/distroless/static:nonroot
+
+ARG TARGETARCH
+
+COPY artifacts/${TARGETARCH}-unknown-linux-musl/bin/rustcloak /rustcloak
+
+ENTRYPOINT ["/rustcloak"]
