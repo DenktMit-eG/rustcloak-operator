@@ -13,9 +13,13 @@ rules:
 - apiGroups:
   - rustcloak.k8s.eboland.de
   resources:
+    - clusterkeycloakapiobjects/status
+    - clusterkeycloakinstances/status
+    - clusterkeycloakrealms/status
     - keycloakapiobjects/status
     - keycloakauthenticationflows/status
     - keycloakauthenticatorconfigs/status
+    - keycloakclientcredentials/status
     - keycloakclients/status
     - keycloakclientscopes/status
     - keycloakcomponents/status
@@ -28,8 +32,10 @@ rules:
     - keycloakrealms/status
     - keycloakrequiredactionproviders/status
     - keycloakresources/status
+    - keycloakrolemappings/status
     - keycloakroles/status
     - keycloakscopes/status
+    - keycloakusercredentials/status
     - keycloakusers/status
   verbs:
     - patch
@@ -37,9 +43,13 @@ rules:
 - apiGroups:
   - rustcloak.k8s.eboland.de
   resources:
+    - clusterkeycloakapiobjects
+    - clusterkeycloakinstances
+    - clusterkeycloakrealms
     - keycloakapiobjects
     - keycloakauthenticationflows
     - keycloakauthenticatorconfigs
+    - keycloakclientcredentials
     - keycloakclients
     - keycloakclientscopes
     - keycloakcomponents
@@ -52,8 +62,10 @@ rules:
     - keycloakrealms
     - keycloakrequiredactionproviders
     - keycloakresources
+    - keycloakrolemappings
     - keycloakroles
     - keycloakscopes
+    - keycloakusercredentials
     - keycloakusers
   verbs:
     - get
