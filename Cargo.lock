@@ -2254,7 +2254,7 @@ dependencies = [
 
 [[package]]
 name = "rustcloak-crd"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "either",
  "http 1.2.0",
@@ -2270,7 +2270,7 @@ dependencies = [
 
 [[package]]
 name = "rustcloak-operator"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "actix-web",
  "async-trait",
