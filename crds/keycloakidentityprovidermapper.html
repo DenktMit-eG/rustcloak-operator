@@ -258,10 +258,6 @@
 <tr><td style="text-align: left"><a href="#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specdefinition">spec.definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitionconfig">spec.definition.config</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconfigattributefriendlyname">spec.definition.config.attribute.friendly.name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconfigattributenameformat">spec.definition.config.attribute.name.format</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconfigsyncmode">spec.definition.config.syncMode</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconfiguserattribute">spec.definition.config.user.attribute</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitionid">spec.definition.id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitionidentityprovideralias">spec.definition.identityProviderAlias</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitionidentityprovidermapper">spec.definition.identityProviderMapper</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -333,38 +329,11 @@
 </div>
 <p>IdentityProviderMapperRepresentation</p>
 <details><summary>JSON schema</summary>
-<p><code>json { "type": "object", "properties": { "config": { "type": "object", "properties": { "attribute.friendly.name": { "title": "Friendly name", "description": "Friendly name of attribute to search for in assertion. You can leave this blank and specify a name instead.", "type": "string" }, "attribute.name.format": { "type": "string", "enum": [ "ATTRIBUTE_FORMAT_BASIC", "ATTRIBUTE_FORMAT_URI", "ATTRIBUTE_FORMAT_UNSPECIFIED" ] }, "syncMode": { "title": "Sync mode override", "description": "Overrides the default sync mode of the IDP for this mapper. Values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider and 'inherit' to use the sync mode defined in the identity provider for this mapper.", "type": "string", "enum": [ "INHERIT", "IMPORT", "LEGACY", "FORCE" ] }, "user.attribute": { "title": "User Attribute Name", "description": "Name of user attribute you want to hardcode", "type": "string" } }, "additionalProperties": { "type": "string" } }, "id": { "type": "string" }, "identityProviderAlias": { "type": "string" }, "identityProviderMapper": { "type": "string" }, "name": { "title": "Name", "description": "Name of the mapper.", "type": "string" } }, "additionalProperties": false } </code> </details></p>
+<p><code>json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "id": { "type": "string" }, "identityProviderAlias": { "type": "string" }, "identityProviderMapper": { "type": "string" }, "name": { "title": "Name", "description": "Name of the mapper.", "type": "string" } } } </code> </details></p>
 <hr />
 <h3 id="specdefinitionconfig"><a class="header" href="#specdefinitionconfig">spec.definition.config</a></h3>
 <p>Type: object</p>
-<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="#specdefinitionconfigattributefriendlyname">attribute.friendly.name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconfigattributenameformat">attribute.name.format</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconfigsyncmode">syncMode</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="#specdefinitionconfiguserattribute">user.attribute</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-</tbody></table>
-</div>
-<p>IdentityProviderMapperRepresentationConfig</p>
-<details><summary>JSON schema</summary>
-<p><code>json { "type": "object", "properties": { "attribute.friendly.name": { "title": "Friendly name", "description": "Friendly name of attribute to search for in assertion. You can leave this blank and specify a name instead.", "type": "string" }, "attribute.name.format": { "type": "string", "enum": [ "ATTRIBUTE_FORMAT_BASIC", "ATTRIBUTE_FORMAT_URI", "ATTRIBUTE_FORMAT_UNSPECIFIED" ] }, "syncMode": { "title": "Sync mode override", "description": "Overrides the default sync mode of the IDP for this mapper. Values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider and 'inherit' to use the sync mode defined in the identity provider for this mapper.", "type": "string", "enum": [ "INHERIT", "IMPORT", "LEGACY", "FORCE" ] }, "user.attribute": { "title": "User Attribute Name", "description": "Name of user attribute you want to hardcode", "type": "string" } }, "additionalProperties": { "type": "string" } } </code> </details></p>
-<hr />
-<h3 id="specdefinitionconfigattributefriendlyname"><a class="header" href="#specdefinitionconfigattributefriendlyname">spec.definition.config.attribute.friendly.name</a></h3>
-<p>Type: string</p>
-<p>Friendly name of attribute to search for in assertion. You can leave this blank and specify a name instead.</p>
-<hr />
-<h3 id="specdefinitionconfigattributenameformat"><a class="header" href="#specdefinitionconfigattributenameformat">spec.definition.config.attribute.name.format</a></h3>
-<p>Type: string</p>
-<p>IdentityProviderMapperRepresentationConfigAttributeNameFormat</p>
-<details><summary>JSON schema</summary>
-<p><code>json { "type": "string", "enum": [ "ATTRIBUTE_FORMAT_BASIC", "ATTRIBUTE_FORMAT_URI", "ATTRIBUTE_FORMAT_UNSPECIFIED" ] } </code> </details></p>
-<hr />
-<h3 id="specdefinitionconfigsyncmode"><a class="header" href="#specdefinitionconfigsyncmode">spec.definition.config.syncMode</a></h3>
-<p>Type: string</p>
-<p>Overrides the default sync mode of the IDP for this mapper. Values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider and 'inherit' to use the sync mode defined in the identity provider for this mapper.</p>
-<hr />
-<h3 id="specdefinitionconfiguserattribute"><a class="header" href="#specdefinitionconfiguserattribute">spec.definition.config.user.attribute</a></h3>
-<p>Type: string</p>
-<p>Name of user attribute you want to hardcode</p>
+<p><em>missing</em></p>
 <hr />
 <h3 id="specdefinitionid"><a class="header" href="#specdefinitionid">spec.definition.id</a></h3>
 <p>Type: string</p>
