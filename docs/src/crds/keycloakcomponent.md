@@ -107,7 +107,7 @@ ComponentRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "config": { "$ref": "#/$defs/MultivaluedHashMapStringString" }, "id": { "type": "string" }, "name": { "type": "string" }, "parentId": { "type": "string" }, "providerId": { "type": "string" }, "providerType": { "type": "string" }, "subType": { "type": "string" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "config": { "$ref": "#/$defs/MultivaluedHashMapStringString" }, "id": { "type": "string" }, "name": { "type": "string" }, "parentId": { "type": "string" }, "providerId": { "type": "string" }, "providerType": { "type": "string" }, "subType": { "type": "string" } } } ``` </details>
 
 ---
 

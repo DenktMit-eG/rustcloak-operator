@@ -22,35 +22,6 @@ resource to define an Organisation within a [KeyclaokRealm](./keycloakrealm.md)
 |[spec.definition.identityProviders[].alias](#specdefinitionidentityprovidersalias)|string||
 |[spec.definition.identityProviders[].authenticateByDefault](#specdefinitionidentityprovidersauthenticatebydefault)|boolean||
 |[spec.definition.identityProviders[].config](#specdefinitionidentityprovidersconfig)|object||
-|[spec.definition.identityProviders[].config.allowCreate](#specdefinitionidentityprovidersconfigallowcreate)|string||
-|[spec.definition.identityProviders[].config.allowedClockSkew](#specdefinitionidentityprovidersconfigallowedclockskew)|string||
-|[spec.definition.identityProviders[].config.attributeConsumingServiceIndex](#specdefinitionidentityprovidersconfigattributeconsumingserviceindex)|string||
-|[spec.definition.identityProviders[].config.authnContextClassRefs](#specdefinitionidentityprovidersconfigauthncontextclassrefs)|string||
-|[spec.definition.identityProviders[].config.authnContextComparisonType](#specdefinitionidentityprovidersconfigauthncontextcomparisontype)|string||
-|[spec.definition.identityProviders[].config.authnContextDeclRefs](#specdefinitionidentityprovidersconfigauthncontextdeclrefs)|string||
-|[spec.definition.identityProviders[].config.backchannelSupported](#specdefinitionidentityprovidersconfigbackchannelsupported)|string||
-|[spec.definition.identityProviders[].config.encryptionAlgorithm](#specdefinitionidentityprovidersconfigencryptionalgorithm)|string||
-|[spec.definition.identityProviders[].config.entityId](#specdefinitionidentityprovidersconfigentityid)|string||
-|[spec.definition.identityProviders[].config.forceAuthn](#specdefinitionidentityprovidersconfigforceauthn)|string||
-|[spec.definition.identityProviders[].config.hideOnLoginPage](#specdefinitionidentityprovidersconfighideonloginpage)|string||
-|[spec.definition.identityProviders[].config.idpEntityId](#specdefinitionidentityprovidersconfigidpentityid)|string||
-|[spec.definition.identityProviders[].config.loginHint](#specdefinitionidentityprovidersconfigloginhint)|string||
-|[spec.definition.identityProviders[].config.nameIDPolicyFormat](#specdefinitionidentityprovidersconfignameidpolicyformat)|string||
-|[spec.definition.identityProviders[].config.postBindingAuthnRequest](#specdefinitionidentityprovidersconfigpostbindingauthnrequest)|string||
-|[spec.definition.identityProviders[].config.postBindingLogout](#specdefinitionidentityprovidersconfigpostbindinglogout)|string||
-|[spec.definition.identityProviders[].config.postBindingResponse](#specdefinitionidentityprovidersconfigpostbindingresponse)|string||
-|[spec.definition.identityProviders[].config.principalAttribute](#specdefinitionidentityprovidersconfigprincipalattribute)|string||
-|[spec.definition.identityProviders[].config.principalType](#specdefinitionidentityprovidersconfigprincipaltype)|string||
-|[spec.definition.identityProviders[].config.signSpMetadata](#specdefinitionidentityprovidersconfigsignspmetadata)|string||
-|[spec.definition.identityProviders[].config.signatureAlgorithm](#specdefinitionidentityprovidersconfigsignaturealgorithm)|string||
-|[spec.definition.identityProviders[].config.signingCertificate](#specdefinitionidentityprovidersconfigsigningcertificate)|string||
-|[spec.definition.identityProviders[].config.singleSignOnServiceUrl](#specdefinitionidentityprovidersconfigsinglesignonserviceurl)|string||
-|[spec.definition.identityProviders[].config.syncMode](#specdefinitionidentityprovidersconfigsyncmode)|string||
-|[spec.definition.identityProviders[].config.validateSignature](#specdefinitionidentityprovidersconfigvalidatesignature)|string||
-|[spec.definition.identityProviders[].config.wantAssertionsEncrypted](#specdefinitionidentityprovidersconfigwantassertionsencrypted)|string||
-|[spec.definition.identityProviders[].config.wantAssertionsSigned](#specdefinitionidentityprovidersconfigwantassertionssigned)|string||
-|[spec.definition.identityProviders[].config.wantAuthnRequestsSigned](#specdefinitionidentityprovidersconfigwantauthnrequestssigned)|string||
-|[spec.definition.identityProviders[].config.xmlSigKeyInfoKeyNameTransformer](#specdefinitionidentityprovidersconfigxmlsigkeyinfokeynametransformer)|string||
 |[spec.definition.identityProviders[].displayName](#specdefinitionidentityprovidersdisplayname)|string||
 |[spec.definition.identityProviders[].enabled](#specdefinitionidentityprovidersenabled)|boolean||
 |[spec.definition.identityProviders[].firstBrokerLoginFlowAlias](#specdefinitionidentityprovidersfirstbrokerloginflowalias)|string||
@@ -232,7 +203,7 @@ OrganizationRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "alias": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "description": { "type": "string" }, "domains": { "type": "array", "items": { "$ref": "#/$defs/OrganizationDomainRepresentation" }, "uniqueItems": true }, "enabled": { "type": "boolean" }, "id": { "type": "string" }, "identityProviders": { "type": "array", "items": { "$ref": "#/$defs/IdentityProviderRepresentation" } }, "members": { "type": "array", "items": { "$ref": "#/$defs/MemberRepresentation" } }, "name": { "type": "string" }, "redirectUrl": { "type": "string" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "alias": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "description": { "type": "string" }, "domains": { "type": "array", "items": { "$ref": "#/$defs/OrganizationDomainRepresentation" }, "uniqueItems": true }, "enabled": { "type": "boolean" }, "id": { "type": "string" }, "identityProviders": { "type": "array", "items": { "$ref": "#/$defs/IdentityProviderRepresentation" } }, "members": { "type": "array", "items": { "$ref": "#/$defs/MemberRepresentation" } }, "name": { "type": "string" }, "redirectUrl": { "type": "string" } } } ``` </details>
 
 ---
 
@@ -273,7 +244,7 @@ OrganizationDomainRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "name": { "type": "string" }, "verified": { "type": "boolean" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "name": { "type": "string" }, "verified": { "type": "boolean" } } } ``` </details>
 
 ---
 
@@ -341,7 +312,7 @@ IdentityProviderRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "addReadTokenRoleOnCreate": { "title": "Stored tokens readable", "description": "Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.", "type": "boolean" }, "alias": { "title": "Alias", "description": "The alias uniquely identifies an identity provider and it is also used to build the redirect uri.", "type": "string" }, "authenticateByDefault": { "type": "boolean" }, "config": { "type": "object", "properties": { "allowCreate": { "title": "Allow create", "description": "Allow the external identity provider to create a new identifier to represent the principal.", "type": "string", "enum": [ "true", "false", "" ] }, "allowedClockSkew": { "title": "Allowed clock skew", "description": "Clock skew in seconds that is tolerated when validating identity provider tokens. Default value is zero.", "type": "string", "pattern": "^[0-9]*$" }, "attributeConsumingServiceIndex": { "title": "Attribute Consuming Service Index", "description": "Index of the Attribute Consuming Service profile to request during authentication.", "type": "string", "pattern": "^[0-9]*$" }, "authnContextClassRefs": { "title": "AuthnContext ClassRefs", "description": "Ordered list of requested AuthnContext ClassRefs.", "type": "string" }, "authnContextComparisonType": { "title": "Comparison", "description": "Specifies the comparison method used to evaluate the requested context classes or statements. The default is \"Exact\".", "type": "string", "enum": [ "exact", "minimum", "maximum", "better" ] }, "authnContextDeclRefs": { "title": "AuthnContext DeclRefs", "description": "Ordered list of requested AuthnContext DeclRefs.", "type": "string" }, "backchannelSupported": { "title": "Backchannel logout", "description": "Does the external IDP support backchannel logout?", "type": "string", "enum": [ "true", "false", "" ] }, "encryptionAlgorithm": { "title": "Encryption Algorithm", "description": "Encryption algorithm, which is used by SAML IDP for encryption of SAML documents, assertions or IDs. The corresponding decryption key for decrypt SAML document parts will be chosen based on this configured algorithm and should be available in realm keys for the encryption (ENC) usage. If algorithm is not configured, then any supported algorithm is allowed and decryption key will be chosen based on the algorithm configured in SAML document itself.", "type": "string" }, "entityId": { "title": "Service provider entity ID", "description": "The Entity ID that will be used to uniquely identify this SAML Service Provider.", "type": "string" }, "forceAuthn": { "title": "Force authentication", "description": "Indicates whether the identity provider must authenticate the presenter directly rather than rely on a previous security context.", "type": "string", "enum": [ "true", "false", "" ] }, "hideOnLoginPage": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "string", "enum": [ "true", "false", "" ] }, "idpEntityId": { "title": "Identity provider entity ID", "description": "The Entity ID used to validate the Issuer for received SAML assertions. If empty, no Issuer validation is performed.", "type": "string" }, "loginHint": { "title": "Pass subject", "description": "During login phase, forward an optional login_hint query parameter to SAML AuthnRequest's Subject.", "type": "string", "enum": [ "true", "false", "" ] }, "nameIDPolicyFormat": { "title": "NameID policy format", "description": "Specifies the URI reference corresponding to a name identifier format.", "type": "string" }, "postBindingAuthnRequest": { "title": "HTTP-POST binding for AuthnRequest", "description": "Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingLogout": { "title": "HTTP-POST binding logout", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingResponse": { "title": "HTTP-POST binding response", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "principalAttribute": { "title": "Principal attribute", "description": "Name or Friendly Name of the attribute used to identify external users.", "type": "string" }, "principalType": { "title": "Principal type", "description": "Way to identify and track external users from the assertion. Default is using Subject NameID, alternatively you can set up identifying attribute.", "type": "string", "enum": [ "SUBJECT", "ATTRIBUTE", "FRIENDLY_ATTRIBUTE" ] }, "signSpMetadata": { "title": "Sign service provider metadata", "description": "Enable/disable signature of the provider SAML metadata.", "type": "string", "enum": [ "true", "false", "" ] }, "signatureAlgorithm": { "title": "Signature algorithm", "description": "The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.", "type": "string" }, "signingCertificate": { "title": "Validating X509 certificates", "description": "The public certificates Keycloak uses to validate the signatures of SAML requests and responses from the external IDP when Use metadata descriptor URL is OFF. Multiple certificates can be entered separated by comma (,). The certificates can be re-imported from the Metadata descriptor URL clicking the Import Keys action in the identity provider page. The action downloads the current certificates in the metadata endpoint and assigns them to the config in this same option. You need to click Save to definitely store the re-imported certificates.", "type": "string" }, "singleSignOnServiceUrl": { "title": "Single Sign-On service URL", "description": "The Url that must be used to send authentication requests (SAML AuthnRequest).", "type": "string" }, "syncMode": { "title": "Sync mode", "description": "Default sync mode for all mappers. The sync mode determines when user data will be synced using the mappers. Possible values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider.", "type": "string", "enum": [ "IMPORT", "LEGACY", "FORCE" ] }, "validateSignature": { "title": "Validate Signatures", "description": "Enable/disable signature validation of external IDP signatures.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsEncrypted": { "title": "Want Assertions encrypted", "description": "Indicates whether this service provider expects an encrypted Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsSigned": { "title": "Want Assertions signed", "description": "Indicates whether this service provider expects a signed Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAuthnRequestsSigned": { "title": "Want AuthnRequests signed", "description": "Indicates whether the identity provider expects a signed AuthnRequest.", "type": "string", "enum": [ "true", "false", "" ] }, "xmlSigKeyInfoKeyNameTransformer": { "title": "SAML signature key name", "description": "Signed SAML documents contain identification of signing key in KeyName element. For Keycloak / RH-SSO counter-party, use KEY_ID, for MS AD FS use CERT_SUBJECT, for others check and use NONE if no other option works.", "type": "string", "enum": [ "NONE", "KEY_ID", "CERT_SUBJECT" ] } }, "additionalProperties": { "type": "string" } }, "displayName": { "title": "Display name", "description": "Friendly name for Identity Providers.", "type": "string" }, "enabled": { "title": "Enabled", "type": "boolean" }, "firstBrokerLoginFlowAlias": { "title": "First login flow override", "description": "Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that no Keycloak account is currently linked to the authenticated identity provider account.", "type": "string" }, "hideOnLogin": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "boolean" }, "internalId": { "type": "string" }, "linkOnly": { "title": "Account linking only", "description": "If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider.", "type": "boolean" }, "organizationId": { "type": "string" }, "postBrokerLoginFlowAlias": { "title": "Post login flow", "description": "Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this to \"None\" if you need no any additional authenticators to be triggered after login with this identity provider. Also note that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.", "type": "string" }, "providerId": { "type": "string" }, "storeToken": { "title": "Store tokens", "description": "Enable/disable if tokens must be stored after authenticating users.", "type": "boolean" }, "trustEmail": { "title": "Trust Email", "description": "If enabled, email provided by this provider is not verified even if verification is enabled for the realm.", "type": "boolean" }, "updateProfileFirstLogin": { "type": "boolean" }, "updateProfileFirstLoginMode": { "type": "string" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "addReadTokenRoleOnCreate": { "title": "Stored tokens readable", "description": "Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.", "type": "boolean" }, "alias": { "title": "Alias", "description": "The alias uniquely identifies an identity provider and it is also used to build the redirect uri.", "type": "string" }, "authenticateByDefault": { "type": "boolean" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "displayName": { "title": "Display name", "description": "Friendly name for Identity Providers.", "type": "string" }, "enabled": { "title": "Enabled", "type": "boolean" }, "firstBrokerLoginFlowAlias": { "title": "First login flow override", "description": "Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that no Keycloak account is currently linked to the authenticated identity provider account.", "type": "string" }, "hideOnLogin": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "boolean" }, "internalId": { "type": "string" }, "linkOnly": { "title": "Account linking only", "description": "If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider.", "type": "boolean" }, "organizationId": { "type": "string" }, "postBrokerLoginFlowAlias": { "title": "Post login flow", "description": "Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this to \"None\" if you need no any additional authenticators to be triggered after login with this identity provider. Also note that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.", "type": "string" }, "providerId": { "type": "string" }, "storeToken": { "title": "Store tokens", "description": "Enable/disable if tokens must be stored after authenticating users.", "type": "boolean" }, "trustEmail": { "title": "Trust Email", "description": "If enabled, email provided by this provider is not verified even if verification is enabled for the realm.", "type": "boolean" }, "updateProfileFirstLogin": { "type": "boolean" }, "updateProfileFirstLoginMode": { "type": "string" } } } ``` </details>
 
 ---
 
@@ -373,275 +344,7 @@ Type: boolean
 
 Type: object
 
-|Property|Type|Required|
-|:-------|:---|:------:|
-|[allowCreate](#specdefinitionidentityprovidersconfigallowcreate)|string||
-|[allowedClockSkew](#specdefinitionidentityprovidersconfigallowedclockskew)|string||
-|[attributeConsumingServiceIndex](#specdefinitionidentityprovidersconfigattributeconsumingserviceindex)|string||
-|[authnContextClassRefs](#specdefinitionidentityprovidersconfigauthncontextclassrefs)|string||
-|[authnContextComparisonType](#specdefinitionidentityprovidersconfigauthncontextcomparisontype)|string||
-|[authnContextDeclRefs](#specdefinitionidentityprovidersconfigauthncontextdeclrefs)|string||
-|[backchannelSupported](#specdefinitionidentityprovidersconfigbackchannelsupported)|string||
-|[encryptionAlgorithm](#specdefinitionidentityprovidersconfigencryptionalgorithm)|string||
-|[entityId](#specdefinitionidentityprovidersconfigentityid)|string||
-|[forceAuthn](#specdefinitionidentityprovidersconfigforceauthn)|string||
-|[hideOnLoginPage](#specdefinitionidentityprovidersconfighideonloginpage)|string||
-|[idpEntityId](#specdefinitionidentityprovidersconfigidpentityid)|string||
-|[loginHint](#specdefinitionidentityprovidersconfigloginhint)|string||
-|[nameIDPolicyFormat](#specdefinitionidentityprovidersconfignameidpolicyformat)|string||
-|[postBindingAuthnRequest](#specdefinitionidentityprovidersconfigpostbindingauthnrequest)|string||
-|[postBindingLogout](#specdefinitionidentityprovidersconfigpostbindinglogout)|string||
-|[postBindingResponse](#specdefinitionidentityprovidersconfigpostbindingresponse)|string||
-|[principalAttribute](#specdefinitionidentityprovidersconfigprincipalattribute)|string||
-|[principalType](#specdefinitionidentityprovidersconfigprincipaltype)|string||
-|[signSpMetadata](#specdefinitionidentityprovidersconfigsignspmetadata)|string||
-|[signatureAlgorithm](#specdefinitionidentityprovidersconfigsignaturealgorithm)|string||
-|[signingCertificate](#specdefinitionidentityprovidersconfigsigningcertificate)|string||
-|[singleSignOnServiceUrl](#specdefinitionidentityprovidersconfigsinglesignonserviceurl)|string||
-|[syncMode](#specdefinitionidentityprovidersconfigsyncmode)|string||
-|[validateSignature](#specdefinitionidentityprovidersconfigvalidatesignature)|string||
-|[wantAssertionsEncrypted](#specdefinitionidentityprovidersconfigwantassertionsencrypted)|string||
-|[wantAssertionsSigned](#specdefinitionidentityprovidersconfigwantassertionssigned)|string||
-|[wantAuthnRequestsSigned](#specdefinitionidentityprovidersconfigwantauthnrequestssigned)|string||
-|[xmlSigKeyInfoKeyNameTransformer](#specdefinitionidentityprovidersconfigxmlsigkeyinfokeynametransformer)|string||
-
-IdentityProviderRepresentationConfig
-
-<details><summary>JSON schema</summary>
-
-```json { "type": "object", "properties": { "allowCreate": { "title": "Allow create", "description": "Allow the external identity provider to create a new identifier to represent the principal.", "type": "string", "enum": [ "true", "false", "" ] }, "allowedClockSkew": { "title": "Allowed clock skew", "description": "Clock skew in seconds that is tolerated when validating identity provider tokens. Default value is zero.", "type": "string", "pattern": "^[0-9]*$" }, "attributeConsumingServiceIndex": { "title": "Attribute Consuming Service Index", "description": "Index of the Attribute Consuming Service profile to request during authentication.", "type": "string", "pattern": "^[0-9]*$" }, "authnContextClassRefs": { "title": "AuthnContext ClassRefs", "description": "Ordered list of requested AuthnContext ClassRefs.", "type": "string" }, "authnContextComparisonType": { "title": "Comparison", "description": "Specifies the comparison method used to evaluate the requested context classes or statements. The default is \"Exact\".", "type": "string", "enum": [ "exact", "minimum", "maximum", "better" ] }, "authnContextDeclRefs": { "title": "AuthnContext DeclRefs", "description": "Ordered list of requested AuthnContext DeclRefs.", "type": "string" }, "backchannelSupported": { "title": "Backchannel logout", "description": "Does the external IDP support backchannel logout?", "type": "string", "enum": [ "true", "false", "" ] }, "encryptionAlgorithm": { "title": "Encryption Algorithm", "description": "Encryption algorithm, which is used by SAML IDP for encryption of SAML documents, assertions or IDs. The corresponding decryption key for decrypt SAML document parts will be chosen based on this configured algorithm and should be available in realm keys for the encryption (ENC) usage. If algorithm is not configured, then any supported algorithm is allowed and decryption key will be chosen based on the algorithm configured in SAML document itself.", "type": "string" }, "entityId": { "title": "Service provider entity ID", "description": "The Entity ID that will be used to uniquely identify this SAML Service Provider.", "type": "string" }, "forceAuthn": { "title": "Force authentication", "description": "Indicates whether the identity provider must authenticate the presenter directly rather than rely on a previous security context.", "type": "string", "enum": [ "true", "false", "" ] }, "hideOnLoginPage": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "string", "enum": [ "true", "false", "" ] }, "idpEntityId": { "title": "Identity provider entity ID", "description": "The Entity ID used to validate the Issuer for received SAML assertions. If empty, no Issuer validation is performed.", "type": "string" }, "loginHint": { "title": "Pass subject", "description": "During login phase, forward an optional login_hint query parameter to SAML AuthnRequest's Subject.", "type": "string", "enum": [ "true", "false", "" ] }, "nameIDPolicyFormat": { "title": "NameID policy format", "description": "Specifies the URI reference corresponding to a name identifier format.", "type": "string" }, "postBindingAuthnRequest": { "title": "HTTP-POST binding for AuthnRequest", "description": "Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingLogout": { "title": "HTTP-POST binding logout", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "postBindingResponse": { "title": "HTTP-POST binding response", "description": "Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.", "type": "string", "enum": [ "true", "false", "" ] }, "principalAttribute": { "title": "Principal attribute", "description": "Name or Friendly Name of the attribute used to identify external users.", "type": "string" }, "principalType": { "title": "Principal type", "description": "Way to identify and track external users from the assertion. Default is using Subject NameID, alternatively you can set up identifying attribute.", "type": "string", "enum": [ "SUBJECT", "ATTRIBUTE", "FRIENDLY_ATTRIBUTE" ] }, "signSpMetadata": { "title": "Sign service provider metadata", "description": "Enable/disable signature of the provider SAML metadata.", "type": "string", "enum": [ "true", "false", "" ] }, "signatureAlgorithm": { "title": "Signature algorithm", "description": "The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.", "type": "string" }, "signingCertificate": { "title": "Validating X509 certificates", "description": "The public certificates Keycloak uses to validate the signatures of SAML requests and responses from the external IDP when Use metadata descriptor URL is OFF. Multiple certificates can be entered separated by comma (,). The certificates can be re-imported from the Metadata descriptor URL clicking the Import Keys action in the identity provider page. The action downloads the current certificates in the metadata endpoint and assigns them to the config in this same option. You need to click Save to definitely store the re-imported certificates.", "type": "string" }, "singleSignOnServiceUrl": { "title": "Single Sign-On service URL", "description": "The Url that must be used to send authentication requests (SAML AuthnRequest).", "type": "string" }, "syncMode": { "title": "Sync mode", "description": "Default sync mode for all mappers. The sync mode determines when user data will be synced using the mappers. Possible values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider.", "type": "string", "enum": [ "IMPORT", "LEGACY", "FORCE" ] }, "validateSignature": { "title": "Validate Signatures", "description": "Enable/disable signature validation of external IDP signatures.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsEncrypted": { "title": "Want Assertions encrypted", "description": "Indicates whether this service provider expects an encrypted Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAssertionsSigned": { "title": "Want Assertions signed", "description": "Indicates whether this service provider expects a signed Assertion.", "type": "string", "enum": [ "true", "false", "" ] }, "wantAuthnRequestsSigned": { "title": "Want AuthnRequests signed", "description": "Indicates whether the identity provider expects a signed AuthnRequest.", "type": "string", "enum": [ "true", "false", "" ] }, "xmlSigKeyInfoKeyNameTransformer": { "title": "SAML signature key name", "description": "Signed SAML documents contain identification of signing key in KeyName element. For Keycloak / RH-SSO counter-party, use KEY_ID, for MS AD FS use CERT_SUBJECT, for others check and use NONE if no other option works.", "type": "string", "enum": [ "NONE", "KEY_ID", "CERT_SUBJECT" ] } }, "additionalProperties": { "type": "string" } } ``` </details>
-
----
-
-### spec.definition.identityProviders[].config.allowCreate
-
-Type: string
-
-Allow the external identity provider to create a new identifier to represent the principal.
-
----
-
-### spec.definition.identityProviders[].config.allowedClockSkew
-
-Type: string
-
-Clock skew in seconds that is tolerated when validating identity provider tokens. Default value is zero.
-
----
-
-### spec.definition.identityProviders[].config.attributeConsumingServiceIndex
-
-Type: string
-
-Index of the Attribute Consuming Service profile to request during authentication.
-
----
-
-### spec.definition.identityProviders[].config.authnContextClassRefs
-
-Type: string
-
-Ordered list of requested AuthnContext ClassRefs.
-
----
-
-### spec.definition.identityProviders[].config.authnContextComparisonType
-
-Type: string
-
-Specifies the comparison method used to evaluate the requested context classes or statements. The default is "Exact".
-
----
-
-### spec.definition.identityProviders[].config.authnContextDeclRefs
-
-Type: string
-
-Ordered list of requested AuthnContext DeclRefs.
-
----
-
-### spec.definition.identityProviders[].config.backchannelSupported
-
-Type: string
-
-Does the external IDP support backchannel logout?
-
----
-
-### spec.definition.identityProviders[].config.encryptionAlgorithm
-
-Type: string
-
-Encryption algorithm, which is used by SAML IDP for encryption of SAML documents, assertions or IDs. The corresponding decryption key for decrypt SAML document parts will be chosen based on this configured algorithm and should be available in realm keys for the encryption (ENC) usage. If algorithm is not configured, then any supported algorithm is allowed and decryption key will be chosen based on the algorithm configured in SAML document itself.
-
----
-
-### spec.definition.identityProviders[].config.entityId
-
-Type: string
-
-The Entity ID that will be used to uniquely identify this SAML Service Provider.
-
----
-
-### spec.definition.identityProviders[].config.forceAuthn
-
-Type: string
-
-Indicates whether the identity provider must authenticate the presenter directly rather than rely on a previous security context.
-
----
-
-### spec.definition.identityProviders[].config.hideOnLoginPage
-
-Type: string
-
-If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.
-
----
-
-### spec.definition.identityProviders[].config.idpEntityId
-
-Type: string
-
-The Entity ID used to validate the Issuer for received SAML assertions. If empty, no Issuer validation is performed.
-
----
-
-### spec.definition.identityProviders[].config.loginHint
-
-Type: string
-
-During login phase, forward an optional login_hint query parameter to SAML AuthnRequest's Subject.
-
----
-
-### spec.definition.identityProviders[].config.nameIDPolicyFormat
-
-Type: string
-
-Specifies the URI reference corresponding to a name identifier format.
-
----
-
-### spec.definition.identityProviders[].config.postBindingAuthnRequest
-
-Type: string
-
-Indicates whether the AuthnRequest must be sent using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
-
----
-
-### spec.definition.identityProviders[].config.postBindingLogout
-
-Type: string
-
-Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
-
----
-
-### spec.definition.identityProviders[].config.postBindingResponse
-
-Type: string
-
-Indicates whether to respond to requests using HTTP-POST binding. If false, HTTP-REDIRECT binding will be used.
-
----
-
-### spec.definition.identityProviders[].config.principalAttribute
-
-Type: string
-
-Name or Friendly Name of the attribute used to identify external users.
-
----
-
-### spec.definition.identityProviders[].config.principalType
-
-Type: string
-
-Way to identify and track external users from the assertion. Default is using Subject NameID, alternatively you can set up identifying attribute.
-
----
-
-### spec.definition.identityProviders[].config.signSpMetadata
-
-Type: string
-
-Enable/disable signature of the provider SAML metadata.
-
----
-
-### spec.definition.identityProviders[].config.signatureAlgorithm
-
-Type: string
-
-The signature algorithm to use to sign documents. Note that 'SHA1' based algorithms are deprecated and can be removed in the future. It is recommended to stick to some more secure algorithm instead of '*_SHA1'.
-
----
-
-### spec.definition.identityProviders[].config.signingCertificate
-
-Type: string
-
-The public certificates Keycloak uses to validate the signatures of SAML requests and responses from the external IDP when Use metadata descriptor URL is OFF. Multiple certificates can be entered separated by comma (,). The certificates can be re-imported from the Metadata descriptor URL clicking the Import Keys action in the identity provider page. The action downloads the current certificates in the metadata endpoint and assigns them to the config in this same option. You need to click Save to definitely store the re-imported certificates.
-
----
-
-### spec.definition.identityProviders[].config.singleSignOnServiceUrl
-
-Type: string
-
-The Url that must be used to send authentication requests (SAML AuthnRequest).
-
----
-
-### spec.definition.identityProviders[].config.syncMode
-
-Type: string
-
-Default sync mode for all mappers. The sync mode determines when user data will be synced using the mappers. Possible values are: 'legacy' to keep the behaviour before this option was introduced, 'import' to only import the user once during first login of the user with this identity provider, 'force' to always update the user during every login with this identity provider.
-
----
-
-### spec.definition.identityProviders[].config.validateSignature
-
-Type: string
-
-Enable/disable signature validation of external IDP signatures.
-
----
-
-### spec.definition.identityProviders[].config.wantAssertionsEncrypted
-
-Type: string
-
-Indicates whether this service provider expects an encrypted Assertion.
-
----
-
-### spec.definition.identityProviders[].config.wantAssertionsSigned
-
-Type: string
-
-Indicates whether this service provider expects a signed Assertion.
-
----
-
-### spec.definition.identityProviders[].config.wantAuthnRequestsSigned
-
-Type: string
-
-Indicates whether the identity provider expects a signed AuthnRequest.
-
----
-
-### spec.definition.identityProviders[].config.xmlSigKeyInfoKeyNameTransformer
-
-Type: string
-
-Signed SAML documents contain identification of signing key in KeyName element. For Keycloak / RH-SSO counter-party, use KEY_ID, for MS AD FS use CERT_SUBJECT, for others check and use NONE if no other option works.
+*missing*
 
 ---
 
@@ -788,7 +491,7 @@ MemberRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "applicationRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientConsents": { "type": "array", "items": { "$ref": "#/$defs/UserConsentRepresentation" } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "createdTimestamp": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentials": { "type": "array", "items": { "$ref": "#/$defs/CredentialRepresentation" } }, "disableableCredentialTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "email": { "type": "string" }, "emailVerified": { "type": "boolean" }, "enabled": { "type": "boolean" }, "federatedIdentities": { "type": "array", "items": { "$ref": "#/$defs/FederatedIdentityRepresentation" } }, "federationLink": { "type": "string" }, "firstName": { "type": "string" }, "groups": { "type": "array", "items": { "type": "string" } }, "id": { "type": "string" }, "lastName": { "type": "string" }, "membershipType": { "$ref": "#/$defs/MembershipType" }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "origin": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "requiredActions": { "type": "array", "items": { "type": "string" } }, "self": { "type": "string" }, "serviceAccountClientId": { "type": "string" }, "socialLinks": { "type": "array", "items": { "$ref": "#/$defs/SocialLinkRepresentation" } }, "totp": { "type": "boolean" }, "userProfileMetadata": { "$ref": "#/$defs/UserProfileMetadata" }, "username": { "type": "string" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "applicationRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientConsents": { "type": "array", "items": { "$ref": "#/$defs/UserConsentRepresentation" } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "createdTimestamp": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentials": { "type": "array", "items": { "$ref": "#/$defs/CredentialRepresentation" } }, "disableableCredentialTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "email": { "type": "string" }, "emailVerified": { "type": "boolean" }, "enabled": { "type": "boolean" }, "federatedIdentities": { "type": "array", "items": { "$ref": "#/$defs/FederatedIdentityRepresentation" } }, "federationLink": { "type": "string" }, "firstName": { "type": "string" }, "groups": { "type": "array", "items": { "type": "string" } }, "id": { "type": "string" }, "lastName": { "type": "string" }, "membershipType": { "$ref": "#/$defs/MembershipType" }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "origin": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "requiredActions": { "type": "array", "items": { "type": "string" } }, "self": { "type": "string" }, "serviceAccountClientId": { "type": "string" }, "socialLinks": { "type": "array", "items": { "$ref": "#/$defs/SocialLinkRepresentation" } }, "totp": { "type": "boolean" }, "userProfileMetadata": { "$ref": "#/$defs/UserProfileMetadata" }, "username": { "type": "string" } } } ``` </details>
 
 ---
 
@@ -832,7 +535,7 @@ UserConsentRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "clientId": { "type": "string" }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "grantedClientScopes": { "type": "array", "items": { "type": "string" } }, "grantedRealmRoles": { "type": "array", "items": { "type": "string" } }, "lastUpdatedDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "clientId": { "type": "string" }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "grantedClientScopes": { "type": "array", "items": { "type": "string" } }, "grantedRealmRoles": { "type": "array", "items": { "type": "string" } }, "lastUpdatedDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 } } } ``` </details>
 
 ---
 
@@ -921,7 +624,7 @@ CredentialRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } ``` </details>
 
 ---
 
@@ -1115,7 +818,7 @@ FederatedIdentityRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "identityProvider": { "type": "string" }, "userId": { "type": "string" }, "userName": { "type": "string" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "identityProvider": { "type": "string" }, "userId": { "type": "string" }, "userName": { "type": "string" } } } ``` </details>
 
 ---
 
@@ -1257,7 +960,7 @@ SocialLinkRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "socialProvider": { "type": "string" }, "socialUserId": { "type": "string" }, "socialUsername": { "type": "string" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "socialProvider": { "type": "string" }, "socialUserId": { "type": "string" }, "socialUsername": { "type": "string" } } } ``` </details>
 
 ---
 
@@ -1306,7 +1009,7 @@ UserProfileMetadata
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "attributes": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeMetadata" } }, "groups": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeGroupMetadata" } } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "attributes": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeMetadata" } }, "groups": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeGroupMetadata" } } } } ``` </details>
 
 ---
 
@@ -1329,7 +1032,7 @@ UserProfileAttributeMetadata
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayName": { "type": "string" }, "group": { "type": "string" }, "multivalued": { "type": "boolean" }, "name": { "type": "string" }, "readOnly": { "type": "boolean" }, "required": { "type": "boolean" }, "validators": { "type": "object", "additionalProperties": { "type": "object", "additionalProperties": {} } } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayName": { "type": "string" }, "group": { "type": "string" }, "multivalued": { "type": "boolean" }, "name": { "type": "string" }, "readOnly": { "type": "boolean" }, "required": { "type": "boolean" }, "validators": { "type": "object", "additionalProperties": { "type": "object", "additionalProperties": {} } } } } ``` </details>
 
 ---
 
@@ -1412,7 +1115,7 @@ UserProfileAttributeGroupMetadata
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayDescription": { "type": "string" }, "displayHeader": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayDescription": { "type": "string" }, "displayHeader": { "type": "string" }, "name": { "type": "string" } } } ``` </details>
 
 ---
 

@@ -99,7 +99,7 @@ AuthenticatorConfigRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "alias": { "type": "string" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "id": { "type": "string" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "alias": { "type": "string" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "id": { "type": "string" } } } ``` </details>
 
 ---
 

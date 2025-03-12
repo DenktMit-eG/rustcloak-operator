@@ -107,7 +107,7 @@ RequiredActionProviderRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "alias": { "type": "string" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "defaultAction": { "type": "boolean" }, "enabled": { "type": "boolean" }, "name": { "type": "string" }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "providerId": { "type": "string" } }, "additionalProperties": false } ``` </details>
+```json { "type": "object", "properties": { "alias": { "type": "string" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "defaultAction": { "type": "boolean" }, "enabled": { "type": "boolean" }, "name": { "type": "string" }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "providerId": { "type": "string" } } } ``` </details>
 
 ---
 
