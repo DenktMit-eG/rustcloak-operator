@@ -60,3 +60,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+prometheus:
+  enabled: false

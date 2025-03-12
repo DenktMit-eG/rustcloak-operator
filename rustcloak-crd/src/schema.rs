@@ -1,8 +1,4 @@
-use std::ops::DerefMut;
-
-use schemars::schema::{
-    ArrayValidation, ObjectValidation, Schema, SchemaObject, SingleOrVec,
-};
+use schemars::schema::{Schema, SchemaObject, SingleOrVec};
 use serde_json::json;
 
 pub trait SchemaUtil {
@@ -104,56 +100,6 @@ impl SchemaUtil for Schema {
     }
 }
 
-fn make_k8s_happy_array(array: &mut ArrayValidation) {
-    match &mut array.items {
-        Some(SingleOrVec::Single(schema)) => make_k8s_happy(schema.deref_mut()),
-        Some(SingleOrVec::Vec(schemas)) => {
-            for schema in schemas {
-                make_k8s_happy(schema);
-            }
-        }
-        _ => (),
-    }
-}
-
-fn make_k8s_happy_object(object: &mut ObjectValidation) {
-    // We need to do that because Kubernetes has a very different
-    // understanding of what additionalProperties means.
-    //
-    // Ref: https://github.com/kubernetes/kubernetes/issues/94593
-    if !object.properties.is_empty() {
-        object.additional_properties = None;
-    }
-
-    // TODO Remove this.
-    // See: https://github.com/jirutka/keycloak-json-schema/issues/2
-    object.properties.remove("bruteForceDetection");
-
-    for schema in object.properties.values_mut() {
-        make_k8s_happy(schema);
-    }
-    if let Some(schema) = &mut object.additional_properties {
-        make_k8s_happy(schema);
-    }
-}
-
-/// This function works around a few quirks in the Kubernetes JSON schema validation.
-/// And bugs in the schema itself.
-/// See the comments for more information.
-pub(crate) fn make_k8s_happy(schema: &mut Schema) {
-    let Schema::Object(object) = schema else {
-        return;
-    };
-
-    if let Some(array) = &mut object.array {
-        make_k8s_happy_array(array);
-    }
-
-    if let Some(object) = &mut object.object {
-        make_k8s_happy_object(object);
-    }
-}
-
 #[macro_export]
 macro_rules! schema_patch {
     ($name:ident) => {
@@ -170,8 +116,6 @@ macro_rules! schema_patch {
                     .subschema_for::<<$name as KeycloakRestObject>::Definition>()
                     .immutable_prop(<$name as KeycloakRestObject>::ID_FIELD)
                     .to_owned();
-
-            $crate::schema::make_k8s_happy(&mut s);
 
             let func: fn(&mut Schema) -> () = $schema;
             func(&mut s);

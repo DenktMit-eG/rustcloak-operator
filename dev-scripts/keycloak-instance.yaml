@@ -1,4 +1,4 @@
-apiVersion: rustcloak.k8s.eboland.de/v1
+apiVersion: rustcloak.k8s.eboland.de/v1beta1
 kind: KeycloakInstance
 metadata:
   name: keycloak-instance

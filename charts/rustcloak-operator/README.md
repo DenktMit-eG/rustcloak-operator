@@ -31,6 +31,7 @@ The helm-chart for the rustcloak-operator
 | podAnnotations | object | `{}` |  |
 | podLabels | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |
+| prometheus.enabled | bool | `false` |  |
 | readinessProbe.httpGet.path | string | `"/healthz"` |  |
 | readinessProbe.httpGet.port | string | `"http"` |  |
 | replicaCount | int | `1` | must be 1. The rustcloak-operator currently does not support multiple replicas. |
