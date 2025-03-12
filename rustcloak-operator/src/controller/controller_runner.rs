@@ -1,4 +1,4 @@
-use std::{sync::Arc, time::Duration};
+use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use crate::{
     app_id,
@@ -18,6 +18,7 @@ use kube::{
     },
 };
 use log::{debug, info, warn};
+use prometheus::{IntCounter, Opts, register_int_counter};
 use serde::{Serialize, de::DeserializeOwned};
 
 use crate::error::*;
@@ -62,6 +63,9 @@ pub trait LifecycleController {
 pub struct ControllerRunner<C> {
     controller: C,
     client: kube::Client,
+    prometheus_reconsiles: IntCounter,
+    prometheus_reconsiles_success: IntCounter,
+    prometheus_reconsiles_fail: IntCounter,
 }
 
 impl<C> ControllerRunner<C>
@@ -81,9 +85,68 @@ where
         Default + Eq + Hash + Clone + Debug + Unpin + From<()>,
     ApiExt<C::Resource>: ApiFactory<Resource = C::Resource>,
 {
+    fn setup_metrics() -> (IntCounter, IntCounter, IntCounter) {
+        let pod_namespace = std::env::var("POD_NAMESPACE")
+            .unwrap_or_else(|_| "<unknown>".to_string());
+        let pod_name = std::env::var("POD_NAME")
+            .unwrap_or_else(|_| "<unknown>".to_string());
+        let common_labels: HashMap<_, _> = [
+            ("kind".to_string(), C::Resource::kind(&()).to_string()),
+            ("controller_pod_name".to_string(), pod_name),
+            ("controller_pod_namespace".to_string(), pod_namespace),
+        ]
+        .into();
+
+        let prometheus_reconsiles = register_int_counter!(Opts {
+            namespace: "rustcloak".to_string(),
+            subsystem: "controller".to_string(),
+            name: "reconciles".to_string(),
+            help: "Number of started reconciles".to_string(),
+            const_labels: common_labels.clone(),
+            variable_labels: vec![],
+        })
+        .unwrap();
+        let prometheus_reconsiles_success = register_int_counter!(Opts {
+            namespace: "rustcloak".to_string(),
+            subsystem: "controller".to_string(),
+            name: "reconciles_success".to_string(),
+            help: "Number of successful reconciles".to_string(),
+            const_labels: common_labels.clone(),
+            variable_labels: vec![],
+        })
+        .unwrap();
+        let prometheus_reconsiles_fail = register_int_counter!(Opts {
+            namespace: "rustcloak".to_string(),
+            subsystem: "controller".to_string(),
+            name: "reconciles_fail".to_string(),
+            help: "Number of failed reconciles".to_string(),
+            const_labels: common_labels.clone(),
+            variable_labels: vec![],
+        })
+        .unwrap();
+
+        (
+            prometheus_reconsiles,
+            prometheus_reconsiles_success,
+            prometheus_reconsiles_fail,
+        )
+    }
     pub fn new(controller: C, client: &kube::Client) -> Self {
         let client = client.clone();
-        ControllerRunner { controller, client }
+
+        let (
+            prometheus_reconsiles,
+            prometheus_reconsiles_success,
+            prometheus_reconsiles_fail,
+        ) = Self::setup_metrics();
+
+        ControllerRunner {
+            controller,
+            client,
+            prometheus_reconsiles,
+            prometheus_reconsiles_success,
+            prometheus_reconsiles_fail,
+        }
     }
 
     pub async fn run(self) -> Result<()> {
@@ -99,9 +162,16 @@ where
             .with_config(config)
             .shutdown_on_signal();
         let controller = self.controller.prepare(controller, &self.client);
+        let self_arc = Arc::new(self);
+
         controller
-            .run(Self::reconcile, Self::error_policy, Arc::new(self))
+            .run(Self::reconcile, Self::error_policy, self_arc.clone())
             .for_each(|res| async {
+                if res.is_err() {
+                    self_arc.prometheus_reconsiles_fail.inc();
+                } else {
+                    self_arc.prometheus_reconsiles_success.inc();
+                }
                 match res {
                     Ok((o, _)) => {
                         info!(target: C::MODULE_PATH,
@@ -143,6 +213,7 @@ where
         let api = ApiExt::<C::Resource>::api(ctx.client.clone(), &ns);
         let client = ctx.client.clone();
         let kind = C::Resource::kind(&());
+        ctx.prometheus_reconsiles.inc();
 
         debug!(
             kind = kind,

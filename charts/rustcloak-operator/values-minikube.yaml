@@ -6,3 +6,6 @@ image:
 application:
   logLevel: debug
   legacy: false
+
+prometheus:
+  enabled: true

@@ -1,5 +1,6 @@
 pub mod controller;
 pub mod error;
+pub mod metrics;
 pub mod morph;
 pub mod opts;
 pub mod util;

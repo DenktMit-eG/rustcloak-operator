@@ -1,6 +1,4 @@
-use actix_web::{
-    App, HttpRequest, HttpResponse, HttpServer, Responder, get, middleware,
-};
+use actix_web::{App, HttpRequest, HttpResponse, HttpServer, Responder, get};
 use clap::Parser;
 use futures::{FutureExt, future};
 use kube::Resource;
@@ -14,6 +12,7 @@ use rustcloak_operator::{
         UserCredentialController,
     },
     error::Result,
+    metrics::metrics,
     opts::{LegacyMode, Opts, legacy_kinds},
 };
 
@@ -192,9 +191,7 @@ async fn main() -> Result<()> {
     if let Some(sock_addr) = opts.metrics_addr {
         controllers.push(
             HttpServer::new(move || {
-                App::new()
-                    .wrap(middleware::Logger::default().exclude("/healthz"))
-                    .service(health)
+                App::new().service(health).service(metrics)
             })
             .bind(sock_addr)?
             .shutdown_timeout(5)
