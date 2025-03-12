@@ -72,8 +72,6 @@ schema_patch!(KeycloakRealmSpec: |s| {
         .remove("federatedUsers")
         .remove("clients")
         .remove("clientScopes")
-        .remove("identityProviders")
-        .remove("identityProviderMappers")
         .remove("protocolMappers")
         .remove("authenticationFlows")
         .remove("authenticatorConfig")
@@ -81,8 +79,7 @@ schema_patch!(KeycloakRealmSpec: |s| {
         .remove("organizations")
         .remove("applications")
         .remove("components")
-        .remove("oauthClients")
-        .remove("roles");
+        .remove("oauthClients");
     client_schema(s.prop("adminPermissionsClient"));
 });
 ref_type!(
