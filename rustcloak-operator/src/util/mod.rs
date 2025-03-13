@@ -8,6 +8,7 @@ mod ref_watcher;
 mod resolve_vars;
 mod retrieve;
 mod secret;
+mod status;
 
 pub use api::*;
 pub use crd_waiter::*;
@@ -19,3 +20,4 @@ pub use ref_watcher::*;
 pub use resolve_vars::*;
 pub use retrieve::*;
 pub use secret::*;
+pub use status::*;

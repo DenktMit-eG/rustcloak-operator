@@ -3,7 +3,7 @@ use std::{collections::HashMap, sync::Arc, time::Duration};
 use crate::{
     app_id,
     error::Result,
-    util::{ApiExt, ApiFactory, FromError, wait_for_crd},
+    util::{ApiExt, ApiFactory, FromError, StatusTrait, wait_for_crd},
 };
 use async_trait::async_trait;
 use k8s_openapi::serde_json::json;
@@ -73,7 +73,7 @@ where
     C: LifecycleController + Sync + Send + 'static,
     C::Resource: KubeResource<DynamicType = ()>
         + Clone
-        + HasStatus<Status: FromError + Serialize + Send + Sync>
+        + HasStatus<Status: FromError + Serialize + Send + Sync + StatusTrait>
         + Debug
         + 'static
         + Send
@@ -285,7 +285,12 @@ where
         let ns = resource.namespace();
         let name = resource.name_unchecked();
         let api: Api<C::Resource> = ApiExt::api(ctx.client.clone(), &ns);
-        let status = <C::Resource as HasStatus>::Status::from_error(e);
+        let attempts = resource
+            .status()
+            .and_then(|s| s.reconcile_attempts())
+            .unwrap_or(0);
+        let mut status = <C::Resource as HasStatus>::Status::from_error(e);
+        status.set_reconcile_attempts(Some(attempts + 1));
         log::error!(
             kind = C::Resource::kind(&()),
             namespace = resource.namespace().unwrap_or_default(),
@@ -302,10 +307,21 @@ where
         Ok(())
     }
     fn error_policy(
-        _resource: Arc<C::Resource>,
+        resource: Arc<C::Resource>,
         _error: &Error,
         _ctx: Arc<Self>,
     ) -> Action {
-        Action::requeue(Duration::from_secs(5))
+        let attempts = resource
+            .status()
+            .and_then(|s| s.reconcile_attempts())
+            .unwrap_or(0);
+        let backoff_seconds = if attempts < 10 {
+            // for the first 10 attempts, we retry every 10 seconds
+            10
+        } else {
+            // after that, we increase the backoff by 60 seconds for each attempt
+            (attempts - 9) * 60
+        };
+        Action::requeue(Duration::from_secs(backoff_seconds))
     }
 }
