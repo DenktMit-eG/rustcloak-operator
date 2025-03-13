@@ -2,6 +2,7 @@ use actix_web::{App, HttpRequest, HttpResponse, HttpServer, Responder, get};
 use clap::Parser;
 use futures::{FutureExt, future};
 use kube::Resource;
+use log::info;
 use rustcloak_crd::*;
 use rustcloak_operator::{
     controller::{
@@ -35,16 +36,24 @@ fn init_logger() {
         .init();
 }
 
-#[tokio::main]
-async fn main() -> Result<()> {
+fn main() -> Result<()> {
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .max_blocking_threads(8)
+        .build()
+        .unwrap()
+        .block_on(async { async_main().await })
+}
+
+async fn async_main() -> Result<()> {
     let opts = Opts::parse();
 
-    eprintln!(
+    init_logger();
+
+    info!(
         "Starting rustcloak-operator version {}",
         env!("CARGO_PKG_VERSION")
     );
-
-    init_logger();
 
     let client = kube::Client::try_default().await?;
     let mut controllers_str = opts.controllers.clone();
