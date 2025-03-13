@@ -84,6 +84,7 @@ resource to define a Scope within a [KeyclaokClient](./keycloakclient.md)
 |[status.instance.instanceRef](#statusinstanceinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
+|[status.reconcileAttempts](#statusreconcileattempts)|integer||
 |[status.resourcePath](#statusresourcepath)|string||
 |[status.status](#statusstatus)|string||
 
@@ -774,6 +775,7 @@ Type: object
 |[instance](#statusinstance)|object||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
+|[reconcileAttempts](#statusreconcileattempts)|integer||
 |[resourcePath](#statusresourcepath)|string||
 |[status](#statusstatus)|string||
 
@@ -885,6 +887,14 @@ Type: string
 ### status.ready
 
 Type: boolean
+
+*missing*
+
+---
+
+### status.reconcileAttempts
+
+Type: integer
 
 *missing*
 
