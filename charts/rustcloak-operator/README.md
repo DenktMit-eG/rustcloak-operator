@@ -36,9 +36,9 @@ The helm-chart for the rustcloak-operator
 | readinessProbe.httpGet.port | string | `"http"` |  |
 | replicaCount | int | `1` | must be 1. The rustcloak-operator currently does not support multiple replicas. |
 | resources.limits.cpu | string | `"100m"` |  |
-| resources.limits.memory | string | `"128Mi"` |  |
+| resources.limits.memory | string | `"512Mi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
-| resources.requests.memory | string | `"128Mi"` |  |
+| resources.requests.memory | string | `"512Mi"` |  |
 | securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | securityContext.readOnlyRootFilesystem | bool | `true` |  |
 | securityContext.runAsNonRoot | bool | `true` |  |
