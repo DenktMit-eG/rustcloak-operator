@@ -603,6 +603,11 @@ spec:
                 type: string
               ready:
                 type: boolean
+              reconcileAttempts:
+                format: uint64
+                minimum: 0.0
+                nullable: true
+                type: integer
               resourcePath:
                 type: string
               status:
