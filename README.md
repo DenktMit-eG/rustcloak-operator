@@ -4,80 +4,58 @@
 
 # rustcloak-operator
 
-This is yet another operator for Keycloak. The novelty of this one is
-that it covers the whole Keycloak API and therefore allows to manage
-keycloak instances completely as Kubernetes resources.
+**Manage Keycloak Realms in Kubernetes!** No more excuses for writing shellscipts! No more excuses for manual steps in the deployment!
 
-Currently rustcloak does not support subgroups.
+Rustcloak is a keycloak-operator for kubernetes.
+It is built in Rust using the [kube-rs](https://kube.rs/) library.
+In contrast to other keycloak operators, Rustcloak aims to cover
+the full API of Keycloak.
 
-rustcloak supports a legacy mode where it can be used as a drop-in
-replacement for the
-[keycloak-realm-operator](https://github.com/keycloak/keycloak-realm-operator).
 
-## TODO:
+## Features
 
-* [x] Support Subgroups
+While Rustcloak is still unfinished, it already supports the following features:
+
+* Lifecycle management of the following Resources:
+  * [AuthenticationFlowRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlAuthenticationFlowRepresentation)
+  * [AuthenticatorConfigRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlAuthenticatorConfigRepresentation)
+  * [ClientRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlClientRepresentation)
+  * [ClientScopeRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlClientScopeRepresentation)
+  * [ComponentRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlComponentRepresentation)
+  * [GroupRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlGroupRepresentation)
+  * [IdentityProviderMapperRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlIdentityProviderMapperRepresentation)
+  * [IdentityProviderRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlIdentityProviderRepresentation)
+  * [OrganizationRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlOrganizationRepresentation)
+  * [ProtocolMapperRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlProtocolMapperRepresentation)
+  * [RealmRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlRealmRepresentation)
+  * [RequiredActionProviderRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlRequiredActionProviderRepresentation)
+  * [ResourceRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlResourceRepresentation)
+  * [RoleRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlRoleRepresentation)
+  * [ScopeRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlScopeRepresentation)
+  * [UserRepresentation](https://www.keycloak.org/docs-api/latest/rest-api/index.htmlUserRepresentation)
+* Role Management for Groups and Users using the [RoleMapping](https://rustcloak.withlazers.dev/crds/keycloakrolemapping.html) resource.
+* Prometheus Metrics
+* Secret Management for Keycloak Users and Clients.
+* Rustcloak can manage Keycloak instances in a multi-tenant setup across namespaces
+  using the [ClusterKeycloakRealm](https://rustcloak.withlazers.dev/crds/clusterkeycloakrealm.html)
+  and [ClusterKeycloakInstance](https://rustcloak.withlazers.dev/crds/clusterkeycloakinstance.html)
+  resources.
+* Compatibility mode for the abandoned [keycloak-realm-operator](https://github.com/keycloak/keycloak-realm-operator).
+
+## State
+
+While Rustcloak is still in development and not feature complete
+
+* [ ] make the RoleMapping resource use selectors instead of parent references
+* [ ] introduce a GroupMapping resource that works similar to the RoleMapping resource
 * [ ] Send Kubernetes Events
-* [ ] Update state transitions in .status.conditions
-* [ ] Update phase in .status.phase
-* [ ] Add prometheus metrics
-
-## Endpoints
-
-Table of implemented endpoints:
-
-* [x] `AuthenticationFlowRepresentation`
-  * [x] `/admin/realms/{realm}/authentication/flows/{id}`
-
-* [x] `AuthenticatorConfigRepresentation`
-  * [x] `/admin/realms/{realm}/authentication/config/{id}`
-
-* [x] `ClientRepresentation`
-  * [x] `/admin/realms/{realm}/clients/{client-uuid}`
-
-* [x] `ClientScopeRepresentation`
-  * [x] `/admin/realms/{realm}/client-scopes/{client-scope-id}`
-  * [x] `/admin/realms/{realm}/client-templates/{client-scope-id}`
-
-* [x] `ComponentRepresentation`
-  * [x] `/admin/realms/{realm}/components/{id}`
-
-* [x] `GroupRepresentation`
-  * [x] `/admin/realms/{realm}/groups/{group-id}`
-  * [ ] `/admin/realms/{realm}/groups/{group-id}/children`
-
-* [x] `IdentityProviderMapperRepresentation`
-  * [x] `/admin/realms/{realm}/identity-provider/instances/{alias}/mappers/{id}`
-
-* [x] `IdentityProviderRepresentation`
-  * [x] `/admin/realms/{realm}/identity-provider/instances/{alias}`
-
-* [x] `OrganizationRepresentation`
-  * [x] `/admin/realms/{realm}/organizations/{id}`
-
-* [x] `ProtocolMapperRepresentation`
-  * [x] `/admin/realms/{realm}/client-scopes/{client-scope-id}/protocol-mappers/models/{id}`
-  * [x] `/admin/realms/{realm}/client-templates/{client-scope-id}/protocol-mappers/models/{id}`
-  * [x] `/admin/realms/{realm}/clients/{client-uuid}/protocol-mappers/models/{id}`
-
-* [x] `RealmRepresentation`
-  * [x] `/admin/realms/{realm}`
-
-* [x] `RequiredActionProviderRepresentation`
-  * [x] `/admin/realms/{realm}/authentication/required-actions/{alias}`
-
-* [x] `ResourceRepresentation`
-  * [x] `/admin/realms/{realm}/clients/{client-uuid}/authz/resource-server/resource/{resource-id}`
-
-* [x] `RoleRepresentation`
-  * [x] `/admin/realms/{realm}/clients/{client-uuid}/roles/{role-name}`
-  * [x] `/admin/realms/{realm}/roles/{role-name}`
-
-* [x] `ScopeRepresentation`
-  * [x] `/admin/realms/{realm}/clients/{client-uuid}/authz/resource-server/scope/{scope-id}`
-
-* [x] `UserRepresentation`
-  * [x] `/admin/realms/{realm}/users/{user-id}`
+* [ ] Populate the .status field of the CRDs
+    * [x] Set .status.ready state correctly
+    * [x] Set .status.phase
+    * [x] Set .status.message
+    * [ ] Update state transitions in .status.conditions
+    * [ ] Update phase in .status.phase
+* [ ] Improve resiliency against reconcilation loops: 
 
 # Comments on the License
 
