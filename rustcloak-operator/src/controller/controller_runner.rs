@@ -92,6 +92,7 @@ where
             .unwrap_or_else(|_| "<unknown>".to_string());
         let common_labels: HashMap<_, _> = [
             ("kind".to_string(), C::Resource::kind(&()).to_string()),
+            ("group".to_string(), C::Resource::group(&()).to_string()),
             ("controller_pod_name".to_string(), pod_name),
             ("controller_pod_namespace".to_string(), pod_namespace),
         ]
