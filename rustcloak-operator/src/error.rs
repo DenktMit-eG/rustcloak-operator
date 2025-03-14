@@ -70,6 +70,8 @@ pub enum Error {
     NoResourcePath,
     #[error("Unsupported Workflow Method")]
     UnsupportedWorkflowMethod,
+    #[error("Prometheus Error: {0}")]
+    Prometheus(#[from] prometheus::Error),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

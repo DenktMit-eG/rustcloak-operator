@@ -85,7 +85,7 @@ where
         Default + Eq + Hash + Clone + Debug + Unpin + From<()>,
     ApiExt<C::Resource>: ApiFactory<Resource = C::Resource>,
 {
-    fn setup_metrics() -> (IntCounter, IntCounter, IntCounter) {
+    fn setup_metrics() -> Result<(IntCounter, IntCounter, IntCounter)> {
         let pod_namespace = std::env::var("POD_NAMESPACE")
             .unwrap_or_else(|_| "<unknown>".to_string());
         let pod_name = std::env::var("POD_NAME")
@@ -105,8 +105,7 @@ where
             help: "Number of started reconciles".to_string(),
             const_labels: common_labels.clone(),
             variable_labels: vec![],
-        })
-        .unwrap();
+        })?;
         let prometheus_reconsiles_success = register_int_counter!(Opts {
             namespace: "rustcloak".to_string(),
             subsystem: "controller".to_string(),
@@ -114,8 +113,7 @@ where
             help: "Number of successful reconciles".to_string(),
             const_labels: common_labels.clone(),
             variable_labels: vec![],
-        })
-        .unwrap();
+        })?;
         let prometheus_reconsiles_fail = register_int_counter!(Opts {
             namespace: "rustcloak".to_string(),
             subsystem: "controller".to_string(),
@@ -123,31 +121,30 @@ where
             help: "Number of failed reconciles".to_string(),
             const_labels: common_labels.clone(),
             variable_labels: vec![],
-        })
-        .unwrap();
+        })?;
 
-        (
+        Ok((
             prometheus_reconsiles,
             prometheus_reconsiles_success,
             prometheus_reconsiles_fail,
-        )
+        ))
     }
-    pub fn new(controller: C, client: &kube::Client) -> Self {
+    pub fn create(controller: C, client: &kube::Client) -> Result<Self> {
         let client = client.clone();
 
         let (
             prometheus_reconsiles,
             prometheus_reconsiles_success,
             prometheus_reconsiles_fail,
-        ) = Self::setup_metrics();
+        ) = Self::setup_metrics()?;
 
-        ControllerRunner {
+        Ok(ControllerRunner {
             controller,
             client,
             prometheus_reconsiles,
             prometheus_reconsiles_success,
             prometheus_reconsiles_fail,
-        }
+        })
     }
 
     pub async fn run(self) -> Result<()> {
