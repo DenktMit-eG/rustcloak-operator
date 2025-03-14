@@ -67,39 +67,43 @@ async fn async_main() -> Result<()> {
     }
 
     // All Rest CRDs
-    let mut controllers = map_rest_crds!( Crd => {
-        controllers_str.contains(&Crd::kind(&()).to_string()).then(|| {
-            ControllerRunner::new(
-                RepresentationController::<Crd>::default(),
-                &client,
-            )
-            .run()
-            .boxed()
-        })
+    let mut controllers = map_rest_crds!(Crd => {
+        if controllers_str.contains(&Crd::kind(&()).to_string()) {
+            Ok(Some(
+                ControllerRunner::create(
+                    RepresentationController::<Crd>::default(),
+                    &client,
+                )?
+                .run()
+                .boxed(),
+            ))
+        } else {
+            Ok(None)
+        }
     })
     .into_iter()
-    .flatten()
-    .collect::<Vec<_>>();
+    .filter_map(|x| x.transpose())
+    .collect::<Result<Vec<_>>>()?;
 
     // Plumbing CRDs
     if controllers_str
         .contains(&ClusterKeycloakApiObject::kind(&()).to_string())
     {
         controllers.push(
-            ControllerRunner::new(
+            ControllerRunner::create(
                 ApiObjectController::<ClusterKeycloakApiObject>::default(),
                 &client,
-            )
+            )?
             .run()
             .boxed(),
         );
     }
     if controllers_str.contains(&KeycloakApiObject::kind(&()).to_string()) {
         controllers.push(
-            ControllerRunner::new(
+            ControllerRunner::create(
                 ApiObjectController::<KeycloakApiObject>::default(),
                 &client,
-            )
+            )?
             .run()
             .boxed(),
         );
@@ -107,20 +111,20 @@ async fn async_main() -> Result<()> {
     if controllers_str.contains(&ClusterKeycloakInstance::kind(&()).to_string())
     {
         controllers.push(
-            ControllerRunner::new(
+            ControllerRunner::create(
                 InstanceController::<ClusterKeycloakInstance>::default(),
                 &client,
-            )
+            )?
             .run()
             .boxed(),
         );
     }
     if controllers_str.contains(&KeycloakInstance::kind(&()).to_string()) {
         controllers.push(
-            ControllerRunner::new(
+            ControllerRunner::create(
                 InstanceController::<KeycloakInstance>::default(),
                 &client,
-            )
+            )?
             .run()
             .boxed(),
         );
@@ -130,9 +134,12 @@ async fn async_main() -> Result<()> {
     if controllers_str.contains(&KeycloakUserCredential::kind(&()).to_string())
     {
         controllers.extend([
-            ControllerRunner::new(UserCredentialController::default(), &client)
-                .run()
-                .boxed(),
+            ControllerRunner::create(
+                UserCredentialController::default(),
+                &client,
+            )?
+            .run()
+            .boxed(),
             ConverterController::<KeycloakUser, KeycloakUserCredential>::new(
                 &client,
             )
@@ -144,7 +151,7 @@ async fn async_main() -> Result<()> {
         .contains(&KeycloakClientCredential::kind(&()).to_string())
     {
         controllers.extend([
-            ControllerRunner::new(ClientCredentialController::default(), &client).run().boxed(),
+            ControllerRunner::create(ClientCredentialController::default(), &client)?.run().boxed(),
             ConverterController::<KeycloakClient, KeycloakClientCredential>::new(&client).run().boxed()
         ])
     }
@@ -152,9 +159,12 @@ async fn async_main() -> Result<()> {
     // RoleMapping CRDs
     if controllers_str.contains(&KeycloakRoleMapping::kind(&()).to_string()) {
         controllers.push(
-            ControllerRunner::new(RoleMappingController::default(), &client)
-                .run()
-                .boxed(),
+            ControllerRunner::create(
+                RoleMappingController::default(),
+                &client,
+            )?
+            .run()
+            .boxed(),
         );
     }
 
@@ -163,36 +173,42 @@ async fn async_main() -> Result<()> {
 
     if controllers_str.contains(&"LegacyInstance".to_string()) {
         controllers.push(
-            ControllerRunner::new(
+            ControllerRunner::create(
                 LegacyInstanceController::new(prudent),
                 &client,
-            )
+            )?
             .run()
             .boxed(),
         );
     }
     if controllers_str.contains(&"LegacyRealm".to_string()) {
         controllers.push(
-            ControllerRunner::new(LegacyRealmController::new(prudent), &client)
-                .run()
-                .boxed(),
+            ControllerRunner::create(
+                LegacyRealmController::new(prudent),
+                &client,
+            )?
+            .run()
+            .boxed(),
         );
     }
     if controllers_str.contains(&"LegacyClient".to_string()) {
         controllers.push(
-            ControllerRunner::new(
+            ControllerRunner::create(
                 LegacyClientController::new(prudent),
                 &client,
-            )
+            )?
             .run()
             .boxed(),
         );
     }
     if controllers_str.contains(&"LegacyUser".to_string()) {
         controllers.push(
-            ControllerRunner::new(LegacyUserController::new(prudent), &client)
-                .run()
-                .boxed(),
+            ControllerRunner::create(
+                LegacyUserController::new(prudent),
+                &client,
+            )?
+            .run()
+            .boxed(),
         );
     }
 
