@@ -1,4 +1,4 @@
-use crate::{InitWorkflow, refs::HasParent};
+use crate::{InitWorkflow, KeycloakApiObjectOptions, refs::HasParent};
 
 pub trait KeycloakRestObject: HasParent {
     type ParentObject;
@@ -8,7 +8,6 @@ pub trait KeycloakRestObject: HasParent {
 
     fn init_workflow(&self) -> InitWorkflow;
     fn definition(&self) -> Option<&Self::Definition>;
-    fn patches(&self) -> Option<&KeycloakApiPatchList>;
     fn options(&self) -> Option<&KeycloakApiObjectOptions>;
 }
 
@@ -30,10 +29,6 @@ macro_rules! impl_object {
                 self.definition.as_ref()
             }
 
-            fn patches(&self) -> Option<&$crate::KeycloakApiPatchList> {
-                self.patches.as_ref()
-            }
-
             fn options(&self) -> Option<&$crate::KeycloakApiObjectOptions> {
                 self.options.as_ref()
             }
@@ -49,5 +44,3 @@ macro_rules! impl_object {
 }
 
 pub(crate) use impl_object;
-
-use crate::{KeycloakApiObjectOptions, KeycloakApiPatchList};

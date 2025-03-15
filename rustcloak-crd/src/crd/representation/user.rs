@@ -3,7 +3,7 @@ use crate::either::UntaggedEither;
 use crate::keycloak_types::UserRepresentation;
 use crate::refs::ref_type;
 use crate::{
-    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+    KeycloakApiObjectOptions, KeycloakApiStatus,
     crd::namespace_scope,
     impl_object, schema_patch,
     traits::{SecretKeyNames, impl_endpoint},
@@ -38,14 +38,12 @@ namespace_scope! {
         )]
         /// the KeycloakUser resource
         pub struct KeycloakUserSpec {
-            #[serde(default, skip_serializing_if = "Option::is_none")]
+            #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
             #[serde(flatten)]
             pub parent_ref: ParentRef,
             #[schemars(schema_with = "schema")]
             pub definition: Option<UserRepresentation>,
-            #[serde(default, flatten)]
-            pub patches: Option<KeycloakApiPatchList>,
             pub user_secret: Option<KeycloakUserSecretReference>,
         }
     }

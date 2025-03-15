@@ -91,7 +91,6 @@ impl LifecycleController for LegacyRealmController {
                     ),
                 },
                 definition: serde_json::from_value(definition)?,
-                patches: None,
             },
             status: None,
         };

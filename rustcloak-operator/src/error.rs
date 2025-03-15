@@ -72,6 +72,8 @@ pub enum Error {
     UnsupportedWorkflowMethod,
     #[error("Prometheus Error: {0}")]
     Prometheus(#[from] prometheus::Error),
+    #[error("JsonPath Error: {0}")]
+    JsonPathError(#[from] jsonpath_rust::JsonPathParserError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

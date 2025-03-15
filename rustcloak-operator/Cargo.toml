@@ -28,3 +28,4 @@ keycloak-client = { git = "https://github.com/Gottox/keycloak-client.rs" }
 #keycloak-client = { path = "../../keycloak-client.rs/keycloak-client" }
 shorter-bounds = "0.1.1"
 prometheus = { version = "0.13.4", default-features = false }
+jsonpath-rust = { git = "https://github.com/besok/jsonpath-rust.git" }

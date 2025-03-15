@@ -1,6 +1,5 @@
 use crate::app_id;
 use crate::error::{Error, Result};
-use crate::morph::Patcher;
 use crate::{
     controller::LifecycleController,
     util::{
@@ -8,8 +7,7 @@ use crate::{
         Retrieve, ToPatch,
     },
 };
-use k8s_openapi::api::core::v1::EnvVar;
-use k8s_openapi::serde_json::{self, Value, json};
+use k8s_openapi::serde_json::{self, json};
 use k8s_openapi::{ClusterResourceScope, NamespaceResourceScope};
 use kube::{
     Api, Resource, ResourceExt,
@@ -88,29 +86,6 @@ macro_rules! impl_api_object_helper {
 impl_api_object_helper!(ClusterResourceScope, ClusterKeycloakApiObject);
 impl_api_object_helper!(NamespaceResourceScope, KeycloakApiObject);
 
-impl<R> RepresentationController<R>
-where
-    R: Representation + Endpoint,
-    ParentGetter<R>: ParentRetrieve<R>,
-    <<<R as HasInnerSpec>::InnerSpec as HasParent>::ParentRef as Ref>::Target:
-        Endpoint,
-    R::Scope: ApiObjectHelper,
-    ApiExt<R>: ApiFactory,
-{
-    fn patch(resource: &R, payload: Value) -> Result<(Value, Vec<EnvVar>)> {
-        let mut patcher = Patcher::new(payload);
-        for (path, patch) in resource
-            .inner_spec()
-            .patches()
-            .map(|x| x.patch_from.iter())
-            .unwrap_or_default()
-        {
-            patcher.patch(path, patch)?;
-        }
-        Ok((patcher.value, patcher.vars))
-    }
-}
-
 #[async_trait::async_trait]
 impl<R> LifecycleController for RepresentationController<R>
 where
@@ -182,7 +157,6 @@ where
         }
         .into();
 
-        let (payload, vars) = Self::patch(&resource, payload)?;
         let payload = serde_yaml::to_string(&payload)?;
 
         let parent_ref = resource.inner_spec().parent_ref();
@@ -233,7 +207,6 @@ where
                 options: resource.inner_spec().options().cloned(),
                 immutable_payload,
                 payload,
-                vars,
             },
         );
 
