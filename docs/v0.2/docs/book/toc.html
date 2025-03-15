@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- sidebar iframe generated using mdBook
+
+        This is a frame, and not included directly in the page, to control the total size of the
+        book. The TOC contains an entry for each page, so if each page includes a copy of the TOC,
+        the total size of the page becomes O(n**2).
+
+        The frame is only used as a fallback when JS is turned off. When it's on, the sidebar is
+        instead added to the main page by `toc.js` instead. The JavaScript mode is better
+        because, when running in a `file:///` URL, the iframed page would not be Same-Origin as
+        the rest of the page, so the sidebar and the main page theme would fall out of sync.
+        -->
+        <meta charset="UTF-8">
+        <meta name="robots" content="noindex">
+        <!-- Custom HTML head -->
+        <style>
+        #menu-version {
+        	position: relative;
+        	align-self: center;
+        }
+        #version-button {
+        	position: relative;
+        	display: flex;
+        	align-items: center;
+        	padding: 0 1em;
+        }
+        #version-button::after {
+        	padding-left: 0.5em;
+        	content: '▼';
+        }
+        #version-list {
+        	position: absolute;
+        	display: none;
+        	text-decoration: none;
+        	right: 0;
+        	top: 100%;
+        	min-width: 100%;
+        	z-index: 1001;
+        	background-color: var(--sidebar-bg);
+        }
+        #version-button-state {
+        	display: none;
+        }
+        #version-button-state:checked ~ #version-list {
+        	display: block;
+        }
+        #version-list a {
+        	display: block;
+        	padding: 0.5em 1em;
+        	text-decoration: none;
+        }
+        #version-deselector {
+        	display: none;
+        	position: fixed;
+        	top: -1000000px;
+        	left: -1000000px;
+        	bottom: -1000000px;
+        	right: -1000000px;
+        	display: none;
+        }
+        #version-button-state:checked ~ #version-deselector {
+        	display: block;
+        	z-index: 1000;
+        }
+        </style>
+        <script>
+        window.addEventListener('DOMContentLoaded', async function () {
+        	const dropdown = document.createElement('div');
+        	const menubar = document.getElementById('menu-bar');
+        
+        	const versions_res = await fetch(`${path_to_root}/../versions.txt`)
+        	if (!versions_res.ok) {
+        		console.error('Failed to fetch versions.txt');
+        		return;
+        	}
+        	const base = versions_res.url.split('/').slice(0, -1).join('/');
+        	const versions = await versions_res.text().then(x => x.trim().split('\n'));
+        
+        	const current_version = versions
+        		.find(x => window.location.href.startsWith(`${base}/${x}`))
+        
+        	const list = versions
+        		.filter(x => x)
+        		.map(
+        			version => {
+        				var a = document.createElement('a');
+        				a.href = `${base}/${version}`;
+        				a.textContent = version;
+        				return a.outerHTML;
+        			}
+        		)
+        	dropdown.innerHTML = `
+        		<input type="checkbox" id=version-button-state>
+        		<label id="version-button" for=version-button-state>
+        			${new Option(String(current_version)).textContent}
+        		</label>
+        		<div id="version-list">
+        			${list.join('')}
+        		</div>
+        		<label id=version-deselector for=version-button-state></label>
+        	`;
+        
+        	menubar.appendChild(dropdown);
+        
+        	dropdown.id = "menu-version";
+        
+        });
+        </script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body class="sidebar-iframe-inner">
+        <ol class="chapter"><li class="chapter-item expanded "><a href="index.html" target="_parent"><strong aria-hidden="true">1.</strong> About</a></li><li class="chapter-item expanded "><a href="installation.html" target="_parent"><strong aria-hidden="true">2.</strong> Installation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="installation/quick-start.html" target="_parent"><strong aria-hidden="true">2.1.</strong> Quick Start</a></li></ol></li><li class="chapter-item expanded "><a href="configuration.html" target="_parent"><strong aria-hidden="true">3.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="configuration/legacy-mode.html" target="_parent"><strong aria-hidden="true">3.1.</strong> Legacy Mode</a></li><li class="chapter-item expanded "><a href="configuration/patches.html" target="_parent"><strong aria-hidden="true">3.2.</strong> Patches</a></li></ol></li><li class="chapter-item expanded "><a href="crds.html" target="_parent"><strong aria-hidden="true">4.</strong> Custom Resource Definitions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="crds/clusterkeycloakrealm.html" target="_parent"><strong aria-hidden="true">4.1.</strong> ClusterKeycloakRealm</a></li><li class="chapter-item expanded "><a href="crds/keycloakauthenticationflow.html" target="_parent"><strong aria-hidden="true">4.2.</strong> KeycloakAuthenticationFlow</a></li><li class="chapter-item expanded "><a href="crds/keycloakauthenticatorconfig.html" target="_parent"><strong aria-hidden="true">4.3.</strong> KeycloakAuthenticatorConfig</a></li><li class="chapter-item expanded "><a href="crds/keycloakclient.html" target="_parent"><strong aria-hidden="true">4.4.</strong> KeycloakClient</a></li><li class="chapter-item expanded "><a href="crds/keycloakclientscope.html" target="_parent"><strong aria-hidden="true">4.5.</strong> KeycloakClientScope</a></li><li class="chapter-item expanded "><a href="crds/keycloakcomponent.html" target="_parent"><strong aria-hidden="true">4.6.</strong> KeycloakComponent</a></li><li class="chapter-item expanded "><a href="crds/keycloakgroup.html" target="_parent"><strong aria-hidden="true">4.7.</strong> KeycloakGroup</a></li><li class="chapter-item expanded "><a href="crds/keycloakidentityprovider.html" target="_parent"><strong aria-hidden="true">4.8.</strong> KeycloakIdentityProvider</a></li><li class="chapter-item expanded "><a href="crds/keycloakidentityprovidermapper.html" target="_parent"><strong aria-hidden="true">4.9.</strong> KeycloakIdentityProviderMapper</a></li><li class="chapter-item expanded "><a href="crds/keycloakorganization.html" target="_parent"><strong aria-hidden="true">4.10.</strong> KeycloakOrganization</a></li><li class="chapter-item expanded "><a href="crds/keycloakprotocolmapper.html" target="_parent"><strong aria-hidden="true">4.11.</strong> KeycloakProtocolMapper</a></li><li class="chapter-item expanded "><a href="crds/keycloakrealm.html" target="_parent"><strong aria-hidden="true">4.12.</strong> KeycloakRealm</a></li><li class="chapter-item expanded "><a href="crds/keycloakrequiredactionprovider.html" target="_parent"><strong aria-hidden="true">4.13.</strong> KeycloakRequiredActionProvider</a></li><li class="chapter-item expanded "><a href="crds/keycloakresource.html" target="_parent"><strong aria-hidden="true">4.14.</strong> KeycloakResource</a></li><li class="chapter-item expanded "><a href="crds/keycloakrole.html" target="_parent"><strong aria-hidden="true">4.15.</strong> KeycloakRole</a></li><li class="chapter-item expanded "><a href="crds/keycloakscope.html" target="_parent"><strong aria-hidden="true">4.16.</strong> KeycloakScope</a></li><li class="chapter-item expanded "><a href="crds/keycloakuser.html" target="_parent"><strong aria-hidden="true">4.17.</strong> KeycloakUser</a></li><li class="chapter-item expanded "><a href="crds/clusterkeycloakapiobject.html" target="_parent"><strong aria-hidden="true">4.18.</strong> ClusterKeycloakApiObject</a></li><li class="chapter-item expanded "><a href="crds/clusterkeycloakinstance.html" target="_parent"><strong aria-hidden="true">4.19.</strong> ClusterKeycloakInstance</a></li><li class="chapter-item expanded "><a href="crds/keycloakapiobject.html" target="_parent"><strong aria-hidden="true">4.20.</strong> KeycloakApiObject</a></li><li class="chapter-item expanded "><a href="crds/keycloakclientcredential.html" target="_parent"><strong aria-hidden="true">4.21.</strong> KeycloakClientCredential</a></li><li class="chapter-item expanded "><a href="crds/keycloakinstance.html" target="_parent"><strong aria-hidden="true">4.22.</strong> KeycloakInstance</a></li><li class="chapter-item expanded "><a href="crds/keycloakrolemapping.html" target="_parent"><strong aria-hidden="true">4.23.</strong> KeycloakRoleMapping</a></li><li class="chapter-item expanded "><a href="crds/keycloakusercredential.html" target="_parent"><strong aria-hidden="true">4.24.</strong> KeycloakUserCredential</a></li></ol></li><li class="chapter-item expanded "><a href="architecture.html" target="_parent"><strong aria-hidden="true">5.</strong> Architecture</a></li></ol>
+    </body>
+</html>
