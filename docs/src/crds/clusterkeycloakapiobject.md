@@ -29,7 +29,7 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |[spec.options.patchFrom[].secretKeyRef.name](#specoptionspatchfromsecretkeyrefname)|string|✅|
 |[spec.options.patchFrom[].secretKeyRef.optional](#specoptionspatchfromsecretkeyrefoptional)|boolean||
 |[spec.options.patchFrom[].value](#specoptionspatchfromvalue)|string||
-|[spec.options.patchFrom[].value_as](#specoptionspatchfromvalueas)|string|✅|
+|[spec.options.patchFrom[].value_as](#specoptionspatchfromvalueas)|string||
 |[spec.payload](#specpayload)|string|✅|
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
@@ -208,7 +208,7 @@ Type: object
 |[path](#specoptionspatchfrompath)|string|✅|
 |[secretKeyRef](#specoptionspatchfromsecretkeyref)|object||
 |[value](#specoptionspatchfromvalue)|string||
-|[value_as](#specoptionspatchfromvalueas)|string|✅|
+|[value_as](#specoptionspatchfromvalueas)|string||
 
 *missing*
 

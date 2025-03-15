@@ -38,21 +38,21 @@ spec:
         providerId: example-provider
         enabled: true
         config:
-          secret: "" # must have a dummy value, must be not null
+          secret: null # must have a dummy value
   patchFrom:
-    "identityProviders.0.config.secret":
+    - path: "$.identityProviders[0].config.secret"
+      valueAs: string
       secretKeyRef:
         name: my-secret
         key: IDENTITY_PROVIDER_SECRET
-        valueAs: auto # optional
 ```
 
-By default the value is autodetected. You can change this behavior by explicitely setting the
+You need to specify how the value should be interpreted using the
 `valueAs` field. The following values are supported:
 
-- `auto`: Autodetect the value type. This is the default.
-- `string`: The secret value is interpreted as a string
+- `string`: The secret value is interpreted as a string. This is the default value.
 - `number`: The secret value is interpreted as a number
+- `bool`: The secret value is interpreted as a number
 - `yaml`: the value is interpreted as a YAML object (default for auto detected objects)
 - `json`: the value is interpreted as a JSON object
 

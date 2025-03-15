@@ -23,7 +23,7 @@ resource to define an Authenticator Config within a [KeycloakRealm](./keycloakre
 |[spec.patchFrom[].secretKeyRef.name](#specpatchfromsecretkeyrefname)|string|✅|
 |[spec.patchFrom[].secretKeyRef.optional](#specpatchfromsecretkeyrefoptional)|boolean||
 |[spec.patchFrom[].value](#specpatchfromvalue)|string||
-|[spec.patchFrom[].value_as](#specpatchfromvalueas)|string|✅|
+|[spec.patchFrom[].value_as](#specpatchfromvalueas)|string||
 |[spec.realmRef](#specrealmref)|string||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
@@ -132,7 +132,7 @@ Type: object
 |[path](#specpatchfrompath)|string|✅|
 |[secretKeyRef](#specpatchfromsecretkeyref)|object||
 |[value](#specpatchfromvalue)|string||
-|[value_as](#specpatchfromvalueas)|string|✅|
+|[value_as](#specpatchfromvalueas)|string||
 
 *missing*
 
