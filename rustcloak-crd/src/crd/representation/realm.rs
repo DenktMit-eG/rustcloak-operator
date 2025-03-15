@@ -4,9 +4,8 @@ use crate::marker::ResourceMarker;
 use crate::refs::ref_type;
 use crate::{InstanceRef, both_scopes};
 use crate::{
-    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    KeycloakApiStatusEndpoint, impl_object, inner_spec::HasInnerSpec,
-    schema_patch, traits::Endpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus, KeycloakApiStatusEndpoint,
+    impl_object, inner_spec::HasInnerSpec, schema_patch, traits::Endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -26,14 +25,12 @@ both_scopes! {
         )]
         /// the KeycloakRealm resource
         pub struct KeycloakRealmSpec {
-            #[serde(default, skip_serializing_if = "Option::is_none")]
+            #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
             #[serde(flatten)]
             pub parent_ref: InstanceRef,
             #[schemars(schema_with = "schema")]
             pub definition: Option<RealmRepresentation>,
-            #[serde(default, flatten)]
-            pub patches: Option<KeycloakApiPatchList>,
         }
     }
 }

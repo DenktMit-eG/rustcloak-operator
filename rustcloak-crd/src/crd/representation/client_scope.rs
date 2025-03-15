@@ -1,8 +1,8 @@
 use crate::keycloak_types::ClientScopeRepresentation;
 use crate::refs::ref_type;
 use crate::{
-    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
+    impl_object, schema_patch, traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -22,7 +22,7 @@ namespace_scope! {
         )]
         /// the KeycloakClientScope resource
         pub struct KeycloakClientScopeSpec {
-            #[serde(default, skip_serializing_if = "Option::is_none")]
+            #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
             #[serde(flatten)]
             pub parent_ref: RealmRef,
@@ -31,8 +31,6 @@ namespace_scope! {
             pub is_template: Option<bool>,
             #[schemars(schema_with = "schema")]
             pub definition: Option<ClientScopeRepresentation>,
-            #[serde(default, flatten)]
-            pub patches: Option<KeycloakApiPatchList>,
         }
     }
 }

@@ -2,8 +2,7 @@ use super::RealmRef;
 use crate::keycloak_types::AuthenticationFlowRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
-    crd::patches::KeycloakApiPatchList, impl_object, schema_patch,
-    traits::impl_endpoint,
+    impl_object, schema_patch, traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -21,14 +20,12 @@ namespace_scope! {
         )]
         /// the KeycloakAuthenticationFlow resource
         pub struct KeycloakAuthenticationFlowSpec {
-            #[serde(default, skip_serializing_if = "Option::is_none")]
+            #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
             #[serde(flatten)]
             pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
             pub definition: Option<AuthenticationFlowRepresentation>,
-            #[serde(default, flatten)]
-            pub patches: Option<KeycloakApiPatchList>,
         }
     }
 }

@@ -1,7 +1,7 @@
 use crate::keycloak_types::RequiredActionProviderRepresentation;
 use crate::{
-    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
+    impl_object, schema_patch, traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -21,14 +21,12 @@ namespace_scope! {
         )]
         /// the KeycloakRequiredActionProvider resource
         pub struct KeycloakRequiredActionProviderSpec {
-            #[serde(default, skip_serializing_if = "Option::is_none")]
+            #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
             #[serde(flatten)]
             pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
             pub definition: Option<RequiredActionProviderRepresentation>,
-            #[serde(default, flatten)]
-            pub patches: Option<KeycloakApiPatchList>,
         }
     }
 }
