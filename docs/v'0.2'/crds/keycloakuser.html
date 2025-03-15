@@ -1,0 +1,1099 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>KeycloakUser - Rustcloak Operator</title>
+
+
+        <!-- Custom HTML head -->
+        <style>
+        #menu-version {
+        	position: relative;
+        	align-self: center;
+        }
+        #version-button {
+        	position: relative;
+        	display: flex;
+        	align-items: center;
+        	padding: 0 1em;
+        }
+        #version-button::after {
+        	padding-left: 0.5em;
+        	content: '▼';
+        }
+        #version-list {
+        	position: absolute;
+        	display: none;
+        	text-decoration: none;
+        	right: 0;
+        	top: 100%;
+        	min-width: 100%;
+        	z-index: 1001;
+        	background-color: var(--sidebar-bg);
+        }
+        #version-button-state {
+        	display: none;
+        }
+        #version-button-state:checked ~ #version-list {
+        	display: block;
+        }
+        #version-list a {
+        	display: block;
+        	padding: 0.5em 1em;
+        	text-decoration: none;
+        }
+        #version-deselector {
+        	display: none;
+        	position: fixed;
+        	top: -1000000px;
+        	left: -1000000px;
+        	bottom: -1000000px;
+        	right: -1000000px;
+        	display: none;
+        }
+        #version-button-state:checked ~ #version-deselector {
+        	display: block;
+        	z-index: 1000;
+        }
+        </style>
+        <script>
+        window.addEventListener('DOMContentLoaded', async function () {
+        	const dropdown = document.createElement('div');
+        	const menubar = document.getElementById('menu-bar');
+        
+        	const root = path_to_root === "" ? "." : path_to_root;
+        	const versions_res = await fetch(`${root}/../versions.txt`)
+        	if (!versions_res.ok) {
+        		console.error('Failed to fetch versions.txt');
+        		return;
+        	}
+        	const base = versions_res.url.split('/').slice(0, -1).join('/');
+        	const versions = await versions_res.text().then(x => x.trim().split('\n'));
+        
+        	const current_version = versions
+        		.find(x => window.location.href.startsWith(`${base}/${x}`))
+        
+        	const list = versions
+        		.filter(x => x)
+        		.map(
+        			version => {
+        				var a = document.createElement('a');
+        				a.href = `${base}/${version}`;
+        				a.textContent = version;
+        				return a.outerHTML;
+        			}
+        		)
+        	dropdown.innerHTML = `
+        		<input type="checkbox" id=version-button-state>
+        		<label id="version-button" for=version-button-state>
+        			${new Option(String(current_version)).textContent}
+        		</label>
+        		<div id="version-list">
+        			${list.join('')}
+        		</div>
+        		<label id=version-deselector for=version-button-state></label>
+        	`;
+        
+        	menubar.appendChild(dropdown);
+        
+        	dropdown.id = "menu-version";
+        
+        });
+        </script>
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rustcloak Operator</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/withlazers/rustcloak-operator/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/withlazers/rustcloak-operator/edit/main/docs/src/crds/keycloakuser.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="keycloakuser"><a class="header" href="#keycloakuser">KeycloakUser</a></h1>
+<h2 id="v1beta1"><a class="header" href="#v1beta1">v1beta1</a></h2>
+<p>resource to define a User within a <a href="./keycloakrealm.html">KeyclaokRealm</a></p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specclientref">spec.clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specclusterrealmref">spec.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinition">spec.definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionaccess">spec.definition.access</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionapplicationroles">spec.definition.applicationRoles</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionattributes">spec.definition.attributes</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsents">spec.definition.clientConsents[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsentsclientid">spec.definition.clientConsents[].clientId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsentscreateddate">spec.definition.clientConsents[].createdDate</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsentsgrantedclientscopes">spec.definition.clientConsents[].grantedClientScopes[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsentsgrantedrealmroles">spec.definition.clientConsents[].grantedRealmRoles[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsentslastupdateddate">spec.definition.clientConsents[].lastUpdatedDate</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientroles">spec.definition.clientRoles</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncreatedtimestamp">spec.definition.createdTimestamp</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentials">spec.definition.credentials[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsalgorithm">spec.definition.credentials[].algorithm</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsconfig">spec.definition.credentials[].config</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialscounter">spec.definition.credentials[].counter</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialscreateddate">spec.definition.credentials[].createdDate</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialscredentialdata">spec.definition.credentials[].credentialData</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsdevice">spec.definition.credentials[].device</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsdigits">spec.definition.credentials[].digits</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialshashiterations">spec.definition.credentials[].hashIterations</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialshashedsaltedvalue">spec.definition.credentials[].hashedSaltedValue</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsid">spec.definition.credentials[].id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsperiod">spec.definition.credentials[].period</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialspriority">spec.definition.credentials[].priority</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialssalt">spec.definition.credentials[].salt</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialssecretdata">spec.definition.credentials[].secretData</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialstemporary">spec.definition.credentials[].temporary</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialstype">spec.definition.credentials[].type</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsuserlabel">spec.definition.credentials[].userLabel</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsvalue">spec.definition.credentials[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitiondisableablecredentialtypes">spec.definition.disableableCredentialTypes[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionemail">spec.definition.email</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionemailverified">spec.definition.emailVerified</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionenabled">spec.definition.enabled</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfederatedidentities">spec.definition.federatedIdentities[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfederatedidentitiesidentityprovider">spec.definition.federatedIdentities[].identityProvider</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfederatedidentitiesuserid">spec.definition.federatedIdentities[].userId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfederatedidentitiesusername">spec.definition.federatedIdentities[].userName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfederationlink">spec.definition.federationLink</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfirstname">spec.definition.firstName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitiongroups">spec.definition.groups[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionid">spec.definition.id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionlastname">spec.definition.lastName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionnotbefore">spec.definition.notBefore</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionorigin">spec.definition.origin</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionrealmroles">spec.definition.realmRoles[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionrequiredactions">spec.definition.requiredActions[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionself">spec.definition.self</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionserviceaccountclientid">spec.definition.serviceAccountClientId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionsociallinks">spec.definition.socialLinks[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionsociallinkssocialprovider">spec.definition.socialLinks[].socialProvider</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionsociallinkssocialuserid">spec.definition.socialLinks[].socialUserId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionsociallinkssocialusername">spec.definition.socialLinks[].socialUsername</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitiontotp">spec.definition.totp</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadata">spec.definition.userProfileMetadata</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributes">spec.definition.userProfileMetadata.attributes[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesannotations">spec.definition.userProfileMetadata.attributes[].annotations</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesdisplayname">spec.definition.userProfileMetadata.attributes[].displayName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesgroup">spec.definition.userProfileMetadata.attributes[].group</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesmultivalued">spec.definition.userProfileMetadata.attributes[].multivalued</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesname">spec.definition.userProfileMetadata.attributes[].name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesreadonly">spec.definition.userProfileMetadata.attributes[].readOnly</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesrequired">spec.definition.userProfileMetadata.attributes[].required</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesvalidators">spec.definition.userProfileMetadata.attributes[].validators</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadatagroups">spec.definition.userProfileMetadata.groups[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadatagroupsannotations">spec.definition.userProfileMetadata.groups[].annotations</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadatagroupsdisplaydescription">spec.definition.userProfileMetadata.groups[].displayDescription</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadatagroupsdisplayheader">spec.definition.userProfileMetadata.groups[].displayHeader</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadatagroupsname">spec.definition.userProfileMetadata.groups[].name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionusername">spec.definition.username</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom">spec.patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2">spec.patchFrom2[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2configmapkeyref">spec.patchFrom2[].configMapKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2configmapkeyrefkey">spec.patchFrom2[].configMapKeyRef.key</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2configmapkeyrefname">spec.patchFrom2[].configMapKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2configmapkeyrefoptional">spec.patchFrom2[].configMapKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2fieldref">spec.patchFrom2[].fieldRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2fieldrefapiversion">spec.patchFrom2[].fieldRef.apiVersion</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2fieldreffieldpath">spec.patchFrom2[].fieldRef.fieldPath</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2path">spec.patchFrom2[].path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2resourcefieldref">spec.patchFrom2[].resourceFieldRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2resourcefieldrefcontainername">spec.patchFrom2[].resourceFieldRef.containerName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2resourcefieldrefdivisor">spec.patchFrom2[].resourceFieldRef.divisor</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2resourcefieldrefresource">spec.patchFrom2[].resourceFieldRef.resource</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2secretkeyref">spec.patchFrom2[].secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2secretkeyrefkey">spec.patchFrom2[].secretKeyRef.key</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2secretkeyrefname">spec.patchFrom2[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2secretkeyrefoptional">spec.patchFrom2[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2valueas">spec.patchFrom2[].valueAs</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specusersecret">spec.userSecret</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specusersecretemailkey">spec.userSecret.emailKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specusersecretpasswordkey">spec.userSecret.passwordKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specusersecretsecretname">spec.userSecret.secretName</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specusersecretusernamekey">spec.userSecret.usernameKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusconditionsmessage">status.conditions[].message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusconditionsreason">status.conditions[].reason</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusconditionsstatus">status.conditions[].status</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#statusconditionstype">status.conditions[].type</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#statusinstance">status.instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusinstanceclusterinstanceref">status.instance.clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#statusreconcileattempts">status.reconcileAttempts</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<hr />
+<h3 id="spec"><a class="header" href="#spec">spec</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinition">definition</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom">patchFrom</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2">patchFrom2[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specusersecret">userSecret</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>the KeycloakUser resource</p>
+<hr />
+<h3 id="specclientref"><a class="header" href="#specclientref">spec.clientRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specclusterrealmref"><a class="header" href="#specclusterrealmref">spec.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="specdefinition"><a class="header" href="#specdefinition">spec.definition</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specdefinitionaccess">access</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionapplicationroles">applicationRoles</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionattributes">attributes</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsents">clientConsents[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientroles">clientRoles</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncreatedtimestamp">createdTimestamp</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentials">credentials[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitiondisableablecredentialtypes">disableableCredentialTypes[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionemail">email</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionemailverified">emailVerified</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionenabled">enabled</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfederatedidentities">federatedIdentities[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfederationlink">federationLink</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfirstname">firstName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitiongroups">groups[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionid">id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionlastname">lastName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionnotbefore">notBefore</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionorigin">origin</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionrealmroles">realmRoles[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionrequiredactions">requiredActions[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionself">self</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionserviceaccountclientid">serviceAccountClientId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionsociallinks">socialLinks[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitiontotp">totp</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadata">userProfileMetadata</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionusername">username</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p> </p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">has(self.id) == has(oldSelf.id)</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>UserRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "applicationRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientConsents": { "type": "array", "items": { "$ref": "#/$defs/UserConsentRepresentation" } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "createdTimestamp": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentials": { "type": "array", "items": { "$ref": "#/$defs/CredentialRepresentation" } }, "disableableCredentialTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "email": { "type": "string" }, "emailVerified": { "type": "boolean" }, "enabled": { "type": "boolean" }, "federatedIdentities": { "type": "array", "items": { "$ref": "#/$defs/FederatedIdentityRepresentation" } }, "federationLink": { "type": "string" }, "firstName": { "type": "string" }, "groups": { "type": "array", "items": { "type": "string" } }, "id": { "type": "string" }, "lastName": { "type": "string" }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "origin": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "requiredActions": { "type": "array", "items": { "type": "string" } }, "self": { "type": "string" }, "serviceAccountClientId": { "type": "string" }, "socialLinks": { "type": "array", "items": { "$ref": "#/$defs/SocialLinkRepresentation" } }, "totp": { "type": "boolean" }, "userProfileMetadata": { "$ref": "#/$defs/UserProfileMetadata" }, "username": { "type": "string" } } } </code> </details></p>
+<hr />
+<h3 id="specdefinitionaccess"><a class="header" href="#specdefinitionaccess">spec.definition.access</a></h3>
+<p>Type: object</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionapplicationroles"><a class="header" href="#specdefinitionapplicationroles">spec.definition.applicationRoles</a></h3>
+<p>Type: object</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionattributes"><a class="header" href="#specdefinitionattributes">spec.definition.attributes</a></h3>
+<p>Type: object</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionclientconsents"><a class="header" href="#specdefinitionclientconsents">spec.definition.clientConsents[]</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsentsclientid">clientId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsentscreateddate">createdDate</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsentsgrantedclientscopes">grantedClientScopes[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsentsgrantedrealmroles">grantedRealmRoles[]</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionclientconsentslastupdateddate">lastUpdatedDate</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>UserConsentRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "clientId": { "type": "string" }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "grantedClientScopes": { "type": "array", "items": { "type": "string" } }, "grantedRealmRoles": { "type": "array", "items": { "type": "string" } }, "lastUpdatedDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 } } } </code> </details></p>
+<hr />
+<h3 id="specdefinitionclientconsentsclientid"><a class="header" href="#specdefinitionclientconsentsclientid">spec.definition.clientConsents[].clientId</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionclientconsentscreateddate"><a class="header" href="#specdefinitionclientconsentscreateddate">spec.definition.clientConsents[].createdDate</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionclientconsentsgrantedclientscopes"><a class="header" href="#specdefinitionclientconsentsgrantedclientscopes">spec.definition.clientConsents[].grantedClientScopes[]</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionclientconsentsgrantedrealmroles"><a class="header" href="#specdefinitionclientconsentsgrantedrealmroles">spec.definition.clientConsents[].grantedRealmRoles[]</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionclientconsentslastupdateddate"><a class="header" href="#specdefinitionclientconsentslastupdateddate">spec.definition.clientConsents[].lastUpdatedDate</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionclientroles"><a class="header" href="#specdefinitionclientroles">spec.definition.clientRoles</a></h3>
+<p>Type: object</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncreatedtimestamp"><a class="header" href="#specdefinitioncreatedtimestamp">spec.definition.createdTimestamp</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentials"><a class="header" href="#specdefinitioncredentials">spec.definition.credentials[]</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsalgorithm">algorithm</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsconfig">config</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialscounter">counter</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialscreateddate">createdDate</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialscredentialdata">credentialData</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsdevice">device</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsdigits">digits</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialshashiterations">hashIterations</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialshashedsaltedvalue">hashedSaltedValue</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsid">id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsperiod">period</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialspriority">priority</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialssalt">salt</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialssecretdata">secretData</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialstemporary">temporary</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialstype">type</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsuserlabel">userLabel</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>CredentialRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } </code> </details></p>
+<hr />
+<h3 id="specdefinitioncredentialsalgorithm"><a class="header" href="#specdefinitioncredentialsalgorithm">spec.definition.credentials[].algorithm</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialsconfig"><a class="header" href="#specdefinitioncredentialsconfig">spec.definition.credentials[].config</a></h3>
+<p>Type: object</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialscounter"><a class="header" href="#specdefinitioncredentialscounter">spec.definition.credentials[].counter</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialscreateddate"><a class="header" href="#specdefinitioncredentialscreateddate">spec.definition.credentials[].createdDate</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialscredentialdata"><a class="header" href="#specdefinitioncredentialscredentialdata">spec.definition.credentials[].credentialData</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialsdevice"><a class="header" href="#specdefinitioncredentialsdevice">spec.definition.credentials[].device</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialsdigits"><a class="header" href="#specdefinitioncredentialsdigits">spec.definition.credentials[].digits</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialshashiterations"><a class="header" href="#specdefinitioncredentialshashiterations">spec.definition.credentials[].hashIterations</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialshashedsaltedvalue"><a class="header" href="#specdefinitioncredentialshashedsaltedvalue">spec.definition.credentials[].hashedSaltedValue</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialsid"><a class="header" href="#specdefinitioncredentialsid">spec.definition.credentials[].id</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialsperiod"><a class="header" href="#specdefinitioncredentialsperiod">spec.definition.credentials[].period</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialspriority"><a class="header" href="#specdefinitioncredentialspriority">spec.definition.credentials[].priority</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialssalt"><a class="header" href="#specdefinitioncredentialssalt">spec.definition.credentials[].salt</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialssecretdata"><a class="header" href="#specdefinitioncredentialssecretdata">spec.definition.credentials[].secretData</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialstemporary"><a class="header" href="#specdefinitioncredentialstemporary">spec.definition.credentials[].temporary</a></h3>
+<p>Type: boolean</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialstype"><a class="header" href="#specdefinitioncredentialstype">spec.definition.credentials[].type</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialsuserlabel"><a class="header" href="#specdefinitioncredentialsuserlabel">spec.definition.credentials[].userLabel</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialsvalue"><a class="header" href="#specdefinitioncredentialsvalue">spec.definition.credentials[].value</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitiondisableablecredentialtypes"><a class="header" href="#specdefinitiondisableablecredentialtypes">spec.definition.disableableCredentialTypes[]</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionemail"><a class="header" href="#specdefinitionemail">spec.definition.email</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionemailverified"><a class="header" href="#specdefinitionemailverified">spec.definition.emailVerified</a></h3>
+<p>Type: boolean</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionenabled"><a class="header" href="#specdefinitionenabled">spec.definition.enabled</a></h3>
+<p>Type: boolean</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionfederatedidentities"><a class="header" href="#specdefinitionfederatedidentities">spec.definition.federatedIdentities[]</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specdefinitionfederatedidentitiesidentityprovider">identityProvider</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfederatedidentitiesuserid">userId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionfederatedidentitiesusername">userName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>FederatedIdentityRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "identityProvider": { "type": "string" }, "userId": { "type": "string" }, "userName": { "type": "string" } } } </code> </details></p>
+<hr />
+<h3 id="specdefinitionfederatedidentitiesidentityprovider"><a class="header" href="#specdefinitionfederatedidentitiesidentityprovider">spec.definition.federatedIdentities[].identityProvider</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionfederatedidentitiesuserid"><a class="header" href="#specdefinitionfederatedidentitiesuserid">spec.definition.federatedIdentities[].userId</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionfederatedidentitiesusername"><a class="header" href="#specdefinitionfederatedidentitiesusername">spec.definition.federatedIdentities[].userName</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionfederationlink"><a class="header" href="#specdefinitionfederationlink">spec.definition.federationLink</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionfirstname"><a class="header" href="#specdefinitionfirstname">spec.definition.firstName</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitiongroups"><a class="header" href="#specdefinitiongroups">spec.definition.groups[]</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionid"><a class="header" href="#specdefinitionid">spec.definition.id</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionlastname"><a class="header" href="#specdefinitionlastname">spec.definition.lastName</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionnotbefore"><a class="header" href="#specdefinitionnotbefore">spec.definition.notBefore</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionorigin"><a class="header" href="#specdefinitionorigin">spec.definition.origin</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionrealmroles"><a class="header" href="#specdefinitionrealmroles">spec.definition.realmRoles[]</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionrequiredactions"><a class="header" href="#specdefinitionrequiredactions">spec.definition.requiredActions[]</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionself"><a class="header" href="#specdefinitionself">spec.definition.self</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionserviceaccountclientid"><a class="header" href="#specdefinitionserviceaccountclientid">spec.definition.serviceAccountClientId</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionsociallinks"><a class="header" href="#specdefinitionsociallinks">spec.definition.socialLinks[]</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specdefinitionsociallinkssocialprovider">socialProvider</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionsociallinkssocialuserid">socialUserId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionsociallinkssocialusername">socialUsername</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>SocialLinkRepresentation</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "socialProvider": { "type": "string" }, "socialUserId": { "type": "string" }, "socialUsername": { "type": "string" } } } </code> </details></p>
+<hr />
+<h3 id="specdefinitionsociallinkssocialprovider"><a class="header" href="#specdefinitionsociallinkssocialprovider">spec.definition.socialLinks[].socialProvider</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionsociallinkssocialuserid"><a class="header" href="#specdefinitionsociallinkssocialuserid">spec.definition.socialLinks[].socialUserId</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionsociallinkssocialusername"><a class="header" href="#specdefinitionsociallinkssocialusername">spec.definition.socialLinks[].socialUsername</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitiontotp"><a class="header" href="#specdefinitiontotp">spec.definition.totp</a></h3>
+<p>Type: boolean</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadata"><a class="header" href="#specdefinitionuserprofilemetadata">spec.definition.userProfileMetadata</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributes">attributes[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadatagroups">groups[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>UserProfileMetadata</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "attributes": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeMetadata" } }, "groups": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeGroupMetadata" } } } } </code> </details></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadataattributes"><a class="header" href="#specdefinitionuserprofilemetadataattributes">spec.definition.userProfileMetadata.attributes[]</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesannotations">annotations</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesdisplayname">displayName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesgroup">group</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesmultivalued">multivalued</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesname">name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesreadonly">readOnly</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesrequired">required</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadataattributesvalidators">validators</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>UserProfileAttributeMetadata</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayName": { "type": "string" }, "group": { "type": "string" }, "multivalued": { "type": "boolean" }, "name": { "type": "string" }, "readOnly": { "type": "boolean" }, "required": { "type": "boolean" }, "validators": { "type": "object", "additionalProperties": { "type": "object", "additionalProperties": {} } } } } </code> </details></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadataattributesannotations"><a class="header" href="#specdefinitionuserprofilemetadataattributesannotations">spec.definition.userProfileMetadata.attributes[].annotations</a></h3>
+<p>Type: object</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadataattributesdisplayname"><a class="header" href="#specdefinitionuserprofilemetadataattributesdisplayname">spec.definition.userProfileMetadata.attributes[].displayName</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadataattributesgroup"><a class="header" href="#specdefinitionuserprofilemetadataattributesgroup">spec.definition.userProfileMetadata.attributes[].group</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadataattributesmultivalued"><a class="header" href="#specdefinitionuserprofilemetadataattributesmultivalued">spec.definition.userProfileMetadata.attributes[].multivalued</a></h3>
+<p>Type: boolean</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadataattributesname"><a class="header" href="#specdefinitionuserprofilemetadataattributesname">spec.definition.userProfileMetadata.attributes[].name</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadataattributesreadonly"><a class="header" href="#specdefinitionuserprofilemetadataattributesreadonly">spec.definition.userProfileMetadata.attributes[].readOnly</a></h3>
+<p>Type: boolean</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadataattributesrequired"><a class="header" href="#specdefinitionuserprofilemetadataattributesrequired">spec.definition.userProfileMetadata.attributes[].required</a></h3>
+<p>Type: boolean</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadataattributesvalidators"><a class="header" href="#specdefinitionuserprofilemetadataattributesvalidators">spec.definition.userProfileMetadata.attributes[].validators</a></h3>
+<p>Type: object</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadatagroups"><a class="header" href="#specdefinitionuserprofilemetadatagroups">spec.definition.userProfileMetadata.groups[]</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadatagroupsannotations">annotations</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadatagroupsdisplaydescription">displayDescription</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadatagroupsdisplayheader">displayHeader</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitionuserprofilemetadatagroupsname">name</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>UserProfileAttributeGroupMetadata</p>
+<details><summary>JSON schema</summary>
+<p><code>json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayDescription": { "type": "string" }, "displayHeader": { "type": "string" }, "name": { "type": "string" } } } </code> </details></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadatagroupsannotations"><a class="header" href="#specdefinitionuserprofilemetadatagroupsannotations">spec.definition.userProfileMetadata.groups[].annotations</a></h3>
+<p>Type: object</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadatagroupsdisplaydescription"><a class="header" href="#specdefinitionuserprofilemetadatagroupsdisplaydescription">spec.definition.userProfileMetadata.groups[].displayDescription</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadatagroupsdisplayheader"><a class="header" href="#specdefinitionuserprofilemetadatagroupsdisplayheader">spec.definition.userProfileMetadata.groups[].displayHeader</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionuserprofilemetadatagroupsname"><a class="header" href="#specdefinitionuserprofilemetadatagroupsname">spec.definition.userProfileMetadata.groups[].name</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionusername"><a class="header" href="#specdefinitionusername">spec.definition.username</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specoptions"><a class="header" href="#specoptions">spec.options</a></h3>
+<p>Type: object</p>
+<p>Options for the request to the Keycloak Admin API.</p>
+<hr />
+<h3 id="specpatchfrom"><a class="header" href="#specpatchfrom">spec.patchFrom</a></h3>
+<p>Type: object</p>
+<p>Defines additional values that can be loaded from secrets or configmaps. Field selectors are not supported. For more informations see <a href="../configuration/patches.html">the patches documentation</a>.</p>
+<hr />
+<h3 id="specpatchfrom2"><a class="header" href="#specpatchfrom2">spec.patchFrom2[]</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specpatchfrom2configmapkeyref">configMapKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2fieldref">fieldRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2path">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2resourcefieldref">resourceFieldRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2secretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2valueas">valueAs</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>EnvVarSource represents a source for the value of an EnvVar.</p>
+<hr />
+<h3 id="specpatchfrom2configmapkeyref"><a class="header" href="#specpatchfrom2configmapkeyref">spec.patchFrom2[].configMapKeyRef</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specpatchfrom2configmapkeyrefkey">key</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2configmapkeyrefname">name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2configmapkeyrefoptional">optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Selects a key of a ConfigMap.</p>
+<hr />
+<h3 id="specpatchfrom2configmapkeyrefkey"><a class="header" href="#specpatchfrom2configmapkeyrefkey">spec.patchFrom2[].configMapKeyRef.key</a></h3>
+<p>Type: string</p>
+<p>The key to select.</p>
+<hr />
+<h3 id="specpatchfrom2configmapkeyrefname"><a class="header" href="#specpatchfrom2configmapkeyrefname">spec.patchFrom2[].configMapKeyRef.name</a></h3>
+<p>Type: string</p>
+<p>Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names</p>
+<hr />
+<h3 id="specpatchfrom2configmapkeyrefoptional"><a class="header" href="#specpatchfrom2configmapkeyrefoptional">spec.patchFrom2[].configMapKeyRef.optional</a></h3>
+<p>Type: boolean</p>
+<p>Specify whether the ConfigMap or its key must be defined</p>
+<hr />
+<h3 id="specpatchfrom2fieldref"><a class="header" href="#specpatchfrom2fieldref">spec.patchFrom2[].fieldRef</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specpatchfrom2fieldrefapiversion">apiVersion</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2fieldreffieldpath">fieldPath</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+</tbody></table>
+</div>
+<p>Selects a field of the pod: supports metadata.name, metadata.namespace, <code>metadata.labels['&lt;KEY&gt;']</code>, <code>metadata.annotations['&lt;KEY&gt;']</code>, spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.</p>
+<hr />
+<h3 id="specpatchfrom2fieldrefapiversion"><a class="header" href="#specpatchfrom2fieldrefapiversion">spec.patchFrom2[].fieldRef.apiVersion</a></h3>
+<p>Type: string</p>
+<p>Version of the schema the FieldPath is written in terms of, defaults to "v1".</p>
+<hr />
+<h3 id="specpatchfrom2fieldreffieldpath"><a class="header" href="#specpatchfrom2fieldreffieldpath">spec.patchFrom2[].fieldRef.fieldPath</a></h3>
+<p>Type: string</p>
+<p>Path of the field to select in the specified API version.</p>
+<hr />
+<h3 id="specpatchfrom2path"><a class="header" href="#specpatchfrom2path">spec.patchFrom2[].path</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specpatchfrom2resourcefieldref"><a class="header" href="#specpatchfrom2resourcefieldref">spec.patchFrom2[].resourceFieldRef</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specpatchfrom2resourcefieldrefcontainername">containerName</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2resourcefieldrefdivisor">divisor</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2resourcefieldrefresource">resource</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+</tbody></table>
+</div>
+<p>Selects a resource of the container: only resources limits and requests (limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.</p>
+<hr />
+<h3 id="specpatchfrom2resourcefieldrefcontainername"><a class="header" href="#specpatchfrom2resourcefieldrefcontainername">spec.patchFrom2[].resourceFieldRef.containerName</a></h3>
+<p>Type: string</p>
+<p>Container name: required for volumes, optional for env vars</p>
+<hr />
+<h3 id="specpatchfrom2resourcefieldrefdivisor"><a class="header" href="#specpatchfrom2resourcefieldrefdivisor">spec.patchFrom2[].resourceFieldRef.divisor</a></h3>
+<p>Type: string</p>
+<p>Specifies the output format of the exposed resources, defaults to "1"</p>
+<hr />
+<h3 id="specpatchfrom2resourcefieldrefresource"><a class="header" href="#specpatchfrom2resourcefieldrefresource">spec.patchFrom2[].resourceFieldRef.resource</a></h3>
+<p>Type: string</p>
+<p>Required: resource to select</p>
+<hr />
+<h3 id="specpatchfrom2secretkeyref"><a class="header" href="#specpatchfrom2secretkeyref">spec.patchFrom2[].secretKeyRef</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specpatchfrom2secretkeyrefkey">key</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2secretkeyrefname">name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specpatchfrom2secretkeyrefoptional">optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Selects a key of a secret in the pod's namespace</p>
+<hr />
+<h3 id="specpatchfrom2secretkeyrefkey"><a class="header" href="#specpatchfrom2secretkeyrefkey">spec.patchFrom2[].secretKeyRef.key</a></h3>
+<p>Type: string</p>
+<p>The key of the secret to select from.  Must be a valid secret key.</p>
+<hr />
+<h3 id="specpatchfrom2secretkeyrefname"><a class="header" href="#specpatchfrom2secretkeyrefname">spec.patchFrom2[].secretKeyRef.name</a></h3>
+<p>Type: string</p>
+<p>Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names</p>
+<hr />
+<h3 id="specpatchfrom2secretkeyrefoptional"><a class="header" href="#specpatchfrom2secretkeyrefoptional">spec.patchFrom2[].secretKeyRef.optional</a></h3>
+<p>Type: boolean</p>
+<p>Specify whether the Secret or its key must be defined</p>
+<hr />
+<h3 id="specpatchfrom2valueas"><a class="header" href="#specpatchfrom2valueas">spec.patchFrom2[].valueAs</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specrealmref"><a class="header" href="#specrealmref">spec.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
+<h3 id="specusersecret"><a class="header" href="#specusersecret">spec.userSecret</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#specusersecretemailkey">emailKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specusersecretpasswordkey">passwordKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specusersecretsecretname">secretName</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specusersecretusernamekey">usernameKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specusersecretemailkey"><a class="header" href="#specusersecretemailkey">spec.userSecret.emailKey</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specusersecretpasswordkey"><a class="header" href="#specusersecretpasswordkey">spec.userSecret.passwordKey</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specusersecretsecretname"><a class="header" href="#specusersecretsecretname">spec.userSecret.secretName</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specusersecretusernamekey"><a class="header" href="#specusersecretusernamekey">spec.userSecret.usernameKey</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="status"><a class="header" href="#status">status</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#statusconditions">conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#statusreconcileattempts">reconcileAttempts</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusconditions"><a class="header" href="#statusconditions">status.conditions[]</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#statusconditionslasttransitiontime">lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusconditionsmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusconditionsreason">reason</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusconditionsstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#statusconditionstype">type</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+</tbody></table>
+</div>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusconditionslasttransitiontime"><a class="header" href="#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></h3>
+<p>Type: string</p>
+<p>Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.</p>
+<hr />
+<h3 id="statusconditionsmessage"><a class="header" href="#statusconditionsmessage">status.conditions[].message</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusconditionsreason"><a class="header" href="#statusconditionsreason">status.conditions[].reason</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusconditionsstatus"><a class="header" href="#statusconditionsstatus">status.conditions[].status</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusconditionstype"><a class="header" href="#statusconditionstype">status.conditions[].type</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusinstance"><a class="header" href="#statusinstance">status.instance</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="#statusinstanceclusterinstanceref">clusterInstanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#statusinstanceinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusinstanceclusterinstanceref"><a class="header" href="#statusinstanceclusterinstanceref">status.instance.clusterInstanceRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster instance to which this object belongs to.</p>
+<hr />
+<h3 id="statusinstanceinstanceref"><a class="header" href="#statusinstanceinstanceref">status.instance.instanceRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the namespaced instance to which this object belongs to.</p>
+<hr />
+<h3 id="statusmessage"><a class="header" href="#statusmessage">status.message</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusready"><a class="header" href="#statusready">status.ready</a></h3>
+<p>Type: boolean</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusreconcileattempts"><a class="header" href="#statusreconcileattempts">status.reconcileAttempts</a></h3>
+<p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusresourcepath"><a class="header" href="#statusresourcepath">status.resourcePath</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="statusstatus"><a class="header" href="#statusstatus">status.status</a></h3>
+<p>Type: string</p>
+<p><em>missing</em></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../crds/keycloakscope.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../crds/clusterkeycloakapiobject.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../crds/keycloakscope.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../crds/clusterkeycloakapiobject.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
