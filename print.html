@@ -550,20 +550,20 @@ spec:
         providerId: example-provider
         enabled: true
         config:
-          secret: "" # must have a dummy value, must be not null
+          secret: null # must have a dummy value
   patchFrom:
-    "identityProviders.0.config.secret":
+    - path: "$.identityProviders[0].config.secret"
+      valueAs: string
       secretKeyRef:
         name: my-secret
         key: IDENTITY_PROVIDER_SECRET
-        valueAs: auto # optional
 </code></pre>
-<p>By default the value is autodetected. You can change this behavior by explicitely setting the
+<p>You need to specify how the value should be interpreted using the
 <code>valueAs</code> field. The following values are supported:</p>
 <ul>
-<li><code>auto</code>: Autodetect the value type. This is the default.</li>
-<li><code>string</code>: The secret value is interpreted as a string</li>
+<li><code>string</code>: The secret value is interpreted as a string. This is the default value.</li>
 <li><code>number</code>: The secret value is interpreted as a number</li>
+<li><code>bool</code>: The secret value is interpreted as a number</li>
 <li><code>yaml</code>: the value is interpreted as a YAML object (default for auto detected objects)</li>
 <li><code>json</code>: the value is interpreted as a JSON object</li>
 </ul>
@@ -1070,7 +1070,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -3815,7 +3815,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -3999,7 +3999,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -4145,7 +4145,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -4325,7 +4325,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -4404,7 +4404,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -4791,7 +4791,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -6045,7 +6045,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclient.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -6236,7 +6236,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -6379,7 +6379,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -6563,7 +6563,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -6662,7 +6662,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -6849,7 +6849,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -6967,7 +6967,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -7161,7 +7161,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -7310,7 +7310,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -7492,7 +7492,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -7579,7 +7579,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -7848,7 +7848,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -8464,7 +8464,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -8649,7 +8649,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -8757,7 +8757,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -9407,7 +9407,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -12152,7 +12152,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -12328,7 +12328,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -12427,7 +12427,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -12652,7 +12652,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -12987,7 +12987,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakresource.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -13169,7 +13169,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -13307,7 +13307,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrole.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -13527,7 +13527,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusconditionslasttransitiontime">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -13833,7 +13833,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakscope.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -14073,7 +14073,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfromsecretkeyrefname">spec.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfromsecretkeyrefoptional">spec.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfromvalue">spec.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfromvalueas">spec.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specrealmref">spec.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specusersecret">spec.userSecret</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specusersecretemailkey">spec.userSecret.emailKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -14537,7 +14537,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#specpatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -14750,7 +14750,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfromsecretkeyrefname">spec.options.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfromsecretkeyrefoptional">spec.options.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfromvalue">spec.options.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfromvalueas">spec.options.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfromvalueas">spec.options.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specpayload">spec.payload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -14878,7 +14878,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -15273,7 +15273,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfromsecretkeyrefname">spec.options.patchFrom[].secretKeyRef.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfromsecretkeyrefoptional">spec.options.patchFrom[].secretKeyRef.optional</a></td><td style="text-align: left">boolean</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfromvalue">spec.options.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfromvalueas">spec.options.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfromvalueas">spec.options.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specpayload">spec.payload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#status">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusconditions">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -15401,7 +15401,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfrompath">path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfromsecretkeyref">secretKeyRef</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfromvalue">value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfromvalueas">value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
