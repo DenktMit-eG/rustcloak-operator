@@ -62,7 +62,8 @@
         	const dropdown = document.createElement('div');
         	const menubar = document.getElementById('menu-bar');
         
-        	const versions_res = await fetch(`${path_to_root}/../versions.txt`)
+        	const root = path_to_root === "" ? "." : path_to_root;
+        	const versions_res = await fetch(`${root}/../versions.txt`)
         	if (!versions_res.ok) {
         		console.error('Failed to fetch versions.txt');
         		return;

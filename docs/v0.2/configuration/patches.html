@@ -62,7 +62,8 @@
         	const dropdown = document.createElement('div');
         	const menubar = document.getElementById('menu-bar');
         
-        	const versions_res = await fetch(`${path_to_root}/../versions.txt`)
+        	const root = path_to_root === "" ? "." : path_to_root;
+        	const versions_res = await fetch(`${root}/../versions.txt`)
         	if (!versions_res.ok) {
         		console.error('Failed to fetch versions.txt');
         		return;
@@ -284,20 +285,20 @@ spec:
         providerId: example-provider
         enabled: true
         config:
-          secret: null # must have a dummy value
+          secret: "" # must have a dummy value, must be not null
   patchFrom:
-    - path: "$.identityProviders[0].config.secret"
-      valueAs: string
+    "identityProviders.0.config.secret":
       secretKeyRef:
         name: my-secret
         key: IDENTITY_PROVIDER_SECRET
+        valueAs: auto # optional
 </code></pre>
-<p>You need to specify how the value should be interpreted using the
+<p>By default the value is autodetected. You can change this behavior by explicitely setting the
 <code>valueAs</code> field. The following values are supported:</p>
 <ul>
-<li><code>string</code>: The secret value is interpreted as a string. This is the default value.</li>
+<li><code>auto</code>: Autodetect the value type. This is the default.</li>
+<li><code>string</code>: The secret value is interpreted as a string</li>
 <li><code>number</code>: The secret value is interpreted as a number</li>
-<li><code>bool</code>: The secret value is interpreted as a number</li>
 <li><code>yaml</code>: the value is interpreted as a YAML object (default for auto detected objects)</li>
 <li><code>json</code>: the value is interpreted as a JSON object</li>
 </ul>
