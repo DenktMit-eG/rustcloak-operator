@@ -2,9 +2,10 @@ use k8s_openapi::api::core::v1::{ConfigMapKeySelector, SecretKeySelector};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
 pub enum ValueAs {
+    #[default]
     String,
     Number,
     Bool,
@@ -25,6 +26,7 @@ pub struct ObjectPatchRef {
     pub path: String,
     #[serde(flatten)]
     pub value_from: ValueFrom,
+    #[serde(default)]
     pub value_as: ValueAs,
 }
 

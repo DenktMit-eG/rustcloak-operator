@@ -91,7 +91,7 @@ resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)
 |[spec.patchFrom[].secretKeyRef.name](#specpatchfromsecretkeyrefname)|string|✅|
 |[spec.patchFrom[].secretKeyRef.optional](#specpatchfromsecretkeyrefoptional)|boolean||
 |[spec.patchFrom[].value](#specpatchfromvalue)|string||
-|[spec.patchFrom[].value_as](#specpatchfromvalueas)|string|✅|
+|[spec.patchFrom[].value_as](#specpatchfromvalueas)|string||
 |[spec.realmRef](#specrealmref)|string||
 |[spec.userSecret](#specusersecret)|object||
 |[spec.userSecret.emailKey](#specusersecretemailkey)|string||
@@ -871,7 +871,7 @@ Type: object
 |[path](#specpatchfrompath)|string|✅|
 |[secretKeyRef](#specpatchfromsecretkeyref)|object||
 |[value](#specpatchfromvalue)|string||
-|[value_as](#specpatchfromvalueas)|string|✅|
+|[value_as](#specpatchfromvalueas)|string||
 
 *missing*
 

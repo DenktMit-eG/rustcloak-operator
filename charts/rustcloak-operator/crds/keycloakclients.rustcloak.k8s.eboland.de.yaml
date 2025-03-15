@@ -1151,6 +1151,7 @@ spec:
                     value:
                       type: string
                     value_as:
+                      default: string
                       enum:
                       - string
                       - number
@@ -1160,7 +1161,6 @@ spec:
                       type: string
                   required:
                   - path
-                  - value_as
                   type: object
                 type: array
               realmRef:
