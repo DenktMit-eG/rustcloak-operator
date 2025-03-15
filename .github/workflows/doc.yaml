@@ -2,7 +2,7 @@ name: Generate Documentation Page
 on:
   push:
     branches:
-      - main
+      - 'release/**'
     paths:
       - 'docs/**'
 
@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Gather mdbook-version
+        id: version
+        run: |
+          version="$(grep "^version\>" rustcloak-operator/Cargo.toml | cut -d '"' -f 2 | cut -d. -f 1,2)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v2
         with:
@@ -21,4 +26,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/book
+          destination_dir: docs/v${{ steps.version.outputs.version }}
           cname: rustcloak.withlazers.dev
