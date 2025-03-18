@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::Arc, time::Duration};
+use std::{cmp, collections::HashMap, sync::Arc, time::Duration};
 
 use crate::{
     app_id,
@@ -313,13 +313,16 @@ where
             .status()
             .and_then(|s| s.reconcile_attempts())
             .unwrap_or(0);
-        let backoff_seconds = if attempts < 10 {
+        let backoff = if attempts < 10 {
             // for the first 10 attempts, we retry every 10 seconds
-            10
+            Duration::from_secs(10)
         } else {
             // after that, we increase the backoff by 60 seconds for each attempt
-            (attempts - 9) * 60
+            Duration::from_secs((attempts - 9) * 60)
         };
-        Action::requeue(Duration::from_secs(backoff_seconds))
+        let hour = Duration::from_secs(3600);
+        let backoff = cmp::min(backoff, hour);
+
+        Action::requeue(backoff)
     }
 }
