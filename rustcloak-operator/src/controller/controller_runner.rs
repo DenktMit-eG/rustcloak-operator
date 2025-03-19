@@ -1,4 +1,4 @@
-use std::{cmp, collections::HashMap, sync::Arc, time::Duration};
+use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use crate::{
     app_id,
@@ -283,12 +283,7 @@ where
         let ns = resource.namespace();
         let name = resource.name_unchecked();
         let api: Api<C::Resource> = ApiExt::api(ctx.client.clone(), &ns);
-        let attempts = resource
-            .status()
-            .and_then(|s| s.reconcile_attempts())
-            .unwrap_or(0);
-        let mut status = <C::Resource as HasStatus>::Status::from_error(e);
-        status.set_reconcile_attempts(Some(attempts + 1));
+        let status = <C::Resource as HasStatus>::Status::from_error(e);
         log::error!(
             kind = C::Resource::kind(&()),
             namespace = resource.namespace().unwrap_or_default(),
@@ -305,24 +300,10 @@ where
         Ok(())
     }
     fn error_policy(
-        resource: Arc<C::Resource>,
+        _resource: Arc<C::Resource>,
         _error: &Error,
         _ctx: Arc<Self>,
     ) -> Action {
-        let attempts = resource
-            .status()
-            .and_then(|s| s.reconcile_attempts())
-            .unwrap_or(0);
-        let backoff = if attempts < 10 {
-            // for the first 10 attempts, we retry every 10 seconds
-            Duration::from_secs(10)
-        } else {
-            // after that, we increase the backoff by 60 seconds for each attempt
-            Duration::from_secs((attempts - 9) * 60)
-        };
-        let hour = Duration::from_secs(3600);
-        let backoff = cmp::min(backoff, hour);
-
-        Action::requeue(backoff)
+        Action::requeue(Duration::from_secs(5))
     }
 }

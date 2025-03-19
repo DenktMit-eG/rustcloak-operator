@@ -1,5 +1,5 @@
 env:
-  #RUST_LOG: rustcloak_operator=debug,reqwest=trace,warn
-  RUST_LOG: debug
+  RUST_LOG: rustcloak_operator=debug,reqwest=trace,warn
+  #RUST_LOG: debug
   RUST_BACKTRACE: "1"
 default: check

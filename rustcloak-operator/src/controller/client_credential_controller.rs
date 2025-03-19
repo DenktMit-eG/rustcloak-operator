@@ -101,10 +101,7 @@ impl LifecycleController for ClientCredentialController {
         }
 
         let Some(client_secret) = credential.value else {
-            // if there is no secret present in the response, let's assume that the client has a
-            // secret-less flow.
-            debug!("client has no secret, skipping secret creation");
-            return Ok(Action::await_change());
+            return Err(Error::CannotRequestClientSecret)?;
         };
         let owner_ref = resource.owner_ref(&()).unwrap();
         let data: BTreeMap<String, ByteString> = [
