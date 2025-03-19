@@ -1,7 +1,7 @@
 mod api_object;
 mod client_credentials;
 mod instance;
-mod patches;
+mod options;
 mod representation;
 mod role_mapping;
 mod status;
@@ -10,7 +10,7 @@ mod user_credentials;
 pub use api_object::*;
 pub use client_credentials::*;
 pub use instance::*;
-pub use patches::*;
+pub use options::*;
 pub use representation::*;
 pub use role_mapping::*;
 pub use status::*;

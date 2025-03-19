@@ -5,14 +5,13 @@ use crate::{
     marker::{HasMarker, ResourceMarker},
     refs::{HasParent, ref_type},
 };
-use k8s_openapi::api::core::v1::EnvVar;
 use kube::{CustomResource, Resource};
 use schemars::{JsonSchema, SchemaGenerator, schema::Schema};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use serde_with::DisplayFromStr;
 
-use super::InstanceRef;
+use super::{InstanceRef, KeycloakApiObjectOptions};
 
 both_scopes! {
     "KeycloakApiObject", "kcapi", "ClusterKeycloakApiObject", "ckcapi", ClusterKeycloakApiObjectSpec {
@@ -37,8 +36,6 @@ both_scopes! {
             pub endpoint: KeycloakApiEndpoint,
             pub immutable_payload: ImmutableString,
             pub payload: String,
-            #[serde(default, skip_serializing_if = "Vec::is_empty")]
-            pub vars: Vec<EnvVar>,
         }
     }
 }
@@ -127,8 +124,3 @@ ref_type!(
 );
 pub type ApiObjectRef =
     UntaggedEither<NamespacedApiObjectRef, ClusterApiObjectRef>;
-
-#[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
-#[serde(rename_all = "camelCase")]
-/// Options for the request to the Keycloak Admin API.
-pub struct KeycloakApiObjectOptions {}

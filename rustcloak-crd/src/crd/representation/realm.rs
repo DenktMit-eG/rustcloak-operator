@@ -4,10 +4,10 @@ use crate::marker::ResourceMarker;
 use crate::refs::ref_type;
 use crate::{InstanceRef, both_scopes};
 use crate::{
-    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    KeycloakApiStatusEndpoint, impl_object, inner_spec::HasInnerSpec,
-    schema_patch, traits::Endpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus, KeycloakApiStatusEndpoint,
+    impl_object, inner_spec::HasInnerSpec, schema_patch, traits::Endpoint,
 };
+use either::Either;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -26,14 +26,12 @@ both_scopes! {
         )]
         /// the KeycloakRealm resource
         pub struct KeycloakRealmSpec {
-            #[serde(default, skip_serializing_if = "Option::is_none")]
+            #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
             #[serde(flatten)]
             pub parent_ref: InstanceRef,
             #[schemars(schema_with = "schema")]
             pub definition: Option<RealmRepresentation>,
-            #[serde(default, flatten)]
-            pub patches: Option<KeycloakApiPatchList>,
         }
     }
 }
@@ -95,3 +93,19 @@ ref_type!(
     "The name of the cluster realm to which this object belongs to"
 );
 pub type RealmRef = UntaggedEither<NamespacedRealmRef, ClusterRealmRef>;
+impl RealmRef {
+    pub fn with_namespaced(name: String) -> Self {
+        Self {
+            inner: Either::Left(NamespacedRealmRef {
+                realm_ref: name.into(),
+            }),
+        }
+    }
+    pub fn with_clustered(name: String) -> Self {
+        Self {
+            inner: Either::Right(ClusterRealmRef {
+                cluster_realm_ref: name.into(),
+            }),
+        }
+    }
+}

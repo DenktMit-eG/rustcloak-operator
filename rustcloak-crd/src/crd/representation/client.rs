@@ -1,5 +1,5 @@
 use crate::{
-    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
+    KeycloakApiObjectOptions, KeycloakApiStatus,
     crd::namespace_scope,
     impl_object,
     refs::ref_type,
@@ -36,14 +36,12 @@ namespace_scope! {
         )]
         /// the KeycloakClient resource
         pub struct KeycloakClientSpec {
-            #[serde(default, skip_serializing_if = "Option::is_none")]
+            #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
             #[serde(flatten)]
             pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
             pub definition: Option<ClientRepresentation>,
-            #[serde(default, flatten)]
-            pub patches: Option<KeycloakApiPatchList>,
             pub client_secret: Option<KeycloakClientSecretReference>,
         }
     }

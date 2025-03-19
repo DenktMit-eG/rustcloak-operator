@@ -158,7 +158,6 @@ impl LifecycleController for LegacyUserController {
                     }),
                 },
                 definition: serde_json::from_value(definition)?,
-                patches: None,
                 user_secret,
             },
             status: None,

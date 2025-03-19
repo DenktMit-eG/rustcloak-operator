@@ -1,6 +1,6 @@
 use crate::{
-    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
+    impl_object, schema_patch, traits::impl_endpoint,
 };
 
 use crate::keycloak_types::AuthenticatorConfigRepresentation;
@@ -22,14 +22,12 @@ namespace_scope! {
         )]
         /// the KeycloakAuthenticatorConfig resource
         pub struct KeycloakAuthenticatorConfigSpec {
-            #[serde(default, skip_serializing_if = "Option::is_none")]
+            #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
             #[serde(flatten)]
             pub parent_ref: RealmRef,
             #[schemars(schema_with = "schema")]
             pub definition: Option<AuthenticatorConfigRepresentation>,
-            #[serde(default, flatten)]
-            pub patches: Option<KeycloakApiPatchList>,
         }
     }
 }

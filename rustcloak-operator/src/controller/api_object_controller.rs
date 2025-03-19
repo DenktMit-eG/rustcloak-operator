@@ -3,7 +3,7 @@ use crate::{
     controller::controller_runner::LifecycleController,
     error::{Error, Result},
     util::{
-        ApiExt, ApiFactory, ApiResolver, K8sKeycloakBuilder, RefWatcher,
+        ApiExt, ApiFactory, JsonPatcher, K8sKeycloakBuilder, RefWatcher,
         Retrieve, Retriever, ToPatch,
     },
 };
@@ -28,7 +28,7 @@ use log::warn;
 use rustcloak_crd::{
     ApiObjectRef, InstanceRef, KeycloakApiEndpointParent,
     KeycloakApiEndpointPath, KeycloakApiObjectSpec, KeycloakApiStatus,
-    KeycloakApiStatusEndpoint, KeycloakRestObject, KeycloakUserSpec,
+    KeycloakApiStatusEndpoint, KeycloakRestObject, KeycloakUserSpec, ValueFrom,
     inner_spec::HasInnerSpec, keycloak_types::UserRepresentation,
 };
 use serde::de::DeserializeOwned;
@@ -215,9 +215,31 @@ where
         let name = resource.name_unchecked();
         let api = ApiExt::<R>::api(client.clone(), &ns);
         let keycloak = Self::keycloak(client, &resource).await?;
-        let mut payload = resource.resolve(client).await?;
+        let spec = resource.inner_spec();
+        let mut payload = serde_yaml::from_str(&spec.payload)?;
+
+        if let Some(options) = spec.options.as_ref() {
+            let mut patcher =
+                JsonPatcher::with_client(client.clone(), ns.clone());
+            for patch in options.patch_from.iter() {
+                patcher.patch(&mut payload, patch).await?;
+
+                match &patch.value_from {
+                    ValueFrom::SecretKeyRef(secret_key_ref) => {
+                        self.secret_refs
+                            .add(&resource, [secret_key_ref.name.clone()]);
+                    }
+                    ValueFrom::ConfigMapKeyRef(config_map_key_ref) => {
+                        self.config_map_refs
+                            .add(&resource, [config_map_key_ref.name.clone()]);
+                    }
+                    ValueFrom::Value(_) => {}
+                }
+            }
+        }
+
         let immutable_payload: Value =
-            serde_yaml::from_str(&resource.inner_spec().immutable_payload.0)?;
+            serde_yaml::from_str(&spec.immutable_payload.0)?;
         payload.merge_from(immutable_payload.clone());
         let mut success = false;
         let kind = R::kind(&());
@@ -282,19 +304,6 @@ where
             )
             .await?;
         }
-
-        let ref_iter = resource
-            .inner_spec()
-            .vars
-            .iter()
-            .filter_map(|v| v.value_from.as_ref());
-        let secret_refs = ref_iter
-            .clone()
-            .filter_map(|v| v.secret_key_ref.as_ref().map(|r| &r.name));
-        self.secret_refs.add(&resource, secret_refs);
-        let config_map_refs = ref_iter
-            .filter_map(|v| v.config_map_key_ref.as_ref().map(|r| &r.name));
-        self.config_map_refs.add(&resource, config_map_refs);
 
         Ok(Action::await_change())
     }

@@ -1500,6 +1500,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "jsonpath-rust"
+version = "0.7.5"
+source = "git+https://github.com/besok/jsonpath-rust.git#bfaa1f238b795a4f51aae1010129de76020c2a7e"
+dependencies = [
+ "pest",
+ "pest_derive",
+ "regex",
+ "serde_json",
+ "thiserror 2.0.12",
+]
+
+[[package]]
 name = "jsonptr"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1595,7 +1607,7 @@ dependencies = [
  "hyper-rustls",
  "hyper-timeout",
  "hyper-util",
- "jsonpath-rust",
+ "jsonpath-rust 0.7.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "k8s-openapi",
  "kube-core",
  "pem",
@@ -2329,6 +2341,7 @@ dependencies = [
  "derive_builder",
  "either",
  "futures",
+ "jsonpath-rust 0.7.5 (git+https://github.com/besok/jsonpath-rust.git)",
  "k8s-openapi",
  "keycloak-client",
  "keycloak-crd",

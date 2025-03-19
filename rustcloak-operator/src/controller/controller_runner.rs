@@ -85,7 +85,7 @@ where
         Default + Eq + Hash + Clone + Debug + Unpin + From<()>,
     ApiExt<C::Resource>: ApiFactory<Resource = C::Resource>,
 {
-    fn setup_metrics() -> (IntCounter, IntCounter, IntCounter) {
+    fn setup_metrics() -> Result<(IntCounter, IntCounter, IntCounter)> {
         let pod_namespace = std::env::var("POD_NAMESPACE")
             .unwrap_or_else(|_| "<unknown>".to_string());
         let pod_name = std::env::var("POD_NAME")
@@ -105,8 +105,7 @@ where
             help: "Number of started reconciles".to_string(),
             const_labels: common_labels.clone(),
             variable_labels: vec![],
-        })
-        .unwrap();
+        })?;
         let prometheus_reconsiles_success = register_int_counter!(Opts {
             namespace: "rustcloak".to_string(),
             subsystem: "controller".to_string(),
@@ -114,8 +113,7 @@ where
             help: "Number of successful reconciles".to_string(),
             const_labels: common_labels.clone(),
             variable_labels: vec![],
-        })
-        .unwrap();
+        })?;
         let prometheus_reconsiles_fail = register_int_counter!(Opts {
             namespace: "rustcloak".to_string(),
             subsystem: "controller".to_string(),
@@ -123,31 +121,30 @@ where
             help: "Number of failed reconciles".to_string(),
             const_labels: common_labels.clone(),
             variable_labels: vec![],
-        })
-        .unwrap();
+        })?;
 
-        (
+        Ok((
             prometheus_reconsiles,
             prometheus_reconsiles_success,
             prometheus_reconsiles_fail,
-        )
+        ))
     }
-    pub fn new(controller: C, client: &kube::Client) -> Self {
+    pub fn create(controller: C, client: &kube::Client) -> Result<Self> {
         let client = client.clone();
 
         let (
             prometheus_reconsiles,
             prometheus_reconsiles_success,
             prometheus_reconsiles_fail,
-        ) = Self::setup_metrics();
+        ) = Self::setup_metrics()?;
 
-        ControllerRunner {
+        Ok(ControllerRunner {
             controller,
             client,
             prometheus_reconsiles,
             prometheus_reconsiles_success,
             prometheus_reconsiles_fail,
-        }
+        })
     }
 
     pub async fn run(self) -> Result<()> {
@@ -286,12 +283,7 @@ where
         let ns = resource.namespace();
         let name = resource.name_unchecked();
         let api: Api<C::Resource> = ApiExt::api(ctx.client.clone(), &ns);
-        let attempts = resource
-            .status()
-            .and_then(|s| s.reconcile_attempts())
-            .unwrap_or(0);
-        let mut status = <C::Resource as HasStatus>::Status::from_error(e);
-        status.set_reconcile_attempts(Some(attempts + 1));
+        let status = <C::Resource as HasStatus>::Status::from_error(e);
         log::error!(
             kind = C::Resource::kind(&()),
             namespace = resource.namespace().unwrap_or_default(),
@@ -308,21 +300,10 @@ where
         Ok(())
     }
     fn error_policy(
-        resource: Arc<C::Resource>,
+        _resource: Arc<C::Resource>,
         _error: &Error,
         _ctx: Arc<Self>,
     ) -> Action {
-        let attempts = resource
-            .status()
-            .and_then(|s| s.reconcile_attempts())
-            .unwrap_or(0);
-        let backoff_seconds = if attempts < 10 {
-            // for the first 10 attempts, we retry every 10 seconds
-            10
-        } else {
-            // after that, we increase the backoff by 60 seconds for each attempt
-            (attempts - 9) * 60
-        };
-        Action::requeue(Duration::from_secs(backoff_seconds))
+        Action::requeue(Duration::from_secs(5))
     }
 }

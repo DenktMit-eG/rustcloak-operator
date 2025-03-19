@@ -70,6 +70,12 @@ pub enum Error {
     NoResourcePath,
     #[error("Unsupported Workflow Method")]
     UnsupportedWorkflowMethod,
+    #[error("Prometheus Error: {0}")]
+    Prometheus(#[from] prometheus::Error),
+    #[error("JsonPath Error: {0}")]
+    JsonPathError(#[from] jsonpath_rust::JsonPathParserError),
+    #[error("Cannot request client secret from Keycloak")]
+    CannotRequestClientSecret,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

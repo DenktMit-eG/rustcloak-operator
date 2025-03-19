@@ -1,8 +1,8 @@
 use crate::either::UntaggedEither;
 use crate::keycloak_types::ProtocolMapperRepresentation;
 use crate::{
-    KeycloakApiObjectOptions, KeycloakApiPatchList, KeycloakApiStatus,
-    crd::namespace_scope, impl_object, schema_patch, traits::impl_endpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
+    impl_object, schema_patch, traits::impl_endpoint,
 };
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -23,15 +23,13 @@ namespace_scope! {
         )]
         /// the KeycloakProtocolMapper resource
         pub struct KeycloakProtocolMapperSpec {
-            #[serde(default, skip_serializing_if = "Option::is_none")]
+            #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
             #[serde(flatten)]
             /// the name of the kubernetes object that created the parent resource.
             pub parent_ref: ParentRef,
             #[schemars(schema_with = "schema")]
             pub definition: Option<ProtocolMapperRepresentation>,
-            #[serde(default, flatten)]
-            pub patches: Option<KeycloakApiPatchList>,
         }
     }
 }
