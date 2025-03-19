@@ -3,12 +3,6 @@ kind: KeycloakUser
 metadata:
   name: example-keycloakuser
 spec:
-  clusterRealmRef: example-keycloakrealm
+  clientRef: example-keycloakclient
   definition:
-    username: awesome-user
-    email: mail@example.com
     enabled: true
-    firstName: Awesome
-    lastName: User
-  userSecret:
-    secretName: example-keycloakuser

@@ -26,8 +26,6 @@ pub struct KeycloakApiStatusEndpoint {
 pub struct KeycloakApiStatus {
     #[serde(default, skip_serializing_if = "Option::is_none", flatten)]
     pub endpoint: Option<KeycloakApiStatusEndpoint>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub reconcile_attempts: Option<u64>,
     pub ready: bool,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub status: String,
@@ -44,7 +42,6 @@ impl KeycloakApiStatus {
             ready: true,
             status,
             message: "ok".to_string(),
-            reconcile_attempts: Some(0),
             ..Default::default()
         }
     }
