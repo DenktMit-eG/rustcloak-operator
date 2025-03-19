@@ -8,6 +8,7 @@ use crate::{
     impl_object, schema_patch,
     traits::{SecretKeyNames, impl_endpoint},
 };
+use either::Either;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -64,7 +65,19 @@ ref_type!(
     "The name of a KeycloakUser resource"
 );
 
-type ParentRef = UntaggedEither<RealmRef, ClientRef>;
+pub type ParentRef = UntaggedEither<RealmRef, ClientRef>;
+impl ParentRef {
+    pub fn with_realm(realm: RealmRef) -> Self {
+        Self {
+            inner: Either::Left(realm),
+        }
+    }
+    pub fn with_client(client: &str) -> Self {
+        Self {
+            inner: Either::Right(ClientRef::from(client.to_string())),
+        }
+    }
+}
 impl_object!("user" <ParentRef> / |d| {
     if d.parent_ref.is_left() {
         "users".into()

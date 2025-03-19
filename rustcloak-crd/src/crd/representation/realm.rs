@@ -7,6 +7,7 @@ use crate::{
     KeycloakApiObjectOptions, KeycloakApiStatus, KeycloakApiStatusEndpoint,
     impl_object, inner_spec::HasInnerSpec, schema_patch, traits::Endpoint,
 };
+use either::Either;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -92,3 +93,19 @@ ref_type!(
     "The name of the cluster realm to which this object belongs to"
 );
 pub type RealmRef = UntaggedEither<NamespacedRealmRef, ClusterRealmRef>;
+impl RealmRef {
+    pub fn with_namespaced(name: String) -> Self {
+        Self {
+            inner: Either::Left(NamespacedRealmRef {
+                realm_ref: name.into(),
+            }),
+        }
+    }
+    pub fn with_clustered(name: String) -> Self {
+        Self {
+            inner: Either::Right(ClusterRealmRef {
+                cluster_realm_ref: name.into(),
+            }),
+        }
+    }
+}
