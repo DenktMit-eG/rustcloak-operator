@@ -1,7 +1,11 @@
 [package]
 name = "utils"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme.workspace = true
+license.workspace = true
+edition.workspace = true
 
 [dependencies]
 rustcloak-crd = { path = "../rustcloak-crd" }

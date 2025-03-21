@@ -1,7 +1,11 @@
 [package]
 name = "rustcloak-crd"
-version = "0.2.5"
-edition = "2024"
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme.workspace = true
+license = "BSD-2-Clause"
+edition.workspace = true
 
 [dependencies]
 kube = { version = "0.99.0", features = ["derive"], default-features = false }
