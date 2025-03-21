@@ -2,7 +2,7 @@ use crate::error::{Error, Result};
 use std::{collections::HashMap, fmt::Debug};
 
 use super::{ApiExt, ApiFactory};
-use jsonpath_rust::{JsonPath, path::JsonLike};
+use jsonpath_rust::{JsonPath, query::queryable::Queryable};
 use k8s_openapi::{
     NamespaceResourceScope,
     api::core::v1::{ConfigMap, Secret, SecretKeySelector},
@@ -86,9 +86,9 @@ impl JsonPatcher {
         let Some(value) = self.get_value(&patch.value_from).await? else {
             return Ok(());
         };
-        let path = JsonPath::<Value>::try_from(patch.path.as_str())?;
-        for elem in path.find_as_path(obj) {
-            let Some(mut_ref) = obj.reference_mut(elem)? else {
+        let results = obj.query_only_path(&patch.path)?;
+        for path in results {
+            let Some(mut_ref) = obj.reference_mut(path) else {
                 continue;
             };
             match patch.value_as {
