@@ -66,6 +66,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: withlazers/container-action@main
       with:
+        token: ${{ secrets.GITHUB_TOKEN }}
         repository: rustcloak-operator
         username: gottox
         password: ${{ secrets.DOCKER_TOKEN }}
