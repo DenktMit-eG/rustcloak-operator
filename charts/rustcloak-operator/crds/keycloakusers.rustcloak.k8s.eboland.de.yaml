@@ -436,6 +436,10 @@ spec:
               userSecret:
                 nullable: true
                 properties:
+                  create:
+                    description: If set to false, rustcloak will not create the secret if it does not exist. Rustcloak will wait for the secret to be created by the user.
+                    nullable: true
+                    type: boolean
                   emailKey:
                     nullable: true
                     type: string

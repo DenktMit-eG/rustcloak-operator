@@ -91,6 +91,7 @@ async fn make_secret(
         username_key: Some(username_key),
         password_key: Some(password_key),
         email_key: None,
+        create: None,
     }))
 }
 

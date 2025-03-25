@@ -11,6 +11,7 @@ represents credentials for a keycloak user
 |[spec.instanceRef](#specinstanceref)|string||
 |[spec.resourcePath](#specresourcepath)|string|✅|
 |[spec.userSecret](#specusersecret)|object|✅|
+|[spec.userSecret.create](#specusersecretcreate)|boolean||
 |[spec.userSecret.emailKey](#specusersecretemailkey)|string||
 |[spec.userSecret.passwordKey](#specusersecretpasswordkey)|string||
 |[spec.userSecret.secretName](#specusersecretsecretname)|string|✅|
@@ -85,12 +86,21 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[create](#specusersecretcreate)|boolean||
 |[emailKey](#specusersecretemailkey)|string||
 |[passwordKey](#specusersecretpasswordkey)|string||
 |[secretName](#specusersecretsecretname)|string|✅|
 |[usernameKey](#specusersecretusernamekey)|string||
 
 *missing*
+
+---
+
+### spec.userSecret.create
+
+Type: boolean
+
+If set to false, rustcloak will not create the secret if it does not exist. Rustcloak will wait for the secret to be created by the user.
 
 ---
 
