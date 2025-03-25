@@ -82,9 +82,15 @@ impl LifecycleController for UserCredentialController {
 
         self.secret_refs.add(&resource, [&secret_name]);
 
-        let password = if let Some(secret) =
+        // If we don't allow the creation of new secrets, we fail if the secret
+        // doesn't exist. Doing it this way returns the actual kube.rs error.
+        let secret = if resource.spec.user_secret.create.unwrap_or(true) {
             secret_api.get_opt(secret_name).await?
-        {
+        } else {
+            Some(secret_api.get(secret_name).await?)
+        };
+
+        let password = if let Some(secret) = secret {
             if let [_, Some(password), _] =
                 secret.extract_opt(&Some(resource.spec.user_secret.clone()))
             {
