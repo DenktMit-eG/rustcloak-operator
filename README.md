@@ -84,9 +84,8 @@ Table of implemented endpoints:
 The AGPL license can seem daunting at first, so here are some
 clarifications on how we interpret it in Rustcloak:
 
-* **CRD Manifests**: Custom Resource Definitions (CRD) manifests are
-  configurations, not modifications of Rustcloak, and are therefore not
-  considered derived work under the AGPL.
+* **CRD Manifests**: Custom Resource Definitions (CRD) are managed in 
+  a dedicated crate licensed under BSD-2-clause.
 
 * **Using the Official Docker Image**: If you use the official
   Rustcloak Docker image without changes, you only need to provide a link

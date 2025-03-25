@@ -73,7 +73,7 @@ pub enum Error {
     #[error("Prometheus Error: {0}")]
     Prometheus(#[from] prometheus::Error),
     #[error("JsonPath Error: {0}")]
-    JsonPathError(#[from] jsonpath_rust::JsonPathParserError),
+    JsonPathError(#[from] jsonpath_rust::parser::errors::JsonPathError),
     #[error("Cannot request client secret from Keycloak")]
     CannotRequestClientSecret,
 }

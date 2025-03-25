@@ -2,6 +2,16 @@
 resolver = "2"
 members = ["rustcloak-operator", "rustcloak-crd", "utils"]
 
+[workspace.package]
+version = "0.2.5"
+authors = [
+  "Enno Boland <mail@eboland.de>",
+]
+repository = "https://github.com/withlazers/rustcloak-operator"
+readme = "README.md"
+license = "AGPL-3.0"
+edition = "2024"
+
 [profile.release]
 strip = true
 opt-level = "z"

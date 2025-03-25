@@ -18,6 +18,10 @@ use super::{ClientRef, RealmRef};
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakUserSecretReference {
+    /// If set to false, rustcloak will not create the secret if it does not exist.
+    /// Rustcloak will wait for the secret to be created by the user.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub create: Option<bool>,
     pub secret_name: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub email_key: Option<String>,

@@ -1,10 +1,14 @@
 [package]
 name = "rustcloak-crd"
-version = "0.2.5"
-edition = "2024"
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme.workspace = true
+license = "BSD-2-Clause"
+edition.workspace = true
 
 [dependencies]
-kube = { version = "0.98.0", features = ["derive"], default-features = false }
+kube = { version = "0.99.0", features = ["derive"], default-features = false }
 k8s-openapi = { version = "0.24.0", features = ["latest", "schemars"] }
 serde = { version = "1.0.219", features = ["derive"] }
 schemars = { version = "0.8.22", features = ["chrono", "either"] }
@@ -13,5 +17,5 @@ keycloak-types = { git = "https://github.com/Gottox/keycloak-client.rs" }
 #keycloak-types = { path = "../../keycloak-client.rs/keycloak-types" }
 either = { version = "1.15.0", features = ["serde"] }
 randstr = { git = "https://github.com/Gottox/randstr", branch = "main" }
-http = { version = "1.2.0", default-features = false }
+http = { version = "1.3.1", default-features = false }
 serde_with = "3.12.0"

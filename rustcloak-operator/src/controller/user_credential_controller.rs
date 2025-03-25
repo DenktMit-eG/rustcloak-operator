@@ -11,8 +11,8 @@ use async_trait::async_trait;
 use either::for_both;
 use k8s_openapi::{ByteString, api::core::v1::Secret};
 use kube::{
-    Api, Resource, ResourceExt,
-    api::{ObjectMeta, Patch, PatchParams},
+    Api, ResourceExt,
+    api::{ObjectMeta, PatchParams, PostParams},
     runtime::{Controller, controller::Action, watcher},
 };
 use randstr::randstr;
@@ -81,21 +81,24 @@ impl LifecycleController for UserCredentialController {
             .await?;
 
         self.secret_refs.add(&resource, [&secret_name]);
-        let password =
-            if let Some(secret) = secret_api.get_opt(secret_name).await? {
-                if let Ok([_, password, _]) =
-                    secret.extract(&Some(resource.spec.user_secret.clone()))
-                {
-                    Some(password)
-                } else {
-                    None
-                }
-            } else {
-                None
-            };
 
-        let password = if let Some(password) = password {
-            password
+        // If we don't allow the creation of new secrets, we fail if the secret
+        // doesn't exist. Doing it this way returns the actual kube.rs error.
+        let secret = if resource.spec.user_secret.create.unwrap_or(true) {
+            secret_api.get_opt(secret_name).await?
+        } else {
+            Some(secret_api.get(secret_name).await?)
+        };
+
+        let password = if let Some(secret) = secret {
+            if let [_, Some(password), _] =
+                secret.extract_opt(&Some(resource.spec.user_secret.clone()))
+            {
+                password
+            } else {
+                let [_, key, _] = resource.spec.user_secret.secret_key_names();
+                return Err(Error::MissingField(key.to_string()));
+            }
         } else {
             let user =
                 keycloak.get::<UserRepresentation>(resource_path).await?;
@@ -122,27 +125,26 @@ impl LifecycleController for UserCredentialController {
                 ),
             ]
             .into();
-            let owner_ref = resource.owner_ref(&()).unwrap();
 
             let secret = Secret {
                 data: Some(data),
                 metadata: ObjectMeta {
                     name: Some(secret_name.to_string()),
                     namespace: ns.clone(),
-                    owner_references: Some(vec![owner_ref]),
+                    labels: Some(
+                        [(
+                            app_id!("autoCreated").to_string(),
+                            "true".to_string(),
+                        )]
+                        .into(),
+                    ),
                     ..Default::default()
                 },
                 type_: Some("Opaque".to_string()),
                 ..Default::default()
             };
 
-            secret_api
-                .patch(
-                    secret_name,
-                    &PatchParams::apply(app_id!()),
-                    &Patch::Apply(secret),
-                )
-                .await?;
+            secret_api.create(&PostParams::default(), &secret).await?;
             password
         };
 
