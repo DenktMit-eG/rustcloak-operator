@@ -21,7 +21,8 @@ The helm-chart for the rustcloak-operator
 | application.logLevel | string | `"info"` | one of error, warn, info, debug, trace. Also supports the [env_logger format](https://docs.rs/env_logger/latest/env_logger/#enabling-logging) |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"withlazers/rustcloak-operator"` |  |
+| image.registry | string | `"ghcr.io/withlazers/rustcloak-operator"` |  |
+| image.repository | string | `"rustcloak-operator"` |  |
 | image.tag | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | livenessProbe.httpGet.path | string | `"/healthz"` |  |
