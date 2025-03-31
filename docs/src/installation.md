@@ -10,4 +10,4 @@ helm install rustcloak withlazers/rustcloak
 For more information on how to configure the helm chart, see the [helm chart documentation][2] on Github.
 
 [1]: https://charts.withlazers.dev
-[2]: https://github.com/withlazers/rustcloak-operator/tree/main/charts/rustcloak-operator
+[2]: https://github.com/DenktMit-eG/rustcloak-operator/tree/main/charts/rustcloak-operator
