@@ -3,7 +3,7 @@ name: rustcloak-operator
 description: |
   The helm-chart for the rustcloak-operator
 type: application
-icon: https://github.com/withlazers/rustcloak-operator/raw/refs/heads/main/icon.svg
+icon: https://github.com/DenktMit-eG/rustcloak-operator/raw/refs/heads/main/icon.svg
 home: https://rustcloak.withlazers.dev
 maintainers:
   - name: Enno Boland

@@ -1,5 +1,5 @@
 <div align="center">
-    <a href="/"><img src="https://github.com/withlazers/rustcloak-operator/raw/refs/heads/main/icon.svg"></a>
+    <a href="/"><img src="https://github.com/DenktMit-eG/rustcloak-operator/raw/refs/heads/main/icon.svg"></a>
 </div>
 
 # About

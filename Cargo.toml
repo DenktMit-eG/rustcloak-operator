@@ -7,7 +7,7 @@ version = "0.2.6"
 authors = [
   "Enno Boland <mail@eboland.de>",
 ]
-repository = "https://github.com/withlazers/rustcloak-operator"
+repository = "https://github.com/DenktMit-eG/rustcloak-operator"
 readme = "README.md"
 license = "AGPL-3.0"
 edition = "2024"

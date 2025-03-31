@@ -6,5 +6,5 @@ src = "src"
 title = "Rustcloak Operator"
 
 [output.html]
-git-repository-url = "https://github.com/withlazers/rustcloak-operator/"
-edit-url-template = "https://github.com/withlazers/rustcloak-operator/edit/main/docs/{path}"
+git-repository-url = "https://github.com/DenktMit-eG/rustcloak-operator/"
+edit-url-template = "https://github.com/DenktMit-eG/rustcloak-operator/edit/main/docs/{path}"
