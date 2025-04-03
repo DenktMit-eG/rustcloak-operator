@@ -89,7 +89,7 @@ clarifications on how we interpret it in Rustcloak:
 
 * **Using the Official Docker Image**: If you use the official
   Rustcloak Docker image without changes, you only need to provide a link
-  to [the repository](https://github.com/withlazers/rustcloak-operator)
+  to [the repository](https://github.com/DenktMit-eG/rustcloak-operator)
   to those who directly interact with Rustcloak itself. This does not
   include the end-users of applications managed by Rustcloak, but may apply
   if you provide rustcloak as a service to others.
@@ -102,4 +102,4 @@ clarifications on how we interpret it in Rustcloak:
   Rustcloak binary, AGPL requirements mean you may need to share the
   modified source code with users who interact with your modified
   instance. To simplify compliance, we encourage contributing these
-  changes back to the [upstream project](https://github.com/withlazers/rustcloak-operator).
+  changes back to the [upstream project](https://github.com/DenktMit-eG/rustcloak-operator).
