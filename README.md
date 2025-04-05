@@ -8,8 +8,6 @@ This is yet another operator for Keycloak. The novelty of this one is
 that it covers the whole Keycloak API and therefore allows to manage
 keycloak instances completely as Kubernetes resources.
 
-Currently rustcloak does not support subgroups.
-
 rustcloak supports a legacy mode where it can be used as a drop-in
 replacement for the
 [keycloak-realm-operator](https://github.com/keycloak/keycloak-realm-operator).
