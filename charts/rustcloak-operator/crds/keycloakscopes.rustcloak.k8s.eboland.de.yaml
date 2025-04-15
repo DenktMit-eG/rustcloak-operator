@@ -37,6 +37,7 @@ spec:
             description: the KeycloakScope resource
             properties:
               clientRef:
+                description: The kubernetes resources name of a KeycloakClient object.
                 type: string
                 x-kubernetes-validations:
                 - message: Value is immutable

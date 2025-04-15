@@ -7,5 +7,6 @@ spec:
   definition:
     clientId: example-client
     name: An example client
+    serviceAccountsEnabled: true
   clientSecret:
     secretName: example-keycloakclient

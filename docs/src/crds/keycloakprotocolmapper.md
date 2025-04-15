@@ -69,7 +69,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-*missing*
+The kubernetes resources name of a KeycloakClient object.
 
 ---
 

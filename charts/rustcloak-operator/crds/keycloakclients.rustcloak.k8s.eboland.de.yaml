@@ -121,8 +121,17 @@ spec:
 
                                 <details><summary>JSON schema</summary>
 
-                                ```json { "type": "object", "properties": { "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "type": { "type": "string" } } } ``` </details>
+                                ```json { "type": "object", "properties": { "groupType": { "type": "string" }, "scopeAliases": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "type": { "type": "string" } } } ``` </details>
                               properties:
+                                groupType:
+                                  nullable: true
+                                  type: string
+                                scopeAliases:
+                                  additionalProperties:
+                                    items:
+                                      type: string
+                                    type: array
+                                  type: object
                                 scopes:
                                   items:
                                     type: string
