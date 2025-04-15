@@ -12,5 +12,5 @@ rustcloak-crd = { path = "../rustcloak-crd" }
 serde_yaml = "0.9.34"
 crd2md = { git = "https://github.com/withlazers/crd2md.git" }
 #crd2md = { path = "../../crd2md/crd2md" }
-clap = { version = "4.5.32", features = ["derive", "help", "std"], default-features = false }
+clap = { version = "4.5.36", features = ["derive", "help", "std"], default-features = false }
 kube = { version = "0.99.0", features = ["derive"], default-features = false }

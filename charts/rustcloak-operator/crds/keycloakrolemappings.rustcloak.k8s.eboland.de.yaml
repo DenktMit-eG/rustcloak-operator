@@ -46,12 +46,13 @@ spec:
             - required:
               - roleRef
             - required:
-              - role
+              - keycloakRole
             properties:
-              role:
+              keycloakRole:
                 description: The name of the role in keycloak. Mutual exclusive with roleRef
                 properties:
                   clientRef:
+                    description: The kubernetes resources name of a KeycloakClient object.
                     type: string
                     x-kubernetes-validations:
                     - message: Value is immutable
@@ -63,7 +64,7 @@ spec:
                 - name
                 type: object
               roleRef:
-                description: The kubernetes resource name of a KeycloakRole object. Mutual exclusive with roleName
+                description: The kubernetes resource name of a KeycloakRole object. Mutual exclusive with keycloakRole
                 type: string
                 x-kubernetes-validations:
                 - message: Value is immutable

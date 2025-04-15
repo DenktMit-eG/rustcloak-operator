@@ -7,9 +7,9 @@ represents a mapping between a user or group and a client
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
-|[spec.role](#specrole)|object||
-|[spec.role.clientRef](#specroleclientref)|string||
-|[spec.role.name](#specrolename)|string|✅|
+|[spec.keycloakRole](#speckeycloakrole)|object||
+|[spec.keycloakRole.clientRef](#speckeycloakroleclientref)|string||
+|[spec.keycloakRole.name](#speckeycloakrolename)|string|✅|
 |[spec.roleRef](#specroleref)|string||
 |[spec.subject](#specsubject)|object|✅|
 |[spec.subject.groupRef](#specsubjectgroupref)|string||
@@ -37,7 +37,7 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[role](#specrole)|object||
+|[keycloakRole](#speckeycloakrole)|object||
 |[roleRef](#specroleref)|string||
 |[subject](#specsubject)|object|✅|
 
@@ -45,20 +45,20 @@ Type: object
 
 ---
 
-### spec.role
+### spec.keycloakRole
 
 Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[clientRef](#specroleclientref)|string||
-|[name](#specrolename)|string|✅|
+|[clientRef](#speckeycloakroleclientref)|string||
+|[name](#speckeycloakrolename)|string|✅|
 
 The name of the role in keycloak. Mutual exclusive with roleRef
 
 ---
 
-### spec.role.clientRef
+### spec.keycloakRole.clientRef
 
 Type: string
 
@@ -66,11 +66,11 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-*missing*
+The kubernetes resources name of a KeycloakClient object.
 
 ---
 
-### spec.role.name
+### spec.keycloakRole.name
 
 Type: string
 
@@ -86,7 +86,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-The kubernetes resource name of a KeycloakRole object. Mutual exclusive with roleName
+The kubernetes resource name of a KeycloakRole object. Mutual exclusive with keycloakRole
 
 ---
 

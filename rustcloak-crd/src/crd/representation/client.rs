@@ -167,4 +167,9 @@ schema_patch!(KeycloakClientSpec: |s| {
     client_schema(s);
 });
 
-ref_type!(ClientRef, client_ref, KeycloakClient);
+ref_type!(
+    ClientRef,
+    client_ref,
+    KeycloakClient,
+    "The kubernetes resources name of a KeycloakClient object."
+);

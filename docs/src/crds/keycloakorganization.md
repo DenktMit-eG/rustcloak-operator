@@ -55,6 +55,7 @@ resource to define an Organisation within a [KeyclaokRealm](./keycloakrealm.md)
 |[spec.definition.members[].credentials[].credentialData](#specdefinitionmemberscredentialscredentialdata)|string||
 |[spec.definition.members[].credentials[].device](#specdefinitionmemberscredentialsdevice)|string||
 |[spec.definition.members[].credentials[].digits](#specdefinitionmemberscredentialsdigits)|integer||
+|[spec.definition.members[].credentials[].federationLink](#specdefinitionmemberscredentialsfederationlink)|string||
 |[spec.definition.members[].credentials[].hashIterations](#specdefinitionmemberscredentialshashiterations)|integer||
 |[spec.definition.members[].credentials[].hashedSaltedValue](#specdefinitionmemberscredentialshashedsaltedvalue)|string||
 |[spec.definition.members[].credentials[].id](#specdefinitionmemberscredentialsid)|string||
@@ -598,6 +599,7 @@ Type: object
 |[credentialData](#specdefinitionmemberscredentialscredentialdata)|string||
 |[device](#specdefinitionmemberscredentialsdevice)|string||
 |[digits](#specdefinitionmemberscredentialsdigits)|integer||
+|[federationLink](#specdefinitionmemberscredentialsfederationlink)|string||
 |[hashIterations](#specdefinitionmemberscredentialshashiterations)|integer||
 |[hashedSaltedValue](#specdefinitionmemberscredentialshashedsaltedvalue)|string||
 |[id](#specdefinitionmemberscredentialsid)|string||
@@ -614,7 +616,7 @@ CredentialRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } ``` </details>
+```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "federationLink": { "type": "string" }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } ``` </details>
 
 ---
 
@@ -669,6 +671,14 @@ Type: string
 ### spec.definition.members[].credentials[].digits
 
 Type: integer
+
+*missing*
+
+---
+
+### spec.definition.members[].credentials[].federationLink
+
+Type: string
 
 *missing*
 

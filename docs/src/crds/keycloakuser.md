@@ -29,6 +29,7 @@ resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)
 |[spec.definition.credentials[].credentialData](#specdefinitioncredentialscredentialdata)|string||
 |[spec.definition.credentials[].device](#specdefinitioncredentialsdevice)|string||
 |[spec.definition.credentials[].digits](#specdefinitioncredentialsdigits)|integer||
+|[spec.definition.credentials[].federationLink](#specdefinitioncredentialsfederationlink)|string||
 |[spec.definition.credentials[].hashIterations](#specdefinitioncredentialshashiterations)|integer||
 |[spec.definition.credentials[].hashedSaltedValue](#specdefinitioncredentialshashedsaltedvalue)|string||
 |[spec.definition.credentials[].id](#specdefinitioncredentialsid)|string||
@@ -141,7 +142,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-*missing*
+The kubernetes resources name of a KeycloakClient object.
 
 ---
 
@@ -318,6 +319,7 @@ Type: object
 |[credentialData](#specdefinitioncredentialscredentialdata)|string||
 |[device](#specdefinitioncredentialsdevice)|string||
 |[digits](#specdefinitioncredentialsdigits)|integer||
+|[federationLink](#specdefinitioncredentialsfederationlink)|string||
 |[hashIterations](#specdefinitioncredentialshashiterations)|integer||
 |[hashedSaltedValue](#specdefinitioncredentialshashedsaltedvalue)|string||
 |[id](#specdefinitioncredentialsid)|string||
@@ -334,7 +336,7 @@ CredentialRepresentation
 
 <details><summary>JSON schema</summary>
 
-```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } ``` </details>
+```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "federationLink": { "type": "string" }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } ``` </details>
 
 ---
 
@@ -389,6 +391,14 @@ Type: string
 ### spec.definition.credentials[].digits
 
 Type: integer
+
+*missing*
+
+---
+
+### spec.definition.credentials[].federationLink
+
+Type: string
 
 *missing*
 

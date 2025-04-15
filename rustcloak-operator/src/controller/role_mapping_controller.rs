@@ -17,7 +17,7 @@ use kube::{
 use log::warn;
 use rustcloak_crd::{
     ClientRef, InstanceRef, KeycloakApiStatus, KeycloakApiStatusEndpoint,
-    KeycloakRoleMapping, RoleLink, RoleMappingParentRef, RoleNameOrRef,
+    KeycloakRoleMapping, KeycloakRoleRef, RoleMappingParentRef, RoleNameOrRef,
     RoleRef,
     keycloak_types::{RoleRepresentation, UserRepresentation},
     traits::Endpoint,
@@ -49,15 +49,15 @@ impl RoleMappingController {
         client: &kube::Client,
         ns: &Option<String>,
     ) -> Result<String> {
-        let client_ref = match &resource.spec.role_ref {
+        let client_ref = match &resource.spec.role {
             RoleNameOrRef::RoleRef(role_ref) => {
                 let role =
                     Retriever::<RoleRef>::get(client.clone(), role_ref, ns)
                         .await?;
                 role.spec.parent_ref.inner.right()
             }
-            RoleNameOrRef::Role {
-                role: RoleLink { client_ref, .. },
+            RoleNameOrRef::KeycloakRole {
+                keycloak_role: KeycloakRoleRef { client_ref, .. },
             } => client_ref.clone(),
         };
         let Some(client_ref) = client_ref else {
@@ -118,7 +118,7 @@ impl RoleMappingController {
         client: &kube::Client,
         ns: &Option<String>,
     ) -> Result<Option<RoleRepresentation>> {
-        match &resource.spec.role_ref {
+        match &resource.spec.role {
             RoleNameOrRef::RoleRef(role_ref) => {
                 let role =
                     Retriever::<RoleRef>::get(client.clone(), role_ref, ns)
@@ -127,8 +127,8 @@ impl RoleMappingController {
                     role.resource_path().ok_or(Error::MissingResourcePath)?;
                 Ok(Some(keycloak.get::<RoleRepresentation>(path).await?))
             }
-            RoleNameOrRef::Role {
-                role: RoleLink { name, .. },
+            RoleNameOrRef::KeycloakRole {
+                keycloak_role: KeycloakRoleRef { name, .. },
             } => {
                 let available_path = format!("{resource_path}{endpoint}");
                 let available_roles = keycloak

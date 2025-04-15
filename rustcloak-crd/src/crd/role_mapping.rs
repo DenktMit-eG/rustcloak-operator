@@ -5,9 +5,11 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug, JsonSchema)]
-pub struct RoleLink {
+#[serde(rename_all = "camelCase")]
+pub struct KeycloakRoleRef {
     /// The name of the role in keycloak
     pub name: String,
+
     /// If null the role is treated as a realm role, otherwise it is treated as a client role
     /// of the referenced kuberntes KeycloakClient resource.
     #[serde(flatten)]
@@ -17,10 +19,13 @@ pub struct RoleLink {
 #[derive(Serialize, Deserialize, Clone, Debug, JsonSchema)]
 #[serde(rename_all = "camelCase", untagged)]
 pub enum RoleNameOrRef {
-    /// The kubernetes resource name of a KeycloakRole object. Mutual exclusive with roleName
+    /// The kubernetes resource name of a KeycloakRole object. Mutual exclusive with keycloakRole
     RoleRef(RoleRef),
     /// The name of the role in keycloak. Mutual exclusive with roleRef
-    Role { role: RoleLink },
+    KeycloakRole {
+        #[serde(rename = "keycloakRole")]
+        keycloak_role: KeycloakRoleRef,
+    },
 }
 
 namespace_scope! {
@@ -50,7 +55,7 @@ namespace_scope! {
             /// The object that the role mapping is for
             pub subject: RoleMappingParentRef,
             #[serde(flatten)]
-            pub role_ref: RoleNameOrRef,
+            pub role: RoleNameOrRef,
         }
     }
 }
