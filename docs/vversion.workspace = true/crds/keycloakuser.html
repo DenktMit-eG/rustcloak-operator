@@ -125,10 +125,11 @@
         <!-- Custom theme stylesheets -->
 
 
-        <!-- Provide site root to javascript -->
+        <!-- Provide site root and default themes to javascript -->
         <script>
-            var path_to_root = "../";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc.js"></script>
@@ -138,8 +139,8 @@
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -153,7 +154,8 @@
 
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script>
-            var theme;
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             const html = document.documentElement;
@@ -166,8 +168,8 @@
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var sidebar = null;
-            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -203,6 +205,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
@@ -220,10 +223,10 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
-                        <a href="https://github.com/withlazers/rustcloak-operator/" title="Git repository" aria-label="Git repository">
+                        <a href="https://github.com/DenktMit-eG/rustcloak-operator/" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/withlazers/rustcloak-operator/edit/main/docs/src/crds/keycloakuser.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/DenktMit-eG/rustcloak-operator/edit/main/docs/src/crds/keycloakuser.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -279,6 +282,7 @@
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialscredentialdata">spec.definition.credentials[].credentialData</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialsdevice">spec.definition.credentials[].device</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialsdigits">spec.definition.credentials[].digits</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsfederationlink">spec.definition.credentials[].federationLink</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialshashiterations">spec.definition.credentials[].hashIterations</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialshashedsaltedvalue">spec.definition.credentials[].hashedSaltedValue</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialsid">spec.definition.credentials[].id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -385,7 +389,7 @@
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>The kubernetes resources name of a KeycloakClient object.</p>
 <hr />
 <h3 id="specclusterrealmref"><a class="header" href="#specclusterrealmref">spec.clusterRealmRef</a></h3>
 <p>Type: string</p>
@@ -500,6 +504,7 @@
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialscredentialdata">credentialData</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialsdevice">device</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialsdigits">digits</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="#specdefinitioncredentialsfederationlink">federationLink</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialshashiterations">hashIterations</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialshashedsaltedvalue">hashedSaltedValue</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specdefinitioncredentialsid">id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -515,7 +520,7 @@
 </div>
 <p>CredentialRepresentation</p>
 <details><summary>JSON schema</summary>
-<p><code>json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } </code> </details></p>
+<p><code>json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "federationLink": { "type": "string" }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } </code> </details></p>
 <hr />
 <h3 id="specdefinitioncredentialsalgorithm"><a class="header" href="#specdefinitioncredentialsalgorithm">spec.definition.credentials[].algorithm</a></h3>
 <p>Type: string</p>
@@ -543,6 +548,10 @@
 <hr />
 <h3 id="specdefinitioncredentialsdigits"><a class="header" href="#specdefinitioncredentialsdigits">spec.definition.credentials[].digits</a></h3>
 <p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialsfederationlink"><a class="header" href="#specdefinitioncredentialsfederationlink">spec.definition.credentials[].federationLink</a></h3>
+<p>Type: string</p>
 <p><em>missing</em></p>
 <hr />
 <h3 id="specdefinitioncredentialshashiterations"><a class="header" href="#specdefinitioncredentialshashiterations">spec.definition.credentials[].hashIterations</a></h3>

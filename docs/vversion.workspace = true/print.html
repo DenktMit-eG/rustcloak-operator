@@ -126,10 +126,11 @@
         <!-- Custom theme stylesheets -->
 
 
-        <!-- Provide site root to javascript -->
+        <!-- Provide site root and default themes to javascript -->
         <script>
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc.js"></script>
@@ -139,8 +140,8 @@
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -154,7 +155,8 @@
 
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script>
-            var theme;
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             const html = document.documentElement;
@@ -167,8 +169,8 @@
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var sidebar = null;
-            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -204,6 +206,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
@@ -221,7 +224,7 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
-                        <a href="https://github.com/withlazers/rustcloak-operator/" title="Git repository" aria-label="Git repository">
+                        <a href="https://github.com/DenktMit-eG/rustcloak-operator/" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
 
@@ -251,7 +254,7 @@
                 <div id="content" class="content">
                     <main>
                         <div align="center">
-    <a href="/"><img src="https://github.com/withlazers/rustcloak-operator/raw/refs/heads/main/icon.svg"></a>
+    <a href="/"><img src="https://github.com/DenktMit-eG/rustcloak-operator/raw/refs/heads/main/icon.svg"></a>
 </div>
 <h1 id="about"><a class="header" href="#about">About</a></h1>
 <p>The rustcloak operator is a Kubernetes operator that manages Keycloak instances
@@ -281,7 +284,7 @@ efforts to provide an operator.</p>
 <pre><code class="language-shell">helm repo add withlazers https://charts.withlazers.dev
 helm install rustcloak withlazers/rustcloak
 </code></pre>
-<p>For more information on how to configure the helm chart, see the <a href="https://github.com/withlazers/rustcloak-operator/tree/main/charts/rustcloak-operator">helm chart documentation</a> on Github.</p>
+<p>For more information on how to configure the helm chart, see the <a href="https://github.com/DenktMit-eG/rustcloak-operator/tree/main/charts/rustcloak-operator">helm chart documentation</a> on Github.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
 <h2 id="pre-requisites"><a class="header" href="#pre-requisites">Pre-requisites</a></h2>
 <ul>
@@ -294,7 +297,7 @@ helm install rustcloak withlazers/rustcloak
 helm install rustcloak withlazers/rustcloak-operator
 </code></pre>
 <h2 id="install-keycloak"><a class="header" href="#install-keycloak">Install Keycloak</a></h2>
-<p>Prepare a <code>keycloak-values.yaml</code> file with the following content:<sup class="footnote-reference"><a href="#1">1</a></sup></p>
+<p>Prepare a <code>keycloak-values.yaml</code> file with the following content:<sup class="footnote-reference" id="fr-1-1"><a href="#footnote-1">1</a></sup></p>
 <pre><code class="language-yaml">command:
   - "/opt/keycloak/bin/kc.sh"
   - "start"
@@ -422,11 +425,12 @@ metadata:
   uid: e1d607fa-8dc6-4db9-bf6b-764d18fc0a57
 type: Opaque
 </code></pre>
-<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>This example an adapted version from the <a href="https://github.com/codecentric/helm-charts/tree/master/charts/keycloakx#tldr">codecentric helmchart documentation</a></p>
-</div>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h1>
-<p><code>Rustcloak</code> itself is configured using <a href="https://github.com/withlazers/rustcloak-operator/tree/main/charts/rustcloak-operator">Helm Charts</a></p>
+<hr>
+<ol class="footnote-definition"><li id="footnote-1">
+<p>This example an adapted version from the <a href="https://github.com/codecentric/helm-charts/tree/master/charts/keycloakx#tldr">codecentric helmchart documentation</a> <a href="#fr-1-1">↩</a></p>
+</li>
+</ol><div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h1>
+<p><code>Rustcloak</code> itself is configured using <a href="https://github.com/DenktMit-eG/rustcloak-operator/tree/main/charts/rustcloak-operator">Helm Charts</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="legacy-mode"><a class="header" href="#legacy-mode">Legacy Mode</a></h1>
 <p>Rustcloak supports a mode called "legacy mode" in which it can control
 the CRDs of the <a href="https://github.com/keycloak/keycloak-realm-operator">keycloak-realms-operator</a>.</p>
@@ -7730,6 +7734,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialscredentialdata">spec.definition.members[].credentials[].credentialData</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialsdevice">spec.definition.members[].credentials[].device</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialsdigits">spec.definition.members[].credentials[].digits</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialsfederationlink">spec.definition.members[].credentials[].federationLink</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialshashiterations">spec.definition.members[].credentials[].hashIterations</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialshashedsaltedvalue">spec.definition.members[].credentials[].hashedSaltedValue</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialsid">spec.definition.members[].credentials[].id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -8095,6 +8100,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialscredentialdata">credentialData</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialsdevice">device</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialsdigits">digits</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialsfederationlink">federationLink</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialshashiterations">hashIterations</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialshashedsaltedvalue">hashedSaltedValue</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#specdefinitionmemberscredentialsid">id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -8110,7 +8116,7 @@ spec:
 </div>
 <p>CredentialRepresentation</p>
 <details><summary>JSON schema</summary>
-<p><code>json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } </code> </details></p>
+<p><code>json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "federationLink": { "type": "string" }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } </code> </details></p>
 <hr />
 <h3 id="specdefinitionmemberscredentialsalgorithm"><a class="header" href="#specdefinitionmemberscredentialsalgorithm">spec.definition.members[].credentials[].algorithm</a></h3>
 <p>Type: string</p>
@@ -8138,6 +8144,10 @@ spec:
 <hr />
 <h3 id="specdefinitionmemberscredentialsdigits"><a class="header" href="#specdefinitionmemberscredentialsdigits">spec.definition.members[].credentials[].digits</a></h3>
 <p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitionmemberscredentialsfederationlink"><a class="header" href="#specdefinitionmemberscredentialsfederationlink">spec.definition.members[].credentials[].federationLink</a></h3>
+<p>Type: string</p>
 <p><em>missing</em></p>
 <hr />
 <h3 id="specdefinitionmemberscredentialshashiterations"><a class="header" href="#specdefinitionmemberscredentialshashiterations">spec.definition.members[].credentials[].hashIterations</a></h3>
@@ -8625,7 +8635,7 @@ spec:
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>The kubernetes resources name of a KeycloakClient object.</p>
 <hr />
 <h3 id="specclientscoperef"><a class="header" href="#specclientscoperef">spec.clientScopeRef</a></h3>
 <p>Type: string</p>
@@ -12609,7 +12619,7 @@ spec:
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>The kubernetes resources name of a KeycloakClient object.</p>
 <hr />
 <h3 id="specdefinition-13"><a class="header" href="#specdefinition-13">spec.definition</a></h3>
 <p>Type: object</p>
@@ -13123,7 +13133,7 @@ spec:
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>The kubernetes resources name of a KeycloakClient object.</p>
 <hr />
 <h3 id="specclusterrealmref-9"><a class="header" href="#specclusterrealmref-9">spec.clusterRealmRef</a></h3>
 <p>Type: string</p>
@@ -13472,7 +13482,7 @@ spec:
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>The kubernetes resources name of a KeycloakClient object.</p>
 <hr />
 <h3 id="specdefinition-15"><a class="header" href="#specdefinition-15">spec.definition</a></h3>
 <p>Type: object</p>
@@ -13916,6 +13926,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialscredentialdata">spec.definition.credentials[].credentialData</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialsdevice">spec.definition.credentials[].device</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialsdigits">spec.definition.credentials[].digits</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialsfederationlink">spec.definition.credentials[].federationLink</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialshashiterations">spec.definition.credentials[].hashIterations</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialshashedsaltedvalue">spec.definition.credentials[].hashedSaltedValue</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialsid">spec.definition.credentials[].id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -14022,7 +14033,7 @@ spec:
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>The kubernetes resources name of a KeycloakClient object.</p>
 <hr />
 <h3 id="specclusterrealmref-10"><a class="header" href="#specclusterrealmref-10">spec.clusterRealmRef</a></h3>
 <p>Type: string</p>
@@ -14137,6 +14148,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialscredentialdata">credentialData</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialsdevice">device</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialsdigits">digits</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialsfederationlink">federationLink</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialshashiterations">hashIterations</a></td><td style="text-align: left">integer</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialshashedsaltedvalue">hashedSaltedValue</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#specdefinitioncredentialsid">id</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -14152,7 +14164,7 @@ spec:
 </div>
 <p>CredentialRepresentation</p>
 <details><summary>JSON schema</summary>
-<p><code>json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } </code> </details></p>
+<p><code>json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "federationLink": { "type": "string" }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } </code> </details></p>
 <hr />
 <h3 id="specdefinitioncredentialsalgorithm"><a class="header" href="#specdefinitioncredentialsalgorithm">spec.definition.credentials[].algorithm</a></h3>
 <p>Type: string</p>
@@ -14180,6 +14192,10 @@ spec:
 <hr />
 <h3 id="specdefinitioncredentialsdigits"><a class="header" href="#specdefinitioncredentialsdigits">spec.definition.credentials[].digits</a></h3>
 <p>Type: integer</p>
+<p><em>missing</em></p>
+<hr />
+<h3 id="specdefinitioncredentialsfederationlink"><a class="header" href="#specdefinitioncredentialsfederationlink">spec.definition.credentials[].federationLink</a></h3>
+<p>Type: string</p>
 <p><em>missing</em></p>
 <hr />
 <h3 id="specdefinitioncredentialshashiterations"><a class="header" href="#specdefinitioncredentialshashiterations">spec.definition.credentials[].hashIterations</a></h3>
@@ -15822,9 +15838,9 @@ spec:
 <p>represents a mapping between a user or group and a client</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrole">spec.role</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleclientref">spec.role.clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrolename">spec.role.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakrole">spec.keycloakRole</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakroleclientref">spec.keycloakRole.clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakrolename">spec.keycloakRole.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleref">spec.roleRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubject">spec.subject</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubjectgroupref">spec.subject.groupRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -15849,31 +15865,31 @@ spec:
 <h3 id="spec-22"><a class="header" href="#spec-22">spec</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrole">role</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakrole">keycloakRole</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleref">roleRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubject">subject</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
 <hr />
-<h3 id="specrole"><a class="header" href="#specrole">spec.role</a></h3>
+<h3 id="speckeycloakrole"><a class="header" href="#speckeycloakrole">spec.keycloakRole</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrolename">name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakroleclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakrolename">name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
 <p>The name of the role in keycloak. Mutual exclusive with roleRef</p>
 <hr />
-<h3 id="specroleclientref"><a class="header" href="#specroleclientref">spec.role.clientRef</a></h3>
+<h3 id="speckeycloakroleclientref"><a class="header" href="#speckeycloakroleclientref">spec.keycloakRole.clientRef</a></h3>
 <p>Type: string</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p><em>missing</em></p>
+<p>The kubernetes resources name of a KeycloakClient object.</p>
 <hr />
-<h3 id="specrolename"><a class="header" href="#specrolename">spec.role.name</a></h3>
+<h3 id="speckeycloakrolename"><a class="header" href="#speckeycloakrolename">spec.keycloakRole.name</a></h3>
 <p>Type: string</p>
 <p>The name of the role in keycloak</p>
 <hr />
@@ -15883,7 +15899,7 @@ spec:
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p>The kubernetes resource name of a KeycloakRole object. Mutual exclusive with roleName</p>
+<p>The kubernetes resource name of a KeycloakRole object. Mutual exclusive with keycloakRole</p>
 <hr />
 <h3 id="specsubject"><a class="header" href="#specsubject">spec.subject</a></h3>
 <p>Type: object</p>
