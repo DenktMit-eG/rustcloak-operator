@@ -8,7 +8,7 @@ application:
   legacy: false
 
 image:
-  registry: ghcr.io/DenktMit-eG/rustcloak-operator
+  registry: ghcr.io/denktmit-eg/rustcloak-operator
   repository: rustcloak-operator
   pullPolicy: IfNotPresent
   tag: ""
