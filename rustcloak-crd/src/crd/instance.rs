@@ -53,11 +53,6 @@ both_scopes! {
     "KeycloakInstance", "kci", "ClusterKeycloakInstance", "ckci", ClusterKeycloakInstanceSpec {
         #[kube(
             doc = "This resource makes a Keycloak instance known to the operator",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
             printcolumn = r#"{
                     "name":"Base URL",
                     "type":"string",
@@ -80,7 +75,7 @@ impl KeycloakInstanceSpec {
         self.token.as_ref()
     }
 
-    pub fn token_secret_name(&self, name: String) -> String {
+    pub fn token_secret_name(&self, name: &str) -> String {
         if let Some(name) =
             self.token.as_ref().and_then(|x| x.secret_name.as_ref())
         {

@@ -3,7 +3,14 @@ use clap::Parser;
 use futures::{FutureExt, future};
 use kube::Resource;
 use log::info;
-use rustcloak_crd::*;
+use rustcloak_crd::{
+    KeycloakClientCredential, KeycloakRoleMapping, KeycloakUserCredential,
+    api_object::{ClusterKeycloakApiObject, KeycloakApiObject},
+    client::KeycloakClient,
+    instance::{ClusterKeycloakInstance, KeycloakInstance},
+    map_all_crds, map_rest_crds,
+    user::KeycloakUser,
+};
 use rustcloak_operator::{
     controller::{
         ApiObjectController, ClientCredentialController, ControllerRunner,
@@ -151,8 +158,18 @@ async fn async_main() -> Result<()> {
         .contains(&KeycloakClientCredential::kind(&()).to_string())
     {
         controllers.extend([
-            ControllerRunner::create(ClientCredentialController::default(), &client)?.run().boxed(),
-            ConverterController::<KeycloakClient, KeycloakClientCredential>::new(&client).run().boxed()
+            ControllerRunner::create(
+                ClientCredentialController::default(),
+                &client,
+            )?
+            .run()
+            .boxed(),
+            ConverterController::<
+                KeycloakClient,
+                KeycloakClientCredential,
+            >::new(&client)
+            .run()
+            .boxed(),
         ])
     }
 

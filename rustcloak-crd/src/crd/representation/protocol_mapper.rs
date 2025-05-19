@@ -8,18 +8,13 @@ use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use super::{ClientRef, ClientScopeRef};
+use super::{client::ClientRef, client_scope::ClientScopeRef};
 
 namespace_scope! {
     "KeycloakProtocolMapper",
     "kcpm" {
         #[kube(
             doc = "resource to define a Protocol Mapper within either a [KeycloakClient](./keycloakclient.md) or a [KeycloakClientScope](./keycloakclientscope.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakProtocolMapper resource
         pub struct KeycloakProtocolMapperSpec {

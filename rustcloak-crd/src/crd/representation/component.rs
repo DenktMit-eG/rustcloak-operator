@@ -8,17 +8,12 @@ use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use super::RealmRef;
+use super::realm::RealmRef;
 
 namespace_scope! {
     "KeycloakComponent", "kcco" {
         #[kube(
             doc = "resource to define a Component within a [KeycloakRealm](./keycloakrealm.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakComponent resource
         pub struct KeycloakComponentSpec {

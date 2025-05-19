@@ -15,8 +15,10 @@ use kube::{
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::either::UntaggedEither;
 use rustcloak_crd::{
-    KeycloakClient, KeycloakClientSecretReference, KeycloakClientSpec,
-    KeycloakRealm,
+    client::{
+        KeycloakClient, KeycloakClientSecretReference, KeycloakClientSpec,
+    },
+    realm::KeycloakRealm,
 };
 use std::sync::Arc;
 

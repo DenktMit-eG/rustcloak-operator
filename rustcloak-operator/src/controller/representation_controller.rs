@@ -17,11 +17,12 @@ use kube::{
 };
 use log::debug;
 use rustcloak_crd::{
-    ClusterKeycloakApiObject, KeycloakApiEndpoint, KeycloakApiEndpointPath,
     KeycloakApiStatus, KeycloakRestObject,
-};
-use rustcloak_crd::{
-    KeycloakApiObject, KeycloakApiObjectSpec,
+    api_object::{
+        ClusterKeycloakApiObject, ClusterKeycloakApiObjectSpec,
+        KeycloakApiEndpoint, KeycloakApiEndpointPath, KeycloakApiObject,
+        KeycloakApiObjectSpec,
+    },
     inner_spec::HasInnerSpec,
     refs::{HasParent, Ref},
     traits::Endpoint,
@@ -59,7 +60,7 @@ pub trait ApiObjectHelper {
 }
 
 macro_rules! impl_api_object_helper {
-    ($scope:ident, $type:ident) => {
+    ($scope:ident, $type:ident, $convert:expr) => {
         impl ApiObjectHelper for $scope {
             type ApiObject = $type;
 
@@ -69,7 +70,7 @@ macro_rules! impl_api_object_helper {
             ) -> Self::ApiObject {
                 Self::ApiObject {
                     metadata: meta,
-                    spec: spec.into(),
+                    spec: $convert(spec),
                     status: None,
                 }
             }
@@ -83,8 +84,12 @@ macro_rules! impl_api_object_helper {
         }
     };
 }
-impl_api_object_helper!(ClusterResourceScope, ClusterKeycloakApiObject);
-impl_api_object_helper!(NamespaceResourceScope, KeycloakApiObject);
+impl_api_object_helper!(
+    ClusterResourceScope,
+    ClusterKeycloakApiObject,
+    |spec| ClusterKeycloakApiObjectSpec { spec }
+);
+impl_api_object_helper!(NamespaceResourceScope, KeycloakApiObject, |spec| spec);
 
 #[async_trait::async_trait]
 impl<R> LifecycleController for RepresentationController<R>
@@ -169,6 +174,11 @@ where
                 .instance_ref()
                 .ok_or(Error::MissingInstanceReference)?
         };
+        let realm_ref = if let Some(realm_ref) = resource.realm_ref() {
+            realm_ref
+        } else {
+            parent.realm_ref().ok_or(Error::MissingRealmRef)?
+        };
         let init_workflow = resource.inner_spec().init_workflow();
         let resource_path = format!(
             "{}/{}",
@@ -177,6 +187,7 @@ where
         );
 
         let endpoint = KeycloakApiEndpoint {
+            realm: Some(realm_ref),
             instance_ref: instance_ref.clone(),
             init_workflow: Some(init_workflow.workflow),
             path_def: KeycloakApiEndpointPath::Path(resource_path.into()),

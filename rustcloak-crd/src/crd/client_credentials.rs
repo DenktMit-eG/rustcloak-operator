@@ -1,4 +1,7 @@
-use super::{InstanceRef, KeycloakClientSecretReference, namespace_scope};
+use super::{
+    client::KeycloakClientSecretReference, instance::InstanceRef,
+    namespace_scope,
+};
 use crate::KeycloakApiStatus;
 use kube::CustomResource;
 use schemars::JsonSchema;
@@ -8,11 +11,6 @@ namespace_scope! {
     "KeycloakClientCredential", "kccc" {
         #[kube(
             doc = "represents credentials for a keycloak client",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
             printcolumn = r#"{
                     "name":"Path",
                     "type":"string",

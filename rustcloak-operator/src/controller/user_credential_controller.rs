@@ -17,7 +17,8 @@ use kube::{
 };
 use randstr::randstr;
 use rustcloak_crd::{
-    InstanceRef, KeycloakApiStatus, KeycloakUserCredential,
+    KeycloakApiStatus, KeycloakUserCredential,
+    instance::InstanceRef,
     keycloak_types::{CredentialRepresentation, UserRepresentation},
     traits::SecretKeyNames,
 };

@@ -33,3 +33,4 @@ keycloak-client = { git = "https://github.com/Gottox/keycloak-client.rs" }
 shorter-bounds = "0.1.1"
 prometheus = { version = "0.14.0", default-features = false }
 jsonpath-rust = "1.0.1"
+urlencoding = "2.1.3"

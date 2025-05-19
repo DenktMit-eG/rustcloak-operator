@@ -1,3 +1,4 @@
+use super::realm::RealmRef;
 use crate::keycloak_types::RequiredActionProviderRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
@@ -7,17 +8,10 @@ use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use super::RealmRef;
-
 namespace_scope! {
     "KeycloakRequiredActionProvider", "kcrap" {
         #[kube(
             doc = "resource to define an Required Action Provider within a [KeyclaokRealm](./keycloakrealm.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakRequiredActionProvider resource
         pub struct KeycloakRequiredActionProviderSpec {

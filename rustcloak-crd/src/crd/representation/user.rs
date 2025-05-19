@@ -1,3 +1,4 @@
+use super::{client::ClientRef, realm::RealmRef};
 use crate::InitWorkflow;
 use crate::either::UntaggedEither;
 use crate::keycloak_types::UserRepresentation;
@@ -12,8 +13,6 @@ use either::Either;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
-use super::{ClientRef, RealmRef};
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
@@ -35,11 +34,6 @@ namespace_scope! {
     "KeycloakUser", "kcu" {
         #[kube(
             doc = "resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakUser resource
         pub struct KeycloakUserSpec {

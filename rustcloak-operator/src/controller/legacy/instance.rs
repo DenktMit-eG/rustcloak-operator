@@ -14,7 +14,7 @@ use kube::{
     runtime::{Controller, controller::Action},
 };
 use kube::{Resource, ResourceExt};
-use rustcloak_crd::{
+use rustcloak_crd::instance::{
     KeycloakInstance, KeycloakInstanceCredentialReference, KeycloakInstanceSpec,
 };
 use std::sync::Arc;

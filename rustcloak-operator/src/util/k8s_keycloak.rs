@@ -16,7 +16,7 @@ use kube::{
     runtime::reflector::ObjectRef,
 };
 use log::{debug, warn};
-use rustcloak_crd::{KeycloakInstance, traits::SecretKeyNames};
+use rustcloak_crd::{instance::KeycloakInstance, traits::SecretKeyNames};
 use std::{
     borrow::Cow,
     collections::{BTreeMap, HashMap},
@@ -36,13 +36,14 @@ fn token_into_secret<R: Instance>(
     oauth2_token: &OAuth2Token,
     instance: &R,
 ) -> Result<Secret> {
+    let name = instance.name_unchecked();
     let spec = instance.inner_spec();
     let token =
         ByteString(serde_yaml::to_string(&oauth2_token.token)?.into_bytes());
     let expires = oauth2_token
         .expires
         .map(|x| ByteString(x.to_rfc3339().into_bytes()));
-    let name = spec.token_secret_name(instance.name_unchecked());
+    let name = spec.token_secret_name(&name);
     let [token_key, expires_key] = spec.token.secret_key_names();
     let ns = instance.namespace();
     let owner_ref = instance.owner_ref(&()).unwrap();
@@ -139,12 +140,11 @@ impl<'a> K8sKeycloakBuilder<'a> {
 
     pub async fn with_token(self) -> Result<ApiClient> {
         let spec = &self.instance.spec;
+        let name = self.instance.name_unchecked();
         let ns = self.instance.namespace();
         let kind = &self.kind;
         let secret_api = ApiExt::<Secret>::api(self.client.clone(), &ns);
-        let token_secret_name = spec
-            .token_secret_name(self.instance.name_unchecked())
-            .to_string();
+        let token_secret_name = spec.token_secret_name(&name).to_string();
         debug!(
             name = self.instance.name_unchecked(),
             namespace = ns,

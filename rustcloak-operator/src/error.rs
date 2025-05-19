@@ -1,5 +1,5 @@
 use k8s_openapi::api::core::v1::{ConfigMapKeySelector, SecretKeySelector};
-use rustcloak_crd::InstanceRef;
+use rustcloak_crd::instance::InstanceRef;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -22,6 +22,10 @@ pub enum Error {
     NoVar(String),
     #[error("No token")]
     NoToken,
+    #[error("No such client on keycloak: {0}")]
+    NoSuchClientOnKeycloak(String),
+    #[error("No such role on keycloak: {0}")]
+    NoSuchRoleOnKeycloak(String),
     #[error("No key {} in Secret {}", r.key, r.name)]
     NoKeyInSecret { r: SecretKeySelector },
     #[error("No key {} in ConfigMap {}", r.key, r.name)]
@@ -50,6 +54,8 @@ pub enum Error {
     UnknownSecretType(String),
     #[error("No Client Id")]
     NoClientId,
+    #[error("No such Keycloak Client: {0}")]
+    NoSuchKeycloakClient(String),
     #[error("No Legacy Instance found")]
     LegacyInstanceNotFound,
     #[error("Ambiguous Legacy Instances found")]
@@ -76,6 +82,16 @@ pub enum Error {
     JsonPathError(#[from] jsonpath_rust::parser::errors::JsonPathError),
     #[error("Cannot request client secret from Keycloak")]
     CannotRequestClientSecret,
+    #[error("Cannot find role: {0:?}")]
+    NoRole(rustcloak_crd::RoleNameOrRef),
+    #[error("No Endpoint")]
+    NoEndpoint,
+    #[error("Missing Realm Ref")]
+    MissingRealmRef,
+    #[error("No Realm")]
+    NoRealm,
+    #[error("Missing Name")]
+    MissingName,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

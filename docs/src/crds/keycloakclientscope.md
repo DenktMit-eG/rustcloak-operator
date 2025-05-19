@@ -48,6 +48,9 @@ resource to define a Scope within a [KeycloakClient](./keycloakclient.md)
 |[status.instance.instanceRef](#statusinstanceinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
+|[status.realm](#statusrealm)|object||
+|[status.realm.clusterRealmRef](#statusrealmclusterrealmref)|string||
+|[status.realm.realmRef](#statusrealmrealmref)|string||
 |[status.resourcePath](#statusresourcepath)|string||
 |[status.status](#statusstatus)|string||
 
@@ -384,6 +387,7 @@ Type: object
 |[instance](#statusinstance)|object||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
+|[realm](#statusrealm)|object||
 |[resourcePath](#statusresourcepath)|string||
 |[status](#statusstatus)|string||
 
@@ -497,6 +501,43 @@ Type: string
 Type: boolean
 
 *missing*
+
+---
+
+### status.realm
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[clusterRealmRef](#statusrealmclusterrealmref)|string||
+|[realmRef](#statusrealmrealmref)|string||
+
+Optional for backwards compatibility
+
+---
+
+### status.realm.clusterRealmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster realm to which this object belongs to
+
+---
+
+### status.realm.realmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the realm to which this object belongs to
 
 ---
 

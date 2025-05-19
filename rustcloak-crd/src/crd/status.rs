@@ -1,8 +1,7 @@
+use super::{instance::InstanceRef, realm::RealmRef};
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::Time;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
-use super::InstanceRef;
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
@@ -19,6 +18,9 @@ pub struct KeycloakApiCondition {
 pub struct KeycloakApiStatusEndpoint {
     pub resource_path: String,
     pub instance: InstanceRef,
+    // TODO: Replace Option<RealmRef> by RealmRef
+    /// Optional for backwards compatibility
+    pub realm: Option<RealmRef>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]

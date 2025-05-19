@@ -1,3 +1,4 @@
+use super::identity_provider::IdentityProviderRef;
 use crate::keycloak_types::IdentityProviderMapperRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
@@ -7,18 +8,11 @@ use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use super::IdentityProviderRef;
-
 namespace_scope! {
     "KeycloakIdentityProviderMapper",
     "kcipm" {
         #[kube(
             doc = "resource to define a identity provider mapper within a [KeyclaokIdentityProvider](./keycloakidentityprovider.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakIdentityProviderMapper resource
         pub struct KeycloakIdentityProviderMapperSpec {

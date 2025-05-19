@@ -19,9 +19,9 @@ use kube::{
 use log::{info, warn};
 use rustcloak_crd::traits::Endpoint;
 use rustcloak_crd::{
-    KeycloakApiStatus, KeycloakClient, KeycloakClientCredential,
-    KeycloakClientCredentialSpec, KeycloakUser, KeycloakUserCredential,
-    KeycloakUserCredentialSpec,
+    KeycloakApiStatus, KeycloakClientCredential, KeycloakClientCredentialSpec,
+    KeycloakUserCredential, KeycloakUserCredentialSpec, client::KeycloakClient,
+    user::KeycloakUser,
 };
 use serde::Serialize;
 use serde::de::DeserializeOwned;

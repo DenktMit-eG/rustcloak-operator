@@ -101,6 +101,28 @@ spec:
                     x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
+                  realm:
+                    anyOf:
+                    - required:
+                      - realmRef
+                    - required:
+                      - clusterRealmRef
+                    description: Optional for backwards compatibility
+                    nullable: true
+                    properties:
+                      clusterRealmRef:
+                        description: The name of the cluster realm to which this object belongs to
+                        type: string
+                        x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                      realmRef:
+                        description: The name of the realm to which this object belongs to
+                        type: string
+                        x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    type: object
                 type: object
               immutablePayload:
                 type: string
@@ -227,6 +249,28 @@ spec:
                 type: string
               ready:
                 type: boolean
+              realm:
+                anyOf:
+                - required:
+                  - realmRef
+                - required:
+                  - clusterRealmRef
+                description: Optional for backwards compatibility
+                nullable: true
+                properties:
+                  clusterRealmRef:
+                    description: The name of the cluster realm to which this object belongs to
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                  realmRef:
+                    description: The name of the realm to which this object belongs to
+                    type: string
+                    x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                type: object
               resourcePath:
                 type: string
               status:

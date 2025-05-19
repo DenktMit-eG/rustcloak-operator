@@ -17,7 +17,8 @@ use kube::{
 };
 use log::debug;
 use rustcloak_crd::{
-    InstanceRef, KeycloakApiStatus, KeycloakClientCredential,
+    KeycloakApiStatus, KeycloakClientCredential,
+    instance::InstanceRef,
     keycloak_types::{ClientRepresentation, CredentialRepresentation},
     traits::SecretKeyNames,
 };
