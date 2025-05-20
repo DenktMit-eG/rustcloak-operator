@@ -4,7 +4,6 @@ use crate::app_id;
 use crate::error::Result;
 use crate::util::{ApiExt, ApiFactory};
 use async_trait::async_trait;
-use either::Either;
 use k8s_openapi::serde_json;
 use keycloak_crd::KeycloakClient as LegacyClient;
 use kube::api::{ObjectMeta, Patch, PatchParams};
@@ -66,6 +65,15 @@ impl LifecycleController for LegacyClientController {
         let owner_ref = resource.owner_ref(&()).unwrap();
         let api = ApiExt::<KeycloakClient>::api(client.clone(), &ns);
         let definition = serde_json::to_value(&resource.spec.client)?;
+        let parent_ref = find_name::<KeycloakRealm>(
+            client,
+            &ns,
+            &resource.spec.realm_selector,
+            &resource.metadata,
+            "realm_ref",
+        )
+        .await?
+        .map_either(|l| l.into(), |r| r.into());
         let instance = KeycloakClient {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
@@ -77,19 +85,7 @@ impl LifecycleController for LegacyClientController {
             },
             spec: KeycloakClientSpec {
                 options: None,
-                parent_ref: UntaggedEither {
-                    inner: Either::Left(
-                        find_name::<KeycloakRealm>(
-                            client,
-                            &ns,
-                            &resource.spec.realm_selector,
-                            &resource.metadata,
-                            "realm_ref",
-                        )
-                        .await?
-                        .into(),
-                    ),
-                },
+                parent_ref: UntaggedEither { inner: parent_ref },
                 definition: serde_json::from_value(definition)?,
                 client_secret: Some(KeycloakClientSecretReference {
                     secret_name: format!("keycloak-client-secret-{}", name),

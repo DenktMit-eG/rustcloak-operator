@@ -5,6 +5,7 @@ use crate::error::Error;
 use crate::util::ApiExt;
 use crate::util::ApiFactory;
 use case_style::CaseStyle;
+use either::Either;
 use k8s_openapi::NamespaceResourceScope;
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::LabelSelector;
 use kube::Resource;
@@ -30,8 +31,8 @@ fn find_variants(
     snake_case: &str,
 ) -> Option<String> {
     let style = CaseStyle::from_snakecase(snake_case);
-    let variants = [snake_case, &style.to_camelcase()]
-        .map(|x| app_id!("").to_string() + x);
+    let variants =
+        [snake_case, &style.to_camelcase()].map(|x| format!(app_id!("{}"), x));
 
     annotations
         .iter()
@@ -44,7 +45,7 @@ pub async fn find_name<T>(
     selector: &LabelSelector,
     meta: &ObjectMeta,
     parent_ref_ident: &str,
-) -> Result<String>
+) -> Result<Either<String, String>>
 where
     T: Resource<Scope = NamespaceResourceScope, DynamicType = ()>
         + Clone
@@ -57,7 +58,15 @@ where
         .as_ref()
         .and_then(|x| find_variants(x, parent_ref_ident))
     {
-        return Ok(name.clone());
+        return Ok(Either::Left(name.clone()));
+    }
+    let parent_cluster_ref_ident = format!("cluster_{parent_ref_ident}");
+    if let Some(name) = meta
+        .annotations
+        .as_ref()
+        .and_then(|x| find_variants(x, &parent_cluster_ref_ident))
+    {
+        return Ok(Either::Right(name.clone()));
     }
 
     let api = ApiExt::<T>::api(client.clone(), namespace);
@@ -72,6 +81,6 @@ where
     } else if list.items.len() > 1 {
         Err(Error::AmbiguousLegacyInstancesFound)
     } else {
-        Ok(list.items[0].name_unchecked())
+        Ok(Either::Left(list.items[0].name_unchecked()))
     }
 }
