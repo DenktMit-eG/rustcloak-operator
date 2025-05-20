@@ -18,7 +18,7 @@ use kube::{
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::{
     KeycloakRealm, KeycloakUser, KeycloakUserSecretReference, KeycloakUserSpec,
-    either::UntaggedEither,
+    RealmRef, either::UntaggedEither,
 };
 use std::sync::Arc;
 
@@ -125,17 +125,29 @@ impl LifecycleController for LegacyUserController {
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let name = resource.name_unchecked();
-        let namespace = resource.namespace();
+        let ns = resource.namespace();
         let owner_ref = resource.owner_ref(&()).unwrap();
-        let api = ApiExt::<KeycloakUser>::api(client.clone(), &namespace);
+        let api = ApiExt::<KeycloakUser>::api(client.clone(), &ns);
         let mut resource = Arc::unwrap_or_clone(resource);
         let user_secret = make_secret(client, &mut resource).await?;
 
         let definition = serde_json::to_value(&resource.spec.user)?;
+        let parent_ref: RealmRef = RealmRef {
+            inner: find_name::<KeycloakRealm>(
+                client,
+                &ns,
+                &resource.spec.realm_selector,
+                &resource.metadata,
+                "realm_ref",
+            )
+            .await?
+            .map_either(|l| l.into(), |r| r.into()),
+        };
+
         let instance = KeycloakUser {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
-                namespace: namespace.clone(),
+                namespace: ns.clone(),
                 owner_references: Some(vec![owner_ref]),
                 labels: resource.meta().labels.clone(),
                 annotations: resource.meta().annotations.clone(),
@@ -144,19 +156,7 @@ impl LifecycleController for LegacyUserController {
             spec: KeycloakUserSpec {
                 options: None,
                 parent_ref: UntaggedEither {
-                    inner: Either::Left(UntaggedEither {
-                        inner: Either::Left(
-                            find_name::<KeycloakRealm>(
-                                client,
-                                &namespace,
-                                &resource.spec.realm_selector,
-                                &resource.metadata,
-                                "realm_ref",
-                            )
-                            .await?
-                            .into(),
-                        ),
-                    }),
+                    inner: Either::Left(parent_ref),
                 },
                 definition: serde_json::from_value(definition)?,
                 user_secret,

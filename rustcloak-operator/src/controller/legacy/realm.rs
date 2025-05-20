@@ -6,7 +6,6 @@ use crate::{
     util::{ApiExt, ApiFactory},
 };
 use async_trait::async_trait;
-use either::Either;
 use k8s_openapi::serde_json;
 use keycloak_crd::KeycloakRealm as LegacyRealm;
 use kube::api::{ObjectMeta, Patch, PatchParams};
@@ -66,6 +65,16 @@ impl LifecycleController for LegacyRealmController {
         let owner_ref = resource.owner_ref(&()).unwrap();
         let api = ApiExt::<KeycloakRealm>::api(client.clone(), &ns);
         let definition = serde_json::to_value(&resource.spec.realm)?;
+        let parent_ref = find_name::<KeycloakInstance>(
+            client,
+            &ns,
+            &resource.spec.instance_selector,
+            &resource.metadata,
+            "instance_ref",
+        )
+        .await?
+        .map_either(|l| l.into(), |r| r.into());
+
         let instance = KeycloakRealm {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
@@ -77,19 +86,7 @@ impl LifecycleController for LegacyRealmController {
             },
             spec: KeycloakRealmSpec {
                 options: None,
-                parent_ref: UntaggedEither {
-                    inner: Either::Left(
-                        find_name::<KeycloakInstance>(
-                            client,
-                            &ns,
-                            &resource.spec.instance_selector,
-                            &resource.metadata,
-                            "instance_ref",
-                        )
-                        .await?
-                        .into(),
-                    ),
-                },
+                parent_ref: UntaggedEither { inner: parent_ref },
                 definition: serde_json::from_value(definition)?,
             },
             status: None,
