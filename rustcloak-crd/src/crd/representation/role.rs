@@ -1,4 +1,4 @@
-use super::{ClientRef, RealmRef};
+use super::{client::ClientRef, realm::RealmRef};
 use crate::either::UntaggedEither;
 use crate::keycloak_types::RoleRepresentation;
 use crate::refs::ref_type;
@@ -14,11 +14,6 @@ namespace_scope! {
     "KeycloakRole", "kcr" {
         #[kube(
             doc = "resource to define a Protocol Mapper within either a [KeycloakRealm](./keycloakrealm.md) or a [KeycloakClient](./keycloakclient.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakRole resource
         pub struct KeycloakRoleSpec {
@@ -32,8 +27,7 @@ namespace_scope! {
     }
 }
 
-type ParentRef = UntaggedEither<RealmRef, ClientRef>;
-
+pub type ParentRef = UntaggedEither<RealmRef, ClientRef>;
 impl_object!("role" <ParentRef> / |_d| {"roles"} / "name" for KeycloakRoleSpec => RoleRepresentation);
 
 ref_type!(

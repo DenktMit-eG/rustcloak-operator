@@ -7,9 +7,10 @@ represents a mapping between a user or group and a client
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[spec](#spec)|object|✅|
-|[spec.keycloakRole](#speckeycloakrole)|object||
-|[spec.keycloakRole.clientRef](#speckeycloakroleclientref)|string||
-|[spec.keycloakRole.name](#speckeycloakrolename)|string|✅|
+|[spec.role](#specrole)|object||
+|[spec.role.clientId](#specroleclientid)|string||
+|[spec.role.clientRef](#specroleclientref)|string||
+|[spec.role.name](#specrolename)|string|✅|
 |[spec.roleRef](#specroleref)|string||
 |[spec.subject](#specsubject)|object|✅|
 |[spec.subject.groupRef](#specsubjectgroupref)|string||
@@ -26,6 +27,9 @@ represents a mapping between a user or group and a client
 |[status.instance.instanceRef](#statusinstanceinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
+|[status.realm](#statusrealm)|object||
+|[status.realm.clusterRealmRef](#statusrealmclusterrealmref)|string||
+|[status.realm.realmRef](#statusrealmrealmref)|string||
 |[status.resourcePath](#statusresourcepath)|string||
 |[status.status](#statusstatus)|string||
 
@@ -37,7 +41,7 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[keycloakRole](#speckeycloakrole)|object||
+|[role](#specrole)|object||
 |[roleRef](#specroleref)|string||
 |[subject](#specsubject)|object|✅|
 
@@ -45,20 +49,29 @@ Type: object
 
 ---
 
-### spec.keycloakRole
+### spec.role
 
 Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
-|[clientRef](#speckeycloakroleclientref)|string||
-|[name](#speckeycloakrolename)|string|✅|
+|[clientId](#specroleclientid)|string||
+|[clientRef](#specroleclientref)|string||
+|[name](#specrolename)|string|✅|
 
 The name of the role in keycloak. Mutual exclusive with roleRef
 
 ---
 
-### spec.keycloakRole.clientRef
+### spec.role.clientId
+
+Type: string
+
+The client id of the the client.
+
+---
+
+### spec.role.clientRef
 
 Type: string
 
@@ -70,7 +83,7 @@ The kubernetes resources name of a KeycloakClient object.
 
 ---
 
-### spec.keycloakRole.name
+### spec.role.name
 
 Type: string
 
@@ -86,7 +99,7 @@ Type: string
 |:--------------|:------------|
 |self == oldSelf|Value is immutable|
 
-The kubernetes resource name of a KeycloakRole object. Mutual exclusive with keycloakRole
+The kubernetes resource name of a KeycloakRole object. Mutual exclusive with role
 
 ---
 
@@ -99,7 +112,7 @@ Type: object
 |[groupRef](#specsubjectgroupref)|string||
 |[userRef](#specsubjectuserref)|string||
 
-The object that the role mapping is for
+The object that :the role mapping is for
 
 ---
 
@@ -137,6 +150,7 @@ Type: object
 |[instance](#statusinstance)|object||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
+|[realm](#statusrealm)|object||
 |[resourcePath](#statusresourcepath)|string||
 |[status](#statusstatus)|string||
 
@@ -250,6 +264,43 @@ Type: string
 Type: boolean
 
 *missing*
+
+---
+
+### status.realm
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[clusterRealmRef](#statusrealmclusterrealmref)|string||
+|[realmRef](#statusrealmrealmref)|string||
+
+Optional for backwards compatibility
+
+---
+
+### status.realm.clusterRealmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster realm to which this object belongs to
+
+---
+
+### status.realm.realmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the realm to which this object belongs to
 
 ---
 

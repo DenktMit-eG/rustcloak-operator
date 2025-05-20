@@ -20,8 +20,8 @@ use kube::{
 use log::warn;
 use randstr::randstr;
 use rustcloak_crd::{
-    KeycloakApiObject, KeycloakApiStatus, KeycloakInstanceSpec,
-    inner_spec::HasInnerSpec, traits::SecretKeyNames,
+    KeycloakApiStatus, api_object::KeycloakApiObject, inner_spec::HasInnerSpec,
+    instance::KeycloakInstanceSpec, traits::SecretKeyNames,
 };
 use serde::de::DeserializeOwned;
 

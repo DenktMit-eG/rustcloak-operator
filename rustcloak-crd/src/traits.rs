@@ -1,4 +1,6 @@
-use crate::{InstanceRef, KeycloakApiStatusEndpoint};
+use crate::{
+    KeycloakApiStatusEndpoint, instance::InstanceRef, realm::RealmRef,
+};
 use std::iter;
 
 pub trait SecretKeyNames<const N: usize> {
@@ -33,6 +35,9 @@ pub trait Endpoint {
     }
     fn resource_path(&self) -> Option<&str> {
         self.endpoint().map(|e| e.resource_path.as_str())
+    }
+    fn realm_ref(&self) -> Option<RealmRef> {
+        self.endpoint().and_then(|e| e.realm.clone())
     }
 }
 

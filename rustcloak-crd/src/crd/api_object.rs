@@ -1,3 +1,4 @@
+use super::{KeycloakApiObjectOptions, instance::InstanceRef, realm::RealmRef};
 use crate::{
     ImmutableString, KeycloakApiStatus,
     crd::both_scopes,
@@ -11,17 +12,10 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use serde_with::DisplayFromStr;
 
-use super::{InstanceRef, KeycloakApiObjectOptions};
-
 both_scopes! {
     "KeycloakApiObject", "kcapi", "ClusterKeycloakApiObject", "ckcapi", ClusterKeycloakApiObjectSpec {
         #[kube(
             doc = "Custom Resource for Keycloak API requests. The user should not use this resource directly.",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
             printcolumn = r#"{
                     "name":"Instance",
                     "type":"string",
@@ -54,13 +48,12 @@ pub struct KeycloakApiEndpointParent {
     pub sub_path: ImmutableString,
 }
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub enum KeycloakApiEndpointPath {
     // BUG: while the values of Path and Parent variants are both ImmutableString, there's
     // there's currently no guard in place prevent the user from replacing the Parent variant with
     // a Path variant. This is a potential source of bugs.
-    #[serde(rename = "path")]
     Path(ImmutableString),
-    #[serde(rename = "parent")]
     Parent(KeycloakApiEndpointParent),
 }
 
@@ -72,6 +65,11 @@ pub struct KeycloakApiEndpoint {
     #[schemars(schema_with = "http_method_schema")]
     pub init_workflow: Option<http::Method>,
 
+    // TODO: Replace Option<RealmRef> by RealmRef
+    /// Optional for backwards compatibility
+    pub realm: Option<RealmRef>,
+
+    // TODO: remove flatten option
     #[serde(flatten)]
     pub instance_ref: InstanceRef,
     #[serde(flatten)]
@@ -90,17 +88,17 @@ fn http_method_schema(generator: &mut SchemaGenerator) -> Schema {
     schema
 }
 
-impl KeycloakApiEndpoint {
-    pub fn new(instance_ref: &InstanceRef, path: &str) -> Self {
-        let path = path.to_string().into();
-        let instance_ref = instance_ref.clone();
-        Self {
-            instance_ref,
-            init_workflow: Some(http::Method::POST),
-            path_def: KeycloakApiEndpointPath::Path(path),
-        }
-    }
-}
+//impl KeycloakApiEndpoint {
+//    pub fn new(instance_ref: &InstanceRef, path: &str) -> Self {
+//        let path = path.to_string().into();
+//        let instance_ref = instance_ref.clone();
+//        Self {
+//            instance_ref,
+//            init_workflow: Some(http::Method::POST),
+//            path_def: KeycloakApiEndpointPath::Path(path),
+//        }
+//    }
+//}
 
 impl HasParent for KeycloakApiEndpointParent {
     type ParentRef = ApiObjectRef;

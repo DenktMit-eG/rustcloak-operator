@@ -3,7 +3,7 @@ use std::{
     ops::Deref,
 };
 
-use crate::{InstanceRef, traits::Endpoint};
+use crate::{instance::InstanceRef, traits::Endpoint};
 use either::{Either, for_both};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize, de::DeserializeOwned};

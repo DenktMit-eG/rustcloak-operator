@@ -1,3 +1,5 @@
+use super::realm::RealmRef;
+use crate::keycloak_types::ClientRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiStatus,
     crd::namespace_scope,
@@ -6,13 +8,9 @@ use crate::{
     schema_patch,
     traits::{SecretKeyNames, impl_endpoint},
 };
-
-use crate::keycloak_types::ClientRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
-use super::RealmRef;
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
@@ -28,11 +26,6 @@ namespace_scope! {
     "KeycloakClient", "kcc" {
         #[kube(
             doc = "resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakClient resource
         pub struct KeycloakClientSpec {

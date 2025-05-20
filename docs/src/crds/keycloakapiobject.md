@@ -16,6 +16,9 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |[spec.endpoint.parent.parentRef](#specendpointparentparentref)|string||
 |[spec.endpoint.parent.sub_path](#specendpointparentsubpath)|string|✅|
 |[spec.endpoint.path](#specendpointpath)|string||
+|[spec.endpoint.realm](#specendpointrealm)|object||
+|[spec.endpoint.realm.clusterRealmRef](#specendpointrealmclusterrealmref)|string||
+|[spec.endpoint.realm.realmRef](#specendpointrealmrealmref)|string||
 |[spec.immutablePayload](#specimmutablepayload)|string|✅|
 |[spec.options](#specoptions)|object||
 |[spec.options.patchFrom[]](#specoptionspatchfrom)|object||
@@ -43,6 +46,9 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |[status.instance.instanceRef](#statusinstanceinstanceref)|string||
 |[status.message](#statusmessage)|string||
 |[status.ready](#statusready)|boolean|✅|
+|[status.realm](#statusrealm)|object||
+|[status.realm.clusterRealmRef](#statusrealmclusterrealmref)|string||
+|[status.realm.realmRef](#statusrealmrealmref)|string||
 |[status.resourcePath](#statusresourcepath)|string||
 |[status.status](#statusstatus)|string||
 
@@ -74,6 +80,7 @@ Type: object
 |[instanceRef](#specendpointinstanceref)|string||
 |[parent](#specendpointparent)|object||
 |[path](#specendpointpath)|string||
+|[realm](#specendpointrealm)|object||
 
 *missing*
 
@@ -170,6 +177,43 @@ Type: string
 |self == oldSelf|Value is immutable|
 
 *missing*
+
+---
+
+### spec.endpoint.realm
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[clusterRealmRef](#specendpointrealmclusterrealmref)|string||
+|[realmRef](#specendpointrealmrealmref)|string||
+
+Optional for backwards compatibility
+
+---
+
+### spec.endpoint.realm.clusterRealmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster realm to which this object belongs to
+
+---
+
+### spec.endpoint.realm.realmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the realm to which this object belongs to
 
 ---
 
@@ -331,6 +375,7 @@ Type: object
 |[instance](#statusinstance)|object||
 |[message](#statusmessage)|string||
 |[ready](#statusready)|boolean|✅|
+|[realm](#statusrealm)|object||
 |[resourcePath](#statusresourcepath)|string||
 |[status](#statusstatus)|string||
 
@@ -444,6 +489,43 @@ Type: string
 Type: boolean
 
 *missing*
+
+---
+
+### status.realm
+
+Type: object
+
+|Property|Type|Required|
+|:-------|:---|:------:|
+|[clusterRealmRef](#statusrealmclusterrealmref)|string||
+|[realmRef](#statusrealmrealmref)|string||
+
+Optional for backwards compatibility
+
+---
+
+### status.realm.clusterRealmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the cluster realm to which this object belongs to
+
+---
+
+### status.realm.realmRef
+
+Type: string
+
+|Validation Rule|Error Message|
+|:--------------|:------------|
+|self == oldSelf|Value is immutable|
+
+The name of the realm to which this object belongs to
 
 ---
 

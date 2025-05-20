@@ -26,10 +26,16 @@ use kube::{
 };
 use log::warn;
 use rustcloak_crd::{
-    ApiObjectRef, InstanceRef, KeycloakApiEndpointParent,
-    KeycloakApiEndpointPath, KeycloakApiObjectSpec, KeycloakApiStatus,
-    KeycloakApiStatusEndpoint, KeycloakRestObject, KeycloakUserSpec, ValueFrom,
-    inner_spec::HasInnerSpec, keycloak_types::UserRepresentation,
+    KeycloakApiStatus, KeycloakApiStatusEndpoint, KeycloakRestObject,
+    ValueFrom,
+    api_object::{
+        ApiObjectRef, KeycloakApiEndpointParent, KeycloakApiEndpointPath,
+        KeycloakApiObjectSpec,
+    },
+    inner_spec::HasInnerSpec,
+    instance::InstanceRef,
+    keycloak_types::UserRepresentation,
+    user::KeycloakUserSpec,
 };
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
@@ -292,7 +298,9 @@ where
                     _ => Err(Error::UnsupportedWorkflowMethod)?,
                 };
             let mut status = resource.status().cloned().unwrap_or_default();
+            let realm_ref = spec.endpoint.realm.clone();
             status.endpoint = Some(KeycloakApiStatusEndpoint {
+                realm: realm_ref,
                 resource_path,
                 instance: resource.inner_spec().endpoint.instance_ref.clone(),
             });

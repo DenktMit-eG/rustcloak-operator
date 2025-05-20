@@ -1,28 +1,22 @@
+use super::client::client_schema;
 use crate::either::UntaggedEither;
 use crate::keycloak_types::RealmRepresentation;
 use crate::marker::ResourceMarker;
 use crate::refs::ref_type;
-use crate::{InstanceRef, both_scopes};
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiStatus, KeycloakApiStatusEndpoint,
     impl_object, inner_spec::HasInnerSpec, schema_patch, traits::Endpoint,
 };
+use crate::{both_scopes, instance::InstanceRef};
 use either::Either;
-use kube::CustomResource;
+use kube::{CustomResource, ResourceExt};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
-use super::client_schema;
 
 both_scopes! {
    "KeycloakRealm", "kcrm", "ClusterKeycloakRealm", "ckcrm", ClusterKeycloakRealmSpec {
         #[kube(
             doc = "resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakRealm resource
         pub struct KeycloakRealmSpec {
@@ -44,6 +38,11 @@ impl Endpoint for KeycloakRealm {
     }
     fn instance_ref(&self) -> Option<&InstanceRef> {
         Some(&self.inner_spec().parent_ref)
+    }
+    fn realm_ref(&self) -> Option<RealmRef> {
+        Some(RealmRef {
+            inner: Either::Left(self.name_any().into()),
+        })
     }
 }
 

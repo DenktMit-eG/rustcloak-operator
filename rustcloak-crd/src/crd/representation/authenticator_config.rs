@@ -1,24 +1,17 @@
+use super::realm::RealmRef;
+use crate::keycloak_types::AuthenticatorConfigRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
     impl_object, schema_patch, traits::impl_endpoint,
 };
-
-use crate::keycloak_types::AuthenticatorConfigRepresentation;
 use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
-use super::RealmRef;
 
 namespace_scope! {
     "KeycloakAuthenticatorConfig", "kcac" {
         #[kube(
             doc = "resource to define an Authenticator Config within a [KeycloakRealm](./keycloakrealm.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakAuthenticatorConfig resource
         pub struct KeycloakAuthenticatorConfigSpec {

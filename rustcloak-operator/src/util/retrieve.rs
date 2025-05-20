@@ -2,6 +2,7 @@ use crate::error::Result;
 use either::Either;
 use k8s_openapi::{ClusterResourceScope, NamespaceResourceScope};
 use kube::{Resource, core::object::HasStatus};
+use log::debug;
 use rustcloak_crd::KeycloakRestObject;
 use rustcloak_crd::marker::{EitherMarker, ResourceMarker};
 use rustcloak_crd::{
@@ -81,7 +82,7 @@ where
         reference: &Self::Ref,
         ns: &Option<String>,
     ) -> Result<<Self::Ref as Ref>::Target> {
-        println!("Retrieving {:?}", reference);
+        debug!("Retrieving {:?}", reference);
         let api = ApiExt::<R::Target>::api(client, ns);
         Ok(api.get(reference.as_ref()).await?)
     }

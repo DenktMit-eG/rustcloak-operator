@@ -1,4 +1,4 @@
-use super::RealmRef;
+use super::realm::RealmRef;
 use crate::either::UntaggedEither;
 use crate::keycloak_types::GroupRepresentation;
 use crate::refs::ref_type;
@@ -14,11 +14,6 @@ namespace_scope! {
     "KeycloakGroup", "kcg" {
         #[kube(
             doc = "resource to define a Group within a [KeycloakRealm](./keycloakrealm.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakGroup resource
         pub struct KeycloakGroupSpec {

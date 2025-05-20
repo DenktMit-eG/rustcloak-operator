@@ -1,4 +1,3 @@
-use super::RealmRef;
 use crate::keycloak_types::AuthenticationFlowRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
@@ -8,15 +7,12 @@ use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+use super::realm::RealmRef;
+
 namespace_scope! {
     "KeycloakAuthenticationFlow", "kcaf" {
         #[kube(
             doc = "resource to define an Authentication Flow within a [KeycloakRealm](./keycloakrealm.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakAuthenticationFlow resource
         pub struct KeycloakAuthenticationFlowSpec {

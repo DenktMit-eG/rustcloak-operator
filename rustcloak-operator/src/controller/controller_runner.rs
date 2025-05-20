@@ -63,9 +63,9 @@ pub trait LifecycleController {
 pub struct ControllerRunner<C> {
     controller: C,
     client: kube::Client,
-    prometheus_reconsiles: IntCounter,
-    prometheus_reconsiles_success: IntCounter,
-    prometheus_reconsiles_fail: IntCounter,
+    prometheus_reconciles: IntCounter,
+    prometheus_reconciles_success: IntCounter,
+    prometheus_reconciles_fail: IntCounter,
 }
 
 impl<C> ControllerRunner<C>
@@ -98,7 +98,7 @@ where
         ]
         .into();
 
-        let prometheus_reconsiles = register_int_counter!(Opts {
+        let prometheus_reconciles = register_int_counter!(Opts {
             namespace: "rustcloak".to_string(),
             subsystem: "controller".to_string(),
             name: "reconciles".to_string(),
@@ -106,7 +106,7 @@ where
             const_labels: common_labels.clone(),
             variable_labels: vec![],
         })?;
-        let prometheus_reconsiles_success = register_int_counter!(Opts {
+        let prometheus_reconciles_success = register_int_counter!(Opts {
             namespace: "rustcloak".to_string(),
             subsystem: "controller".to_string(),
             name: "reconciles_success".to_string(),
@@ -114,7 +114,7 @@ where
             const_labels: common_labels.clone(),
             variable_labels: vec![],
         })?;
-        let prometheus_reconsiles_fail = register_int_counter!(Opts {
+        let prometheus_reconciles_fail = register_int_counter!(Opts {
             namespace: "rustcloak".to_string(),
             subsystem: "controller".to_string(),
             name: "reconciles_fail".to_string(),
@@ -124,26 +124,26 @@ where
         })?;
 
         Ok((
-            prometheus_reconsiles,
-            prometheus_reconsiles_success,
-            prometheus_reconsiles_fail,
+            prometheus_reconciles,
+            prometheus_reconciles_success,
+            prometheus_reconciles_fail,
         ))
     }
     pub fn create(controller: C, client: &kube::Client) -> Result<Self> {
         let client = client.clone();
 
         let (
-            prometheus_reconsiles,
-            prometheus_reconsiles_success,
-            prometheus_reconsiles_fail,
+            prometheus_reconciles,
+            prometheus_reconciles_success,
+            prometheus_reconciles_fail,
         ) = Self::setup_metrics()?;
 
         Ok(ControllerRunner {
             controller,
             client,
-            prometheus_reconsiles,
-            prometheus_reconsiles_success,
-            prometheus_reconsiles_fail,
+            prometheus_reconciles,
+            prometheus_reconciles_success,
+            prometheus_reconciles_fail,
         })
     }
 
@@ -166,9 +166,9 @@ where
             .run(Self::reconcile, Self::error_policy, self_arc.clone())
             .for_each(|res| async {
                 if res.is_err() {
-                    self_arc.prometheus_reconsiles_fail.inc();
+                    self_arc.prometheus_reconciles_fail.inc();
                 } else {
-                    self_arc.prometheus_reconsiles_success.inc();
+                    self_arc.prometheus_reconciles_success.inc();
                 }
                 match res {
                     Ok((o, _)) => {
@@ -211,7 +211,7 @@ where
         let api = ApiExt::<C::Resource>::api(ctx.client.clone(), &ns);
         let client = ctx.client.clone();
         let kind = C::Resource::kind(&());
-        ctx.prometheus_reconsiles.inc();
+        ctx.prometheus_reconciles.inc();
 
         debug!(
             kind = kind,

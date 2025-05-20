@@ -1,3 +1,4 @@
+use super::client::ClientRef;
 use crate::keycloak_types::ResourceRepresentation;
 use crate::{
     KeycloakApiObjectOptions, KeycloakApiStatus, crd::namespace_scope,
@@ -7,17 +8,10 @@ use kube::CustomResource;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use super::ClientRef;
-
 namespace_scope! {
     "KeycloakResource", "kcrs" {
         #[kube(
             doc = "resource to define a Resource within a [KeyclaokClient](./keycloakclient.md)",
-            group = "rustcloak.k8s.eboland.de",
-            version = "v1beta1",
-            status = "KeycloakApiStatus",
-            category = "keycloak",
-            category = "all",
         )]
         /// the KeycloakResource resource
         pub struct KeycloakResourceSpec {
