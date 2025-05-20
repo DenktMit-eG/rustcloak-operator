@@ -3,7 +3,7 @@ resolver = "2"
 members = ["rustcloak-operator", "rustcloak-crd", "utils"]
 
 [workspace.package]
-version = "0.2.7"
+version = "0.3.0"
 authors = [
   "Enno Boland <mail@eboland.de>",
 ]
