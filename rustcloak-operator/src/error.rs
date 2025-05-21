@@ -76,8 +76,6 @@ pub enum Error {
     NoResourcePath,
     #[error("Unsupported Workflow Method")]
     UnsupportedWorkflowMethod,
-    #[error("Prometheus Error: {0}")]
-    Prometheus(#[from] prometheus::Error),
     #[error("JsonPath Error: {0}")]
     JsonPathError(#[from] jsonpath_rust::parser::errors::JsonPathError),
     #[error("Cannot request client secret from Keycloak")]
@@ -92,6 +90,8 @@ pub enum Error {
     NoRealm,
     #[error("Missing Name")]
     MissingName,
+    #[error(transparent)]
+    PrometheusBuild(#[from] metrics_exporter_prometheus::BuildError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

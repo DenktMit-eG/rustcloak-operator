@@ -1,6 +1,5 @@
-use actix_web::{App, HttpRequest, HttpResponse, HttpServer, Responder, get};
 use clap::Parser;
-use futures::{FutureExt, future};
+use futures::FutureExt;
 use kube::Resource;
 use log::info;
 use rustcloak_crd::{
@@ -11,6 +10,7 @@ use rustcloak_crd::{
     map_all_crds, map_rest_crds,
     user::KeycloakUser,
 };
+use rustcloak_operator::metrics;
 use rustcloak_operator::{
     controller::{
         ApiObjectController, ClientCredentialController, ControllerRunner,
@@ -20,14 +20,8 @@ use rustcloak_operator::{
         UserCredentialController,
     },
     error::Result,
-    metrics::metrics,
     opts::{LegacyMode, Opts, legacy_kinds},
 };
-
-#[get("/healthz")]
-async fn health(_: HttpRequest) -> impl Responder {
-    HttpResponse::Ok().json("healthy")
-}
 
 #[cfg(debug_assertions)]
 fn init_logger() {
@@ -230,17 +224,8 @@ async fn async_main() -> Result<()> {
     }
 
     // Metrics
-    if let Some(sock_addr) = opts.metrics_addr {
-        controllers.push(
-            HttpServer::new(move || {
-                App::new().service(health).service(metrics)
-            })
-            .bind(sock_addr)?
-            .shutdown_timeout(5)
-            .run()
-            .then(|_| future::ready(Ok(())))
-            .boxed(),
-        );
+    if let Some(socket_addr) = opts.metrics_addr {
+        controllers.push(metrics::serve(socket_addr).boxed());
     }
 
     futures::future::try_join_all(controllers).await?;

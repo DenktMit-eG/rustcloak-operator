@@ -1,15 +1,16 @@
-use actix_web::{HttpRequest, HttpResponse, Responder, get};
-use prometheus::{Encoder, TextEncoder};
+use crate::error::Result;
+use axum::{Json, Router, routing::get};
+use metrics_exporter_prometheus::PrometheusBuilder;
+use std::net::SocketAddr;
+use tokio::net::TcpListener;
 
-#[get("/metrics")]
-pub async fn metrics(_: HttpRequest) -> impl Responder {
-    let encoder = TextEncoder::new();
+pub async fn serve(socket_addr: SocketAddr) -> Result<()> {
+    let bind = TcpListener::bind(socket_addr).await?;
+    let handle = PrometheusBuilder::new().install_recorder()?;
 
-    let metric_families = prometheus::gather();
-    let mut buffer = vec![];
-    encoder.encode(&metric_families, &mut buffer).unwrap();
-
-    HttpResponse::Ok()
-        .insert_header(("Content-Type", encoder.format_type()))
-        .body(buffer)
+    let router = Router::new()
+        .route("/health", get(async || Json("healthy")))
+        .route("/metrics", get(async move || handle.render()));
+    axum::serve(bind, router).await?;
+    Ok(())
 }
