@@ -40,9 +40,7 @@ impl Endpoint for KeycloakRealm {
         Some(&self.inner_spec().parent_ref)
     }
     fn realm_ref(&self) -> Option<RealmRef> {
-        Some(RealmRef {
-            inner: Either::Left(self.name_any().into()),
-        })
+        Some(Either::Left(NamespacedRealmRef::from(self.name_any())).into())
     }
 }
 
@@ -52,6 +50,9 @@ impl Endpoint for ClusterKeycloakRealm {
     }
     fn instance_ref(&self) -> Option<&InstanceRef> {
         Some(&self.inner_spec().parent_ref)
+    }
+    fn realm_ref(&self) -> Option<RealmRef> {
+        Some(Either::Right(ClusterRealmRef::from(self.name_any())).into())
     }
 }
 
@@ -92,19 +93,3 @@ ref_type!(
     "The name of the cluster realm to which this object belongs to"
 );
 pub type RealmRef = UntaggedEither<NamespacedRealmRef, ClusterRealmRef>;
-impl RealmRef {
-    pub fn with_namespaced(name: String) -> Self {
-        Self {
-            inner: Either::Left(NamespacedRealmRef {
-                realm_ref: name.into(),
-            }),
-        }
-    }
-    pub fn with_clustered(name: String) -> Self {
-        Self {
-            inner: Either::Right(ClusterRealmRef {
-                cluster_realm_ref: name.into(),
-            }),
-        }
-    }
-}

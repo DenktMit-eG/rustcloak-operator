@@ -16,8 +16,7 @@ use kube::{
 };
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::{
-    either::UntaggedEither,
-    instance::KeycloakInstance,
+    instance::{InstanceRef, KeycloakInstance},
     realm::{KeycloakRealm, KeycloakRealmSpec},
 };
 use std::sync::Arc;
@@ -67,15 +66,17 @@ impl LifecycleController for LegacyRealmController {
         let owner_ref = resource.owner_ref(&()).unwrap();
         let api = ApiExt::<KeycloakRealm>::api(client.clone(), &ns);
         let definition = serde_json::to_value(&resource.spec.realm)?;
-        let parent_ref = find_name::<KeycloakInstance>(
-            client,
-            &ns,
-            &resource.spec.instance_selector,
-            &resource.metadata,
-            "instance_ref",
-        )
-        .await?
-        .map_either(|l| l.into(), |r| r.into());
+        let parent_ref = InstanceRef::from(
+            find_name::<KeycloakInstance>(
+                client,
+                &ns,
+                &resource.spec.instance_selector,
+                &resource.metadata,
+                "instance_ref",
+            )
+            .await?
+            .map_either(|l| l.into(), |r| r.into()),
+        );
 
         let instance = KeycloakRealm {
             metadata: ObjectMeta {
@@ -87,8 +88,8 @@ impl LifecycleController for LegacyRealmController {
                 ..Default::default()
             },
             spec: KeycloakRealmSpec {
+                parent_ref,
                 options: None,
-                parent_ref: UntaggedEither { inner: parent_ref },
                 definition: serde_json::from_value(definition)?,
             },
             status: None,

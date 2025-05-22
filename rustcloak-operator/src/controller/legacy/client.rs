@@ -13,7 +13,7 @@ use kube::{
     runtime::{Controller, controller::Action},
 };
 use kube::{Resource, ResourceExt};
-use rustcloak_crd::either::UntaggedEither;
+use rustcloak_crd::realm::RealmRef;
 use rustcloak_crd::{
     client::{
         KeycloakClient, KeycloakClientSecretReference, KeycloakClientSpec,
@@ -67,15 +67,17 @@ impl LifecycleController for LegacyClientController {
         let owner_ref = resource.owner_ref(&()).unwrap();
         let api = ApiExt::<KeycloakClient>::api(client.clone(), &ns);
         let definition = serde_json::to_value(&resource.spec.client)?;
-        let parent_ref = find_name::<KeycloakRealm>(
-            client,
-            &ns,
-            &resource.spec.realm_selector,
-            &resource.metadata,
-            "realm_ref",
-        )
-        .await?
-        .map_either(|l| l.into(), |r| r.into());
+        let parent_ref = RealmRef::from(
+            find_name::<KeycloakRealm>(
+                client,
+                &ns,
+                &resource.spec.realm_selector,
+                &resource.metadata,
+                "realm_ref",
+            )
+            .await?
+            .map_either(|l| l.into(), |r| r.into()),
+        );
         let instance = KeycloakClient {
             metadata: ObjectMeta {
                 name: Some(name.clone()),
@@ -86,8 +88,8 @@ impl LifecycleController for LegacyClientController {
                 ..Default::default()
             },
             spec: KeycloakClientSpec {
+                parent_ref,
                 options: None,
-                parent_ref: UntaggedEither { inner: parent_ref },
                 definition: serde_json::from_value(definition)?,
                 client_secret: Some(KeycloakClientSecretReference {
                     secret_name: format!("keycloak-client-secret-{}", name),

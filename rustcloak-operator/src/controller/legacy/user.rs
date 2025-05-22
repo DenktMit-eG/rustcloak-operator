@@ -17,7 +17,6 @@ use kube::{
 };
 use kube::{Resource, ResourceExt};
 use rustcloak_crd::{
-    either::UntaggedEither,
     realm::{KeycloakRealm, RealmRef},
     user::{KeycloakUser, KeycloakUserSecretReference, KeycloakUserSpec},
 };
@@ -133,8 +132,8 @@ impl LifecycleController for LegacyUserController {
         let user_secret = make_secret(client, &mut resource).await?;
 
         let definition = serde_json::to_value(&resource.spec.user)?;
-        let parent_ref: RealmRef = RealmRef {
-            inner: find_name::<KeycloakRealm>(
+        let parent_ref = RealmRef::from(
+            find_name::<KeycloakRealm>(
                 client,
                 &ns,
                 &resource.spec.realm_selector,
@@ -143,7 +142,7 @@ impl LifecycleController for LegacyUserController {
             )
             .await?
             .map_either(|l| l.into(), |r| r.into()),
-        };
+        );
 
         let instance = KeycloakUser {
             metadata: ObjectMeta {
@@ -156,9 +155,7 @@ impl LifecycleController for LegacyUserController {
             },
             spec: KeycloakUserSpec {
                 options: None,
-                parent_ref: UntaggedEither {
-                    inner: Either::Left(parent_ref),
-                },
+                parent_ref: Either::Left(parent_ref).into(),
                 definition: serde_json::from_value(definition)?,
                 user_secret,
             },
