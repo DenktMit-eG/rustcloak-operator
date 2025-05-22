@@ -282,7 +282,6 @@ where
                 }
             }
         }
-        println!("success: {}", success);
 
         if !success {
             let path = self.resolve_path(client, &ns, &resource).await?;
