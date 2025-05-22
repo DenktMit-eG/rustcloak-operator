@@ -20,6 +20,26 @@ where
     pub inner: Either<L, R>,
 }
 
+impl<L, R> From<UntaggedEither<L, R>> for Either<L, R>
+where
+    L: Serialize + DeserializeOwned + JsonSchema,
+    R: Serialize + DeserializeOwned + JsonSchema,
+{
+    fn from(value: UntaggedEither<L, R>) -> Self {
+        value.inner
+    }
+}
+
+impl<L, R> From<Either<L, R>> for UntaggedEither<L, R>
+where
+    L: Serialize + DeserializeOwned + JsonSchema,
+    R: Serialize + DeserializeOwned + JsonSchema,
+{
+    fn from(inner: Either<L, R>) -> Self {
+        Self { inner }
+    }
+}
+
 impl<L, R> AsRef<str> for UntaggedEither<L, R>
 where
     L: Serialize + DeserializeOwned + JsonSchema + AsRef<str>,
