@@ -9,5 +9,5 @@ maintainers:
   - name: Enno Boland
     email: mail@eboland.de
     url: https://github.com/Gottox
-version: 0.3.0
-appVersion: "v0.3.0"
+version: 0.3.1
+appVersion: "v0.3.1"
