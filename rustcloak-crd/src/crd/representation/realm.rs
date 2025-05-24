@@ -4,11 +4,12 @@ use crate::keycloak_types::RealmRepresentation;
 use crate::marker::ResourceMarker;
 use crate::refs::ref_type;
 use crate::{
-    KeycloakApiObjectOptions, KeycloakApiStatus, KeycloakApiStatusEndpoint,
-    impl_object, inner_spec::HasInnerSpec, schema_patch, traits::Endpoint,
+    KeycloakApiObjectOptions, KeycloakApiStatus, impl_object,
+    inner_spec::HasInnerSpec, schema_patch, traits::Endpoint,
 };
 use crate::{both_scopes, instance::InstanceRef};
 use either::Either;
+use kube::core::object::HasStatus;
 use kube::{CustomResource, ResourceExt};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -32,29 +33,28 @@ both_scopes! {
 
 impl_object!("realm" <InstanceRef> / |_d| {"admin/realms"} / "realm" for KeycloakRealmSpec => RealmRepresentation);
 
-impl Endpoint for KeycloakRealm {
-    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
-        self.status.as_ref().and_then(|s| s.endpoint.as_ref())
-    }
-    fn instance_ref(&self) -> Option<&InstanceRef> {
-        Some(&self.inner_spec().parent_ref)
-    }
-    fn realm_ref(&self) -> Option<RealmRef> {
-        Some(Either::Left(NamespacedRealmRef::from(self.name_any())).into())
-    }
+macro_rules! realm_endpoint {
+    ($name:ident, $either:ident) => {
+        impl Endpoint for $name {
+            fn instance_ref(&self) -> Option<&InstanceRef> {
+                Some(&self.inner_spec().parent_ref)
+            }
+            fn realm_ref(&self) -> Option<RealmRef> {
+                let either = Either::$either(self.name_any().into());
+                let realm_ref = RealmRef::from(either);
+                Some(realm_ref)
+            }
+            fn resource_path(&self) -> Option<&str> {
+                self.status()
+                    .as_ref()
+                    .and_then(|s| s.endpoint.as_ref())
+                    .map(|e| e.resource_path.as_str())
+            }
+        }
+    };
 }
-
-impl Endpoint for ClusterKeycloakRealm {
-    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
-        self.status.as_ref().and_then(|s| s.endpoint.as_ref())
-    }
-    fn instance_ref(&self) -> Option<&InstanceRef> {
-        Some(&self.inner_spec().parent_ref)
-    }
-    fn realm_ref(&self) -> Option<RealmRef> {
-        Some(Either::Right(ClusterRealmRef::from(self.name_any())).into())
-    }
-}
+realm_endpoint!(KeycloakRealm, Left);
+realm_endpoint!(ClusterKeycloakRealm, Right);
 
 impl crate::marker::HasMarker for KeycloakRealm {
     type Marker = ResourceMarker<<Self as kube::Resource>::Scope>;

@@ -73,15 +73,15 @@ where
 }
 
 impl<L: Endpoint, R: Endpoint> Endpoint for Either<L, R> {
-    fn endpoint(&self) -> Option<&crate::KeycloakApiStatusEndpoint> {
-        for_both!(self, s => s.endpoint())
-    }
-
     fn instance_ref(&self) -> Option<&InstanceRef> {
         for_both!(self, s => s.instance_ref())
     }
 
     fn resource_path(&self) -> Option<&str> {
         for_both!(self, s => s.resource_path())
+    }
+
+    fn realm_ref(&self) -> Option<crate::realm::RealmRef> {
+        for_both!(self, s => s.realm_ref())
     }
 }

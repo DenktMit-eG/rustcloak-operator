@@ -295,7 +295,7 @@ impl LifecycleController for RoleMappingController {
         client: &kube::Client,
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
-        let Some(endpoint) = resource.endpoint() else {
+        let Some(resource_path) = resource.resource_path() else {
             return Ok(Action::await_change());
         };
 
@@ -305,8 +305,7 @@ impl LifecycleController for RoleMappingController {
             .get_role_name_and_path(&resource, &subject, &keycloak, client, &ns)
             .await?;
 
-        let Some(role) =
-            self.role(&endpoint.resource_path, &name, &keycloak).await?
+        let Some(role) = self.role(resource_path, &name, &keycloak).await?
         else {
             warn!(
                 "Role not found in applied roles. Assuming it's already removed"
@@ -314,9 +313,7 @@ impl LifecycleController for RoleMappingController {
             return Ok(Action::await_change());
         };
 
-        keycloak
-            .delete_with_payload(&endpoint.resource_path, [role])
-            .await?;
+        keycloak.delete_with_payload(resource_path, [role]).await?;
         Ok(Action::await_change())
     }
 }
