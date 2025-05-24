@@ -1,10 +1,11 @@
-use crate::either::UntaggedEither;
-use crate::marker::{HasMarker, ResourceMarker};
-use crate::refs::ref_type;
-use crate::traits::{Endpoint, SecretKeyNames};
-
-use super::KeycloakApiStatusEndpoint;
 use super::{KeycloakApiStatus, both_scopes};
+use crate::{
+    either::UntaggedEither,
+    marker::{HasMarker, ResourceMarker},
+    realm::RealmRef,
+    refs::ref_type,
+    traits::{Endpoint, SecretKeyNames},
+};
 use kube::{CustomResource, Resource};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -90,36 +91,27 @@ impl KeycloakInstanceSpec {
     }
 }
 
-impl Endpoint for KeycloakInstance {
-    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
-        None
-    }
-
-    fn instance_ref(&self) -> Option<&InstanceRef> {
-        None
-    }
-
-    fn resource_path(&self) -> Option<&str> {
-        Some("")
-    }
+macro_rules! instance_endpoint {
+    ($name:ident, $either:ident) => {
+        impl Endpoint for $name {
+            fn instance_ref(&self) -> Option<&InstanceRef> {
+                None
+            }
+            fn realm_ref(&self) -> Option<RealmRef> {
+                None
+            }
+            fn resource_path(&self) -> Option<&str> {
+                Some("")
+            }
+        }
+    };
 }
+
+instance_endpoint!(KeycloakInstance, Left);
+instance_endpoint!(ClusterKeycloakInstance, Right);
 
 impl HasMarker for KeycloakInstance {
     type Marker = ResourceMarker<<Self as Resource>::Scope>;
-}
-
-impl Endpoint for ClusterKeycloakInstance {
-    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint> {
-        None
-    }
-
-    fn instance_ref(&self) -> Option<&InstanceRef> {
-        None
-    }
-
-    fn resource_path(&self) -> Option<&str> {
-        Some("")
-    }
 }
 
 impl HasMarker for ClusterKeycloakInstance {

@@ -1,6 +1,4 @@
-use crate::{
-    KeycloakApiStatusEndpoint, instance::InstanceRef, realm::RealmRef,
-};
+use crate::{instance::InstanceRef, realm::RealmRef};
 use std::iter;
 
 pub trait SecretKeyNames<const N: usize> {
@@ -29,16 +27,9 @@ where
 }
 
 pub trait Endpoint {
-    fn endpoint(&self) -> Option<&KeycloakApiStatusEndpoint>;
-    fn instance_ref(&self) -> Option<&InstanceRef> {
-        self.endpoint().map(|e| &e.instance)
-    }
-    fn resource_path(&self) -> Option<&str> {
-        self.endpoint().map(|e| e.resource_path.as_str())
-    }
-    fn realm_ref(&self) -> Option<RealmRef> {
-        self.endpoint().and_then(|e| e.realm.clone())
-    }
+    fn instance_ref(&self) -> Option<&InstanceRef>;
+    fn resource_path(&self) -> Option<&str>;
+    fn realm_ref(&self) -> Option<RealmRef>;
 }
 
 macro_rules! impl_endpoint {
@@ -47,9 +38,20 @@ macro_rules! impl_endpoint {
         impl_instance_ref!($cluster_type);
     };
     ($type:ident) => {
-        impl $crate::traits::Endpoint for $type {
+        impl $type {
             fn endpoint(&self) -> Option<&$crate::KeycloakApiStatusEndpoint> {
                 self.status.as_ref().and_then(|s| s.endpoint.as_ref())
+            }
+        }
+        impl $crate::traits::Endpoint for $type {
+            fn instance_ref(&self) -> Option<&$crate::instance::InstanceRef> {
+                self.endpoint().map(|e| &e.instance)
+            }
+            fn realm_ref(&self) -> Option<$crate::realm::RealmRef> {
+                self.endpoint().and_then(|e| e.realm.clone())
+            }
+            fn resource_path(&self) -> Option<&str> {
+                self.endpoint().map(|e| e.resource_path.as_str())
             }
         }
         impl $crate::marker::HasMarker for $type {
