@@ -9,7 +9,6 @@ use crate::{
     },
 };
 use async_trait::async_trait;
-use chrono::{Duration, Utc};
 use k8s_openapi::{ByteString, api::core::v1::Secret};
 use kube::{
     Api, Resource, ResourceExt,
@@ -17,16 +16,21 @@ use kube::{
     core::object::HasStatus,
     runtime::{Controller, controller::Action, watcher},
 };
-use log::warn;
 use randstr::randstr;
 use rustcloak_crd::{
-    KeycloakApiStatus, api_object::KeycloakApiObject, inner_spec::HasInnerSpec,
-    instance::KeycloakInstanceSpec, traits::SecretKeyNames,
+    KeycloakApiStatus,
+    api_object::{ClusterKeycloakApiObject, KeycloakApiObject},
+    inner_spec::HasInnerSpec,
+    instance::{
+        ClusterKeycloakInstance, KeycloakInstance, KeycloakInstanceSpec,
+    },
+    traits::SecretKeyNames,
 };
 use serde::de::DeserializeOwned;
 
 shorter_bounds::alias!(
     pub trait Instance: Resource<DynamicType = ()>
+        + RefName
         + HasStatus<Status = KeycloakApiStatus>
         + HasInnerSpec<InnerSpec = KeycloakInstanceSpec>
         + Send
@@ -36,6 +40,18 @@ shorter_bounds::alias!(
         + DeserializeOwned
         + 'static
 );
+
+trait RefName {
+    const REF_NAME: &'static str;
+}
+
+impl RefName for KeycloakInstance {
+    const REF_NAME: &'static str = app_id!("instanceRef");
+}
+
+impl RefName for ClusterKeycloakInstance {
+    const REF_NAME: &'static str = app_id!("clusterInstanceRef");
+}
 
 #[derive(Debug)]
 pub struct InstanceController<R>
@@ -102,6 +118,28 @@ where
         };
 
         secret_api.create(&PostParams::default(), &secret).await?;
+        Ok(())
+    }
+
+    async fn cleanup_api_objects<A>(
+        &self,
+        client: &kube::Client,
+        ns: &Option<String>,
+        resource_name: &str,
+    ) -> Result<()>
+    where
+        ApiExt<A>: ApiFactory<Resource = A>,
+        A: Resource,
+    {
+        let selector = format!("{}={}", R::REF_NAME, resource_name);
+        let api = ApiExt::<KeycloakApiObject>::api(client.clone(), ns);
+        let list = api
+            .list_metadata(&ListParams::default().labels(&selector))
+            .await?;
+        if !list.items.is_empty() {
+            let items = list.items.iter().map(|item| item.name_any()).collect();
+            return Err(Error::ResourceInUseForDeletion(items));
+        }
         Ok(())
     }
 }
@@ -181,27 +219,21 @@ where
         resource: Arc<Self::Resource>,
     ) -> Result<Action> {
         let ns = resource.namespace();
-        let grace_period = Duration::minutes(3);
-        let deletion_time =
-            resource.meta().deletion_timestamp.as_ref().unwrap().0;
 
-        let selector =
-            format!("{}={}", app_id!("instanceRef"), resource.name_unchecked());
-        let api = ApiExt::<KeycloakApiObject>::api(client.clone(), &ns);
-        let list = api
-            .list_metadata(&ListParams::default().labels(&selector))
-            .await?;
-        if !list.items.is_empty() {
-            let items = list.items.iter().map(|item| item.name_any()).collect();
-            if Utc::now() < deletion_time + grace_period {
-                return Err(Error::ResourceInUseForDeletion(items));
-            } else {
-                warn!(
-                    "Deleting KeycloakApi objects that were not cleaned up, grace period expired. Dangling objects: {:?}",
-                    items
-                );
-            }
-        }
+        let resource_name = resource.name_any();
+        self.cleanup_api_objects::<KeycloakApiObject>(
+            client,
+            &ns,
+            &resource_name,
+        )
+        .await?;
+        self.cleanup_api_objects::<ClusterKeycloakApiObject>(
+            client,
+            &ns,
+            &resource_name,
+        )
+        .await?;
+
         self.manager.cancel_refresh(&resource).await?;
         self.secret_refs.remove(&resource);
         Ok(Action::await_change())
