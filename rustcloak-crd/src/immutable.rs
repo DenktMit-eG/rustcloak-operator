@@ -1,7 +1,6 @@
 use crate::schema::SchemaUtil;
 use schemars::{JsonSchema, r#gen::SchemaGenerator, schema::Schema};
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use std::ops::Deref;
 
 macro_rules! container_type {
@@ -30,22 +29,4 @@ macro_rules! container_type {
 container_type!(ImmutableString, String, "immutable_string");
 fn immutable_string(generator: &mut SchemaGenerator) -> Schema {
     generator.subschema_for::<String>().immutable().to_owned()
-}
-
-container_type!(JsonObject, Value, "json_object");
-fn json_object(generator: &mut SchemaGenerator) -> Schema {
-    #[derive(JsonSchema)]
-    struct Empty {}
-
-    generator
-        .subschema_for::<Empty>()
-        .additional_properties()
-        .to_owned()
-}
-
-container_type!(ImmutableJsonObject, Value, "immutable_json_object");
-fn immutable_json_object(generator: &mut SchemaGenerator) -> Schema {
-    let mut schema = json_object(generator);
-    schema.immutable();
-    schema
 }
