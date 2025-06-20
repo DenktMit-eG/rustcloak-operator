@@ -7,12 +7,41 @@ env:
 jobs:
   check:
     runs-on: 'ubuntu-latest'
+    services:
+      keycloak:
+        image: quay.io/keycloak/keycloak:latest
+        ports:
+          - 8080:8080
+        env:
+          KEYCLOAK_ADMIN: admin
+          KEYCLOAK_ADMIN_PASSWORD: password
+        command: start-dev
     steps:
+
+    # Prepare the code
     - uses: actions/checkout@v4
     - uses: dtolnay/rust-toolchain@stable
     - uses: Swatinem/rust-cache@v2
       with:
         cache-on-failure: "true"
+
+    # Prepare services
+    - uses: helm/kind-action@v1
+    - name: wait for Keycloak
+      run: |
+        for i in `seq 1 30`; do
+          curl -sfI http://localhost:8080 > /dev/null && break
+          echo "Waiting for Keycloak..."
+          sleep 5
+        done
+    - uses: actions/checkout@v4
+
+    # Prepare kubernetes cluster
+    - name: Install CRDs and boot the operator
+      run: |
+        cargo run --bin crdgen | kubectl apply -f -
+        cargo run --bin=rustcloak
+
     - run: |
         cargo check --all-targets --all-features
 
