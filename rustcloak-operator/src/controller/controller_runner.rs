@@ -1,5 +1,3 @@
-use std::{collections::HashMap, sync::Arc, time::Duration};
-
 use crate::{
     app_id,
     error::Result,
@@ -18,8 +16,9 @@ use kube::{
     },
 };
 use log::{debug, info, warn};
-use prometheus::{IntCounter, Opts, register_int_counter};
+use metrics::{Counter, counter};
 use serde::{Serialize, de::DeserializeOwned};
+use std::{sync::Arc, time::Duration};
 
 use crate::error::*;
 use futures::StreamExt;
@@ -63,9 +62,9 @@ pub trait LifecycleController {
 pub struct ControllerRunner<C> {
     controller: C,
     client: kube::Client,
-    prometheus_reconciles: IntCounter,
-    prometheus_reconciles_success: IntCounter,
-    prometheus_reconciles_fail: IntCounter,
+    prometheus_reconciles: Counter,
+    prometheus_reconciles_success: Counter,
+    prometheus_reconciles_fail: Counter,
 }
 
 impl<C> ControllerRunner<C>
@@ -85,43 +84,32 @@ where
         Default + Eq + Hash + Clone + Debug + Unpin + From<()>,
     ApiExt<C::Resource>: ApiFactory<Resource = C::Resource>,
 {
-    fn setup_metrics() -> Result<(IntCounter, IntCounter, IntCounter)> {
-        let pod_namespace = std::env::var("POD_NAMESPACE")
-            .unwrap_or_else(|_| "<unknown>".to_string());
+    fn setup_metrics() -> Result<(Counter, Counter, Counter)> {
         let pod_name = std::env::var("POD_NAME")
             .unwrap_or_else(|_| "<unknown>".to_string());
-        let common_labels: HashMap<_, _> = [
-            ("kind".to_string(), C::Resource::kind(&()).to_string()),
-            ("group".to_string(), C::Resource::group(&()).to_string()),
-            ("controller_pod_name".to_string(), pod_name),
-            ("controller_pod_namespace".to_string(), pod_namespace),
-        ]
-        .into();
+        let pod_namespace = std::env::var("POD_NAMESPACE")
+            .unwrap_or_else(|_| "<unknown>".to_string());
+        let kind = C::Resource::kind(&());
+        let group = C::Resource::group(&());
 
-        let prometheus_reconciles = register_int_counter!(Opts {
-            namespace: "rustcloak".to_string(),
-            subsystem: "controller".to_string(),
-            name: "reconciles".to_string(),
-            help: "Number of started reconciles".to_string(),
-            const_labels: common_labels.clone(),
-            variable_labels: vec![],
-        })?;
-        let prometheus_reconciles_success = register_int_counter!(Opts {
-            namespace: "rustcloak".to_string(),
-            subsystem: "controller".to_string(),
-            name: "reconciles_success".to_string(),
-            help: "Number of successful reconciles".to_string(),
-            const_labels: common_labels.clone(),
-            variable_labels: vec![],
-        })?;
-        let prometheus_reconciles_fail = register_int_counter!(Opts {
-            namespace: "rustcloak".to_string(),
-            subsystem: "controller".to_string(),
-            name: "reconciles_fail".to_string(),
-            help: "Number of failed reconciles".to_string(),
-            const_labels: common_labels.clone(),
-            variable_labels: vec![],
-        })?;
+        let [
+            prometheus_reconciles,
+            prometheus_reconciles_success,
+            prometheus_reconciles_fail,
+        ] = [
+            "rustcloak_controller_reconciles",
+            "rustcloak_controller_reconciles_success",
+            "rustcloak_controller_reconciles_fail",
+        ]
+        .map(|name| {
+            counter!(
+                name,
+                "kind" => kind.clone(),
+                "group" => group.clone(),
+                "controller_pod_name" => pod_name.clone(),
+                "controller_pod_namespace" => pod_namespace.clone(),
+            )
+        });
 
         Ok((
             prometheus_reconciles,
@@ -166,9 +154,9 @@ where
             .run(Self::reconcile, Self::error_policy, self_arc.clone())
             .for_each(|res| async {
                 if res.is_err() {
-                    self_arc.prometheus_reconciles_fail.inc();
+                    self_arc.prometheus_reconciles_fail.increment(1);
                 } else {
-                    self_arc.prometheus_reconciles_success.inc();
+                    self_arc.prometheus_reconciles_success.increment(1);
                 }
                 match res {
                     Ok((o, _)) => {
@@ -211,7 +199,7 @@ where
         let api = ApiExt::<C::Resource>::api(ctx.client.clone(), &ns);
         let client = ctx.client.clone();
         let kind = C::Resource::kind(&());
-        ctx.prometheus_reconciles.inc();
+        ctx.prometheus_reconciles.increment(1);
 
         debug!(
             kind = kind,

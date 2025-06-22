@@ -76,8 +76,8 @@ pub enum Error {
     NoResourcePath,
     #[error("Unsupported Workflow Method")]
     UnsupportedWorkflowMethod,
-    #[error("Prometheus Error: {0}")]
-    Prometheus(#[from] prometheus::Error),
+    #[error("Metrics exporter error: {0}")]
+    Metrics(#[from] metrics_exporter_prometheus::BuildError),
     #[error("JsonPath Error: {0}")]
     JsonPathError(#[from] jsonpath_rust::parser::errors::JsonPathError),
     #[error("Cannot request client secret from Keycloak")]
