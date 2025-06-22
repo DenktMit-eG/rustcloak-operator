@@ -29,12 +29,6 @@ async fn health(_: HttpRequest) -> impl Responder {
     HttpResponse::Ok().json("healthy")
 }
 
-#[cfg(debug_assertions)]
-fn init_logger() {
-    pretty_env_logger::init();
-}
-
-#[cfg(not(debug_assertions))]
 fn init_logger() {
     use structured_logger::{Builder, async_json::new_writer};
 
@@ -43,16 +37,8 @@ fn init_logger() {
         .init();
 }
 
-fn main() -> Result<()> {
-    tokio::runtime::Builder::new_current_thread()
-        .enable_all()
-        .max_blocking_threads(8)
-        .build()
-        .unwrap()
-        .block_on(async { async_main().await })
-}
-
-async fn async_main() -> Result<()> {
+#[tokio::main(flavor = "current_thread")]
+async fn main() -> Result<()> {
     let opts = Opts::parse();
 
     init_logger();
