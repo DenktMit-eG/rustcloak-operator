@@ -7,15 +7,6 @@ env:
 jobs:
   check:
     runs-on: 'ubuntu-latest'
-    services:
-      keycloak:
-        image: quay.io/keycloak/keycloak:latest
-        ports:
-          - 8080:8080
-        env:
-          KEYCLOAK_ADMIN: admin
-          KEYCLOAK_ADMIN_PASSWORD: password
-        command: start-dev
     steps:
 
     # Prepare the code
@@ -27,6 +18,10 @@ jobs:
 
     # Prepare services
     - uses: helm/kind-action@v1
+    - uses: progi1984/setup-keycloak@master
+      with:
+        keycloak_admin_user: admin
+        keycloak_admin_pass: password
     - name: wait for Keycloak
       run: |
         for i in `seq 1 30`; do
@@ -40,7 +35,7 @@ jobs:
     - name: Install CRDs and boot the operator
       run: |
         cargo run --bin crdgen | kubectl apply -f -
-        cargo run --bin=rustcloak
+        #cargo run --bin=rustcloak
 
     - run: |
         cargo check --all-targets --all-features
