@@ -65,8 +65,9 @@ async fn async_main() -> Result<()> {
     let client = kube::Client::try_default().await?;
     let mut controllers_str = opts.controllers.clone();
     if controllers_str.is_empty() {
-        controllers_str =
-            map_all_crds!(Crd => Crd::kind(&()).to_string()).collect();
+        controllers_str.extend_from_slice(
+            &map_all_crds!(Crd => Crd::kind(&()).to_string()),
+        );
     }
 
     if opts.legacy != LegacyMode::Disabled {
