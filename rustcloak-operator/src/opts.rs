@@ -28,7 +28,7 @@ pub fn legacy_kinds() -> [String; 4] {
 
 fn controller_values() -> PossibleValuesParser {
     let rustcloak_kinds = map_all_crds!(C => C::kind(&()).as_ref().to_string());
-    PossibleValuesParser::new(rustcloak_kinds.chain(legacy_kinds()))
+    PossibleValuesParser::new(rustcloak_kinds.into_iter().chain(legacy_kinds()))
 }
 
 /// Keycloak Operator

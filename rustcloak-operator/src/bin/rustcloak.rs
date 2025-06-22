@@ -1,6 +1,5 @@
-use actix_web::{App, HttpRequest, HttpResponse, HttpServer, Responder, get};
 use clap::Parser;
-use futures::{FutureExt, future};
+use futures::FutureExt;
 use kube::Resource;
 use log::info;
 use rustcloak_crd::{
@@ -20,21 +19,10 @@ use rustcloak_operator::{
         UserCredentialController,
     },
     error::Result,
-    metrics::metrics,
+    metrics::Metrics,
     opts::{LegacyMode, Opts, legacy_kinds},
 };
 
-#[get("/healthz")]
-async fn health(_: HttpRequest) -> impl Responder {
-    HttpResponse::Ok().json("healthy")
-}
-
-#[cfg(debug_assertions)]
-fn init_logger() {
-    pretty_env_logger::init();
-}
-
-#[cfg(not(debug_assertions))]
 fn init_logger() {
     use structured_logger::{Builder, async_json::new_writer};
 
@@ -43,16 +31,8 @@ fn init_logger() {
         .init();
 }
 
-fn main() -> Result<()> {
-    tokio::runtime::Builder::new_current_thread()
-        .enable_all()
-        .max_blocking_threads(8)
-        .build()
-        .unwrap()
-        .block_on(async { async_main().await })
-}
-
-async fn async_main() -> Result<()> {
+#[tokio::main(flavor = "current_thread")]
+async fn main() -> Result<()> {
     let opts = Opts::parse();
 
     init_logger();
@@ -65,8 +45,9 @@ async fn async_main() -> Result<()> {
     let client = kube::Client::try_default().await?;
     let mut controllers_str = opts.controllers.clone();
     if controllers_str.is_empty() {
-        controllers_str =
-            map_all_crds!(Crd => Crd::kind(&()).to_string()).collect();
+        controllers_str.extend_from_slice(
+            &map_all_crds!(Crd => Crd::kind(&()).to_string()),
+        );
     }
 
     if opts.legacy != LegacyMode::Disabled {
@@ -229,18 +210,8 @@ async fn async_main() -> Result<()> {
         );
     }
 
-    // Metrics
     if let Some(sock_addr) = opts.metrics_addr {
-        controllers.push(
-            HttpServer::new(move || {
-                App::new().service(health).service(metrics)
-            })
-            .bind(sock_addr)?
-            .shutdown_timeout(5)
-            .run()
-            .then(|_| future::ready(Ok(())))
-            .boxed(),
-        );
+        controllers.push(Metrics::create(sock_addr)?.run().boxed());
     }
 
     futures::future::try_join_all(controllers).await?;

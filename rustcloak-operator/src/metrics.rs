@@ -1,15 +1,59 @@
-use actix_web::{HttpRequest, HttpResponse, Responder, get};
-use prometheus::{Encoder, TextEncoder};
+use crate::error::Result;
+use axum::{
+    Json, Router,
+    body::Body,
+    http::{Response, StatusCode, header::CONTENT_TYPE},
+    response::IntoResponse,
+    routing::get,
+    serve,
+};
+use metrics_exporter_prometheus::{PrometheusBuilder, PrometheusHandle};
+use std::{net::SocketAddr, sync::Arc};
+use tokio::net::TcpListener;
 
-#[get("/metrics")]
-pub async fn metrics(_: HttpRequest) -> impl Responder {
-    let encoder = TextEncoder::new();
+pub struct Metrics {
+    prom_handle: Arc<PrometheusHandle>,
+    sock_addr: SocketAddr,
+}
 
-    let metric_families = prometheus::gather();
-    let mut buffer = vec![];
-    encoder.encode(&metric_families, &mut buffer).unwrap();
+impl Metrics {
+    pub fn create(sock_addr: SocketAddr) -> Result<Self> {
+        let prom_handle =
+            Arc::new(PrometheusBuilder::new().install_recorder()?);
 
-    HttpResponse::Ok()
-        .insert_header(("Content-Type", encoder.format_type()))
-        .body(buffer)
+        Ok(Self {
+            prom_handle,
+            sock_addr,
+        })
+    }
+
+    async fn metrics(prom_handle: Arc<PrometheusHandle>) -> impl IntoResponse {
+        prom_handle.run_upkeep();
+
+        let body = prom_handle.render();
+        Response::builder()
+            .status(StatusCode::OK)
+            .header(CONTENT_TYPE, "text/plain; version=0.0.4")
+            .body(Body::from(body))
+            .unwrap()
+    }
+
+    async fn health() -> impl IntoResponse {
+        Json("healthy")
+    }
+
+    pub async fn run(self) -> Result<()> {
+        let router = Router::new()
+            .route("/healthz", get(Self::health))
+            .route("/metrics", get(move || Self::metrics(self.prom_handle)));
+
+        let listener = TcpListener::bind(self.sock_addr).await?;
+        serve(listener, router)
+            .with_graceful_shutdown(async {
+                let _ = tokio::signal::ctrl_c().await;
+            })
+            .await?;
+
+        Ok(())
+    }
 }
