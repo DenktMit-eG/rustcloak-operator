@@ -92,7 +92,7 @@ impl LifecycleController for LegacyClientController {
                 options: None,
                 definition: serde_json::from_value(definition)?,
                 client_secret: Some(KeycloakClientSecretReference {
-                    secret_name: format!("keycloak-client-secret-{}", name),
+                    secret_name: format!("keycloak-client-secret-{name}"),
                     client_id_key: Some("CLIENT_ID".to_string()),
                     client_secret_key: Some("CLIENT_SECRET".to_string()),
                 }),

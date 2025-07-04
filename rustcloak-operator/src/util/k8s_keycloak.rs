@@ -330,8 +330,7 @@ impl<R: Instance> K8sKeycloakRefreshJob<R> {
                     kind = R::kind(&()),
                     name = name,
                     namespace = ns;
-                    "Error refreshing token: {}, trying to login",
-                    e
+                    "Error refreshing token: {e}, trying to login"
                 );
                 self.keycloak_with_credentials().await?;
             }
@@ -405,7 +404,7 @@ where
             let stopper = session_handler.stopper();
             let handle = tokio::spawn(async move {
                 if let Err(e) = session_handler.run_expire(expires).await {
-                    log::error!("Error in keycloak session handler: {}", e);
+                    log::error!("Error in keycloak session handler: {e}");
                     if let Err(e) = instance_api
                         .patch_status(
                             &name,
@@ -414,7 +413,7 @@ where
                         )
                         .await
                     {
-                        log::error!("Error updating status: {}", e);
+                        log::error!("Error updating status: {e}");
                     }
                 }
             });

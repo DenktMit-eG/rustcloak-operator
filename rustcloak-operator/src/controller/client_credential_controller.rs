@@ -70,7 +70,7 @@ impl LifecycleController for ClientCredentialController {
         let [client_id_key, client_secret_key] =
             resource.spec.client_secret.secret_key_names();
 
-        let secret_path = format!("{}/client-secret", resource_path);
+        let secret_path = format!("{resource_path}/client-secret");
 
         let instance = Retriever::<InstanceRef>::get(
             client.clone(),

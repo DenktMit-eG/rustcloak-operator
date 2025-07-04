@@ -149,7 +149,7 @@ impl LifecycleController for UserCredentialController {
             password
         };
 
-        let path = format!("{}/reset-password", resource_path);
+        let path = format!("{resource_path}/reset-password");
         let credential = CredentialRepresentation {
             temporary: Some(false),
             value: Some(password),
