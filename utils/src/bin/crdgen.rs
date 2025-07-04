@@ -26,7 +26,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let yaml = serde_yaml::to_string(&crd)?;
         let md = crd.to_markdown();
         if opts.markdown {
-            println!("---\n{}", md);
+            println!("---\n{md}");
         } else if opts.update {
             std::fs::create_dir_all(MD_DIR)?;
             std::fs::create_dir_all(CRD_DIR)?;
@@ -44,7 +44,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 md_path.file_name().unwrap().to_str().unwrap()
             );
         } else {
-            println!("---\n{}", yaml);
+            println!("---\n{yaml}");
         }
     }
     Ok(())

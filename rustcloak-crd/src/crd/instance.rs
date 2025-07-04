@@ -82,7 +82,7 @@ impl KeycloakInstanceSpec {
         {
             name.to_string()
         } else {
-            format!("{}-api-token", name)
+            format!("{name}-api-token")
         }
     }
 

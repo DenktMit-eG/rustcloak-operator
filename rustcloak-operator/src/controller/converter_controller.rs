@@ -195,7 +195,7 @@ where
                     kind = kind,
                     name = name,
                     namespace = ns;
-                    "Resource not found, assuming it's already deleted. Message: {}", m);
+                    "Resource not found, assuming it's already deleted. Message: {m}");
                 }
                 x => {
                     x?;

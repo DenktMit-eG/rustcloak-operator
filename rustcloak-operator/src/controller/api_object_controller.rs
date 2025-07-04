@@ -151,7 +151,7 @@ where
         // =>
         // /admin/realms/<realm_name>/users/<user_id>
         let realm_path = path.split('/').take(4).collect::<Vec<_>>().join("/");
-        let resource_path = format!("{}/users/{user_id}", realm_path);
+        let resource_path = format!("{realm_path}/users/{user_id}");
 
         keycloak.put(&resource_path, &user).await?;
 
@@ -272,12 +272,11 @@ where
                         name = name,
                         namespace = ns,
                         path = endpoint.resource_path;
-                        "Failed to update resource at path, try recreating. (Message: {})",
-                        m
+                        "Failed to update resource at path, try recreating. (Message: {m})"
                     );
                 }
                 x => {
-                    warn!("{:#?}", x);
+                    warn!("{x:#?}");
                     x?
                 }
             }
@@ -354,7 +353,7 @@ where
                     name = name,
                     namespace = ns,
                     path = endpoint.resource_path;
-                    "Resource not found, assuming it's already deleted. Message: {}", m);
+                    "Resource not found, assuming it's already deleted. Message: {m}");
             }
             x => x?,
         }

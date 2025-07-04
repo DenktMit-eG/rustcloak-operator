@@ -60,7 +60,7 @@ async fn make_secret(
     let Some(password) = credentials.value.clone() else {
         return Ok(None);
     };
-    let name = format!("user-cred-{}", name);
+    let name = format!("user-cred-{name}");
     let username_key = "username".to_string();
     let password_key = "password".to_string();
 
