@@ -14,7 +14,7 @@ jobs:
       - name: Gather mdbook-version
         id: version
         run: |
-          version="$(grep "^version\>" rustcloak-operator/Cargo.toml | cut -d '"' -f 2 | cut -d. -f 1,2)"
+          version="$(grep "^version\>" Cargo.toml | cut -d '"' -f 2 | cut -d. -f 1,2)"
           echo "version=$version" >> "$GITHUB_OUTPUT"
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v2
