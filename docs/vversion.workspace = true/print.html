@@ -63,8 +63,7 @@
         	const dropdown = document.createElement('div');
         	const menubar = document.getElementById('menu-bar');
         
-        	const root = path_to_root === "" ? "." : path_to_root;
-        	const versions_res = await fetch(`${root}/../versions.txt`)
+        	const versions_res = await fetch(`${path_to_root}../versions.txt`)
         	if (!versions_res.ok) {
         		console.error('Failed to fetch versions.txt');
         		return;
@@ -136,6 +135,17 @@
         <script src="toc.js"></script>
     </head>
     <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
     <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
@@ -213,7 +223,7 @@
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -1088,6 +1098,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -3887,6 +3900,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -3958,6 +3972,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm"><a class="header" href="#statusrealm">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakrealm.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref"><a class="header" href="#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref"><a class="header" href="#statusrealmrealmref">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath"><a class="header" href="#statusresourcepath">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -4012,6 +4051,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -4219,6 +4261,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -4290,6 +4333,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-1"><a class="header" href="#statusrealm-1">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticationflow.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-1"><a class="header" href="#statusrealmclusterrealmref-1">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-1"><a class="header" href="#statusrealmrealmref-1">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-1"><a class="header" href="#statusresourcepath-1">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -4332,6 +4400,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -4472,6 +4543,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -4542,6 +4614,31 @@ spec:
 <h3 id="statusready-2"><a class="header" href="#statusready-2">status.ready</a></h3>
 <p>Type: boolean</p>
 <p><em>missing</em></p>
+<hr />
+<h3 id="statusrealm-2"><a class="header" href="#statusrealm-2">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakauthenticatorconfig.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-2"><a class="header" href="#statusrealmclusterrealmref-2">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-2"><a class="header" href="#statusrealmrealmref-2">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
 <hr />
 <h3 id="statusresourcepath-2"><a class="header" href="#statusresourcepath-2">status.resourcePath</a></h3>
 <p>Type: string</p>
@@ -4792,6 +4889,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -6107,6 +6207,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -6178,6 +6279,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-3"><a class="header" href="#statusrealm-3">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclient.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-3"><a class="header" href="#statusrealmclusterrealmref-3">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-3"><a class="header" href="#statusrealmrealmref-3">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-3"><a class="header" href="#statusresourcepath-3">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -6231,6 +6357,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -6435,6 +6564,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -6506,6 +6636,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-4"><a class="header" href="#statusrealm-4">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientscope.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-4"><a class="header" href="#statusrealmclusterrealmref-4">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-4"><a class="header" href="#statusrealmrealmref-4">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-4"><a class="header" href="#statusresourcepath-4">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -6552,6 +6707,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -6712,6 +6870,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -6783,6 +6942,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-5"><a class="header" href="#statusrealm-5">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakcomponent.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-5"><a class="header" href="#statusrealmclusterrealmref-5">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-5"><a class="header" href="#statusrealmrealmref-5">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-5"><a class="header" href="#statusresourcepath-5">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -6832,6 +7016,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -7011,6 +7198,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -7082,6 +7270,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-6"><a class="header" href="#statusrealm-6">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakgroup.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-6"><a class="header" href="#statusrealmclusterrealmref-6">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-6"><a class="header" href="#statusrealmrealmref-6">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-6"><a class="header" href="#statusresourcepath-6">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -7138,6 +7351,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -7348,6 +7564,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -7419,6 +7636,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-7"><a class="header" href="#statusrealm-7">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovider.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-7"><a class="header" href="#statusrealmclusterrealmref-7">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-7"><a class="header" href="#statusrealmrealmref-7">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-7"><a class="header" href="#statusresourcepath-7">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -7462,6 +7704,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -7603,6 +7848,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -7673,6 +7919,31 @@ spec:
 <h3 id="statusready-8"><a class="header" href="#statusready-8">status.ready</a></h3>
 <p>Type: boolean</p>
 <p><em>missing</em></p>
+<hr />
+<h3 id="statusrealm-8"><a class="header" href="#statusrealm-8">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakidentityprovidermapper.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-8"><a class="header" href="#statusrealmclusterrealmref-8">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-8"><a class="header" href="#statusrealmrealmref-8">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
 <hr />
 <h3 id="statusresourcepath-8"><a class="header" href="#statusresourcepath-8">status.resourcePath</a></h3>
 <p>Type: string</p>
@@ -7814,6 +8085,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -8496,6 +8770,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -8567,6 +8842,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-9"><a class="header" href="#statusrealm-9">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakorganization.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-9"><a class="header" href="#statusrealmclusterrealmref-9">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-9"><a class="header" href="#statusrealmrealmref-9">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-9"><a class="header" href="#statusresourcepath-9">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -8613,6 +8913,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -8775,6 +9078,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -8845,6 +9149,31 @@ spec:
 <h3 id="statusready-10"><a class="header" href="#statusready-10">status.ready</a></h3>
 <p>Type: boolean</p>
 <p><em>missing</em></p>
+<hr />
+<h3 id="statusrealm-10"><a class="header" href="#statusrealm-10">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakprotocolmapper.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-10"><a class="header" href="#statusrealmclusterrealmref-10">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-10"><a class="header" href="#statusrealmrealmref-10">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
 <hr />
 <h3 id="statusresourcepath-10"><a class="header" href="#statusresourcepath-10">status.resourcePath</a></h3>
 <p>Type: string</p>
@@ -9365,6 +9694,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -12164,6 +12496,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -12235,6 +12568,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-11"><a class="header" href="#statusrealm-11">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrealm.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-11"><a class="header" href="#statusrealmclusterrealmref-11">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-11"><a class="header" href="#statusrealmrealmref-11">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-11"><a class="header" href="#statusresourcepath-11">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -12281,6 +12639,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -12441,6 +12802,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -12511,6 +12873,31 @@ spec:
 <h3 id="statusready-12"><a class="header" href="#statusready-12">status.ready</a></h3>
 <p>Type: boolean</p>
 <p><em>missing</em></p>
+<hr />
+<h3 id="statusrealm-12"><a class="header" href="#statusrealm-12">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrequiredactionprovider.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-12"><a class="header" href="#statusrealmclusterrealmref-12">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-12"><a class="header" href="#statusrealmrealmref-12">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
 <hr />
 <h3 id="statusresourcepath-12"><a class="header" href="#statusresourcepath-12">status.resourcePath</a></h3>
 <p>Type: string</p>
@@ -12598,6 +12985,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -12987,6 +13377,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -13058,6 +13449,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-13"><a class="header" href="#statusrealm-13">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakresource.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-13"><a class="header" href="#statusrealmclusterrealmref-13">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-13"><a class="header" href="#statusrealmrealmref-13">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-13"><a class="header" href="#statusresourcepath-13">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -13110,6 +13526,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -13309,6 +13728,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -13379,6 +13799,31 @@ spec:
 <h3 id="statusready-14"><a class="header" href="#statusready-14">status.ready</a></h3>
 <p>Type: boolean</p>
 <p><em>missing</em></p>
+<hr />
+<h3 id="statusrealm-14"><a class="header" href="#statusrealm-14">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrole.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-14"><a class="header" href="#statusrealmclusterrealmref-14">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-14"><a class="header" href="#statusrealmrealmref-14">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
 <hr />
 <h3 id="statusresourcepath-14"><a class="header" href="#statusresourcepath-14">status.resourcePath</a></h3>
 <p>Type: string</p>
@@ -13461,6 +13906,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -13821,6 +14269,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -13891,6 +14340,31 @@ spec:
 <h3 id="statusready-15"><a class="header" href="#statusready-15">status.ready</a></h3>
 <p>Type: boolean</p>
 <p><em>missing</em></p>
+<hr />
+<h3 id="statusrealm-15"><a class="header" href="#statusrealm-15">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakscope.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-15"><a class="header" href="#statusrealmclusterrealmref-15">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-15"><a class="header" href="#statusrealmrealmref-15">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
 <hr />
 <h3 id="statusresourcepath-15"><a class="header" href="#statusresourcepath-15">status.resourcePath</a></h3>
 <p>Type: string</p>
@@ -14009,6 +14483,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -14566,6 +15043,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -14637,6 +15115,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-16"><a class="header" href="#statusrealm-16">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakuser.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-16"><a class="header" href="#statusrealmclusterrealmref-16">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-16"><a class="header" href="#statusrealmrealmref-16">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-16"><a class="header" href="#statusresourcepath-16">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -14658,6 +15161,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointparentparentref">spec.endpoint.parent.parentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointparentsubpath">spec.endpoint.parent.sub_path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointpath">spec.endpoint.path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointrealm">spec.endpoint.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointrealmclusterrealmref">spec.endpoint.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointrealmrealmref">spec.endpoint.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specimmutablepayload">spec.immutablePayload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specoptionspatchfrom">spec.options.patchFrom[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -14685,6 +15191,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -14709,6 +15218,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointparent">parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointpath">path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -14774,6 +15284,31 @@ spec:
 </tbody></table>
 </div>
 <p><em>missing</em></p>
+<hr />
+<h3 id="specendpointrealm"><a class="header" href="#specendpointrealm">spec.endpoint.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#specendpointrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="specendpointrealmclusterrealmref"><a class="header" href="#specendpointrealmclusterrealmref">spec.endpoint.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="specendpointrealmrealmref"><a class="header" href="#specendpointrealmrealmref">spec.endpoint.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
 <hr />
 <h3 id="specimmutablepayload"><a class="header" href="#specimmutablepayload">spec.immutablePayload</a></h3>
 <p>Type: string</p>
@@ -14870,6 +15405,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -14941,6 +15477,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-17"><a class="header" href="#statusrealm-17">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakapiobject.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-17"><a class="header" href="#statusrealmclusterrealmref-17">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-17"><a class="header" href="#statusrealmrealmref-17">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-17"><a class="header" href="#statusresourcepath-17">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -14979,6 +15540,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -15077,6 +15641,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -15148,6 +15713,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-18"><a class="header" href="#statusrealm-18">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/clusterkeycloakinstance.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-18"><a class="header" href="#statusrealmclusterrealmref-18">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-18"><a class="header" href="#statusrealmrealmref-18">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-18"><a class="header" href="#statusresourcepath-18">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -15169,6 +15759,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointparentparentref">spec.endpoint.parent.parentRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointparentsubpath">spec.endpoint.parent.sub_path</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointpath">spec.endpoint.path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointrealm">spec.endpoint.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointrealmclusterrealmref">spec.endpoint.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointrealmrealmref">spec.endpoint.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specimmutablepayload">spec.immutablePayload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptions">spec.options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specoptionspatchfrom">spec.options.patchFrom[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
@@ -15196,6 +15789,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -15220,6 +15816,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointinstanceref">instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointparent">parent</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointpath">path</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
@@ -15285,6 +15882,31 @@ spec:
 </tbody></table>
 </div>
 <p><em>missing</em></p>
+<hr />
+<h3 id="specendpointrealm-1"><a class="header" href="#specendpointrealm-1">spec.endpoint.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#specendpointrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="specendpointrealmclusterrealmref-1"><a class="header" href="#specendpointrealmclusterrealmref-1">spec.endpoint.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="specendpointrealmrealmref-1"><a class="header" href="#specendpointrealmrealmref-1">spec.endpoint.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
 <hr />
 <h3 id="specimmutablepayload-1"><a class="header" href="#specimmutablepayload-1">spec.immutablePayload</a></h3>
 <p>Type: string</p>
@@ -15381,6 +16003,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -15452,6 +16075,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-19"><a class="header" href="#statusrealm-19">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakapiobject.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-19"><a class="header" href="#statusrealmclusterrealmref-19">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-19"><a class="header" href="#statusrealmrealmref-19">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-19"><a class="header" href="#statusresourcepath-19">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -15483,6 +16131,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -15548,6 +16199,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -15619,6 +16271,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-20"><a class="header" href="#statusrealm-20">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakclientcredential.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-20"><a class="header" href="#statusrealmclusterrealmref-20">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-20"><a class="header" href="#statusrealmrealmref-20">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-20"><a class="header" href="#statusresourcepath-20">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -15657,6 +16334,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -15755,6 +16435,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -15826,6 +16507,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-21"><a class="header" href="#statusrealm-21">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakinstance.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-21"><a class="header" href="#statusrealmclusterrealmref-21">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-21"><a class="header" href="#statusrealmrealmref-21">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-21"><a class="header" href="#statusresourcepath-21">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -15838,9 +16544,10 @@ spec:
 <p>represents a mapping between a user or group and a client</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#spec">spec</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakrole">spec.keycloakRole</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakroleclientref">spec.keycloakRole.clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakrolename">spec.keycloakRole.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrole">spec.role</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleclientid">spec.role.clientId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleclientref">spec.role.clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrolename">spec.role.name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleref">spec.roleRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubject">spec.subject</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubjectgroupref">spec.subject.groupRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -15857,6 +16564,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -15865,23 +16575,28 @@ spec:
 <h3 id="spec-22"><a class="header" href="#spec-22">spec</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakrole">keycloakRole</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrole">role</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleref">roleRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubject">subject</a></td><td style="text-align: left">object</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
 <p><em>missing</em></p>
 <hr />
-<h3 id="speckeycloakrole"><a class="header" href="#speckeycloakrole">spec.keycloakRole</a></h3>
+<h3 id="specrole"><a class="header" href="#specrole">spec.role</a></h3>
 <p>Type: object</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakroleclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
-<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#speckeycloakrolename">name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleclientid">clientId</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specroleclientref">clientRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specrolename">name</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 </tbody></table>
 </div>
 <p>The name of the role in keycloak. Mutual exclusive with roleRef</p>
 <hr />
-<h3 id="speckeycloakroleclientref"><a class="header" href="#speckeycloakroleclientref">spec.keycloakRole.clientRef</a></h3>
+<h3 id="specroleclientid"><a class="header" href="#specroleclientid">spec.role.clientId</a></h3>
+<p>Type: string</p>
+<p>The client id of the the client.</p>
+<hr />
+<h3 id="specroleclientref"><a class="header" href="#specroleclientref">spec.role.clientRef</a></h3>
 <p>Type: string</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
@@ -15889,7 +16604,7 @@ spec:
 </div>
 <p>The kubernetes resources name of a KeycloakClient object.</p>
 <hr />
-<h3 id="speckeycloakrolename"><a class="header" href="#speckeycloakrolename">spec.keycloakRole.name</a></h3>
+<h3 id="specrolename"><a class="header" href="#specrolename">spec.role.name</a></h3>
 <p>Type: string</p>
 <p>The name of the role in keycloak</p>
 <hr />
@@ -15899,7 +16614,7 @@ spec:
 <tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
 </tbody></table>
 </div>
-<p>The kubernetes resource name of a KeycloakRole object. Mutual exclusive with keycloakRole</p>
+<p>The kubernetes resource name of a KeycloakRole object. Mutual exclusive with role</p>
 <hr />
 <h3 id="specsubject"><a class="header" href="#specsubject">spec.subject</a></h3>
 <p>Type: object</p>
@@ -15908,7 +16623,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#specsubjectuserref">userRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
 </div>
-<p>The object that the role mapping is for</p>
+<p>The object that :the role mapping is for</p>
 <hr />
 <h3 id="specsubjectgroupref"><a class="header" href="#specsubjectgroupref">spec.subject.groupRef</a></h3>
 <p>Type: string</p>
@@ -15933,6 +16648,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -16004,6 +16720,31 @@ spec:
 <p>Type: boolean</p>
 <p><em>missing</em></p>
 <hr />
+<h3 id="statusrealm-22"><a class="header" href="#statusrealm-22">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakrolemapping.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-22"><a class="header" href="#statusrealmclusterrealmref-22">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-22"><a class="header" href="#statusrealmrealmref-22">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
+<hr />
 <h3 id="statusresourcepath-22"><a class="header" href="#statusresourcepath-22">status.resourcePath</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
@@ -16037,6 +16778,9 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusinstanceinstanceref">status.instance.instanceRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusmessage">status.message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusready">status.ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusrealm">status.realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusrealmclusterrealmref">status.realm.clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusrealmrealmref">status.realm.realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusresourcepath">status.resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusstatus">status.status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -16112,6 +16856,7 @@ spec:
 <tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusinstance">instance</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusmessage">message</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusready">ready</a></td><td style="text-align: left">boolean</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusrealm">realm</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusresourcepath">resourcePath</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusstatus">status</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody></table>
@@ -16182,6 +16927,31 @@ spec:
 <h3 id="statusready-23"><a class="header" href="#statusready-23">status.ready</a></h3>
 <p>Type: boolean</p>
 <p><em>missing</em></p>
+<hr />
+<h3 id="statusrealm-23"><a class="header" href="#statusrealm-23">status.realm</a></h3>
+<p>Type: object</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Property</th><th style="text-align: left">Type</th><th style="text-align: center">Required</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusrealmclusterrealmref">clusterRealmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+<tr><td style="text-align: left"><a href="crds/keycloakusercredential.html#statusrealmrealmref">realmRef</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
+</tbody></table>
+</div>
+<p>Optional for backwards compatibility</p>
+<hr />
+<h3 id="statusrealmclusterrealmref-23"><a class="header" href="#statusrealmclusterrealmref-23">status.realm.clusterRealmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the cluster realm to which this object belongs to</p>
+<hr />
+<h3 id="statusrealmrealmref-23"><a class="header" href="#statusrealmrealmref-23">status.realm.realmRef</a></h3>
+<p>Type: string</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Validation Rule</th><th style="text-align: left">Error Message</th></tr></thead><tbody>
+<tr><td style="text-align: left">self == oldSelf</td><td style="text-align: left">Value is immutable</td></tr>
+</tbody></table>
+</div>
+<p>The name of the realm to which this object belongs to</p>
 <hr />
 <h3 id="statusresourcepath-23"><a class="header" href="#statusresourcepath-23">status.resourcePath</a></h3>
 <p>Type: string</p>
