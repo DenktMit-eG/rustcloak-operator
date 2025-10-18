@@ -27,6 +27,7 @@ where
 }
 
 pub trait Endpoint {
+    fn is_ready(&self) -> bool;
     fn instance_ref(&self) -> Option<&InstanceRef>;
     fn resource_path(&self) -> Option<&str>;
     fn realm_ref(&self) -> Option<RealmRef>;
@@ -44,6 +45,9 @@ macro_rules! impl_endpoint {
             }
         }
         impl $crate::traits::Endpoint for $type {
+            fn is_ready(&self) -> bool {
+                self.status.as_ref().map_or(false, |s| s.ready)
+            }
             fn instance_ref(&self) -> Option<&$crate::instance::InstanceRef> {
                 self.endpoint().map(|e| &e.instance)
             }

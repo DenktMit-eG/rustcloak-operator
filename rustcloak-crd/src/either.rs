@@ -73,6 +73,10 @@ where
 }
 
 impl<L: Endpoint, R: Endpoint> Endpoint for Either<L, R> {
+    fn is_ready(&self) -> bool {
+        for_both!(self, s => s.is_ready())
+    }
+
     fn instance_ref(&self) -> Option<&InstanceRef> {
         for_both!(self, s => s.instance_ref())
     }

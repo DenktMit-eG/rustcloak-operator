@@ -180,6 +180,10 @@ where
             parent.realm_ref().ok_or(Error::MissingRealmRef)?
         };
         let init_workflow = resource.inner_spec().init_workflow();
+        if ! parent.is_ready() {
+            return Err(Error::ParentNotReady);
+        }
+
         let resource_path = format!(
             "{}/{}",
             parent.resource_path().ok_or(Error::MissingResourcePath)?,
