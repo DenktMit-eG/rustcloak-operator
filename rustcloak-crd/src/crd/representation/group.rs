@@ -41,7 +41,7 @@ impl_object!("group" <ParentRef> / |d| {
 impl_endpoint!(KeycloakGroup);
 
 schema_patch!(KeycloakGroupSpec: |s| {
-    s.remove("subGroups");
+    s.remove_prop("subGroups");
 });
 ref_type!(SubGroupRef, parent_group_ref, KeycloakGroup);
 ref_type!(

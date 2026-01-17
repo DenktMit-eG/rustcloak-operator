@@ -7,7 +7,7 @@ use crate::{
     refs::{HasParent, ref_type},
 };
 use kube::{CustomResource, Resource};
-use schemars::{JsonSchema, SchemaGenerator, schema::Schema};
+use schemars::{JsonSchema, Schema, SchemaGenerator};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use serde_with::DisplayFromStr;
@@ -77,14 +77,13 @@ pub struct KeycloakApiEndpoint {
 }
 fn http_method_schema(generator: &mut SchemaGenerator) -> Schema {
     let mut schema = String::json_schema(generator);
-    let Schema::Object(ref mut schema_obj) = schema else {
-        unreachable!();
-    };
-    schema_obj.enum_values = Some(vec![
-        Value::String(http::Method::GET.to_string()),
-        Value::String(http::Method::POST.to_string()),
-    ]);
-
+    schema.insert(
+        "enum".to_owned(),
+        Value::Array(vec![
+            Value::String(http::Method::GET.to_string()),
+            Value::String(http::Method::POST.to_string()),
+        ]),
+    );
     schema
 }
 

@@ -34,19 +34,19 @@ schema_patch!(KeycloakResourceSpec: |s| {
         .array_item()
         .prop("policies")
         .array_item()
-        .remove("scopesData")
-        .remove("resourcesData")
+        .remove_prop("scopesData")
+        .remove_prop("resourcesData")
         .additional_properties();
-    s.prop("scopes").array_item().remove("resources");
+    s.prop("scopes").array_item().remove_prop("resources");
     s.prop("scopesUma")
         .array_item()
         .prop("policies")
         .array_item()
-        .remove("resourcesData")
-        .remove("scopesData")
+        .remove_prop("resourcesData")
+        .remove_prop("scopesData")
         .additional_properties();
     s.prop("scopesUma")
         .array_item()
-        .remove("resources")
+        .remove_prop("resources")
         .additional_properties();
 });

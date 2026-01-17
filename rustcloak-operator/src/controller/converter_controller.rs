@@ -186,16 +186,12 @@ where
                 .await?;
         } else {
             match to_api.delete(&name, &DeleteParams::default()).await {
-                Err(kube::Error::Api(kube::core::ErrorResponse {
-                    code: 404,
-                    message: m,
-                    ..
-                })) => {
+                Err(kube::Error::Api(ref status)) if status.is_not_found() => {
                     warn!(
                     kind = kind,
                     name = name,
                     namespace = ns;
-                    "Resource not found, assuming it's already deleted. Message: {m}");
+                    "Resource not found, assuming it's already deleted. Message: {}", status.message);
                 }
                 x => {
                     x?;

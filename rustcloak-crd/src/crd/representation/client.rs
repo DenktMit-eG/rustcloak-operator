@@ -9,7 +9,7 @@ use crate::{
     traits::{SecretKeyNames, impl_endpoint},
 };
 use kube::CustomResource;
-use schemars::JsonSchema;
+use schemars::{JsonSchema, Schema};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
@@ -60,8 +60,8 @@ pub(crate) fn client_schema(s: &mut Schema) {
         .array_item()
         .prop("scopes")
         .array_item()
-        .remove("policies")
-        .remove("resources")
+        .remove_prop("policies")
+        .remove_prop("resources")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("policies")
@@ -70,8 +70,8 @@ pub(crate) fn client_schema(s: &mut Schema) {
         .array_item()
         .prop("scopesUma")
         .array_item()
-        .remove("policies")
-        .remove("resources")
+        .remove_prop("policies")
+        .remove_prop("resources")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("policies")
@@ -80,15 +80,15 @@ pub(crate) fn client_schema(s: &mut Schema) {
         .array_item()
         .prop("resources")
         .array_item()
-        .remove("scopes")
-        .remove("scopesUma")
+        .remove_prop("scopes")
+        .remove_prop("scopesUma")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("policies")
         .array_item()
         .prop("scopesData")
         .array_item()
-        .remove("policies")
+        .remove_prop("policies")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("resources")
@@ -97,15 +97,15 @@ pub(crate) fn client_schema(s: &mut Schema) {
         .array_item()
         .prop("policies")
         .array_item()
-        .remove("resourcesData")
-        .remove("scopesData")
+        .remove_prop("resourcesData")
+        .remove_prop("scopesData")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("resources")
         .array_item()
         .prop("scopes")
         .array_item()
-        .remove("resources")
+        .remove_prop("resources")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("resources")
@@ -114,15 +114,15 @@ pub(crate) fn client_schema(s: &mut Schema) {
         .array_item()
         .prop("policies")
         .array_item()
-        .remove("resourcesData")
-        .remove("scopesData")
+        .remove_prop("resourcesData")
+        .remove_prop("scopesData")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("resources")
         .array_item()
         .prop("scopesUma")
         .array_item()
-        .remove("resources")
+        .remove_prop("resources")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("scopes")
@@ -131,29 +131,29 @@ pub(crate) fn client_schema(s: &mut Schema) {
         .array_item()
         .prop("resourcesData")
         .array_item()
-        .remove("scopes")
-        .remove("scopesUma")
+        .remove_prop("scopes")
+        .remove_prop("scopesUma")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("scopes")
         .array_item()
         .prop("policies")
         .array_item()
-        .remove("scopesData")
+        .remove_prop("scopesData")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("scopes")
         .array_item()
         .prop("resources")
         .array_item()
-        .remove("scopes")
+        .remove_prop("scopes")
         .additional_properties();
     s.prop("authorizationSettings")
         .prop("scopes")
         .array_item()
         .prop("resources")
         .array_item()
-        .remove("scopesUma")
+        .remove_prop("scopesUma")
         .additional_properties();
 }
 schema_patch!(KeycloakClientSpec: |s| {
