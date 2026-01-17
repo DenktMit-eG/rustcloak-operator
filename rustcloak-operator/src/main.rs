@@ -1,7 +1,22 @@
+pub mod controller;
+pub mod error;
+pub mod metrics;
+pub mod opts;
+pub mod util;
+
 use clap::Parser;
+use controller::{
+    ApiObjectController, ClientCredentialController, ControllerRunner,
+    ConverterController, InstanceController, LegacyClientController,
+    LegacyInstanceController, LegacyRealmController, LegacyUserController,
+    RepresentationController, RoleMappingController, UserCredentialController,
+};
+use error::Result;
 use futures::FutureExt;
 use kube::Resource;
 use log::info;
+use metrics::Metrics;
+use opts::{LegacyMode, Opts, legacy_kinds};
 use rustcloak_crd::{
     KeycloakClientCredential, KeycloakRoleMapping, KeycloakUserCredential,
     api_object::{ClusterKeycloakApiObject, KeycloakApiObject},
@@ -10,18 +25,14 @@ use rustcloak_crd::{
     map_all_crds, map_rest_crds,
     user::KeycloakUser,
 };
-use rustcloak_operator::{
-    controller::{
-        ApiObjectController, ClientCredentialController, ControllerRunner,
-        ConverterController, InstanceController, LegacyClientController,
-        LegacyInstanceController, LegacyRealmController, LegacyUserController,
-        RepresentationController, RoleMappingController,
-        UserCredentialController,
-    },
-    error::Result,
-    metrics::Metrics,
-    opts::{LegacyMode, Opts, legacy_kinds},
-};
+
+macro_rules! app_id {
+    ($($name:expr)?) => {
+        concat!("rustcloak.k8s.eboland.de", $("/", $name)?)
+    };
+}
+
+pub(crate) use app_id;
 
 fn init_logger() {
     use structured_logger::{Builder, async_json::new_writer};
