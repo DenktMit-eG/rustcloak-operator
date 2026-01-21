@@ -15,9 +15,12 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakClientSecretReference {
+    /// Name of the Kubernetes Secret where the client credentials will be stored.
     pub secret_name: String,
+    /// Key in the secret for storing the client ID. Defaults to "client_id".
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub client_id_key: Option<String>,
+    /// Key in the secret for storing the client secret. Defaults to "client_secret".
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub client_secret_key: Option<String>,
 }
@@ -29,12 +32,16 @@ namespace_scope! {
         )]
         /// the KeycloakClient resource
         pub struct KeycloakClientSpec {
+            /// API options for configuring patches and other operational settings.
             #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
+            /// Reference to the parent KeycloakRealm or ClusterKeycloakRealm resource.
             #[serde(flatten)]
             pub parent_ref: RealmRef,
+            /// The Keycloak client configuration. See Keycloak Admin REST API documentation for available fields.
             #[schemars(schema_with = "schema")]
             pub definition: Option<ClientRepresentation>,
+            /// Optional reference to a Kubernetes Secret for storing generated client credentials.
             pub client_secret: Option<KeycloakClientSecretReference>,
         }
     }

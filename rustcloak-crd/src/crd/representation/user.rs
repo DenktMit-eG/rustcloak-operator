@@ -21,11 +21,15 @@ pub struct KeycloakUserSecretReference {
     /// Rustcloak will wait for the secret to be created by the user.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub create: Option<bool>,
+    /// Name of the Kubernetes Secret where the user credentials will be stored.
     pub secret_name: String,
+    /// Key in the secret for storing the user's email. Defaults to "email".
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub email_key: Option<String>,
+    /// Key in the secret for storing the username. Defaults to "username".
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub username_key: Option<String>,
+    /// Key in the secret for storing the password. Defaults to "password".
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub password_key: Option<String>,
 }
@@ -33,16 +37,20 @@ pub struct KeycloakUserSecretReference {
 namespace_scope! {
     "KeycloakUser", "kcu" {
         #[kube(
-            doc = "resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)",
+            doc = "resource to define a User within a [KeycloakRealm](./keycloakrealm.md)",
         )]
         /// the KeycloakUser resource
         pub struct KeycloakUserSpec {
+            /// API options for configuring patches and other operational settings.
             #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
+            /// Reference to the parent realm (KeycloakRealm/ClusterKeycloakRealm) or client (for service account users).
             #[serde(flatten)]
             pub parent_ref: ParentRef,
+            /// The Keycloak user configuration. See Keycloak Admin REST API documentation for available fields.
             #[schemars(schema_with = "schema")]
             pub definition: Option<UserRepresentation>,
+            /// Optional reference to a Kubernetes Secret for storing generated user credentials.
             pub user_secret: Option<KeycloakUserSecretReference>,
         }
     }

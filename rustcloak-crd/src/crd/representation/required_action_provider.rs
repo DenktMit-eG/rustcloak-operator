@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 namespace_scope! {
     "KeycloakRequiredActionProvider", "kcrap" {
         #[kube(
-            doc = "resource to define an Required Action Provider within a [KeyclaokRealm](./keycloakrealm.md)",
+            doc = "resource to define a Required Action Provider within a [KeycloakRealm](./keycloakrealm.md)",
         )]
         /// the KeycloakRequiredActionProvider resource
         pub struct KeycloakRequiredActionProviderSpec {

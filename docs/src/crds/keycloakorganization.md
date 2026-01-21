@@ -2,7 +2,7 @@
 
 ## v1beta1
 
-resource to define an Organisation within a [KeyclaokRealm](./keycloakrealm.md)
+resource to define an Organization within a [KeycloakRealm](./keycloakrealm.md)
 
 |Property|Type|Required|
 |:-------|:---|:------:|

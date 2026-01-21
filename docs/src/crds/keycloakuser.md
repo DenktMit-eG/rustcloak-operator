@@ -2,7 +2,7 @@
 
 ## v1beta1
 
-resource to define a User within a [KeyclaokRealm](./keycloakrealm.md)
+resource to define a User within a [KeycloakRealm](./keycloakrealm.md)
 
 |Property|Type|Required|
 |:-------|:---|:------:|
@@ -202,11 +202,7 @@ Type: object
 |:--------------|:------------|
 |has(self.id) == has(oldSelf.id)|Value is immutable|
 
-UserRepresentation
-
-<details><summary>JSON schema</summary>
-
-```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "applicationRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientConsents": { "type": "array", "items": { "$ref": "#/$defs/UserConsentRepresentation" } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "createdTimestamp": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentials": { "type": "array", "items": { "$ref": "#/$defs/CredentialRepresentation" } }, "disableableCredentialTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "email": { "type": "string" }, "emailVerified": { "type": "boolean" }, "enabled": { "type": "boolean" }, "federatedIdentities": { "type": "array", "items": { "$ref": "#/$defs/FederatedIdentityRepresentation" } }, "federationLink": { "type": "string" }, "firstName": { "type": "string" }, "groups": { "type": "array", "items": { "type": "string" } }, "id": { "type": "string" }, "lastName": { "type": "string" }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "origin": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "requiredActions": { "type": "array", "items": { "type": "string" } }, "self": { "type": "string" }, "serviceAccountClientId": { "type": "string" }, "socialLinks": { "type": "array", "items": { "$ref": "#/$defs/SocialLinkRepresentation" } }, "totp": { "type": "boolean" }, "userProfileMetadata": { "$ref": "#/$defs/UserProfileMetadata" }, "username": { "type": "string" } } } ``` </details>
+The Keycloak user configuration. See Keycloak Admin REST API documentation for available fields.
 
 ---
 
@@ -1015,7 +1011,7 @@ Type: object
 |[secretName](#specusersecretsecretname)|string|✅|
 |[usernameKey](#specusersecretusernamekey)|string||
 
-*missing*
+Optional reference to a Kubernetes Secret for storing generated user credentials.
 
 ---
 
@@ -1031,7 +1027,7 @@ If set to false, rustcloak will not create the secret if it does not exist. Rust
 
 Type: string
 
-*missing*
+Key in the secret for storing the user's email. Defaults to "email".
 
 ---
 
@@ -1039,7 +1035,7 @@ Type: string
 
 Type: string
 
-*missing*
+Key in the secret for storing the password. Defaults to "password".
 
 ---
 
@@ -1047,7 +1043,7 @@ Type: string
 
 Type: string
 
-*missing*
+Name of the Kubernetes Secret where the user credentials will be stored.
 
 ---
 
@@ -1055,7 +1051,7 @@ Type: string
 
 Type: string
 
-*missing*
+Key in the secret for storing the username. Defaults to "username".
 
 ---
 

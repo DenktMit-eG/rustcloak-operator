@@ -13,7 +13,7 @@ use super::realm::RealmRef;
 namespace_scope! {
     "KeycloakIdentityProvider", "kcip" {
         #[kube(
-            doc = "resource to define a identity provider in a [KeyclaokRealm](./keycloakrealm.md)",
+            doc = "resource to define an identity provider in a [KeycloakRealm](./keycloakrealm.md)",
         )]
         /// the KeycloakIdentityProvider resource
         pub struct KeycloakIdentityProviderSpec {

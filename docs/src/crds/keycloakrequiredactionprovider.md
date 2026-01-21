@@ -2,7 +2,7 @@
 
 ## v1beta1
 
-resource to define an Required Action Provider within a [KeyclaokRealm](./keycloakrealm.md)
+resource to define a Required Action Provider within a [KeycloakRealm](./keycloakrealm.md)
 
 |Property|Type|Required|
 |:-------|:---|:------:|

@@ -112,7 +112,7 @@ If set to false, rustcloak will not create the secret if it does not exist. Rust
 
 Type: string
 
-*missing*
+Key in the secret for storing the user's email. Defaults to "email".
 
 ---
 
@@ -120,7 +120,7 @@ Type: string
 
 Type: string
 
-*missing*
+Key in the secret for storing the password. Defaults to "password".
 
 ---
 
@@ -128,7 +128,7 @@ Type: string
 
 Type: string
 
-*missing*
+Name of the Kubernetes Secret where the user credentials will be stored.
 
 ---
 
@@ -136,7 +136,7 @@ Type: string
 
 Type: string
 
-*missing*
+Key in the secret for storing the username. Defaults to "username".
 
 ---
 

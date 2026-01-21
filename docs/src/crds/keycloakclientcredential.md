@@ -68,7 +68,7 @@ Type: object
 
 Type: string
 
-*missing*
+Key in the secret for storing the client ID. Defaults to "client_id".
 
 ---
 
@@ -76,7 +76,7 @@ Type: string
 
 Type: string
 
-*missing*
+Key in the secret for storing the client secret. Defaults to "client_secret".
 
 ---
 
@@ -84,7 +84,7 @@ Type: string
 
 Type: string
 
-*missing*
+Name of the Kubernetes Secret where the client credentials will be stored.
 
 ---
 

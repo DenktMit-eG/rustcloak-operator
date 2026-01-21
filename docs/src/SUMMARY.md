@@ -32,3 +32,4 @@
     - [KeycloakRoleMapping](crds/keycloakrolemapping.md)
     - [KeycloakUserCredential](crds/keycloakusercredential.md)
 - [Architecture](./architecture.md)
+- [Troubleshooting](./troubleshooting.md)

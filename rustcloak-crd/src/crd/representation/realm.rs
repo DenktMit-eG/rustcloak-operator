@@ -17,14 +17,17 @@ use serde::{Deserialize, Serialize};
 both_scopes! {
    "KeycloakRealm", "kcrm", "ClusterKeycloakRealm", "ckcrm", ClusterKeycloakRealmSpec {
         #[kube(
-            doc = "resource to define an Realm within a [KeyclaokInstance](./keycloakinstance.md)",
+            doc = "resource to define a Realm within a [KeycloakInstance](./keycloakinstance.md)",
         )]
         /// the KeycloakRealm resource
         pub struct KeycloakRealmSpec {
+            /// API options for configuring patches and other operational settings.
             #[serde(default, flatten)]
             pub options: Option<KeycloakApiObjectOptions>,
+            /// Reference to the parent KeycloakInstance or ClusterKeycloakInstance resource.
             #[serde(flatten)]
             pub parent_ref: InstanceRef,
+            /// The Keycloak realm configuration. See Keycloak Admin REST API documentation for available fields.
             #[schemars(schema_with = "schema")]
             pub definition: Option<RealmRepresentation>,
         }

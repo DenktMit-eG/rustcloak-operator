@@ -2,7 +2,7 @@
 
 ## v1beta1
 
-resource to define a identity provider in a [KeyclaokRealm](./keycloakrealm.md)
+resource to define an identity provider in a [KeycloakRealm](./keycloakrealm.md)
 
 |Property|Type|Required|
 |:-------|:---|:------:|

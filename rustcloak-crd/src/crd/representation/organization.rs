@@ -12,7 +12,7 @@ namespace_scope! {
     "KeycloakOrganization",
     "kcorg" {
         #[kube(
-            doc = "resource to define an Organisation within a [KeyclaokRealm](./keycloakrealm.md)",
+            doc = "resource to define an Organization within a [KeycloakRealm](./keycloakrealm.md)",
         )]
         /// the KeycloakOrganization resource
         pub struct KeycloakOrganizationSpec {

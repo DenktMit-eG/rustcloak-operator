@@ -40,47 +40,67 @@ spec:
             spec:
               properties:
                 baseUrl:
+                  description: "Base URL of the Keycloak server (e.g., \"https://keycloak.example.com\")."
                   type: string
                 client:
+                  description: >-
+                    Optional client credentials for service account authentication instead of
+                    username/password.
                   nullable: true
                   properties:
                     id:
+                      description: Client ID for service account authentication.
                       type: string
                     secret:
+                      description: >-
+                        Client secret for service account authentication. Optional if the client is
+                        public.
                       nullable: true
                       type: string
                   required:
                     - id
                   type: object
                 credentials:
+                  description: Reference to the Kubernetes Secret containing admin credentials.
                   properties:
                     create:
+                      description: "If true, the operator will create the secret with a randomly generated password if it doesn't exist."
                       nullable: true
                       type: boolean
                     passwordKey:
+                      description: Key in the secret containing the password. Defaults to "password".
                       nullable: true
                       type: string
                     secretName:
+                      description: Name of the Kubernetes Secret containing the credentials.
                       type: string
                     usernameKey:
+                      description: Key in the secret containing the username. Defaults to "user".
                       nullable: true
                       type: string
                   required:
                     - secretName
                   type: object
                 realm:
+                  description: Realm used for authentication. Defaults to "master".
                   nullable: true
                   type: string
                 token:
+                  description: Optional configuration for caching the authentication token in a Secret.
                   nullable: true
                   properties:
                     expiresKey:
+                      description: >-
+                        Key in the secret for storing the token expiration timestamp. Defaults to
+                        "expires".
                       nullable: true
                       type: string
                     secretName:
+                      description: "Name of the Kubernetes Secret for caching the authentication token. If not specified, defaults to \"{instance-name}-api-token\"."
                       nullable: true
                       type: string
                     tokenKey:
+                      description: Key in the secret for storing the token. Defaults to "token".
                       nullable: true
                       type: string
                   type: object

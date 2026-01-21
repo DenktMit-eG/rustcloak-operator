@@ -13,9 +13,13 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakInstanceCredentialReference {
+    /// If true, the operator will create the secret with a randomly generated password if it doesn't exist.
     pub create: Option<bool>,
+    /// Name of the Kubernetes Secret containing the credentials.
     pub secret_name: String,
+    /// Key in the secret containing the username. Defaults to "user".
     pub username_key: Option<String>,
+    /// Key in the secret containing the password. Defaults to "password".
     pub password_key: Option<String>,
 }
 
@@ -30,8 +34,11 @@ impl SecretKeyNames<2> for KeycloakInstanceCredentialReference {
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakInstanceTokenReference {
+    /// Name of the Kubernetes Secret for caching the authentication token. If not specified, defaults to "{instance-name}-api-token".
     pub secret_name: Option<String>,
+    /// Key in the secret for storing the token. Defaults to "token".
     pub token_key: Option<String>,
+    /// Key in the secret for storing the token expiration timestamp. Defaults to "expires".
     pub expires_key: Option<String>,
 }
 
@@ -46,7 +53,9 @@ impl SecretKeyNames<2> for KeycloakInstanceTokenReference {
 #[derive(Clone, Debug, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakInstanceClient {
+    /// Client ID for service account authentication.
     pub id: String,
+    /// Client secret for service account authentication. Optional if the client is public.
     pub secret: Option<String>,
 }
 
@@ -62,10 +71,15 @@ both_scopes! {
                 }"#,
         )]
         pub struct KeycloakInstanceSpec {
+            /// Base URL of the Keycloak server (e.g., "https://keycloak.example.com").
             pub base_url: String,
+            /// Realm used for authentication. Defaults to "master".
             pub realm: Option<String>,
+            /// Reference to the Kubernetes Secret containing admin credentials.
             pub credentials: KeycloakInstanceCredentialReference,
+            /// Optional configuration for caching the authentication token in a Secret.
             pub token: Option<KeycloakInstanceTokenReference>,
+            /// Optional client credentials for service account authentication instead of username/password.
             pub client: Option<KeycloakInstanceClient>,
         }
     }

@@ -62,7 +62,7 @@ Type: object
 
 Type: string
 
-*missing*
+Base URL of the Keycloak server (e.g., "https://keycloak.example.com").
 
 ---
 
@@ -75,7 +75,7 @@ Type: object
 |[id](#specclientid)|string|✅|
 |[secret](#specclientsecret)|string||
 
-*missing*
+Optional client credentials for service account authentication instead of username/password.
 
 ---
 
@@ -83,7 +83,7 @@ Type: object
 
 Type: string
 
-*missing*
+Client ID for service account authentication.
 
 ---
 
@@ -91,7 +91,7 @@ Type: string
 
 Type: string
 
-*missing*
+Client secret for service account authentication. Optional if the client is public.
 
 ---
 
@@ -106,7 +106,7 @@ Type: object
 |[secretName](#speccredentialssecretname)|string|✅|
 |[usernameKey](#speccredentialsusernamekey)|string||
 
-*missing*
+Reference to the Kubernetes Secret containing admin credentials.
 
 ---
 
@@ -114,7 +114,7 @@ Type: object
 
 Type: boolean
 
-*missing*
+If true, the operator will create the secret with a randomly generated password if it doesn't exist.
 
 ---
 
@@ -122,7 +122,7 @@ Type: boolean
 
 Type: string
 
-*missing*
+Key in the secret containing the password. Defaults to "password".
 
 ---
 
@@ -130,7 +130,7 @@ Type: string
 
 Type: string
 
-*missing*
+Name of the Kubernetes Secret containing the credentials.
 
 ---
 
@@ -138,7 +138,7 @@ Type: string
 
 Type: string
 
-*missing*
+Key in the secret containing the username. Defaults to "user".
 
 ---
 
@@ -146,7 +146,7 @@ Type: string
 
 Type: string
 
-*missing*
+Realm used for authentication. Defaults to "master".
 
 ---
 
@@ -160,7 +160,7 @@ Type: object
 |[secretName](#spectokensecretname)|string||
 |[tokenKey](#spectokentokenkey)|string||
 
-*missing*
+Optional configuration for caching the authentication token in a Secret.
 
 ---
 
@@ -168,7 +168,7 @@ Type: object
 
 Type: string
 
-*missing*
+Key in the secret for storing the token expiration timestamp. Defaults to "expires".
 
 ---
 
@@ -176,7 +176,7 @@ Type: string
 
 Type: string
 
-*missing*
+Name of the Kubernetes Secret for caching the authentication token. If not specified, defaults to "{instance-name}-api-token".
 
 ---
 
@@ -184,7 +184,7 @@ Type: string
 
 Type: string
 
-*missing*
+Key in the secret for storing the token. Defaults to "token".
 
 ---
 
