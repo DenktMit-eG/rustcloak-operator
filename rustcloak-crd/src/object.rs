@@ -9,10 +9,13 @@ pub trait KeycloakRestObject: HasParent {
     fn init_workflow(&self) -> InitWorkflow;
     fn definition(&self) -> Option<&Self::Definition>;
     fn options(&self) -> Option<&KeycloakApiObjectOptions>;
+
+    /// Get human-readable name for K8s resource naming (returns reference to avoid allocation)
+    fn human_readable_name(&self) -> Option<&str>;
 }
 
 macro_rules! impl_object {
-    ($api_prefix:literal <$parent_ref_type:ty> / |$def_v:ident| $mount_path:block / $id_lit:literal for $object_type:ty => $definition_type:ty) => {
+    ($api_prefix:literal <$parent_ref_type:ty> / |$def_v:ident| $mount_path:block / $id_lit:literal / |$name_v:ident| $name_expr:block for $object_type:ty => $definition_type:ty) => {
         impl $crate::object::KeycloakRestObject for $object_type {
             type ParentObject = <$parent_ref_type as $crate::refs::Ref>::Target;
             type Definition = $definition_type;
@@ -31,6 +34,11 @@ macro_rules! impl_object {
 
             fn options(&self) -> Option<&$crate::KeycloakApiObjectOptions> {
                 self.options.as_ref()
+            }
+
+            fn human_readable_name(&self) -> Option<&str> {
+                let $name_v = self;
+                $name_expr
             }
         }
 

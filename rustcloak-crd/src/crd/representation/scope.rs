@@ -25,7 +25,9 @@ namespace_scope! {
     }
 }
 
-impl_object!("scope" <ClientRef> / |_d| {"authz/resource-server/scope"} / "id" for KeycloakScopeSpec => ScopeRepresentation);
+impl_object!("scope" <ClientRef> / |_d| {"authz/resource-server/scope"} / "id" / |d| {
+    d.definition.as_ref().and_then(|def| def.name.as_deref())
+} for KeycloakScopeSpec => ScopeRepresentation);
 
 impl_endpoint!(KeycloakScope);
 

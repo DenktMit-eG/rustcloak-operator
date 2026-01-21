@@ -38,7 +38,9 @@ impl_object!("scope" <RealmRef> / |d| {
     } else {
         "client-templates"
     }
-} / "id" for KeycloakClientScopeSpec => ClientScopeRepresentation);
+} / "id" / |d| {
+    d.definition.as_ref().and_then(|def| def.name.as_deref())
+} for KeycloakClientScopeSpec => ClientScopeRepresentation);
 
 schema_patch!(KeycloakClientScopeSpec);
 

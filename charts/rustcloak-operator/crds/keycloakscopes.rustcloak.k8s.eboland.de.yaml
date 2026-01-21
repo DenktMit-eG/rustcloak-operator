@@ -6,411 +6,378 @@ spec:
   group: rustcloak.k8s.eboland.de
   names:
     categories:
-    - keycloak
-    - all
+      - keycloak
+      - all
     kind: KeycloakScope
     plural: keycloakscopes
     shortNames:
-    - kcs
+      - kcs
     singular: keycloakscope
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: true if the realm is ready
-      jsonPath: .status.ready
-      name: Ready
-      type: boolean
-    - description: Status String of the resource
-      jsonPath: .status.status
-      name: Status
-      type: string
-    - description: time since the realm was created
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: resource to define a Scope within a [KeyclaokClient](./keycloakclient.md)
-        properties:
-          spec:
-            description: the KeycloakScope resource
-            properties:
-              clientRef:
-                description: The kubernetes resources name of a KeycloakClient object.
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-              definition:
-                description: |-
-                  ScopeRepresentation
-
-                  <details><summary>JSON schema</summary>
-
-                  ```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } } } ``` </details>
-                properties:
-                  displayName:
-                    nullable: true
-                    type: string
-                  iconUri:
-                    nullable: true
-                    type: string
-                  id:
-                    nullable: true
-                    type: string
-                    x-kubernetes-validations:
+    - additionalPrinterColumns:
+        - description: true if the realm is ready
+          jsonPath: .status.ready
+          name: Ready
+          type: boolean
+        - description: Status String of the resource
+          jsonPath: .status.status
+          name: Status
+          type: string
+        - description: time since the realm was created
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1beta1
+      schema:
+        openAPIV3Schema:
+          description: "resource to define a Scope within a [KeyclaokClient](./keycloakclient.md)"
+          properties:
+            spec:
+              description: the KeycloakScope resource
+              properties:
+                clientRef:
+                  description: The kubernetes resources name of a KeycloakClient object.
+                  type: string
+                  x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
-                  name:
-                    nullable: true
-                    type: string
-                  policies:
-                    items:
-                      description: |-
-                        PolicyRepresentation
-
-                        <details><summary>JSON schema</summary>
-
-                        ```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } } } ``` </details>
-                      properties:
-                        config:
-                          additionalProperties:
+                definition:
+                  description: "ScopeRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"displayName\": { \"type\": \"string\" }, \"iconUri\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/PolicyRepresentation\" } }, \"resources\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" } } } } ``` </details>"
+                  properties:
+                    displayName:
+                      nullable: true
+                      type: string
+                    iconUri:
+                      nullable: true
+                      type: string
+                    id:
+                      nullable: true
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    name:
+                      nullable: true
+                      type: string
+                    policies:
+                      items:
+                        description: "PolicyRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"config\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"string\" } }, \"decisionStrategy\": { \"$ref\": \"#/$defs/DecisionStrategy\" }, \"description\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"logic\": { \"$ref\": \"#/$defs/Logic\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"resourceType\": { \"type\": \"string\" }, \"resources\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"resourcesData\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" }, \"uniqueItems\": true }, \"scopes\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"scopesData\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" } } } ``` </details>"
+                        properties:
+                          config:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          decisionStrategy:
+                            description: "DecisionStrategy\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"AFFIRMATIVE\", \"UNANIMOUS\", \"CONSENSUS\" ] } ``` </details>"
+                            enum:
+                              - AFFIRMATIVE
+                              - UNANIMOUS
+                              - CONSENSUS
+                            nullable: true
                             type: string
-                          type: object
-                        decisionStrategy:
-                          description: |-
-                            DecisionStrategy
-
-                            <details><summary>JSON schema</summary>
-
-                            ```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
-                          enum:
-                          - AFFIRMATIVE
-                          - UNANIMOUS
-                          - CONSENSUS
-                          nullable: true
-                          type: string
-                        description:
-                          nullable: true
-                          type: string
-                        id:
-                          nullable: true
-                          type: string
-                        logic:
-                          description: |-
-                            Logic
-
-                            <details><summary>JSON schema</summary>
-
-                            ```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
-                          enum:
-                          - POSITIVE
-                          - NEGATIVE
-                          nullable: true
-                          type: string
-                        name:
-                          nullable: true
-                          type: string
-                        owner:
-                          nullable: true
-                          type: string
-                        policies:
-                          items:
+                          description:
+                            nullable: true
                             type: string
-                          nullable: true
-                          type: array
-                        resourceType:
-                          nullable: true
-                          type: string
-                        resources:
-                          items:
+                          id:
+                            nullable: true
                             type: string
-                          nullable: true
-                          type: array
-                        resourcesData:
-                          items:
-                            description: |-
-                              ResourceRepresentation
-
-                              <details><summary>JSON schema</summary>
-
-                              ```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } } } ``` </details>
-                            properties:
-                              _id:
-                                nullable: true
-                                type: string
-                              attributes:
-                                additionalProperties:
+                          logic:
+                            description: "Logic\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"POSITIVE\", \"NEGATIVE\" ] } ``` </details>"
+                            enum:
+                              - POSITIVE
+                              - NEGATIVE
+                            nullable: true
+                            type: string
+                          name:
+                            nullable: true
+                            type: string
+                          owner:
+                            nullable: true
+                            type: string
+                          policies:
+                            items:
+                              type: string
+                            nullable: true
+                            type: array
+                          resourceType:
+                            nullable: true
+                            type: string
+                          resources:
+                            items:
+                              type: string
+                            nullable: true
+                            type: array
+                          resourcesData:
+                            items:
+                              description: "ResourceRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"_id\": { \"type\": \"string\" }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"displayName\": { \"type\": \"string\" }, \"icon_uri\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"object\", \"allOf\": [ { \"$ref\": \"#/$defs/ResourceOwnerRepresentation\" } ] }, \"ownerManagedAccess\": { \"type\": \"boolean\" }, \"scopes\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"scopesUma\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" }, \"uri\": { \"type\": \"string\" }, \"uris\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true } } } ``` </details>"
+                              properties:
+                                _id:
+                                  nullable: true
+                                  type: string
+                                attributes:
+                                  additionalProperties:
+                                    items:
+                                      type: string
+                                    type: array
+                                  type: object
+                                displayName:
+                                  nullable: true
+                                  type: string
+                                icon_uri:
+                                  nullable: true
+                                  type: string
+                                name:
+                                  nullable: true
+                                  type: string
+                                owner:
+                                  description: "ResourceOwnerRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" } } } ``` </details>"
+                                  nullable: true
+                                  properties:
+                                    id:
+                                      nullable: true
+                                      type: string
+                                    name:
+                                      nullable: true
+                                      type: string
+                                  type: object
+                                ownerManagedAccess:
+                                  nullable: true
+                                  type: boolean
+                                type:
+                                  nullable: true
+                                  type: string
+                                uri:
+                                  nullable: true
+                                  type: string
+                                uris:
                                   items:
                                     type: string
+                                  nullable: true
                                   type: array
-                                type: object
-                              displayName:
-                                nullable: true
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                            nullable: true
+                            type: array
+                          scopes:
+                            items:
+                              type: string
+                            nullable: true
+                            type: array
+                          type:
+                            nullable: true
+                            type: string
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                      type: array
+                    resources:
+                      items:
+                        description: "ResourceRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"_id\": { \"type\": \"string\" }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"displayName\": { \"type\": \"string\" }, \"icon_uri\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"object\", \"allOf\": [ { \"$ref\": \"#/$defs/ResourceOwnerRepresentation\" } ] }, \"ownerManagedAccess\": { \"type\": \"boolean\" }, \"scopes\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"scopesUma\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" }, \"uri\": { \"type\": \"string\" }, \"uris\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true } } } ``` </details>"
+                        properties:
+                          _id:
+                            nullable: true
+                            type: string
+                          attributes:
+                            additionalProperties:
+                              items:
                                 type: string
-                              icon_uri:
+                              type: array
+                            type: object
+                          displayName:
+                            nullable: true
+                            type: string
+                          icon_uri:
+                            nullable: true
+                            type: string
+                          name:
+                            nullable: true
+                            type: string
+                          owner:
+                            description: "ResourceOwnerRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" } } } ``` </details>"
+                            nullable: true
+                            properties:
+                              id:
                                 nullable: true
                                 type: string
                               name:
                                 nullable: true
                                 type: string
-                              owner:
-                                description: |-
-                                  ResourceOwnerRepresentation
-
-                                  <details><summary>JSON schema</summary>
-
-                                  ```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } } } ``` </details>
-                                nullable: true
-                                properties:
-                                  id:
-                                    nullable: true
-                                    type: string
-                                  name:
-                                    nullable: true
-                                    type: string
-                                type: object
-                              ownerManagedAccess:
-                                nullable: true
-                                type: boolean
-                              type:
-                                nullable: true
-                                type: string
-                              uri:
-                                nullable: true
-                                type: string
-                              uris:
-                                items:
-                                  type: string
-                                nullable: true
-                                type: array
                             type: object
-                            x-kubernetes-preserve-unknown-fields: true
-                          nullable: true
-                          type: array
-                        scopes:
-                          items:
+                          ownerManagedAccess:
+                            nullable: true
+                            type: boolean
+                          type:
+                            nullable: true
                             type: string
-                          nullable: true
-                          type: array
-                        type:
-                          nullable: true
-                          type: string
-                      type: object
-                      x-kubernetes-preserve-unknown-fields: true
-                    type: array
-                  resources:
-                    items:
-                      description: |-
-                        ResourceRepresentation
-
-                        <details><summary>JSON schema</summary>
-
-                        ```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } } } ``` </details>
-                      properties:
-                        _id:
-                          nullable: true
-                          type: string
-                        attributes:
-                          additionalProperties:
+                          uri:
+                            nullable: true
+                            type: string
+                          uris:
                             items:
                               type: string
+                            nullable: true
                             type: array
-                          type: object
-                        displayName:
-                          nullable: true
-                          type: string
-                        icon_uri:
-                          nullable: true
-                          type: string
-                        name:
-                          nullable: true
-                          type: string
-                        owner:
-                          description: |-
-                            ResourceOwnerRepresentation
-
-                            <details><summary>JSON schema</summary>
-
-                            ```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } } } ``` </details>
-                          nullable: true
-                          properties:
-                            id:
-                              nullable: true
-                              type: string
-                            name:
-                              nullable: true
-                              type: string
-                          type: object
-                        ownerManagedAccess:
-                          nullable: true
-                          type: boolean
-                        type:
-                          nullable: true
-                          type: string
-                        uri:
-                          nullable: true
-                          type: string
-                        uris:
-                          items:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                      type: array
+                  type: object
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: has(self.id) == has(oldSelf.id)
+                patchFrom:
+                  items:
+                    oneOf:
+                      - required:
+                          - secretKeyRef
+                      - required:
+                          - configMapKeyRef
+                      - required:
+                          - value
+                    properties:
+                      configMapKeyRef:
+                        description: Selects a key from a ConfigMap.
+                        properties:
+                          key:
+                            description: The key to select.
                             type: string
-                          nullable: true
-                          type: array
-                      type: object
-                      x-kubernetes-preserve-unknown-fields: true
-                    type: array
-                type: object
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: has(self.id) == has(oldSelf.id)
-              patchFrom:
-                items:
-                  oneOf:
-                  - required:
-                    - secretKeyRef
-                  - required:
-                    - configMapKeyRef
-                  - required:
-                    - value
+                          name:
+                            description: "Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                            type: string
+                          optional:
+                            description: Specify whether the ConfigMap or its key must be defined
+                            type: boolean
+                        required:
+                          - key
+                          - name
+                        type: object
+                      path:
+                        type: string
+                      secretKeyRef:
+                        description: SecretKeySelector selects a key of a Secret.
+                        properties:
+                          key:
+                            description: The key of the secret to select from.  Must be a valid secret key.
+                            type: string
+                          name:
+                            description: "Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                            type: string
+                          optional:
+                            description: Specify whether the Secret or its key must be defined
+                            type: boolean
+                        required:
+                          - key
+                          - name
+                        type: object
+                      value:
+                        type: string
+                      value_as:
+                        default: string
+                        enum:
+                          - string
+                          - number
+                          - bool
+                          - yaml
+                          - json
+                        type: string
+                    required:
+                      - path
+                    type: object
+                  type: array
+              required:
+                - clientRef
+                - definition
+              type: object
+            status:
+              nullable: true
+              properties:
+                apiObjectRef:
+                  description: Reference to the API object name (KeycloakApiObject or ClusterKeycloakApiObject)
+                  nullable: true
+                  type: string
+                conditions:
+                  items:
+                    properties:
+                      lastTransitionTime:
+                        description: >-
+                          Time is a wrapper around time.Time which supports correct marshaling to YAML and
+                          JSON.  Wrappers are provided for many of the factory methods that the time
+                          package offers.
+                        format: date-time
+                        nullable: true
+                        type: string
+                      message:
+                        nullable: true
+                        type: string
+                      reason:
+                        nullable: true
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string
+                    required:
+                      - status
+                      - type
+                    type: object
+                  type: array
+                instance:
+                  anyOf:
+                    - required:
+                        - instanceRef
+                    - required:
+                        - clusterInstanceRef
                   properties:
-                    configMapKeyRef:
-                      description: Selects a key from a ConfigMap.
-                      properties:
-                        key:
-                          description: The key to select.
-                          type: string
-                        name:
-                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        optional:
-                          description: Specify whether the ConfigMap or its key must be defined
-                          type: boolean
-                      required:
-                      - key
-                      - name
-                      type: object
-                    path:
+                    clusterInstanceRef:
+                      description: The name of the cluster instance to which this object belongs to.
                       type: string
-                    secretKeyRef:
-                      description: SecretKeySelector selects a key of a Secret.
-                      properties:
-                        key:
-                          description: The key of the secret to select from.  Must be a valid secret key.
-                          type: string
-                        name:
-                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        optional:
-                          description: Specify whether the Secret or its key must be defined
-                          type: boolean
-                      required:
-                      - key
-                      - name
-                      type: object
-                    value:
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    instanceRef:
+                      description: The name of the namespaced instance to which this object belongs to.
                       type: string
-                    value_as:
-                      default: string
-                      enum:
-                      - string
-                      - number
-                      - bool
-                      - yaml
-                      - json
-                      type: string
-                  required:
-                  - path
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
                   type: object
-                type: array
-            required:
-            - clientRef
-            - definition
-            type: object
-          status:
-            nullable: true
-            properties:
-              conditions:
-                items:
+                message:
+                  type: string
+                ready:
+                  type: boolean
+                realm:
+                  anyOf:
+                    - required:
+                        - realmRef
+                    - required:
+                        - clusterRealmRef
+                  description: Optional for backwards compatibility
+                  nullable: true
                   properties:
-                    lastTransitionTime:
-                      description: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-                      format: date-time
-                      nullable: true
+                    clusterRealmRef:
+                      description: The name of the cluster realm to which this object belongs to
                       type: string
-                    message:
-                      nullable: true
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    realmRef:
+                      description: The name of the realm to which this object belongs to
                       type: string
-                    reason:
-                      nullable: true
-                      type: string
-                    status:
-                      type: string
-                    type:
-                      type: string
-                  required:
-                  - status
-                  - type
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
                   type: object
-                type: array
-              instance:
-                anyOf:
-                - required:
-                  - instanceRef
-                - required:
-                  - clusterInstanceRef
-                properties:
-                  clusterInstanceRef:
-                    description: The name of the cluster instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  instanceRef:
-                    description: The name of the namespaced instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              message:
-                type: string
-              ready:
-                type: boolean
-              realm:
-                anyOf:
-                - required:
-                  - realmRef
-                - required:
-                  - clusterRealmRef
-                description: Optional for backwards compatibility
-                nullable: true
-                properties:
-                  clusterRealmRef:
-                    description: The name of the cluster realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  realmRef:
-                    description: The name of the realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              resourcePath:
-                type: string
-              status:
-                type: string
-            required:
-            - ready
-            type: object
-        required:
-        - spec
-        title: KeycloakScope
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                resourcePath:
+                  type: string
+                status:
+                  type: string
+              required:
+                - ready
+              type: object
+          required:
+            - spec
+          title: KeycloakScope
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

@@ -15,6 +15,7 @@ represents credentials for a keycloak client
 |[spec.instanceRef](#specinstanceref)|string||
 |[spec.resourcePath](#specresourcepath)|string|✅|
 |[status](#status)|object||
+|[status.apiObjectRef](#statusapiobjectref)|string||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
 |[status.conditions[].message](#statusconditionsmessage)|string||
@@ -125,6 +126,7 @@ Type: object
 
 |Property|Type|Required|
 |:-------|:---|:------:|
+|[apiObjectRef](#statusapiobjectref)|string||
 |[conditions[]](#statusconditions)|object||
 |[instance](#statusinstance)|object||
 |[message](#statusmessage)|string||
@@ -134,6 +136,14 @@ Type: object
 |[status](#statusstatus)|string||
 
 *missing*
+
+---
+
+### status.apiObjectRef
+
+Type: string
+
+Reference to the API object name (KeycloakApiObject or ClusterKeycloakApiObject)
 
 ---
 

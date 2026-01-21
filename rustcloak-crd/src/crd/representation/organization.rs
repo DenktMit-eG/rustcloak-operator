@@ -26,7 +26,9 @@ namespace_scope! {
     }
 }
 
-impl_object!("org" <RealmRef> / |_d| {"organizations"} / "id" for KeycloakOrganizationSpec => OrganizationRepresentation);
+impl_object!("org" <RealmRef> / |_d| {"organizations"} / "id" / |d| {
+    d.definition.as_ref().and_then(|def| def.name.as_deref())
+} for KeycloakOrganizationSpec => OrganizationRepresentation);
 
 impl_endpoint!(KeycloakOrganization);
 

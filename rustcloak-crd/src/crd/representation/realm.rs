@@ -31,7 +31,9 @@ both_scopes! {
     }
 }
 
-impl_object!("realm" <InstanceRef> / |_d| {"admin/realms"} / "realm" for KeycloakRealmSpec => RealmRepresentation);
+impl_object!("realm" <InstanceRef> / |_d| {"admin/realms"} / "realm" / |d| {
+    d.definition.as_ref().and_then(|def| def.realm.as_deref())
+} for KeycloakRealmSpec => RealmRepresentation);
 
 macro_rules! realm_endpoint {
     ($name:ident, $either:ident) => {

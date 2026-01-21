@@ -36,7 +36,9 @@ impl_object!("group" <ParentRef> / |d| {
     } else {
         "children"
     }
-} / "id" for KeycloakGroupSpec => GroupRepresentation);
+} / "id" / |d| {
+    d.definition.as_ref().and_then(|def| def.name.as_deref())
+} for KeycloakGroupSpec => GroupRepresentation);
 
 impl_endpoint!(KeycloakGroup);
 

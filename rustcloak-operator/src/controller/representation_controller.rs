@@ -180,7 +180,7 @@ where
             parent.realm_ref().ok_or(Error::MissingRealmRef)?
         };
         let init_workflow = resource.inner_spec().init_workflow();
-        if ! parent.is_ready() {
+        if !parent.is_ready() {
             return Err(Error::ParentNotReady);
         }
 
@@ -236,11 +236,15 @@ where
         if let Some(api_status) =
             admin_api.get_status(&api_name).await?.status()
         {
+            // Set the reference to the API object
+            let mut status_with_ref = api_status.clone();
+            status_with_ref.api_object_ref = Some(api_name.clone());
+
             let api = ApiExt::<Self::Resource>::api(client.clone(), &ns);
             api.patch_status(
                 &resource.name_unchecked(),
                 &PatchParams::apply(app_id!()),
-                &api_status.to_patch(),
+                &status_with_ref.to_patch(),
             )
             .await?;
         }

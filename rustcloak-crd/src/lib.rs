@@ -1,9 +1,11 @@
 mod crd;
 pub mod either;
+pub mod filters;
 pub mod immutable;
 pub mod inner_spec;
 pub mod macros;
 pub mod marker;
+pub mod naming;
 mod object;
 pub mod refs;
 mod schema;

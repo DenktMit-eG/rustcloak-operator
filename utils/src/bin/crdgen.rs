@@ -23,7 +23,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let opts = Opts::parse();
 
     for crd in map_all_crds!(Crd => Crd::crd()) {
-        let yaml = serde_yaml::to_string(&crd)?;
+        let yaml = serde_saphyr::to_string(&crd)?;
         let md = crd.to_markdown();
         if opts.markdown {
             println!("---\n{md}");

@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["rustcloak-operator", "rustcloak-crd", "utils"]
+members = ["rustcloak-operator", "rustcloak-crd", "utils", "rustcloak-cli"]
 
 [workspace.package]
 version = "0.3.2"

@@ -25,7 +25,9 @@ namespace_scope! {
     }
 }
 
-impl_object!("rap" <RealmRef> / |_d| {"authentication/required-actions"} / "alias" for KeycloakRequiredActionProviderSpec => RequiredActionProviderRepresentation);
+impl_object!("rap" <RealmRef> / |_d| {"authentication/required-actions"} / "alias" / |d| {
+    d.definition.as_ref().and_then(|def| def.alias.as_deref())
+} for KeycloakRequiredActionProviderSpec => RequiredActionProviderRepresentation);
 
 impl_endpoint!(KeycloakRequiredActionProvider);
 

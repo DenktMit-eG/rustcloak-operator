@@ -6,185 +6,194 @@ spec:
   group: rustcloak.k8s.eboland.de
   names:
     categories:
-    - keycloak
-    - all
+      - keycloak
+      - all
     kind: KeycloakRoleMapping
     plural: keycloakrolemappings
     shortNames:
-    - kcrmp
+      - kcrmp
     singular: keycloakrolemapping
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: Role Name
-      jsonPath: .spec.roleRef
-      name: Role Name
-      type: string
-    - description: Role Ref
-      jsonPath: .spec.roleRef
-      name: Role Ref
-      type: string
-    - description: true if the realm is ready
-      jsonPath: .status.ready
-      name: Ready
-      type: boolean
-    - description: Status String of the resource
-      jsonPath: .status.status
-      name: Status
-      type: string
-    - description: time since the realm was created
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: represents a mapping between a user or group and a client
-        properties:
-          spec:
-            anyOf:
-            - required:
-              - roleRef
-            - required:
-              - role
-            properties:
-              role:
-                anyOf:
+    - additionalPrinterColumns:
+        - description: Role Name
+          jsonPath: .spec.roleRef
+          name: Role Name
+          type: string
+        - description: Role Ref
+          jsonPath: .spec.roleRef
+          name: Role Ref
+          type: string
+        - description: true if the realm is ready
+          jsonPath: .status.ready
+          name: Ready
+          type: boolean
+        - description: Status String of the resource
+          jsonPath: .status.status
+          name: Status
+          type: string
+        - description: time since the realm was created
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1beta1
+      schema:
+        openAPIV3Schema:
+          description: represents a mapping between a user or group and a client
+          properties:
+            spec:
+              anyOf:
                 - required:
-                  - clientRef
+                    - roleRef
                 - required:
-                  - clientId
-                description: The name of the role in keycloak. Mutual exclusive with roleRef
-                properties:
-                  clientId:
-                    description: The client id of the the client.
-                    type: string
-                  clientRef:
-                    description: The kubernetes resources name of a KeycloakClient object.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  name:
-                    description: The name of the role in keycloak
-                    type: string
-                required:
-                - name
-                type: object
-              roleRef:
-                description: The kubernetes resource name of a KeycloakRole object. Mutual exclusive with role
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-              subject:
-                anyOf:
-                - required:
-                  - userRef
-                - required:
-                  - groupRef
-                description: The object that :the role mapping is for
-                properties:
-                  groupRef:
-                    description: The name of a KeycloakGroup resource
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  userRef:
-                    description: The name of a KeycloakUser resource
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-            required:
-            - subject
-            type: object
-          status:
-            nullable: true
-            properties:
-              conditions:
-                items:
+                    - role
+              properties:
+                role:
+                  anyOf:
+                    - required:
+                        - clientRef
+                    - required:
+                        - clientId
+                  description: The name of the role in keycloak. Mutual exclusive with roleRef
                   properties:
-                    lastTransitionTime:
-                      description: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-                      format: date-time
-                      nullable: true
+                    clientId:
+                      description: The client id of the the client.
                       type: string
-                    message:
-                      nullable: true
+                    clientRef:
+                      description: The kubernetes resources name of a KeycloakClient object.
                       type: string
-                    reason:
-                      nullable: true
-                      type: string
-                    status:
-                      type: string
-                    type:
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    name:
+                      description: The name of the role in keycloak
                       type: string
                   required:
-                  - status
-                  - type
+                    - name
                   type: object
-                type: array
-              instance:
-                anyOf:
-                - required:
-                  - instanceRef
-                - required:
-                  - clusterInstanceRef
-                properties:
-                  clusterInstanceRef:
-                    description: The name of the cluster instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
+                roleRef:
+                  description: >-
+                    The kubernetes resource name of a KeycloakRole object. Mutual exclusive with
+                    role
+                  type: string
+                  x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
-                  instanceRef:
-                    description: The name of the namespaced instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              message:
-                type: string
-              ready:
-                type: boolean
-              realm:
-                anyOf:
-                - required:
-                  - realmRef
-                - required:
-                  - clusterRealmRef
-                description: Optional for backwards compatibility
-                nullable: true
-                properties:
-                  clusterRealmRef:
-                    description: The name of the cluster realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  realmRef:
-                    description: The name of the realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              resourcePath:
-                type: string
-              status:
-                type: string
-            required:
-            - ready
-            type: object
-        required:
-        - spec
-        title: KeycloakRoleMapping
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                subject:
+                  anyOf:
+                    - required:
+                        - userRef
+                    - required:
+                        - groupRef
+                  description: The object that :the role mapping is for
+                  properties:
+                    groupRef:
+                      description: The name of a KeycloakGroup resource
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    userRef:
+                      description: The name of a KeycloakUser resource
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                  type: object
+              required:
+                - subject
+              type: object
+            status:
+              nullable: true
+              properties:
+                apiObjectRef:
+                  description: Reference to the API object name (KeycloakApiObject or ClusterKeycloakApiObject)
+                  nullable: true
+                  type: string
+                conditions:
+                  items:
+                    properties:
+                      lastTransitionTime:
+                        description: >-
+                          Time is a wrapper around time.Time which supports correct marshaling to YAML and
+                          JSON.  Wrappers are provided for many of the factory methods that the time
+                          package offers.
+                        format: date-time
+                        nullable: true
+                        type: string
+                      message:
+                        nullable: true
+                        type: string
+                      reason:
+                        nullable: true
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string
+                    required:
+                      - status
+                      - type
+                    type: object
+                  type: array
+                instance:
+                  anyOf:
+                    - required:
+                        - instanceRef
+                    - required:
+                        - clusterInstanceRef
+                  properties:
+                    clusterInstanceRef:
+                      description: The name of the cluster instance to which this object belongs to.
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    instanceRef:
+                      description: The name of the namespaced instance to which this object belongs to.
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                  type: object
+                message:
+                  type: string
+                ready:
+                  type: boolean
+                realm:
+                  anyOf:
+                    - required:
+                        - realmRef
+                    - required:
+                        - clusterRealmRef
+                  description: Optional for backwards compatibility
+                  nullable: true
+                  properties:
+                    clusterRealmRef:
+                      description: The name of the cluster realm to which this object belongs to
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    realmRef:
+                      description: The name of the realm to which this object belongs to
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                  type: object
+                resourcePath:
+                  type: string
+                status:
+                  type: string
+              required:
+                - ready
+              type: object
+          required:
+            - spec
+          title: KeycloakRoleMapping
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

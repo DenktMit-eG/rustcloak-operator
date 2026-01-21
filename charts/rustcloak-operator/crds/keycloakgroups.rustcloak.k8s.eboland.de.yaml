@@ -6,258 +6,259 @@ spec:
   group: rustcloak.k8s.eboland.de
   names:
     categories:
-    - keycloak
-    - all
+      - keycloak
+      - all
     kind: KeycloakGroup
     plural: keycloakgroups
     shortNames:
-    - kcg
+      - kcg
     singular: keycloakgroup
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: true if the realm is ready
-      jsonPath: .status.ready
-      name: Ready
-      type: boolean
-    - description: Status String of the resource
-      jsonPath: .status.status
-      name: Status
-      type: string
-    - description: time since the realm was created
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: resource to define a Group within a [KeycloakRealm](./keycloakrealm.md)
-        properties:
-          spec:
-            anyOf:
-            - anyOf:
-              - required:
-                - realmRef
-              - required:
-                - clusterRealmRef
-            - required:
-              - parentGroupRef
-            description: the KeycloakGroup resource
-            properties:
-              clusterRealmRef:
-                description: The name of the cluster realm to which this object belongs to
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-              definition:
-                description: |-
-                  GroupRepresentation
-
-                  <details><summary>JSON schema</summary>
-
-                  ```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "id": { "type": "string" }, "name": { "type": "string" }, "parentId": { "type": "string" }, "path": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "subGroupCount": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "subGroups": { "type": "array", "items": { "$ref": "#/$defs/GroupRepresentation" } } } } ``` </details>
-                properties:
-                  access:
-                    additionalProperties:
-                      type: boolean
-                    type: object
-                  attributes:
-                    additionalProperties:
-                      items:
-                        type: string
-                      type: array
-                    type: object
-                  clientRoles:
-                    additionalProperties:
-                      items:
-                        type: string
-                      type: array
-                    type: object
-                  id:
-                    nullable: true
-                    type: string
-                    x-kubernetes-validations:
+    - additionalPrinterColumns:
+        - description: true if the realm is ready
+          jsonPath: .status.ready
+          name: Ready
+          type: boolean
+        - description: Status String of the resource
+          jsonPath: .status.status
+          name: Status
+          type: string
+        - description: time since the realm was created
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1beta1
+      schema:
+        openAPIV3Schema:
+          description: "resource to define a Group within a [KeycloakRealm](./keycloakrealm.md)"
+          properties:
+            spec:
+              anyOf:
+                - anyOf:
+                    - required:
+                        - realmRef
+                    - required:
+                        - clusterRealmRef
+                - required:
+                    - parentGroupRef
+              description: the KeycloakGroup resource
+              properties:
+                clusterRealmRef:
+                  description: The name of the cluster realm to which this object belongs to
+                  type: string
+                  x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
-                  name:
-                    nullable: true
-                    type: string
-                  parentId:
-                    nullable: true
-                    type: string
-                  path:
-                    nullable: true
-                    type: string
-                  realmRoles:
-                    items:
-                      type: string
-                    type: array
-                  subGroupCount:
-                    format: int64
-                    nullable: true
-                    type: integer
-                type: object
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: has(self.id) == has(oldSelf.id)
-              parentGroupRef:
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-              patchFrom:
-                items:
-                  oneOf:
-                  - required:
-                    - secretKeyRef
-                  - required:
-                    - configMapKeyRef
-                  - required:
-                    - value
+                definition:
+                  description: "GroupRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"access\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"boolean\" } }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"clientRoles\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"parentId\": { \"type\": \"string\" }, \"path\": { \"type\": \"string\" }, \"realmRoles\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } }, \"subGroupCount\": { \"type\": \"integer\", \"format\": \"int64\", \"maximum\": 9.223372036854776e18, \"minimum\": -9.223372036854776e18 }, \"subGroups\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/GroupRepresentation\" } } } } ``` </details>"
                   properties:
-                    configMapKeyRef:
-                      description: Selects a key from a ConfigMap.
-                      properties:
-                        key:
-                          description: The key to select.
-                          type: string
-                        name:
-                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        optional:
-                          description: Specify whether the ConfigMap or its key must be defined
-                          type: boolean
-                      required:
-                      - key
-                      - name
+                    access:
+                      additionalProperties:
+                        type: boolean
                       type: object
+                    attributes:
+                      additionalProperties:
+                        items:
+                          type: string
+                        type: array
+                      type: object
+                    clientRoles:
+                      additionalProperties:
+                        items:
+                          type: string
+                        type: array
+                      type: object
+                    id:
+                      nullable: true
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    name:
+                      nullable: true
+                      type: string
+                    parentId:
+                      nullable: true
+                      type: string
                     path:
+                      nullable: true
                       type: string
-                    secretKeyRef:
-                      description: SecretKeySelector selects a key of a Secret.
-                      properties:
-                        key:
-                          description: The key of the secret to select from.  Must be a valid secret key.
-                          type: string
-                        name:
-                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        optional:
-                          description: Specify whether the Secret or its key must be defined
-                          type: boolean
-                      required:
-                      - key
-                      - name
-                      type: object
-                    value:
-                      type: string
-                    value_as:
-                      default: string
-                      enum:
-                      - string
-                      - number
-                      - bool
-                      - yaml
-                      - json
-                      type: string
-                  required:
-                  - path
+                    realmRoles:
+                      items:
+                        type: string
+                      type: array
+                    subGroupCount:
+                      nullable: true
+                      type: integer
                   type: object
-                type: array
-              realmRef:
-                description: The name of the realm to which this object belongs to
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-            required:
-            - definition
-            type: object
-          status:
-            nullable: true
-            properties:
-              conditions:
-                items:
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: has(self.id) == has(oldSelf.id)
+                parentGroupRef:
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                patchFrom:
+                  items:
+                    oneOf:
+                      - required:
+                          - secretKeyRef
+                      - required:
+                          - configMapKeyRef
+                      - required:
+                          - value
+                    properties:
+                      configMapKeyRef:
+                        description: Selects a key from a ConfigMap.
+                        properties:
+                          key:
+                            description: The key to select.
+                            type: string
+                          name:
+                            description: "Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                            type: string
+                          optional:
+                            description: Specify whether the ConfigMap or its key must be defined
+                            type: boolean
+                        required:
+                          - key
+                          - name
+                        type: object
+                      path:
+                        type: string
+                      secretKeyRef:
+                        description: SecretKeySelector selects a key of a Secret.
+                        properties:
+                          key:
+                            description: The key of the secret to select from.  Must be a valid secret key.
+                            type: string
+                          name:
+                            description: "Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                            type: string
+                          optional:
+                            description: Specify whether the Secret or its key must be defined
+                            type: boolean
+                        required:
+                          - key
+                          - name
+                        type: object
+                      value:
+                        type: string
+                      value_as:
+                        default: string
+                        enum:
+                          - string
+                          - number
+                          - bool
+                          - yaml
+                          - json
+                        type: string
+                    required:
+                      - path
+                    type: object
+                  type: array
+                realmRef:
+                  description: The name of the realm to which this object belongs to
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+              required:
+                - definition
+              type: object
+            status:
+              nullable: true
+              properties:
+                apiObjectRef:
+                  description: Reference to the API object name (KeycloakApiObject or ClusterKeycloakApiObject)
+                  nullable: true
+                  type: string
+                conditions:
+                  items:
+                    properties:
+                      lastTransitionTime:
+                        description: >-
+                          Time is a wrapper around time.Time which supports correct marshaling to YAML and
+                          JSON.  Wrappers are provided for many of the factory methods that the time
+                          package offers.
+                        format: date-time
+                        nullable: true
+                        type: string
+                      message:
+                        nullable: true
+                        type: string
+                      reason:
+                        nullable: true
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string
+                    required:
+                      - status
+                      - type
+                    type: object
+                  type: array
+                instance:
+                  anyOf:
+                    - required:
+                        - instanceRef
+                    - required:
+                        - clusterInstanceRef
                   properties:
-                    lastTransitionTime:
-                      description: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-                      format: date-time
-                      nullable: true
+                    clusterInstanceRef:
+                      description: The name of the cluster instance to which this object belongs to.
                       type: string
-                    message:
-                      nullable: true
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    instanceRef:
+                      description: The name of the namespaced instance to which this object belongs to.
                       type: string
-                    reason:
-                      nullable: true
-                      type: string
-                    status:
-                      type: string
-                    type:
-                      type: string
-                  required:
-                  - status
-                  - type
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
                   type: object
-                type: array
-              instance:
-                anyOf:
-                - required:
-                  - instanceRef
-                - required:
-                  - clusterInstanceRef
-                properties:
-                  clusterInstanceRef:
-                    description: The name of the cluster instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  instanceRef:
-                    description: The name of the namespaced instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              message:
-                type: string
-              ready:
-                type: boolean
-              realm:
-                anyOf:
-                - required:
-                  - realmRef
-                - required:
-                  - clusterRealmRef
-                description: Optional for backwards compatibility
-                nullable: true
-                properties:
-                  clusterRealmRef:
-                    description: The name of the cluster realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  realmRef:
-                    description: The name of the realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              resourcePath:
-                type: string
-              status:
-                type: string
-            required:
-            - ready
-            type: object
-        required:
-        - spec
-        title: KeycloakGroup
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                message:
+                  type: string
+                ready:
+                  type: boolean
+                realm:
+                  anyOf:
+                    - required:
+                        - realmRef
+                    - required:
+                        - clusterRealmRef
+                  description: Optional for backwards compatibility
+                  nullable: true
+                  properties:
+                    clusterRealmRef:
+                      description: The name of the cluster realm to which this object belongs to
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    realmRef:
+                      description: The name of the realm to which this object belongs to
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                  type: object
+                resourcePath:
+                  type: string
+                status:
+                  type: string
+              required:
+                - ready
+              type: object
+          required:
+            - spec
+          title: KeycloakGroup
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

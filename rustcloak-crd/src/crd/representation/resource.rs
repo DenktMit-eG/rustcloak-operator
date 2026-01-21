@@ -25,7 +25,9 @@ namespace_scope! {
     }
 }
 
-impl_object!("resource" <ClientRef> / |_d| {"authz/resource-server/resource"} / "_id" for KeycloakResourceSpec => ResourceRepresentation);
+impl_object!("resource" <ClientRef> / |_d| {"authz/resource-server/resource"} / "_id" / |d| {
+    d.definition.as_ref().and_then(|def| def.name.as_deref())
+} for KeycloakResourceSpec => ResourceRepresentation);
 
 impl_endpoint!(KeycloakResource);
 

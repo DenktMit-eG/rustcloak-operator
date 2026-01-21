@@ -35,6 +35,9 @@ pub struct KeycloakApiStatus {
     pub message: String,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub conditions: Vec<KeycloakApiCondition>,
+    /// Reference to the API object name (KeycloakApiObject or ClusterKeycloakApiObject)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub api_object_ref: Option<String>,
 }
 
 impl KeycloakApiStatus {

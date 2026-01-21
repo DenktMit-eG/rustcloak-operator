@@ -27,7 +27,9 @@ namespace_scope! {
     }
 }
 
-impl_object!("component" <RealmRef> / |_d| {"components"} / "id" for KeycloakComponentSpec => ComponentRepresentation);
+impl_object!("component" <RealmRef> / |_d| {"components"} / "id" / |d| {
+    d.definition.as_ref().and_then(|def| def.name.as_deref())
+} for KeycloakComponentSpec => ComponentRepresentation);
 
 impl_endpoint!(KeycloakComponent);
 

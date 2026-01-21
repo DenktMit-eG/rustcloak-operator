@@ -25,7 +25,9 @@ namespace_scope! {
     }
 }
 
-impl_object!("authconfig" <RealmRef> / |_d| {"authentication/config"} / "id" for KeycloakAuthenticatorConfigSpec => AuthenticatorConfigRepresentation);
+impl_object!("authconfig" <RealmRef> / |_d| {"authentication/config"} / "id" / |d| {
+    d.definition.as_ref().and_then(|def| def.alias.as_deref())
+} for KeycloakAuthenticatorConfigSpec => AuthenticatorConfigRepresentation);
 
 impl_endpoint!(KeycloakAuthenticatorConfig);
 

@@ -26,7 +26,9 @@ namespace_scope! {
     }
 }
 
-impl_object!("authflow" <RealmRef> / |_d| {"authentication/flows"} / "id" for KeycloakAuthenticationFlowSpec => AuthenticationFlowRepresentation);
+impl_object!("authflow" <RealmRef> / |_d| {"authentication/flows"} / "id" / |d| {
+    d.definition.as_ref().and_then(|def| def.alias.as_deref())
+} for KeycloakAuthenticationFlowSpec => AuthenticationFlowRepresentation);
 
 impl_endpoint!(KeycloakAuthenticationFlow);
 

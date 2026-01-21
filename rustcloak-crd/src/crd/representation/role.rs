@@ -28,7 +28,9 @@ namespace_scope! {
 }
 
 pub type ParentRef = UntaggedEither<RealmRef, ClientRef>;
-impl_object!("role" <ParentRef> / |_d| {"roles"} / "name" for KeycloakRoleSpec => RoleRepresentation);
+impl_object!("role" <ParentRef> / |_d| {"roles"} / "name" / |d| {
+    d.definition.as_ref().and_then(|def| def.name.as_deref())
+} for KeycloakRoleSpec => RoleRepresentation);
 
 ref_type!(
     RoleRef,

@@ -6,652 +6,593 @@ spec:
   group: rustcloak.k8s.eboland.de
   names:
     categories:
-    - keycloak
-    - all
+      - keycloak
+      - all
     kind: KeycloakOrganization
     plural: keycloakorganizations
     shortNames:
-    - kcorg
+      - kcorg
     singular: keycloakorganization
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: true if the realm is ready
-      jsonPath: .status.ready
-      name: Ready
-      type: boolean
-    - description: Status String of the resource
-      jsonPath: .status.status
-      name: Status
-      type: string
-    - description: time since the realm was created
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: resource to define an Organisation within a [KeyclaokRealm](./keycloakrealm.md)
-        properties:
-          spec:
-            anyOf:
-            - required:
-              - realmRef
-            - required:
-              - clusterRealmRef
-            description: the KeycloakOrganization resource
-            properties:
-              clusterRealmRef:
-                description: The name of the cluster realm to which this object belongs to
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-              definition:
-                description: |-
-                  OrganizationRepresentation
-
-                  <details><summary>JSON schema</summary>
-
-                  ```json { "type": "object", "properties": { "alias": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "description": { "type": "string" }, "domains": { "type": "array", "items": { "$ref": "#/$defs/OrganizationDomainRepresentation" }, "uniqueItems": true }, "enabled": { "type": "boolean" }, "id": { "type": "string" }, "identityProviders": { "type": "array", "items": { "$ref": "#/$defs/IdentityProviderRepresentation" } }, "members": { "type": "array", "items": { "$ref": "#/$defs/MemberRepresentation" } }, "name": { "type": "string" }, "redirectUrl": { "type": "string" } } } ``` </details>
-                properties:
-                  alias:
-                    nullable: true
-                    type: string
-                  attributes:
-                    additionalProperties:
-                      items:
-                        type: string
-                      type: array
-                    type: object
-                  description:
-                    nullable: true
-                    type: string
-                  domains:
-                    items:
-                      description: |-
-                        OrganizationDomainRepresentation
-
-                        <details><summary>JSON schema</summary>
-
-                        ```json { "type": "object", "properties": { "name": { "type": "string" }, "verified": { "type": "boolean" } } } ``` </details>
-                      properties:
-                        name:
-                          nullable: true
-                          type: string
-                        verified:
-                          nullable: true
-                          type: boolean
-                      type: object
-                    nullable: true
-                    type: array
-                  enabled:
-                    nullable: true
-                    type: boolean
-                  id:
-                    nullable: true
-                    type: string
-                    x-kubernetes-validations:
+    - additionalPrinterColumns:
+        - description: true if the realm is ready
+          jsonPath: .status.ready
+          name: Ready
+          type: boolean
+        - description: Status String of the resource
+          jsonPath: .status.status
+          name: Status
+          type: string
+        - description: time since the realm was created
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1beta1
+      schema:
+        openAPIV3Schema:
+          description: "resource to define an Organisation within a [KeyclaokRealm](./keycloakrealm.md)"
+          properties:
+            spec:
+              anyOf:
+                - required:
+                    - realmRef
+                - required:
+                    - clusterRealmRef
+              description: the KeycloakOrganization resource
+              properties:
+                clusterRealmRef:
+                  description: The name of the cluster realm to which this object belongs to
+                  type: string
+                  x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
-                  identityProviders:
-                    items:
-                      description: |-
-                        IdentityProviderRepresentation
-
-                        <details><summary>JSON schema</summary>
-
-                        ```json { "type": "object", "properties": { "addReadTokenRoleOnCreate": { "title": "Stored tokens readable", "description": "Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.", "type": "boolean" }, "alias": { "title": "Alias", "description": "The alias uniquely identifies an identity provider and it is also used to build the redirect uri.", "type": "string" }, "authenticateByDefault": { "type": "boolean" }, "config": { "type": "object", "additionalProperties": { "type": "string" } }, "displayName": { "title": "Display name", "description": "Friendly name for Identity Providers.", "type": "string" }, "enabled": { "title": "Enabled", "type": "boolean" }, "firstBrokerLoginFlowAlias": { "title": "First login flow override", "description": "Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that no Keycloak account is currently linked to the authenticated identity provider account.", "type": "string" }, "hideOnLogin": { "title": "Hide on login page", "description": "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.", "type": "boolean" }, "internalId": { "type": "string" }, "linkOnly": { "title": "Account linking only", "description": "If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider.", "type": "boolean" }, "organizationId": { "type": "string" }, "postBrokerLoginFlowAlias": { "title": "Post login flow", "description": "Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this to \"None\" if you need no any additional authenticators to be triggered after login with this identity provider. Also note that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.", "type": "string" }, "providerId": { "type": "string" }, "storeToken": { "title": "Store tokens", "description": "Enable/disable if tokens must be stored after authenticating users.", "type": "boolean" }, "trustEmail": { "title": "Trust Email", "description": "If enabled, email provided by this provider is not verified even if verification is enabled for the realm.", "type": "boolean" }, "updateProfileFirstLogin": { "type": "boolean" }, "updateProfileFirstLoginMode": { "type": "string" } } } ``` </details>
-                      properties:
-                        addReadTokenRoleOnCreate:
-                          description: Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.
-                          nullable: true
-                          type: boolean
-                        alias:
-                          description: The alias uniquely identifies an identity provider and it is also used to build the redirect uri.
-                          nullable: true
+                definition:
+                  description: "OrganizationRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"alias\": { \"type\": \"string\" }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"description\": { \"type\": \"string\" }, \"domains\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/OrganizationDomainRepresentation\" }, \"uniqueItems\": true }, \"enabled\": { \"type\": \"boolean\" }, \"id\": { \"type\": \"string\" }, \"identityProviders\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/IdentityProviderRepresentation\" } }, \"members\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/MemberRepresentation\" } }, \"name\": { \"type\": \"string\" }, \"redirectUrl\": { \"type\": \"string\" } } } ``` </details>"
+                  properties:
+                    alias:
+                      nullable: true
+                      type: string
+                    attributes:
+                      additionalProperties:
+                        items:
                           type: string
-                        authenticateByDefault:
-                          nullable: true
-                          type: boolean
-                        config:
-                          additionalProperties:
-                            type: string
-                          type: object
-                        displayName:
-                          description: Friendly name for Identity Providers.
-                          nullable: true
-                          type: string
-                        enabled:
-                          nullable: true
-                          type: boolean
-                        firstBrokerLoginFlowAlias:
-                          description: Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that no Keycloak account is currently linked to the authenticated identity provider account.
-                          nullable: true
-                          type: string
-                        hideOnLogin:
-                          description: If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.
-                          nullable: true
-                          type: boolean
-                        internalId:
-                          nullable: true
-                          type: string
-                        linkOnly:
-                          description: If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider.
-                          nullable: true
-                          type: boolean
-                        organizationId:
-                          nullable: true
-                          type: string
-                        postBrokerLoginFlowAlias:
-                          description: Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this to "None" if you need no any additional authenticators to be triggered after login with this identity provider. Also note that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.
-                          nullable: true
-                          type: string
-                        providerId:
-                          nullable: true
-                          type: string
-                        storeToken:
-                          description: Enable/disable if tokens must be stored after authenticating users.
-                          nullable: true
-                          type: boolean
-                        trustEmail:
-                          description: If enabled, email provided by this provider is not verified even if verification is enabled for the realm.
-                          nullable: true
-                          type: boolean
-                        updateProfileFirstLogin:
-                          nullable: true
-                          type: boolean
-                        updateProfileFirstLoginMode:
-                          nullable: true
-                          type: string
+                        type: array
                       type: object
-                    type: array
-                  members:
-                    items:
-                      description: |-
-                        MemberRepresentation
-
-                        <details><summary>JSON schema</summary>
-
-                        ```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "applicationRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "clientConsents": { "type": "array", "items": { "$ref": "#/$defs/UserConsentRepresentation" } }, "clientRoles": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "createdTimestamp": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentials": { "type": "array", "items": { "$ref": "#/$defs/CredentialRepresentation" } }, "disableableCredentialTypes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "email": { "type": "string" }, "emailVerified": { "type": "boolean" }, "enabled": { "type": "boolean" }, "federatedIdentities": { "type": "array", "items": { "$ref": "#/$defs/FederatedIdentityRepresentation" } }, "federationLink": { "type": "string" }, "firstName": { "type": "string" }, "groups": { "type": "array", "items": { "type": "string" } }, "id": { "type": "string" }, "lastName": { "type": "string" }, "membershipType": { "$ref": "#/$defs/MembershipType" }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "origin": { "type": "string" }, "realmRoles": { "type": "array", "items": { "type": "string" } }, "requiredActions": { "type": "array", "items": { "type": "string" } }, "self": { "type": "string" }, "serviceAccountClientId": { "type": "string" }, "socialLinks": { "type": "array", "items": { "$ref": "#/$defs/SocialLinkRepresentation" } }, "totp": { "type": "boolean" }, "userProfileMetadata": { "$ref": "#/$defs/UserProfileMetadata" }, "username": { "type": "string" } } } ``` </details>
-                      properties:
-                        access:
-                          additionalProperties:
+                    description:
+                      nullable: true
+                      type: string
+                    domains:
+                      items:
+                        description: "OrganizationDomainRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"name\": { \"type\": \"string\" }, \"verified\": { \"type\": \"boolean\" } } } ``` </details>"
+                        properties:
+                          name:
+                            nullable: true
+                            type: string
+                          verified:
+                            nullable: true
                             type: boolean
-                          type: object
-                        applicationRoles:
-                          additionalProperties:
-                            items:
+                        type: object
+                      nullable: true
+                      type: array
+                    enabled:
+                      nullable: true
+                      type: boolean
+                    id:
+                      nullable: true
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    identityProviders:
+                      items:
+                        description: "IdentityProviderRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"addReadTokenRoleOnCreate\": { \"title\": \"Stored tokens readable\", \"description\": \"Enable/disable if new users can read any stored tokens. This assigns the broker.read-token role.\", \"type\": \"boolean\" }, \"alias\": { \"title\": \"Alias\", \"description\": \"The alias uniquely identifies an identity provider and it is also used to build the redirect uri.\", \"type\": \"string\" }, \"authenticateByDefault\": { \"type\": \"boolean\" }, \"config\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"string\" } }, \"displayName\": { \"title\": \"Display name\", \"description\": \"Friendly name for Identity Providers.\", \"type\": \"string\" }, \"enabled\": { \"title\": \"Enabled\", \"type\": \"boolean\" }, \"firstBrokerLoginFlowAlias\": { \"title\": \"First login flow override\", \"description\": \"Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that no Keycloak account is currently linked to the authenticated identity provider account.\", \"type\": \"string\" }, \"hideOnLogin\": { \"title\": \"Hide on login page\", \"description\": \"If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter.\", \"type\": \"boolean\" }, \"internalId\": { \"type\": \"string\" }, \"linkOnly\": { \"title\": \"Account linking only\", \"description\": \"If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider.\", \"type\": \"boolean\" }, \"organizationId\": { \"type\": \"string\" }, \"postBrokerLoginFlowAlias\": { \"title\": \"Post login flow\", \"description\": \"Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this to \\\"None\\\" if you need no any additional authenticators to be triggered after login with this identity provider. Also note that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it.\", \"type\": \"string\" }, \"providerId\": { \"type\": \"string\" }, \"storeToken\": { \"title\": \"Store tokens\", \"description\": \"Enable/disable if tokens must be stored after authenticating users.\", \"type\": \"boolean\" }, \"trustEmail\": { \"title\": \"Trust Email\", \"description\": \"If enabled, email provided by this provider is not verified even if verification is enabled for the realm.\", \"type\": \"boolean\" }, \"updateProfileFirstLogin\": { \"type\": \"boolean\" }, \"updateProfileFirstLoginMode\": { \"type\": \"string\" } } } ``` </details>"
+                        properties:
+                          addReadTokenRoleOnCreate:
+                            description: >-
+                              Enable/disable if new users can read any stored tokens. This assigns the
+                              broker.read-token role.
+                            nullable: true
+                            type: boolean
+                          alias:
+                            description: >-
+                              The alias uniquely identifies an identity provider and it is also used to build
+                              the redirect uri.
+                            nullable: true
+                            type: string
+                          authenticateByDefault:
+                            nullable: true
+                            type: boolean
+                          config:
+                            additionalProperties:
                               type: string
-                            type: array
-                          type: object
-                        attributes:
-                          additionalProperties:
-                            items:
-                              type: string
-                            type: array
-                          type: object
-                        clientConsents:
-                          items:
-                            description: |-
-                              UserConsentRepresentation
-
-                              <details><summary>JSON schema</summary>
-
-                              ```json { "type": "object", "properties": { "clientId": { "type": "string" }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "grantedClientScopes": { "type": "array", "items": { "type": "string" } }, "grantedRealmRoles": { "type": "array", "items": { "type": "string" } }, "lastUpdatedDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 } } } ``` </details>
-                            properties:
-                              clientId:
-                                nullable: true
-                                type: string
-                              createdDate:
-                                format: int64
-                                nullable: true
-                                type: integer
-                              grantedClientScopes:
-                                items:
-                                  type: string
-                                type: array
-                              grantedRealmRoles:
-                                items:
-                                  type: string
-                                type: array
-                              lastUpdatedDate:
-                                format: int64
-                                nullable: true
-                                type: integer
                             type: object
-                          type: array
-                        clientRoles:
-                          additionalProperties:
-                            items:
-                              type: string
-                            type: array
-                          type: object
-                        createdTimestamp:
-                          format: int64
-                          nullable: true
-                          type: integer
-                        credentials:
-                          items:
-                            description: |-
-                              CredentialRepresentation
-
-                              <details><summary>JSON schema</summary>
-
-                              ```json { "type": "object", "properties": { "algorithm": { "type": "string" }, "config": { "type": "object", "allOf": [ { "$ref": "#/$defs/MultivaluedHashMapStringString" } ] }, "counter": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "createdDate": { "type": "integer", "format": "int64", "maximum": 9.223372036854776e18, "minimum": -9.223372036854776e18 }, "credentialData": { "type": "string" }, "device": { "type": "string" }, "digits": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "federationLink": { "type": "string" }, "hashIterations": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "hashedSaltedValue": { "type": "string" }, "id": { "type": "string" }, "period": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "priority": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "salt": { "type": "string" }, "secretData": { "type": "string" }, "temporary": { "type": "boolean" }, "type": { "type": "string" }, "userLabel": { "type": "string" }, "value": { "type": "string" } } } ``` </details>
-                            properties:
-                              algorithm:
-                                nullable: true
+                          displayName:
+                            description: Friendly name for Identity Providers.
+                            nullable: true
+                            type: string
+                          enabled:
+                            nullable: true
+                            type: boolean
+                          firstBrokerLoginFlowAlias:
+                            description: "Alias of authentication flow, which is triggered after first login with this identity provider. Term 'First Login' means that no Keycloak account is currently linked to the authenticated identity provider account."
+                            nullable: true
+                            type: string
+                          hideOnLogin:
+                            description: "If hidden, login with this provider is possible only if requested explicitly, for example using the 'kc_idp_hint' parameter."
+                            nullable: true
+                            type: boolean
+                          internalId:
+                            nullable: true
+                            type: string
+                          linkOnly:
+                            description: "If true, users cannot log in through this provider.  They can only link to this provider.  This is useful if you don't want to allow login from the provider, but want to integrate with a provider."
+                            nullable: true
+                            type: boolean
+                          organizationId:
+                            nullable: true
+                            type: string
+                          postBrokerLoginFlowAlias:
+                            description: "Alias of authentication flow, which is triggered after each login with this identity provider. Useful if you want additional verification of each user authenticated with this identity provider (for example OTP). Leave this to \"None\" if you need no any additional authenticators to be triggered after login with this identity provider. Also note that authenticator implementations must assume that user is already set in ClientSession as identity provider already set it."
+                            nullable: true
+                            type: string
+                          providerId:
+                            nullable: true
+                            type: string
+                          storeToken:
+                            description: Enable/disable if tokens must be stored after authenticating users.
+                            nullable: true
+                            type: boolean
+                          trustEmail:
+                            description: "If enabled, email provided by this provider is not verified even if verification is enabled for the realm."
+                            nullable: true
+                            type: boolean
+                          updateProfileFirstLogin:
+                            nullable: true
+                            type: boolean
+                          updateProfileFirstLoginMode:
+                            nullable: true
+                            type: string
+                        type: object
+                      type: array
+                    members:
+                      items:
+                        description: "MemberRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"access\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"boolean\" } }, \"applicationRoles\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"clientConsents\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/UserConsentRepresentation\" } }, \"clientRoles\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"createdTimestamp\": { \"type\": \"integer\", \"format\": \"int64\", \"maximum\": 9.223372036854776e18, \"minimum\": -9.223372036854776e18 }, \"credentials\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/CredentialRepresentation\" } }, \"disableableCredentialTypes\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"email\": { \"type\": \"string\" }, \"emailVerified\": { \"type\": \"boolean\" }, \"enabled\": { \"type\": \"boolean\" }, \"federatedIdentities\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/FederatedIdentityRepresentation\" } }, \"federationLink\": { \"type\": \"string\" }, \"firstName\": { \"type\": \"string\" }, \"groups\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } }, \"id\": { \"type\": \"string\" }, \"lastName\": { \"type\": \"string\" }, \"membershipType\": { \"$ref\": \"#/$defs/MembershipType\" }, \"notBefore\": { \"type\": \"integer\", \"format\": \"int32\", \"maximum\": 2147483647.0, \"minimum\": -2147483648.0 }, \"origin\": { \"type\": \"string\" }, \"realmRoles\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } }, \"requiredActions\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } }, \"self\": { \"type\": \"string\" }, \"serviceAccountClientId\": { \"type\": \"string\" }, \"socialLinks\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/SocialLinkRepresentation\" } }, \"totp\": { \"type\": \"boolean\" }, \"userProfileMetadata\": { \"$ref\": \"#/$defs/UserProfileMetadata\" }, \"username\": { \"type\": \"string\" } } } ``` </details>"
+                        properties:
+                          access:
+                            additionalProperties:
+                              type: boolean
+                            type: object
+                          applicationRoles:
+                            additionalProperties:
+                              items:
                                 type: string
-                              config:
-                                additionalProperties:
+                              type: array
+                            type: object
+                          attributes:
+                            additionalProperties:
+                              items:
+                                type: string
+                              type: array
+                            type: object
+                          clientConsents:
+                            items:
+                              description: "UserConsentRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"clientId\": { \"type\": \"string\" }, \"createdDate\": { \"type\": \"integer\", \"format\": \"int64\", \"maximum\": 9.223372036854776e18, \"minimum\": -9.223372036854776e18 }, \"grantedClientScopes\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } }, \"grantedRealmRoles\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } }, \"lastUpdatedDate\": { \"type\": \"integer\", \"format\": \"int64\", \"maximum\": 9.223372036854776e18, \"minimum\": -9.223372036854776e18 } } } ``` </details>"
+                              properties:
+                                clientId:
+                                  nullable: true
+                                  type: string
+                                createdDate:
+                                  nullable: true
+                                  type: integer
+                                grantedClientScopes:
                                   items:
                                     type: string
                                   type: array
-                                nullable: true
-                                type: object
-                              counter:
-                                format: int32
-                                nullable: true
-                                type: integer
-                              createdDate:
-                                format: int64
-                                nullable: true
-                                type: integer
-                              credentialData:
-                                nullable: true
-                                type: string
-                              device:
-                                nullable: true
-                                type: string
-                              digits:
-                                format: int32
-                                nullable: true
-                                type: integer
-                              federationLink:
-                                nullable: true
-                                type: string
-                              hashIterations:
-                                format: int32
-                                nullable: true
-                                type: integer
-                              hashedSaltedValue:
-                                nullable: true
-                                type: string
-                              id:
-                                nullable: true
-                                type: string
-                              period:
-                                format: int32
-                                nullable: true
-                                type: integer
-                              priority:
-                                format: int32
-                                nullable: true
-                                type: integer
-                              salt:
-                                nullable: true
-                                type: string
-                              secretData:
-                                nullable: true
-                                type: string
-                              temporary:
-                                nullable: true
-                                type: boolean
-                              type:
-                                nullable: true
-                                type: string
-                              userLabel:
-                                nullable: true
-                                type: string
-                              value:
-                                nullable: true
-                                type: string
-                            type: object
-                          type: array
-                        disableableCredentialTypes:
-                          items:
-                            type: string
-                          nullable: true
-                          type: array
-                        email:
-                          nullable: true
-                          type: string
-                        emailVerified:
-                          nullable: true
-                          type: boolean
-                        enabled:
-                          nullable: true
-                          type: boolean
-                        federatedIdentities:
-                          items:
-                            description: |-
-                              FederatedIdentityRepresentation
-
-                              <details><summary>JSON schema</summary>
-
-                              ```json { "type": "object", "properties": { "identityProvider": { "type": "string" }, "userId": { "type": "string" }, "userName": { "type": "string" } } } ``` </details>
-                            properties:
-                              identityProvider:
-                                nullable: true
-                                type: string
-                              userId:
-                                nullable: true
-                                type: string
-                              userName:
-                                nullable: true
-                                type: string
-                            type: object
-                          type: array
-                        federationLink:
-                          nullable: true
-                          type: string
-                        firstName:
-                          nullable: true
-                          type: string
-                        groups:
-                          items:
-                            type: string
-                          type: array
-                        id:
-                          nullable: true
-                          type: string
-                        lastName:
-                          nullable: true
-                          type: string
-                        membershipType:
-                          description: |-
-                            MembershipType
-
-                            <details><summary>JSON schema</summary>
-
-                            ```json { "type": "string", "enum": [ "UNMANAGED", "MANAGED" ] } ``` </details>
-                          enum:
-                          - UNMANAGED
-                          - MANAGED
-                          nullable: true
-                          type: string
-                        notBefore:
-                          format: int32
-                          nullable: true
-                          type: integer
-                        origin:
-                          nullable: true
-                          type: string
-                        realmRoles:
-                          items:
-                            type: string
-                          type: array
-                        requiredActions:
-                          items:
-                            type: string
-                          type: array
-                        self:
-                          nullable: true
-                          type: string
-                        serviceAccountClientId:
-                          nullable: true
-                          type: string
-                        socialLinks:
-                          items:
-                            description: |-
-                              SocialLinkRepresentation
-
-                              <details><summary>JSON schema</summary>
-
-                              ```json { "type": "object", "properties": { "socialProvider": { "type": "string" }, "socialUserId": { "type": "string" }, "socialUsername": { "type": "string" } } } ``` </details>
-                            properties:
-                              socialProvider:
-                                nullable: true
-                                type: string
-                              socialUserId:
-                                nullable: true
-                                type: string
-                              socialUsername:
-                                nullable: true
-                                type: string
-                            type: object
-                          type: array
-                        totp:
-                          nullable: true
-                          type: boolean
-                        userProfileMetadata:
-                          description: |-
-                            UserProfileMetadata
-
-                            <details><summary>JSON schema</summary>
-
-                            ```json { "type": "object", "properties": { "attributes": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeMetadata" } }, "groups": { "type": "array", "items": { "$ref": "#/$defs/UserProfileAttributeGroupMetadata" } } } } ``` </details>
-                          nullable: true
-                          properties:
-                            attributes:
+                                grantedRealmRoles:
+                                  items:
+                                    type: string
+                                  type: array
+                                lastUpdatedDate:
+                                  nullable: true
+                                  type: integer
+                              type: object
+                            type: array
+                          clientRoles:
+                            additionalProperties:
                               items:
-                                description: |-
-                                  UserProfileAttributeMetadata
-
-                                  <details><summary>JSON schema</summary>
-
-                                  ```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayName": { "type": "string" }, "group": { "type": "string" }, "multivalued": { "type": "boolean" }, "name": { "type": "string" }, "readOnly": { "type": "boolean" }, "required": { "type": "boolean" }, "validators": { "type": "object", "additionalProperties": { "type": "object", "additionalProperties": {} } } } } ``` </details>
-                                properties:
-                                  annotations:
-                                    additionalProperties: true
-                                    type: object
-                                  displayName:
-                                    nullable: true
-                                    type: string
-                                  group:
-                                    nullable: true
-                                    type: string
-                                  multivalued:
-                                    nullable: true
-                                    type: boolean
-                                  name:
-                                    nullable: true
-                                    type: string
-                                  readOnly:
-                                    nullable: true
-                                    type: boolean
-                                  required:
-                                    nullable: true
-                                    type: boolean
-                                  validators:
-                                    additionalProperties:
+                                type: string
+                              type: array
+                            type: object
+                          createdTimestamp:
+                            nullable: true
+                            type: integer
+                          credentials:
+                            items:
+                              description: "CredentialRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"algorithm\": { \"type\": \"string\" }, \"config\": { \"type\": \"object\", \"allOf\": [ { \"$ref\": \"#/$defs/MultivaluedHashMapStringString\" } ] }, \"counter\": { \"type\": \"integer\", \"format\": \"int32\", \"maximum\": 2147483647.0, \"minimum\": -2147483648.0 }, \"createdDate\": { \"type\": \"integer\", \"format\": \"int64\", \"maximum\": 9.223372036854776e18, \"minimum\": -9.223372036854776e18 }, \"credentialData\": { \"type\": \"string\" }, \"device\": { \"type\": \"string\" }, \"digits\": { \"type\": \"integer\", \"format\": \"int32\", \"maximum\": 2147483647.0, \"minimum\": -2147483648.0 }, \"federationLink\": { \"type\": \"string\" }, \"hashIterations\": { \"type\": \"integer\", \"format\": \"int32\", \"maximum\": 2147483647.0, \"minimum\": -2147483648.0 }, \"hashedSaltedValue\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"period\": { \"type\": \"integer\", \"format\": \"int32\", \"maximum\": 2147483647.0, \"minimum\": -2147483648.0 }, \"priority\": { \"type\": \"integer\", \"format\": \"int32\", \"maximum\": 2147483647.0, \"minimum\": -2147483648.0 }, \"salt\": { \"type\": \"string\" }, \"secretData\": { \"type\": \"string\" }, \"temporary\": { \"type\": \"boolean\" }, \"type\": { \"type\": \"string\" }, \"userLabel\": { \"type\": \"string\" }, \"value\": { \"type\": \"string\" } } } ``` </details>"
+                              properties:
+                                algorithm:
+                                  nullable: true
+                                  type: string
+                                config:
+                                  additionalProperties:
+                                    items:
+                                      type: string
+                                    type: array
+                                  nullable: true
+                                  type: object
+                                counter:
+                                  nullable: true
+                                  type: integer
+                                createdDate:
+                                  nullable: true
+                                  type: integer
+                                credentialData:
+                                  nullable: true
+                                  type: string
+                                device:
+                                  nullable: true
+                                  type: string
+                                digits:
+                                  nullable: true
+                                  type: integer
+                                federationLink:
+                                  nullable: true
+                                  type: string
+                                hashIterations:
+                                  nullable: true
+                                  type: integer
+                                hashedSaltedValue:
+                                  nullable: true
+                                  type: string
+                                id:
+                                  nullable: true
+                                  type: string
+                                period:
+                                  nullable: true
+                                  type: integer
+                                priority:
+                                  nullable: true
+                                  type: integer
+                                salt:
+                                  nullable: true
+                                  type: string
+                                secretData:
+                                  nullable: true
+                                  type: string
+                                temporary:
+                                  nullable: true
+                                  type: boolean
+                                type:
+                                  nullable: true
+                                  type: string
+                                userLabel:
+                                  nullable: true
+                                  type: string
+                                value:
+                                  nullable: true
+                                  type: string
+                              type: object
+                            type: array
+                          disableableCredentialTypes:
+                            items:
+                              type: string
+                            nullable: true
+                            type: array
+                          email:
+                            nullable: true
+                            type: string
+                          emailVerified:
+                            nullable: true
+                            type: boolean
+                          enabled:
+                            nullable: true
+                            type: boolean
+                          federatedIdentities:
+                            items:
+                              description: "FederatedIdentityRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"identityProvider\": { \"type\": \"string\" }, \"userId\": { \"type\": \"string\" }, \"userName\": { \"type\": \"string\" } } } ``` </details>"
+                              properties:
+                                identityProvider:
+                                  nullable: true
+                                  type: string
+                                userId:
+                                  nullable: true
+                                  type: string
+                                userName:
+                                  nullable: true
+                                  type: string
+                              type: object
+                            type: array
+                          federationLink:
+                            nullable: true
+                            type: string
+                          firstName:
+                            nullable: true
+                            type: string
+                          groups:
+                            items:
+                              type: string
+                            type: array
+                          id:
+                            nullable: true
+                            type: string
+                          lastName:
+                            nullable: true
+                            type: string
+                          membershipType:
+                            description: "MembershipType\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"UNMANAGED\", \"MANAGED\" ] } ``` </details>"
+                            enum:
+                              - UNMANAGED
+                              - MANAGED
+                            nullable: true
+                            type: string
+                          notBefore:
+                            nullable: true
+                            type: integer
+                          origin:
+                            nullable: true
+                            type: string
+                          realmRoles:
+                            items:
+                              type: string
+                            type: array
+                          requiredActions:
+                            items:
+                              type: string
+                            type: array
+                          self:
+                            nullable: true
+                            type: string
+                          serviceAccountClientId:
+                            nullable: true
+                            type: string
+                          socialLinks:
+                            items:
+                              description: "SocialLinkRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"socialProvider\": { \"type\": \"string\" }, \"socialUserId\": { \"type\": \"string\" }, \"socialUsername\": { \"type\": \"string\" } } } ``` </details>"
+                              properties:
+                                socialProvider:
+                                  nullable: true
+                                  type: string
+                                socialUserId:
+                                  nullable: true
+                                  type: string
+                                socialUsername:
+                                  nullable: true
+                                  type: string
+                              type: object
+                            type: array
+                          totp:
+                            nullable: true
+                            type: boolean
+                          userProfileMetadata:
+                            description: "UserProfileMetadata\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"attributes\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/UserProfileAttributeMetadata\" } }, \"groups\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/UserProfileAttributeGroupMetadata\" } } } } ``` </details>"
+                            nullable: true
+                            properties:
+                              attributes:
+                                items:
+                                  description: "UserProfileAttributeMetadata\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"annotations\": { \"type\": \"object\", \"additionalProperties\": {} }, \"displayName\": { \"type\": \"string\" }, \"group\": { \"type\": \"string\" }, \"multivalued\": { \"type\": \"boolean\" }, \"name\": { \"type\": \"string\" }, \"readOnly\": { \"type\": \"boolean\" }, \"required\": { \"type\": \"boolean\" }, \"validators\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"object\", \"additionalProperties\": {} } } } } ``` </details>"
+                                  properties:
+                                    annotations:
                                       additionalProperties: true
                                       type: object
-                                    type: object
-                                type: object
-                              type: array
-                            groups:
-                              items:
-                                description: |-
-                                  UserProfileAttributeGroupMetadata
-
-                                  <details><summary>JSON schema</summary>
-
-                                  ```json { "type": "object", "properties": { "annotations": { "type": "object", "additionalProperties": {} }, "displayDescription": { "type": "string" }, "displayHeader": { "type": "string" }, "name": { "type": "string" } } } ``` </details>
-                                properties:
-                                  annotations:
-                                    additionalProperties: true
-                                    type: object
-                                  displayDescription:
-                                    nullable: true
-                                    type: string
-                                  displayHeader:
-                                    nullable: true
-                                    type: string
-                                  name:
-                                    nullable: true
-                                    type: string
-                                type: object
-                              type: array
-                          type: object
-                        username:
-                          nullable: true
-                          type: string
-                      type: object
-                    type: array
-                  name:
-                    nullable: true
-                    type: string
-                  redirectUrl:
-                    nullable: true
-                    type: string
-                type: object
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: has(self.id) == has(oldSelf.id)
-              patchFrom:
-                items:
-                  oneOf:
-                  - required:
-                    - secretKeyRef
-                  - required:
-                    - configMapKeyRef
-                  - required:
-                    - value
-                  properties:
-                    configMapKeyRef:
-                      description: Selects a key from a ConfigMap.
-                      properties:
-                        key:
-                          description: The key to select.
-                          type: string
-                        name:
-                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        optional:
-                          description: Specify whether the ConfigMap or its key must be defined
-                          type: boolean
-                      required:
-                      - key
-                      - name
-                      type: object
-                    path:
+                                    displayName:
+                                      nullable: true
+                                      type: string
+                                    group:
+                                      nullable: true
+                                      type: string
+                                    multivalued:
+                                      nullable: true
+                                      type: boolean
+                                    name:
+                                      nullable: true
+                                      type: string
+                                    readOnly:
+                                      nullable: true
+                                      type: boolean
+                                    required:
+                                      nullable: true
+                                      type: boolean
+                                    validators:
+                                      additionalProperties:
+                                        additionalProperties: true
+                                        type: object
+                                      type: object
+                                  type: object
+                                type: array
+                              groups:
+                                items:
+                                  description: "UserProfileAttributeGroupMetadata\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"annotations\": { \"type\": \"object\", \"additionalProperties\": {} }, \"displayDescription\": { \"type\": \"string\" }, \"displayHeader\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" } } } ``` </details>"
+                                  properties:
+                                    annotations:
+                                      additionalProperties: true
+                                      type: object
+                                    displayDescription:
+                                      nullable: true
+                                      type: string
+                                    displayHeader:
+                                      nullable: true
+                                      type: string
+                                    name:
+                                      nullable: true
+                                      type: string
+                                  type: object
+                                type: array
+                            type: object
+                          username:
+                            nullable: true
+                            type: string
+                        type: object
+                      type: array
+                    name:
+                      nullable: true
                       type: string
-                    secretKeyRef:
-                      description: SecretKeySelector selects a key of a Secret.
-                      properties:
-                        key:
-                          description: The key of the secret to select from.  Must be a valid secret key.
-                          type: string
-                        name:
-                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        optional:
-                          description: Specify whether the Secret or its key must be defined
-                          type: boolean
-                      required:
-                      - key
-                      - name
-                      type: object
-                    value:
+                    redirectUrl:
+                      nullable: true
                       type: string
-                    value_as:
-                      default: string
-                      enum:
-                      - string
-                      - number
-                      - bool
-                      - yaml
-                      - json
-                      type: string
-                  required:
-                  - path
                   type: object
-                type: array
-              realmRef:
-                description: The name of the realm to which this object belongs to
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-            required:
-            - definition
-            type: object
-          status:
-            nullable: true
-            properties:
-              conditions:
-                items:
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: has(self.id) == has(oldSelf.id)
+                patchFrom:
+                  items:
+                    oneOf:
+                      - required:
+                          - secretKeyRef
+                      - required:
+                          - configMapKeyRef
+                      - required:
+                          - value
+                    properties:
+                      configMapKeyRef:
+                        description: Selects a key from a ConfigMap.
+                        properties:
+                          key:
+                            description: The key to select.
+                            type: string
+                          name:
+                            description: "Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                            type: string
+                          optional:
+                            description: Specify whether the ConfigMap or its key must be defined
+                            type: boolean
+                        required:
+                          - key
+                          - name
+                        type: object
+                      path:
+                        type: string
+                      secretKeyRef:
+                        description: SecretKeySelector selects a key of a Secret.
+                        properties:
+                          key:
+                            description: The key of the secret to select from.  Must be a valid secret key.
+                            type: string
+                          name:
+                            description: "Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                            type: string
+                          optional:
+                            description: Specify whether the Secret or its key must be defined
+                            type: boolean
+                        required:
+                          - key
+                          - name
+                        type: object
+                      value:
+                        type: string
+                      value_as:
+                        default: string
+                        enum:
+                          - string
+                          - number
+                          - bool
+                          - yaml
+                          - json
+                        type: string
+                    required:
+                      - path
+                    type: object
+                  type: array
+                realmRef:
+                  description: The name of the realm to which this object belongs to
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+              required:
+                - definition
+              type: object
+            status:
+              nullable: true
+              properties:
+                apiObjectRef:
+                  description: Reference to the API object name (KeycloakApiObject or ClusterKeycloakApiObject)
+                  nullable: true
+                  type: string
+                conditions:
+                  items:
+                    properties:
+                      lastTransitionTime:
+                        description: >-
+                          Time is a wrapper around time.Time which supports correct marshaling to YAML and
+                          JSON.  Wrappers are provided for many of the factory methods that the time
+                          package offers.
+                        format: date-time
+                        nullable: true
+                        type: string
+                      message:
+                        nullable: true
+                        type: string
+                      reason:
+                        nullable: true
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string
+                    required:
+                      - status
+                      - type
+                    type: object
+                  type: array
+                instance:
+                  anyOf:
+                    - required:
+                        - instanceRef
+                    - required:
+                        - clusterInstanceRef
                   properties:
-                    lastTransitionTime:
-                      description: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-                      format: date-time
-                      nullable: true
+                    clusterInstanceRef:
+                      description: The name of the cluster instance to which this object belongs to.
                       type: string
-                    message:
-                      nullable: true
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    instanceRef:
+                      description: The name of the namespaced instance to which this object belongs to.
                       type: string
-                    reason:
-                      nullable: true
-                      type: string
-                    status:
-                      type: string
-                    type:
-                      type: string
-                  required:
-                  - status
-                  - type
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
                   type: object
-                type: array
-              instance:
-                anyOf:
-                - required:
-                  - instanceRef
-                - required:
-                  - clusterInstanceRef
-                properties:
-                  clusterInstanceRef:
-                    description: The name of the cluster instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  instanceRef:
-                    description: The name of the namespaced instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              message:
-                type: string
-              ready:
-                type: boolean
-              realm:
-                anyOf:
-                - required:
-                  - realmRef
-                - required:
-                  - clusterRealmRef
-                description: Optional for backwards compatibility
-                nullable: true
-                properties:
-                  clusterRealmRef:
-                    description: The name of the cluster realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  realmRef:
-                    description: The name of the realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              resourcePath:
-                type: string
-              status:
-                type: string
-            required:
-            - ready
-            type: object
-        required:
-        - spec
-        title: KeycloakOrganization
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                message:
+                  type: string
+                ready:
+                  type: boolean
+                realm:
+                  anyOf:
+                    - required:
+                        - realmRef
+                    - required:
+                        - clusterRealmRef
+                  description: Optional for backwards compatibility
+                  nullable: true
+                  properties:
+                    clusterRealmRef:
+                      description: The name of the cluster realm to which this object belongs to
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    realmRef:
+                      description: The name of the realm to which this object belongs to
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                  type: object
+                resourcePath:
+                  type: string
+                status:
+                  type: string
+              required:
+                - ready
+              type: object
+          required:
+            - spec
+          title: KeycloakOrganization
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

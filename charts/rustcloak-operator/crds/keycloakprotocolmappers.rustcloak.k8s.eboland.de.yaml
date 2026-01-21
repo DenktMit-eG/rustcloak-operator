@@ -6,244 +6,241 @@ spec:
   group: rustcloak.k8s.eboland.de
   names:
     categories:
-    - keycloak
-    - all
+      - keycloak
+      - all
     kind: KeycloakProtocolMapper
     plural: keycloakprotocolmappers
     shortNames:
-    - kcpm
+      - kcpm
     singular: keycloakprotocolmapper
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: true if the realm is ready
-      jsonPath: .status.ready
-      name: Ready
-      type: boolean
-    - description: Status String of the resource
-      jsonPath: .status.status
-      name: Status
-      type: string
-    - description: time since the realm was created
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: resource to define a Protocol Mapper within either a [KeycloakClient](./keycloakclient.md) or a [KeycloakClientScope](./keycloakclientscope.md)
-        properties:
-          spec:
-            anyOf:
-            - required:
-              - clientRef
-            - required:
-              - clientScopeRef
-            description: the KeycloakProtocolMapper resource
-            properties:
-              clientRef:
-                description: The kubernetes resources name of a KeycloakClient object.
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-              clientScopeRef:
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-              definition:
-                description: |-
-                  ProtocolMapperRepresentation
-
-                  <details><summary>JSON schema</summary>
-
-                  ```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } } } ``` </details>
-                properties:
-                  config:
-                    additionalProperties:
-                      type: string
-                    type: object
-                  consentRequired:
-                    nullable: true
-                    type: boolean
-                  consentText:
-                    nullable: true
-                    type: string
-                  id:
-                    nullable: true
-                    type: string
-                    x-kubernetes-validations:
+    - additionalPrinterColumns:
+        - description: true if the realm is ready
+          jsonPath: .status.ready
+          name: Ready
+          type: boolean
+        - description: Status String of the resource
+          jsonPath: .status.status
+          name: Status
+          type: string
+        - description: time since the realm was created
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1beta1
+      schema:
+        openAPIV3Schema:
+          description: "resource to define a Protocol Mapper within either a [KeycloakClient](./keycloakclient.md) or a [KeycloakClientScope](./keycloakclientscope.md)"
+          properties:
+            spec:
+              anyOf:
+                - required:
+                    - clientRef
+                - required:
+                    - clientScopeRef
+              description: the KeycloakProtocolMapper resource
+              properties:
+                clientRef:
+                  description: The kubernetes resources name of a KeycloakClient object.
+                  type: string
+                  x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
-                  name:
-                    nullable: true
-                    type: string
-                  protocol:
-                    description: |-
-                      ProtocolMapperRepresentationProtocol
-
-                      <details><summary>JSON schema</summary>
-
-                      ```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
-                    enum:
-                    - openid-connect
-                    - saml
-                    nullable: true
-                    type: string
-                  protocolMapper:
-                    nullable: true
-                    type: string
-                type: object
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: has(self.id) == has(oldSelf.id)
-              patchFrom:
-                items:
-                  oneOf:
-                  - required:
-                    - secretKeyRef
-                  - required:
-                    - configMapKeyRef
-                  - required:
-                    - value
+                clientScopeRef:
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                definition:
+                  description: "ProtocolMapperRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"config\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"string\" } }, \"consentRequired\": { \"type\": \"boolean\" }, \"consentText\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"protocol\": { \"type\": \"string\", \"enum\": [ \"openid-connect\", \"saml\" ] }, \"protocolMapper\": { \"type\": \"string\" } } } ``` </details>"
                   properties:
-                    configMapKeyRef:
-                      description: Selects a key from a ConfigMap.
-                      properties:
-                        key:
-                          description: The key to select.
-                          type: string
-                        name:
-                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        optional:
-                          description: Specify whether the ConfigMap or its key must be defined
-                          type: boolean
-                      required:
-                      - key
-                      - name
+                    config:
+                      additionalProperties:
+                        type: string
                       type: object
-                    path:
+                    consentRequired:
+                      nullable: true
+                      type: boolean
+                    consentText:
+                      nullable: true
                       type: string
-                    secretKeyRef:
-                      description: SecretKeySelector selects a key of a Secret.
-                      properties:
-                        key:
-                          description: The key of the secret to select from.  Must be a valid secret key.
-                          type: string
-                        name:
-                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        optional:
-                          description: Specify whether the Secret or its key must be defined
-                          type: boolean
-                      required:
-                      - key
-                      - name
-                      type: object
-                    value:
+                    id:
+                      nullable: true
                       type: string
-                    value_as:
-                      default: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    name:
+                      nullable: true
+                      type: string
+                    protocol:
+                      description: "ProtocolMapperRepresentationProtocol\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"openid-connect\", \"saml\" ] } ``` </details>"
                       enum:
-                      - string
-                      - number
-                      - bool
-                      - yaml
-                      - json
+                        - openid-connect
+                        - saml
+                      nullable: true
                       type: string
-                  required:
-                  - path
+                    protocolMapper:
+                      nullable: true
+                      type: string
                   type: object
-                type: array
-            required:
-            - definition
-            type: object
-          status:
-            nullable: true
-            properties:
-              conditions:
-                items:
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: has(self.id) == has(oldSelf.id)
+                patchFrom:
+                  items:
+                    oneOf:
+                      - required:
+                          - secretKeyRef
+                      - required:
+                          - configMapKeyRef
+                      - required:
+                          - value
+                    properties:
+                      configMapKeyRef:
+                        description: Selects a key from a ConfigMap.
+                        properties:
+                          key:
+                            description: The key to select.
+                            type: string
+                          name:
+                            description: "Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                            type: string
+                          optional:
+                            description: Specify whether the ConfigMap or its key must be defined
+                            type: boolean
+                        required:
+                          - key
+                          - name
+                        type: object
+                      path:
+                        type: string
+                      secretKeyRef:
+                        description: SecretKeySelector selects a key of a Secret.
+                        properties:
+                          key:
+                            description: The key of the secret to select from.  Must be a valid secret key.
+                            type: string
+                          name:
+                            description: "Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                            type: string
+                          optional:
+                            description: Specify whether the Secret or its key must be defined
+                            type: boolean
+                        required:
+                          - key
+                          - name
+                        type: object
+                      value:
+                        type: string
+                      value_as:
+                        default: string
+                        enum:
+                          - string
+                          - number
+                          - bool
+                          - yaml
+                          - json
+                        type: string
+                    required:
+                      - path
+                    type: object
+                  type: array
+              required:
+                - definition
+              type: object
+            status:
+              nullable: true
+              properties:
+                apiObjectRef:
+                  description: Reference to the API object name (KeycloakApiObject or ClusterKeycloakApiObject)
+                  nullable: true
+                  type: string
+                conditions:
+                  items:
+                    properties:
+                      lastTransitionTime:
+                        description: >-
+                          Time is a wrapper around time.Time which supports correct marshaling to YAML and
+                          JSON.  Wrappers are provided for many of the factory methods that the time
+                          package offers.
+                        format: date-time
+                        nullable: true
+                        type: string
+                      message:
+                        nullable: true
+                        type: string
+                      reason:
+                        nullable: true
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string
+                    required:
+                      - status
+                      - type
+                    type: object
+                  type: array
+                instance:
+                  anyOf:
+                    - required:
+                        - instanceRef
+                    - required:
+                        - clusterInstanceRef
                   properties:
-                    lastTransitionTime:
-                      description: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-                      format: date-time
-                      nullable: true
+                    clusterInstanceRef:
+                      description: The name of the cluster instance to which this object belongs to.
                       type: string
-                    message:
-                      nullable: true
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    instanceRef:
+                      description: The name of the namespaced instance to which this object belongs to.
                       type: string
-                    reason:
-                      nullable: true
-                      type: string
-                    status:
-                      type: string
-                    type:
-                      type: string
-                  required:
-                  - status
-                  - type
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
                   type: object
-                type: array
-              instance:
-                anyOf:
-                - required:
-                  - instanceRef
-                - required:
-                  - clusterInstanceRef
-                properties:
-                  clusterInstanceRef:
-                    description: The name of the cluster instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  instanceRef:
-                    description: The name of the namespaced instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              message:
-                type: string
-              ready:
-                type: boolean
-              realm:
-                anyOf:
-                - required:
-                  - realmRef
-                - required:
-                  - clusterRealmRef
-                description: Optional for backwards compatibility
-                nullable: true
-                properties:
-                  clusterRealmRef:
-                    description: The name of the cluster realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  realmRef:
-                    description: The name of the realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              resourcePath:
-                type: string
-              status:
-                type: string
-            required:
-            - ready
-            type: object
-        required:
-        - spec
-        title: KeycloakProtocolMapper
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                message:
+                  type: string
+                ready:
+                  type: boolean
+                realm:
+                  anyOf:
+                    - required:
+                        - realmRef
+                    - required:
+                        - clusterRealmRef
+                  description: Optional for backwards compatibility
+                  nullable: true
+                  properties:
+                    clusterRealmRef:
+                      description: The name of the cluster realm to which this object belongs to
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    realmRef:
+                      description: The name of the realm to which this object belongs to
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                  type: object
+                resourcePath:
+                  type: string
+                status:
+                  type: string
+              required:
+                - ready
+              type: object
+          required:
+            - spec
+          title: KeycloakProtocolMapper
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

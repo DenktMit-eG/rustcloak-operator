@@ -10,6 +10,6 @@ edition.workspace = true
 [dependencies]
 clap = { workspace = true }
 rustcloak-crd = { path = "../rustcloak-crd" }
-serde_yaml = "0.9.34"
+serde-saphyr = "0.0"
 crd2md = { git = "https://github.com/withlazers/crd2md.git" }
 kube = { version = "1.1.0", default-features = false }

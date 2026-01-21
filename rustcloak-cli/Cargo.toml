@@ -1,0 +1,22 @@
+[package]
+name = "rustcloak-cli"
+version.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme.workspace = true
+license.workspace = true
+edition.workspace = true
+
+[dependencies]
+clap = { workspace = true, features = ["env"] }
+tokio = { version = "1", features = ["full"] }
+kube = { workspace = true, features = ["client", "runtime", "rustls-tls"] }
+k8s-openapi.workspace = true
+keycloak-client = { git = "https://github.com/Gottox/keycloak-client.rs" }
+rustcloak-crd = { path = "../rustcloak-crd" }
+serde.workspace = true
+serde_json = "1.0"
+serde_yaml = "0.9"
+convert_case = "0.6"
+anyhow = "1.0"
+either = "1.15"

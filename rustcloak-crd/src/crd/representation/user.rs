@@ -82,7 +82,9 @@ impl_object!("user" <ParentRef> / |d| {
     } else {
         InitWorkflow { workflow: http::Method::GET, mount_path: "service-account-user"}
     }
-} / "id" for KeycloakUserSpec => UserRepresentation);
+} / "id" / |d| {
+    d.definition.as_ref().and_then(|def| def.username.as_deref())
+} for KeycloakUserSpec => UserRepresentation);
 
 impl_endpoint!(KeycloakUser);
 

@@ -31,7 +31,9 @@ namespace_scope! {
 
 type ParentRef = UntaggedEither<ClientRef, ClientScopeRef>;
 
-impl_object!("pm" <ParentRef> / |_d| {"protocol-mappers/models"} / "id" for KeycloakProtocolMapperSpec => ProtocolMapperRepresentation);
+impl_object!("pm" <ParentRef> / |_d| {"protocol-mappers/models"} / "id" / |d| {
+    d.definition.as_ref().and_then(|def| def.name.as_deref())
+} for KeycloakProtocolMapperSpec => ProtocolMapperRepresentation);
 
 impl_endpoint!(KeycloakProtocolMapper);
 

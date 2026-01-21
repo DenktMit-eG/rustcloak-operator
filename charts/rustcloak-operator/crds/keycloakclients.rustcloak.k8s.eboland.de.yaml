@@ -6,1031 +6,136 @@ spec:
   group: rustcloak.k8s.eboland.de
   names:
     categories:
-    - keycloak
-    - all
+      - keycloak
+      - all
     kind: KeycloakClient
     plural: keycloakclients
     shortNames:
-    - kcc
+      - kcc
     singular: keycloakclient
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: true if the realm is ready
-      jsonPath: .status.ready
-      name: Ready
-      type: boolean
-    - description: Status String of the resource
-      jsonPath: .status.status
-      name: Status
-      type: string
-    - description: time since the realm was created
-      jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)
-        properties:
-          spec:
-            anyOf:
-            - required:
-              - realmRef
-            - required:
-              - clusterRealmRef
-            description: the KeycloakClient resource
-            properties:
-              clientSecret:
-                nullable: true
-                properties:
-                  clientIdKey:
-                    nullable: true
-                    type: string
-                  clientSecretKey:
-                    nullable: true
-                    type: string
-                  secretName:
-                    type: string
-                required:
-                - secretName
-                type: object
-              clusterRealmRef:
-                description: The name of the cluster realm to which this object belongs to
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-              definition:
-                description: |-
-                  ClientRepresentation
-
-                  <details><summary>JSON schema</summary>
-
-                  ```json { "type": "object", "properties": { "access": { "type": "object", "additionalProperties": { "type": "boolean" } }, "adminUrl": { "title": "Admin URL", "description": "URL to the admin interface of the client. Set this if the client supports the adapter REST API. This REST API allows the auth server to push revocation policies and other administrative tasks. Usually this is set to the base URL of the client.", "type": "string" }, "alwaysDisplayInConsole": { "title": "Always display in UI", "description": "Always list this client in the Account UI, even if the user does not have an active session.", "type": "boolean" }, "attributes": { "type": "object", "additionalProperties": { "type": "string" } }, "authenticationFlowBindingOverrides": { "title": "Authentication flow overrides", "type": "object", "additionalProperties": { "type": "string" } }, "authorizationServicesEnabled": { "title": "Authorization", "description": "Enable/Disable fine-grained authorization support for a client.", "type": "boolean" }, "authorizationSettings": { "$ref": "#/$defs/ResourceServerRepresentation" }, "baseUrl": { "title": "Home URL", "description": "Default URL to use when the auth server needs to redirect or link back to the client.", "type": "string" }, "bearerOnly": { "description": "This is a special OIDC type. This client only allows bearer token requests and cannot participate in browser logins.", "type": "boolean" }, "clientAuthenticatorType": { "title": "Client Authenticator", "description": "Client Authenticator used for authentication of this client against Keycloak server", "type": "string", "enum": [ "client-jwt", "client-secret", "client-secret-jwt", "client-x509" ] }, "clientId": { "title": "Client ID", "description": "The client identifier registered with the identity provider.", "type": "string" }, "clientTemplate": { "type": "string" }, "consentRequired": { "title": "Consent required", "description": "If enabled, users have to consent to client access.", "type": "boolean" }, "defaultClientScopes": { "type": "array", "items": { "type": "string" } }, "defaultRoles": { "type": "array", "items": { "type": "string" } }, "description": { "title": "Description", "description": "Help text for the description of the new flow", "type": "string" }, "directAccessGrantsEnabled": { "title": "Direct access grants", "description": "This enables support for Direct Access Grants, which means that client has access to username/password of user and exchange it directly with Keycloak server for access token. In terms of OAuth2 specification, this enables support of 'Resource Owner Password Credentials Grant' for this client.", "type": "boolean" }, "directGrantsOnly": { "type": "boolean" }, "enabled": { "title": "Enabled", "description": "Disabled clients cannot initiate a login or have obtained access tokens.", "type": "boolean" }, "frontchannelLogout": { "title": "Front channel logout", "description": "When true, logout requires a browser redirect to client. When false, server performs a background invocation for logout.", "type": "boolean" }, "fullScopeAllowed": { "title": "Full scope allowed", "description": "Allows you to disable all restrictions.", "type": "boolean" }, "id": { "type": "string" }, "implicitFlowEnabled": { "title": "Implicit flow", "description": "This enables support for OpenID Connect redirect based authentication without authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Implicit Flow' for this client.", "type": "boolean" }, "name": { "title": "Name", "description": "Specifies display name of the client. For example 'My Client'. Supports keys for localized values as well. For example: ${my_client}.", "type": "string" }, "nodeReRegistrationTimeout": { "title": "Node Re-registration timeout", "description": "Interval to specify max time for registered clients cluster nodes to re-register. If cluster node will not send re-registration request to Keycloak within this time, it will be unregistered from Keycloak.", "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "notBefore": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 }, "optionalClientScopes": { "type": "array", "items": { "type": "string" } }, "origin": { "type": "string" }, "protocol": { "title": "Protocol", "type": "string" }, "protocolMappers": { "type": "array", "items": { "$ref": "#/$defs/ProtocolMapperRepresentation" } }, "publicClient": { "title": "Client authentication", "description": "This defines the type of the OIDC client. When it's ON, the OIDC type is set to confidential access type. When it's OFF, it is set to public access type.", "type": "boolean" }, "redirectUris": { "title": "Valid redirect URIs", "description": "Valid URI pattern a browser can redirect to after a successful login. Simple wildcards are allowed such as 'http://example.com/*'. Relative path can be specified too such as /my/relative/path/*. Relative paths are relative to the client root URL, or if none is specified the auth server root URL is used. For SAML, you must set valid URI patterns if you are relying on the consumer service URL embedded with the login request.", "type": "array", "items": { "type": "string" } }, "registeredNodes": { "type": "object", "additionalProperties": { "type": "integer", "format": "int32", "maximum": 2147483647.0, "minimum": -2147483648.0 } }, "registrationAccessToken": { "title": "Registration access token", "description": "The registration access token provides access for clients to the client registration service.", "type": "string" }, "rootUrl": { "title": "Root URL", "description": "Root URL appended to relative URLs", "type": "string" }, "secret": { "title": "Client Secret", "type": "string" }, "serviceAccountsEnabled": { "title": "Service accounts roles", "description": "Allows you to authenticate this client to Keycloak and retrieve access token dedicated to this client. In terms of OAuth2 specification, this enables support of 'Client Credentials Grant' for this client.", "type": "boolean" }, "standardFlowEnabled": { "title": "Standard flow", "description": "This enables standard OpenID Connect redirect based authentication with authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Authorization Code Flow' for this client.", "type": "boolean" }, "surrogateAuthRequired": { "type": "boolean" }, "type": { "type": "string" }, "useTemplateConfig": { "type": "boolean" }, "useTemplateMappers": { "type": "boolean" }, "useTemplateScope": { "type": "boolean" }, "webOrigins": { "title": "Web origins", "description": "Allowed CORS origins. To permit all origins of Valid Redirect URIs, add '+'. This does not include the '*' wildcard though. To permit all origins, explicitly add '*'.", "type": "array", "items": { "type": "string" } } } } ``` </details>
-                properties:
-                  access:
-                    additionalProperties:
-                      type: boolean
-                    type: object
-                  adminUrl:
-                    description: URL to the admin interface of the client. Set this if the client supports the adapter REST API. This REST API allows the auth server to push revocation policies and other administrative tasks. Usually this is set to the base URL of the client.
-                    nullable: true
-                    type: string
-                  alwaysDisplayInConsole:
-                    description: Always list this client in the Account UI, even if the user does not have an active session.
-                    nullable: true
-                    type: boolean
-                  attributes:
-                    additionalProperties:
+    - additionalPrinterColumns:
+        - description: true if the realm is ready
+          jsonPath: .status.ready
+          name: Ready
+          type: boolean
+        - description: Status String of the resource
+          jsonPath: .status.status
+          name: Status
+          type: string
+        - description: time since the realm was created
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1beta1
+      schema:
+        openAPIV3Schema:
+          description: "resource to define a Client within a [KeycloakRealm](./keycloakrealm.md)"
+          properties:
+            spec:
+              anyOf:
+                - required:
+                    - realmRef
+                - required:
+                    - clusterRealmRef
+              description: the KeycloakClient resource
+              properties:
+                clientSecret:
+                  nullable: true
+                  properties:
+                    clientIdKey:
+                      nullable: true
                       type: string
-                    type: object
-                  authenticationFlowBindingOverrides:
-                    additionalProperties:
+                    clientSecretKey:
+                      nullable: true
                       type: string
-                    type: object
-                  authorizationServicesEnabled:
-                    description: Enable/Disable fine-grained authorization support for a client.
-                    nullable: true
-                    type: boolean
-                  authorizationSettings:
-                    description: |-
-                      ResourceServerRepresentation
-
-                      <details><summary>JSON schema</summary>
-
-                      ```json { "type": "object", "properties": { "allowRemoteResourceManagement": { "type": "boolean" }, "authorizationSchema": { "$ref": "#/$defs/AuthorizationSchema" }, "clientId": { "type": "string" }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "policyEnforcementMode": { "$ref": "#/$defs/PolicyEnforcementMode" }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" } } } } ``` </details>
-                    nullable: true
-                    properties:
-                      allowRemoteResourceManagement:
-                        nullable: true
-                        type: boolean
-                      authorizationSchema:
-                        description: |-
-                          AuthorizationSchema
-
-                          <details><summary>JSON schema</summary>
-
-                          ```json { "type": "object", "properties": { "resourceTypes": { "type": "object", "additionalProperties": { "$ref": "#/$defs/ResourceType" } } } } ``` </details>
-                        nullable: true
-                        properties:
-                          resourceTypes:
-                            additionalProperties:
-                              description: |-
-                                ResourceType
-
-                                <details><summary>JSON schema</summary>
-
-                                ```json { "type": "object", "properties": { "groupType": { "type": "string" }, "scopeAliases": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "type": { "type": "string" } } } ``` </details>
-                              properties:
-                                groupType:
-                                  nullable: true
-                                  type: string
-                                scopeAliases:
-                                  additionalProperties:
-                                    items:
-                                      type: string
-                                    type: array
-                                  type: object
-                                scopes:
-                                  items:
-                                    type: string
-                                  nullable: true
-                                  type: array
-                                type:
-                                  nullable: true
-                                  type: string
-                              type: object
-                            type: object
-                        type: object
-                      clientId:
-                        nullable: true
-                        type: string
-                      decisionStrategy:
-                        description: |-
-                          DecisionStrategy
-
-                          <details><summary>JSON schema</summary>
-
-                          ```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
-                        enum:
-                        - AFFIRMATIVE
-                        - UNANIMOUS
-                        - CONSENSUS
-                        nullable: true
-                        type: string
-                      id:
-                        nullable: true
-                        type: string
-                      name:
-                        nullable: true
-                        type: string
-                      policies:
-                        items:
-                          description: |-
-                            PolicyRepresentation
-
-                            <details><summary>JSON schema</summary>
-
-                            ```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } } } ``` </details>
-                          properties:
-                            config:
-                              additionalProperties:
-                                type: string
-                              type: object
-                            decisionStrategy:
-                              description: |-
-                                DecisionStrategy
-
-                                <details><summary>JSON schema</summary>
-
-                                ```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
-                              enum:
-                              - AFFIRMATIVE
-                              - UNANIMOUS
-                              - CONSENSUS
-                              nullable: true
-                              type: string
-                            description:
-                              nullable: true
-                              type: string
-                            id:
-                              nullable: true
-                              type: string
-                            logic:
-                              description: |-
-                                Logic
-
-                                <details><summary>JSON schema</summary>
-
-                                ```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
-                              enum:
-                              - POSITIVE
-                              - NEGATIVE
-                              nullable: true
-                              type: string
-                            name:
-                              nullable: true
-                              type: string
-                            owner:
-                              nullable: true
-                              type: string
-                            policies:
-                              items:
-                                type: string
-                              nullable: true
-                              type: array
-                            resourceType:
-                              nullable: true
-                              type: string
-                            resources:
-                              items:
-                                type: string
-                              nullable: true
-                              type: array
-                            resourcesData:
-                              items:
-                                description: |-
-                                  ResourceRepresentation
-
-                                  <details><summary>JSON schema</summary>
-
-                                  ```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } } } ``` </details>
-                                properties:
-                                  _id:
-                                    nullable: true
-                                    type: string
-                                  attributes:
-                                    additionalProperties:
-                                      items:
-                                        type: string
-                                      type: array
-                                    type: object
-                                  displayName:
-                                    nullable: true
-                                    type: string
-                                  icon_uri:
-                                    nullable: true
-                                    type: string
-                                  name:
-                                    nullable: true
-                                    type: string
-                                  owner:
-                                    description: |-
-                                      ResourceOwnerRepresentation
-
-                                      <details><summary>JSON schema</summary>
-
-                                      ```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } } } ``` </details>
-                                    nullable: true
-                                    properties:
-                                      id:
-                                        nullable: true
-                                        type: string
-                                      name:
-                                        nullable: true
-                                        type: string
-                                    type: object
-                                  ownerManagedAccess:
-                                    nullable: true
-                                    type: boolean
-                                  scopes:
-                                    items:
-                                      description: |-
-                                        ScopeRepresentation
-
-                                        <details><summary>JSON schema</summary>
-
-                                        ```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } } } ``` </details>
-                                      properties:
-                                        displayName:
-                                          nullable: true
-                                          type: string
-                                        iconUri:
-                                          nullable: true
-                                          type: string
-                                        id:
-                                          nullable: true
-                                          type: string
-                                        name:
-                                          nullable: true
-                                          type: string
-                                      type: object
-                                      x-kubernetes-preserve-unknown-fields: true
-                                    nullable: true
-                                    type: array
-                                  scopesUma:
-                                    items:
-                                      description: |-
-                                        ScopeRepresentation
-
-                                        <details><summary>JSON schema</summary>
-
-                                        ```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } } } ``` </details>
-                                      properties:
-                                        displayName:
-                                          nullable: true
-                                          type: string
-                                        iconUri:
-                                          nullable: true
-                                          type: string
-                                        id:
-                                          nullable: true
-                                          type: string
-                                        name:
-                                          nullable: true
-                                          type: string
-                                      type: object
-                                      x-kubernetes-preserve-unknown-fields: true
-                                    nullable: true
-                                    type: array
-                                  type:
-                                    nullable: true
-                                    type: string
-                                  uri:
-                                    nullable: true
-                                    type: string
-                                  uris:
-                                    items:
-                                      type: string
-                                    nullable: true
-                                    type: array
-                                type: object
-                              nullable: true
-                              type: array
-                            scopes:
-                              items:
-                                type: string
-                              nullable: true
-                              type: array
-                            scopesData:
-                              items:
-                                description: |-
-                                  ScopeRepresentation
-
-                                  <details><summary>JSON schema</summary>
-
-                                  ```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } } } ``` </details>
-                                properties:
-                                  displayName:
-                                    nullable: true
-                                    type: string
-                                  iconUri:
-                                    nullable: true
-                                    type: string
-                                  id:
-                                    nullable: true
-                                    type: string
-                                  name:
-                                    nullable: true
-                                    type: string
-                                  resources:
-                                    items:
-                                      description: |-
-                                        ResourceRepresentation
-
-                                        <details><summary>JSON schema</summary>
-
-                                        ```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } } } ``` </details>
-                                      properties:
-                                        _id:
-                                          nullable: true
-                                          type: string
-                                        attributes:
-                                          additionalProperties:
-                                            items:
-                                              type: string
-                                            type: array
-                                          type: object
-                                        displayName:
-                                          nullable: true
-                                          type: string
-                                        icon_uri:
-                                          nullable: true
-                                          type: string
-                                        name:
-                                          nullable: true
-                                          type: string
-                                        owner:
-                                          description: |-
-                                            ResourceOwnerRepresentation
-
-                                            <details><summary>JSON schema</summary>
-
-                                            ```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } } } ``` </details>
-                                          nullable: true
-                                          properties:
-                                            id:
-                                              nullable: true
-                                              type: string
-                                            name:
-                                              nullable: true
-                                              type: string
-                                          type: object
-                                        ownerManagedAccess:
-                                          nullable: true
-                                          type: boolean
-                                        type:
-                                          nullable: true
-                                          type: string
-                                        uri:
-                                          nullable: true
-                                          type: string
-                                        uris:
-                                          items:
-                                            type: string
-                                          nullable: true
-                                          type: array
-                                      type: object
-                                      x-kubernetes-preserve-unknown-fields: true
-                                    type: array
-                                type: object
-                                x-kubernetes-preserve-unknown-fields: true
-                              nullable: true
-                              type: array
-                            type:
-                              nullable: true
-                              type: string
-                          type: object
-                        type: array
-                      policyEnforcementMode:
-                        description: |-
-                          PolicyEnforcementMode
-
-                          <details><summary>JSON schema</summary>
-
-                          ```json { "type": "string", "enum": [ "ENFORCING", "PERMISSIVE", "DISABLED" ] } ``` </details>
-                        enum:
-                        - ENFORCING
-                        - PERMISSIVE
-                        - DISABLED
-                        nullable: true
-                        type: string
-                      resources:
-                        items:
-                          description: |-
-                            ResourceRepresentation
-
-                            <details><summary>JSON schema</summary>
-
-                            ```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } } } ``` </details>
-                          properties:
-                            _id:
-                              nullable: true
-                              type: string
-                            attributes:
-                              additionalProperties:
-                                items:
-                                  type: string
-                                type: array
-                              type: object
-                            displayName:
-                              nullable: true
-                              type: string
-                            icon_uri:
-                              nullable: true
-                              type: string
-                            name:
-                              nullable: true
-                              type: string
-                            owner:
-                              description: |-
-                                ResourceOwnerRepresentation
-
-                                <details><summary>JSON schema</summary>
-
-                                ```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } } } ``` </details>
-                              nullable: true
-                              properties:
-                                id:
-                                  nullable: true
-                                  type: string
-                                name:
-                                  nullable: true
-                                  type: string
-                              type: object
-                            ownerManagedAccess:
-                              nullable: true
-                              type: boolean
-                            scopes:
-                              items:
-                                description: |-
-                                  ScopeRepresentation
-
-                                  <details><summary>JSON schema</summary>
-
-                                  ```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } } } ``` </details>
-                                properties:
-                                  displayName:
-                                    nullable: true
-                                    type: string
-                                  iconUri:
-                                    nullable: true
-                                    type: string
-                                  id:
-                                    nullable: true
-                                    type: string
-                                  name:
-                                    nullable: true
-                                    type: string
-                                  policies:
-                                    items:
-                                      description: |-
-                                        PolicyRepresentation
-
-                                        <details><summary>JSON schema</summary>
-
-                                        ```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } } } ``` </details>
-                                      properties:
-                                        config:
-                                          additionalProperties:
-                                            type: string
-                                          type: object
-                                        decisionStrategy:
-                                          description: |-
-                                            DecisionStrategy
-
-                                            <details><summary>JSON schema</summary>
-
-                                            ```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
-                                          enum:
-                                          - AFFIRMATIVE
-                                          - UNANIMOUS
-                                          - CONSENSUS
-                                          nullable: true
-                                          type: string
-                                        description:
-                                          nullable: true
-                                          type: string
-                                        id:
-                                          nullable: true
-                                          type: string
-                                        logic:
-                                          description: |-
-                                            Logic
-
-                                            <details><summary>JSON schema</summary>
-
-                                            ```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
-                                          enum:
-                                          - POSITIVE
-                                          - NEGATIVE
-                                          nullable: true
-                                          type: string
-                                        name:
-                                          nullable: true
-                                          type: string
-                                        owner:
-                                          nullable: true
-                                          type: string
-                                        policies:
-                                          items:
-                                            type: string
-                                          nullable: true
-                                          type: array
-                                        resourceType:
-                                          nullable: true
-                                          type: string
-                                        resources:
-                                          items:
-                                            type: string
-                                          nullable: true
-                                          type: array
-                                        scopes:
-                                          items:
-                                            type: string
-                                          nullable: true
-                                          type: array
-                                        type:
-                                          nullable: true
-                                          type: string
-                                      type: object
-                                      x-kubernetes-preserve-unknown-fields: true
-                                    type: array
-                                type: object
-                                x-kubernetes-preserve-unknown-fields: true
-                              nullable: true
-                              type: array
-                            scopesUma:
-                              items:
-                                description: |-
-                                  ScopeRepresentation
-
-                                  <details><summary>JSON schema</summary>
-
-                                  ```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } } } ``` </details>
-                                properties:
-                                  displayName:
-                                    nullable: true
-                                    type: string
-                                  iconUri:
-                                    nullable: true
-                                    type: string
-                                  id:
-                                    nullable: true
-                                    type: string
-                                  name:
-                                    nullable: true
-                                    type: string
-                                  policies:
-                                    items:
-                                      description: |-
-                                        PolicyRepresentation
-
-                                        <details><summary>JSON schema</summary>
-
-                                        ```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } } } ``` </details>
-                                      properties:
-                                        config:
-                                          additionalProperties:
-                                            type: string
-                                          type: object
-                                        decisionStrategy:
-                                          description: |-
-                                            DecisionStrategy
-
-                                            <details><summary>JSON schema</summary>
-
-                                            ```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
-                                          enum:
-                                          - AFFIRMATIVE
-                                          - UNANIMOUS
-                                          - CONSENSUS
-                                          nullable: true
-                                          type: string
-                                        description:
-                                          nullable: true
-                                          type: string
-                                        id:
-                                          nullable: true
-                                          type: string
-                                        logic:
-                                          description: |-
-                                            Logic
-
-                                            <details><summary>JSON schema</summary>
-
-                                            ```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
-                                          enum:
-                                          - POSITIVE
-                                          - NEGATIVE
-                                          nullable: true
-                                          type: string
-                                        name:
-                                          nullable: true
-                                          type: string
-                                        owner:
-                                          nullable: true
-                                          type: string
-                                        policies:
-                                          items:
-                                            type: string
-                                          nullable: true
-                                          type: array
-                                        resourceType:
-                                          nullable: true
-                                          type: string
-                                        resources:
-                                          items:
-                                            type: string
-                                          nullable: true
-                                          type: array
-                                        scopes:
-                                          items:
-                                            type: string
-                                          nullable: true
-                                          type: array
-                                        type:
-                                          nullable: true
-                                          type: string
-                                      type: object
-                                      x-kubernetes-preserve-unknown-fields: true
-                                    type: array
-                                type: object
-                                x-kubernetes-preserve-unknown-fields: true
-                              nullable: true
-                              type: array
-                            type:
-                              nullable: true
-                              type: string
-                            uri:
-                              nullable: true
-                              type: string
-                            uris:
-                              items:
-                                type: string
-                              nullable: true
-                              type: array
-                          type: object
-                        type: array
-                      scopes:
-                        items:
-                          description: |-
-                            ScopeRepresentation
-
-                            <details><summary>JSON schema</summary>
-
-                            ```json { "type": "object", "properties": { "displayName": { "type": "string" }, "iconUri": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "policies": { "type": "array", "items": { "$ref": "#/$defs/PolicyRepresentation" } }, "resources": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" } } } } ``` </details>
-                          properties:
-                            displayName:
-                              nullable: true
-                              type: string
-                            iconUri:
-                              nullable: true
-                              type: string
-                            id:
-                              nullable: true
-                              type: string
-                            name:
-                              nullable: true
-                              type: string
-                            policies:
-                              items:
-                                description: |-
-                                  PolicyRepresentation
-
-                                  <details><summary>JSON schema</summary>
-
-                                  ```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "decisionStrategy": { "$ref": "#/$defs/DecisionStrategy" }, "description": { "type": "string" }, "id": { "type": "string" }, "logic": { "$ref": "#/$defs/Logic" }, "name": { "type": "string" }, "owner": { "type": "string" }, "policies": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourceType": { "type": "string" }, "resources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "resourcesData": { "type": "array", "items": { "$ref": "#/$defs/ResourceRepresentation" }, "uniqueItems": true }, "scopes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }, "scopesData": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" } } } ``` </details>
-                                properties:
-                                  config:
-                                    additionalProperties:
-                                      type: string
-                                    type: object
-                                  decisionStrategy:
-                                    description: |-
-                                      DecisionStrategy
-
-                                      <details><summary>JSON schema</summary>
-
-                                      ```json { "type": "string", "enum": [ "AFFIRMATIVE", "UNANIMOUS", "CONSENSUS" ] } ``` </details>
-                                    enum:
-                                    - AFFIRMATIVE
-                                    - UNANIMOUS
-                                    - CONSENSUS
-                                    nullable: true
-                                    type: string
-                                  description:
-                                    nullable: true
-                                    type: string
-                                  id:
-                                    nullable: true
-                                    type: string
-                                  logic:
-                                    description: |-
-                                      Logic
-
-                                      <details><summary>JSON schema</summary>
-
-                                      ```json { "type": "string", "enum": [ "POSITIVE", "NEGATIVE" ] } ``` </details>
-                                    enum:
-                                    - POSITIVE
-                                    - NEGATIVE
-                                    nullable: true
-                                    type: string
-                                  name:
-                                    nullable: true
-                                    type: string
-                                  owner:
-                                    nullable: true
-                                    type: string
-                                  policies:
-                                    items:
-                                      type: string
-                                    nullable: true
-                                    type: array
-                                  resourceType:
-                                    nullable: true
-                                    type: string
-                                  resources:
-                                    items:
-                                      type: string
-                                    nullable: true
-                                    type: array
-                                  resourcesData:
-                                    items:
-                                      description: |-
-                                        ResourceRepresentation
-
-                                        <details><summary>JSON schema</summary>
-
-                                        ```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } } } ``` </details>
-                                      properties:
-                                        _id:
-                                          nullable: true
-                                          type: string
-                                        attributes:
-                                          additionalProperties:
-                                            items:
-                                              type: string
-                                            type: array
-                                          type: object
-                                        displayName:
-                                          nullable: true
-                                          type: string
-                                        icon_uri:
-                                          nullable: true
-                                          type: string
-                                        name:
-                                          nullable: true
-                                          type: string
-                                        owner:
-                                          description: |-
-                                            ResourceOwnerRepresentation
-
-                                            <details><summary>JSON schema</summary>
-
-                                            ```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } } } ``` </details>
-                                          nullable: true
-                                          properties:
-                                            id:
-                                              nullable: true
-                                              type: string
-                                            name:
-                                              nullable: true
-                                              type: string
-                                          type: object
-                                        ownerManagedAccess:
-                                          nullable: true
-                                          type: boolean
-                                        type:
-                                          nullable: true
-                                          type: string
-                                        uri:
-                                          nullable: true
-                                          type: string
-                                        uris:
-                                          items:
-                                            type: string
-                                          nullable: true
-                                          type: array
-                                      type: object
-                                      x-kubernetes-preserve-unknown-fields: true
-                                    nullable: true
-                                    type: array
-                                  scopes:
-                                    items:
-                                      type: string
-                                    nullable: true
-                                    type: array
-                                  type:
-                                    nullable: true
-                                    type: string
-                                type: object
-                                x-kubernetes-preserve-unknown-fields: true
-                              type: array
-                            resources:
-                              items:
-                                description: |-
-                                  ResourceRepresentation
-
-                                  <details><summary>JSON schema</summary>
-
-                                  ```json { "type": "object", "properties": { "_id": { "type": "string" }, "attributes": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }, "displayName": { "type": "string" }, "icon_uri": { "type": "string" }, "name": { "type": "string" }, "owner": { "type": "object", "allOf": [ { "$ref": "#/$defs/ResourceOwnerRepresentation" } ] }, "ownerManagedAccess": { "type": "boolean" }, "scopes": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "scopesUma": { "type": "array", "items": { "$ref": "#/$defs/ScopeRepresentation" }, "uniqueItems": true }, "type": { "type": "string" }, "uri": { "type": "string" }, "uris": { "type": "array", "items": { "type": "string" }, "uniqueItems": true } } } ``` </details>
-                                properties:
-                                  _id:
-                                    nullable: true
-                                    type: string
-                                  attributes:
-                                    additionalProperties:
-                                      items:
-                                        type: string
-                                      type: array
-                                    type: object
-                                  displayName:
-                                    nullable: true
-                                    type: string
-                                  icon_uri:
-                                    nullable: true
-                                    type: string
-                                  name:
-                                    nullable: true
-                                    type: string
-                                  owner:
-                                    description: |-
-                                      ResourceOwnerRepresentation
-
-                                      <details><summary>JSON schema</summary>
-
-                                      ```json { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } } } ``` </details>
-                                    nullable: true
-                                    properties:
-                                      id:
-                                        nullable: true
-                                        type: string
-                                      name:
-                                        nullable: true
-                                        type: string
-                                    type: object
-                                  ownerManagedAccess:
-                                    nullable: true
-                                    type: boolean
-                                  type:
-                                    nullable: true
-                                    type: string
-                                  uri:
-                                    nullable: true
-                                    type: string
-                                  uris:
-                                    items:
-                                      type: string
-                                    nullable: true
-                                    type: array
-                                type: object
-                                x-kubernetes-preserve-unknown-fields: true
-                              type: array
-                          type: object
-                        type: array
-                    type: object
-                  baseUrl:
-                    description: Default URL to use when the auth server needs to redirect or link back to the client.
-                    nullable: true
-                    type: string
-                  bearerOnly:
-                    description: This is a special OIDC type. This client only allows bearer token requests and cannot participate in browser logins.
-                    nullable: true
-                    type: boolean
-                  clientAuthenticatorType:
-                    description: Client Authenticator used for authentication of this client against Keycloak server
-                    enum:
-                    - client-jwt
-                    - client-secret
-                    - client-secret-jwt
-                    - client-x509
-                    nullable: true
-                    type: string
-                  clientId:
-                    description: The client identifier registered with the identity provider.
-                    nullable: true
-                    type: string
-                  clientTemplate:
-                    nullable: true
-                    type: string
-                  consentRequired:
-                    description: If enabled, users have to consent to client access.
-                    nullable: true
-                    type: boolean
-                  defaultClientScopes:
-                    items:
+                    secretName:
                       type: string
-                    type: array
-                  defaultRoles:
-                    items:
-                      type: string
-                    type: array
-                  description:
-                    description: Help text for the description of the new flow
-                    nullable: true
-                    type: string
-                  directAccessGrantsEnabled:
-                    description: This enables support for Direct Access Grants, which means that client has access to username/password of user and exchange it directly with Keycloak server for access token. In terms of OAuth2 specification, this enables support of 'Resource Owner Password Credentials Grant' for this client.
-                    nullable: true
-                    type: boolean
-                  directGrantsOnly:
-                    nullable: true
-                    type: boolean
-                  enabled:
-                    description: Disabled clients cannot initiate a login or have obtained access tokens.
-                    nullable: true
-                    type: boolean
-                  frontchannelLogout:
-                    description: When true, logout requires a browser redirect to client. When false, server performs a background invocation for logout.
-                    nullable: true
-                    type: boolean
-                  fullScopeAllowed:
-                    description: Allows you to disable all restrictions.
-                    nullable: true
-                    type: boolean
-                  id:
-                    nullable: true
-                    type: string
-                    x-kubernetes-validations:
+                  required:
+                    - secretName
+                  type: object
+                clusterRealmRef:
+                  description: The name of the cluster realm to which this object belongs to
+                  type: string
+                  x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
-                  implicitFlowEnabled:
-                    description: This enables support for OpenID Connect redirect based authentication without authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Implicit Flow' for this client.
-                    nullable: true
-                    type: boolean
-                  name:
-                    description: 'Specifies display name of the client. For example ''My Client''. Supports keys for localized values as well. For example: ${my_client}.'
-                    nullable: true
-                    type: string
-                  nodeReRegistrationTimeout:
-                    description: Interval to specify max time for registered clients cluster nodes to re-register. If cluster node will not send re-registration request to Keycloak within this time, it will be unregistered from Keycloak.
-                    format: int32
-                    nullable: true
-                    type: integer
-                  notBefore:
-                    format: int32
-                    nullable: true
-                    type: integer
-                  optionalClientScopes:
-                    items:
+                definition:
+                  description: "ClientRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"access\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"boolean\" } }, \"adminUrl\": { \"title\": \"Admin URL\", \"description\": \"URL to the admin interface of the client. Set this if the client supports the adapter REST API. This REST API allows the auth server to push revocation policies and other administrative tasks. Usually this is set to the base URL of the client.\", \"type\": \"string\" }, \"alwaysDisplayInConsole\": { \"title\": \"Always display in UI\", \"description\": \"Always list this client in the Account UI, even if the user does not have an active session.\", \"type\": \"boolean\" }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"string\" } }, \"authenticationFlowBindingOverrides\": { \"title\": \"Authentication flow overrides\", \"type\": \"object\", \"additionalProperties\": { \"type\": \"string\" } }, \"authorizationServicesEnabled\": { \"title\": \"Authorization\", \"description\": \"Enable/Disable fine-grained authorization support for a client.\", \"type\": \"boolean\" }, \"authorizationSettings\": { \"$ref\": \"#/$defs/ResourceServerRepresentation\" }, \"baseUrl\": { \"title\": \"Home URL\", \"description\": \"Default URL to use when the auth server needs to redirect or link back to the client.\", \"type\": \"string\" }, \"bearerOnly\": { \"description\": \"This is a special OIDC type. This client only allows bearer token requests and cannot participate in browser logins.\", \"type\": \"boolean\" }, \"clientAuthenticatorType\": { \"title\": \"Client Authenticator\", \"description\": \"Client Authenticator used for authentication of this client against Keycloak server\", \"type\": \"string\", \"enum\": [ \"client-jwt\", \"client-secret\", \"client-secret-jwt\", \"client-x509\" ] }, \"clientId\": { \"title\": \"Client ID\", \"description\": \"The client identifier registered with the identity provider.\", \"type\": \"string\" }, \"clientTemplate\": { \"type\": \"string\" }, \"consentRequired\": { \"title\": \"Consent required\", \"description\": \"If enabled, users have to consent to client access.\", \"type\": \"boolean\" }, \"defaultClientScopes\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } }, \"defaultRoles\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } }, \"description\": { \"title\": \"Description\", \"description\": \"Help text for the description of the new flow\", \"type\": \"string\" }, \"directAccessGrantsEnabled\": { \"title\": \"Direct access grants\", \"description\": \"This enables support for Direct Access Grants, which means that client has access to username/password of user and exchange it directly with Keycloak server for access token. In terms of OAuth2 specification, this enables support of 'Resource Owner Password Credentials Grant' for this client.\", \"type\": \"boolean\" }, \"directGrantsOnly\": { \"type\": \"boolean\" }, \"enabled\": { \"title\": \"Enabled\", \"description\": \"Disabled clients cannot initiate a login or have obtained access tokens.\", \"type\": \"boolean\" }, \"frontchannelLogout\": { \"title\": \"Front channel logout\", \"description\": \"When true, logout requires a browser redirect to client. When false, server performs a background invocation for logout.\", \"type\": \"boolean\" }, \"fullScopeAllowed\": { \"title\": \"Full scope allowed\", \"description\": \"Allows you to disable all restrictions.\", \"type\": \"boolean\" }, \"id\": { \"type\": \"string\" }, \"implicitFlowEnabled\": { \"title\": \"Implicit flow\", \"description\": \"This enables support for OpenID Connect redirect based authentication without authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Implicit Flow' for this client.\", \"type\": \"boolean\" }, \"name\": { \"title\": \"Name\", \"description\": \"Specifies display name of the client. For example 'My Client'. Supports keys for localized values as well. For example: ${my_client}.\", \"type\": \"string\" }, \"nodeReRegistrationTimeout\": { \"title\": \"Node Re-registration timeout\", \"description\": \"Interval to specify max time for registered clients cluster nodes to re-register. If cluster node will not send re-registration request to Keycloak within this time, it will be unregistered from Keycloak.\", \"type\": \"integer\", \"format\": \"int32\", \"maximum\": 2147483647.0, \"minimum\": -2147483648.0 }, \"notBefore\": { \"type\": \"integer\", \"format\": \"int32\", \"maximum\": 2147483647.0, \"minimum\": -2147483648.0 }, \"optionalClientScopes\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } }, \"origin\": { \"type\": \"string\" }, \"protocol\": { \"title\": \"Protocol\", \"type\": \"string\" }, \"protocolMappers\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ProtocolMapperRepresentation\" } }, \"publicClient\": { \"title\": \"Client authentication\", \"description\": \"This defines the type of the OIDC client. When it's ON, the OIDC type is set to confidential access type. When it's OFF, it is set to public access type.\", \"type\": \"boolean\" }, \"redirectUris\": { \"title\": \"Valid redirect URIs\", \"description\": \"Valid URI pattern a browser can redirect to after a successful login. Simple wildcards are allowed such as 'http://example.com/*'. Relative path can be specified too such as /my/relative/path/*. Relative paths are relative to the client root URL, or if none is specified the auth server root URL is used. For SAML, you must set valid URI patterns if you are relying on the consumer service URL embedded with the login request.\", \"type\": \"array\", \"items\": { \"type\": \"string\" } }, \"registeredNodes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"integer\", \"format\": \"int32\", \"maximum\": 2147483647.0, \"minimum\": -2147483648.0 } }, \"registrationAccessToken\": { \"title\": \"Registration access token\", \"description\": \"The registration access token provides access for clients to the client registration service.\", \"type\": \"string\" }, \"rootUrl\": { \"title\": \"Root URL\", \"description\": \"Root URL appended to relative URLs\", \"type\": \"string\" }, \"secret\": { \"title\": \"Client Secret\", \"type\": \"string\" }, \"serviceAccountsEnabled\": { \"title\": \"Service accounts roles\", \"description\": \"Allows you to authenticate this client to Keycloak and retrieve access token dedicated to this client. In terms of OAuth2 specification, this enables support of 'Client Credentials Grant' for this client.\", \"type\": \"boolean\" }, \"standardFlowEnabled\": { \"title\": \"Standard flow\", \"description\": \"This enables standard OpenID Connect redirect based authentication with authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Authorization Code Flow' for this client.\", \"type\": \"boolean\" }, \"surrogateAuthRequired\": { \"type\": \"boolean\" }, \"type\": { \"type\": \"string\" }, \"useTemplateConfig\": { \"type\": \"boolean\" }, \"useTemplateMappers\": { \"type\": \"boolean\" }, \"useTemplateScope\": { \"type\": \"boolean\" }, \"webOrigins\": { \"title\": \"Web origins\", \"description\": \"Allowed CORS origins. To permit all origins of Valid Redirect URIs, add '+'. This does not include the '*' wildcard though. To permit all origins, explicitly add '*'.\", \"type\": \"array\", \"items\": { \"type\": \"string\" } } } } ``` </details>"
+                  properties:
+                    access:
+                      additionalProperties:
+                        type: boolean
+                      type: object
+                    adminUrl:
+                      description: >-
+                        URL to the admin interface of the client. Set this if the client supports the
+                        adapter REST API. This REST API allows the auth server to push revocation policies
+                        and other administrative tasks. Usually this is set to the base URL of the
+                        client.
+                      nullable: true
                       type: string
-                    type: array
-                  origin:
-                    nullable: true
-                    type: string
-                  protocol:
-                    nullable: true
-                    type: string
-                  protocolMappers:
-                    items:
-                      description: |-
-                        ProtocolMapperRepresentation
-
-                        <details><summary>JSON schema</summary>
-
-                        ```json { "type": "object", "properties": { "config": { "type": "object", "additionalProperties": { "type": "string" } }, "consentRequired": { "type": "boolean" }, "consentText": { "type": "string" }, "id": { "type": "string" }, "name": { "type": "string" }, "protocol": { "type": "string", "enum": [ "openid-connect", "saml" ] }, "protocolMapper": { "type": "string" } } } ``` </details>
+                    alwaysDisplayInConsole:
+                      description: "Always list this client in the Account UI, even if the user does not have an active session."
+                      nullable: true
+                      type: boolean
+                    attributes:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    authenticationFlowBindingOverrides:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    authorizationServicesEnabled:
+                      description: Enable/Disable fine-grained authorization support for a client.
+                      nullable: true
+                      type: boolean
+                    authorizationSettings:
+                      description: "ResourceServerRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"allowRemoteResourceManagement\": { \"type\": \"boolean\" }, \"authorizationSchema\": { \"$ref\": \"#/$defs/AuthorizationSchema\" }, \"clientId\": { \"type\": \"string\" }, \"decisionStrategy\": { \"$ref\": \"#/$defs/DecisionStrategy\" }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/PolicyRepresentation\" } }, \"policyEnforcementMode\": { \"$ref\": \"#/$defs/PolicyEnforcementMode\" }, \"resources\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" } }, \"scopes\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" } } } } ``` </details>"
+                      nullable: true
                       properties:
-                        config:
-                          additionalProperties:
-                            type: string
-                          type: object
-                        consentRequired:
+                        allowRemoteResourceManagement:
                           nullable: true
                           type: boolean
-                        consentText:
+                        authorizationSchema:
+                          description: "AuthorizationSchema\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"resourceTypes\": { \"type\": \"object\", \"additionalProperties\": { \"$ref\": \"#/$defs/ResourceType\" } } } } ``` </details>"
+                          nullable: true
+                          properties:
+                            resourceTypes:
+                              additionalProperties:
+                                description: "ResourceType\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"groupType\": { \"type\": \"string\" }, \"scopeAliases\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true } }, \"scopes\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" } } } ``` </details>"
+                                properties:
+                                  groupType:
+                                    nullable: true
+                                    type: string
+                                  scopeAliases:
+                                    additionalProperties:
+                                      items:
+                                        type: string
+                                      type: array
+                                    type: object
+                                  scopes:
+                                    items:
+                                      type: string
+                                    nullable: true
+                                    type: array
+                                  type:
+                                    nullable: true
+                                    type: string
+                                type: object
+                              type: object
+                          type: object
+                        clientId:
+                          nullable: true
+                          type: string
+                        decisionStrategy:
+                          description: "DecisionStrategy\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"AFFIRMATIVE\", \"UNANIMOUS\", \"CONSENSUS\" ] } ``` </details>"
+                          enum:
+                            - AFFIRMATIVE
+                            - UNANIMOUS
+                            - CONSENSUS
                           nullable: true
                           type: string
                         id:
@@ -1039,232 +144,963 @@ spec:
                         name:
                           nullable: true
                           type: string
-                        protocol:
-                          description: |-
-                            ProtocolMapperRepresentationProtocol
-
-                            <details><summary>JSON schema</summary>
-
-                            ```json { "type": "string", "enum": [ "openid-connect", "saml" ] } ``` </details>
+                        policies:
+                          items:
+                            description: "PolicyRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"config\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"string\" } }, \"decisionStrategy\": { \"$ref\": \"#/$defs/DecisionStrategy\" }, \"description\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"logic\": { \"$ref\": \"#/$defs/Logic\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"resourceType\": { \"type\": \"string\" }, \"resources\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"resourcesData\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" }, \"uniqueItems\": true }, \"scopes\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"scopesData\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" } } } ``` </details>"
+                            properties:
+                              config:
+                                additionalProperties:
+                                  type: string
+                                type: object
+                              decisionStrategy:
+                                description: "DecisionStrategy\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"AFFIRMATIVE\", \"UNANIMOUS\", \"CONSENSUS\" ] } ``` </details>"
+                                enum:
+                                  - AFFIRMATIVE
+                                  - UNANIMOUS
+                                  - CONSENSUS
+                                nullable: true
+                                type: string
+                              description:
+                                nullable: true
+                                type: string
+                              id:
+                                nullable: true
+                                type: string
+                              logic:
+                                description: "Logic\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"POSITIVE\", \"NEGATIVE\" ] } ``` </details>"
+                                enum:
+                                  - POSITIVE
+                                  - NEGATIVE
+                                nullable: true
+                                type: string
+                              name:
+                                nullable: true
+                                type: string
+                              owner:
+                                nullable: true
+                                type: string
+                              policies:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              resourceType:
+                                nullable: true
+                                type: string
+                              resources:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              resourcesData:
+                                items:
+                                  description: "ResourceRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"_id\": { \"type\": \"string\" }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"displayName\": { \"type\": \"string\" }, \"icon_uri\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"object\", \"allOf\": [ { \"$ref\": \"#/$defs/ResourceOwnerRepresentation\" } ] }, \"ownerManagedAccess\": { \"type\": \"boolean\" }, \"scopes\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"scopesUma\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" }, \"uri\": { \"type\": \"string\" }, \"uris\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true } } } ``` </details>"
+                                  properties:
+                                    _id:
+                                      nullable: true
+                                      type: string
+                                    attributes:
+                                      additionalProperties:
+                                        items:
+                                          type: string
+                                        type: array
+                                      type: object
+                                    displayName:
+                                      nullable: true
+                                      type: string
+                                    icon_uri:
+                                      nullable: true
+                                      type: string
+                                    name:
+                                      nullable: true
+                                      type: string
+                                    owner:
+                                      description: "ResourceOwnerRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" } } } ``` </details>"
+                                      nullable: true
+                                      properties:
+                                        id:
+                                          nullable: true
+                                          type: string
+                                        name:
+                                          nullable: true
+                                          type: string
+                                      type: object
+                                    ownerManagedAccess:
+                                      nullable: true
+                                      type: boolean
+                                    scopes:
+                                      items:
+                                        description: "ScopeRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"displayName\": { \"type\": \"string\" }, \"iconUri\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/PolicyRepresentation\" } }, \"resources\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" } } } } ``` </details>"
+                                        properties:
+                                          displayName:
+                                            nullable: true
+                                            type: string
+                                          iconUri:
+                                            nullable: true
+                                            type: string
+                                          id:
+                                            nullable: true
+                                            type: string
+                                          name:
+                                            nullable: true
+                                            type: string
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      nullable: true
+                                      type: array
+                                    scopesUma:
+                                      items:
+                                        description: "ScopeRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"displayName\": { \"type\": \"string\" }, \"iconUri\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/PolicyRepresentation\" } }, \"resources\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" } } } } ``` </details>"
+                                        properties:
+                                          displayName:
+                                            nullable: true
+                                            type: string
+                                          iconUri:
+                                            nullable: true
+                                            type: string
+                                          id:
+                                            nullable: true
+                                            type: string
+                                          name:
+                                            nullable: true
+                                            type: string
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      nullable: true
+                                      type: array
+                                    type:
+                                      nullable: true
+                                      type: string
+                                    uri:
+                                      nullable: true
+                                      type: string
+                                    uris:
+                                      items:
+                                        type: string
+                                      nullable: true
+                                      type: array
+                                  type: object
+                                nullable: true
+                                type: array
+                              scopes:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                              scopesData:
+                                items:
+                                  description: "ScopeRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"displayName\": { \"type\": \"string\" }, \"iconUri\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/PolicyRepresentation\" } }, \"resources\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" } } } } ``` </details>"
+                                  properties:
+                                    displayName:
+                                      nullable: true
+                                      type: string
+                                    iconUri:
+                                      nullable: true
+                                      type: string
+                                    id:
+                                      nullable: true
+                                      type: string
+                                    name:
+                                      nullable: true
+                                      type: string
+                                    resources:
+                                      items:
+                                        description: "ResourceRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"_id\": { \"type\": \"string\" }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"displayName\": { \"type\": \"string\" }, \"icon_uri\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"object\", \"allOf\": [ { \"$ref\": \"#/$defs/ResourceOwnerRepresentation\" } ] }, \"ownerManagedAccess\": { \"type\": \"boolean\" }, \"scopes\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"scopesUma\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" }, \"uri\": { \"type\": \"string\" }, \"uris\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true } } } ``` </details>"
+                                        properties:
+                                          _id:
+                                            nullable: true
+                                            type: string
+                                          attributes:
+                                            additionalProperties:
+                                              items:
+                                                type: string
+                                              type: array
+                                            type: object
+                                          displayName:
+                                            nullable: true
+                                            type: string
+                                          icon_uri:
+                                            nullable: true
+                                            type: string
+                                          name:
+                                            nullable: true
+                                            type: string
+                                          owner:
+                                            description: "ResourceOwnerRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" } } } ``` </details>"
+                                            nullable: true
+                                            properties:
+                                              id:
+                                                nullable: true
+                                                type: string
+                                              name:
+                                                nullable: true
+                                                type: string
+                                            type: object
+                                          ownerManagedAccess:
+                                            nullable: true
+                                            type: boolean
+                                          type:
+                                            nullable: true
+                                            type: string
+                                          uri:
+                                            nullable: true
+                                            type: string
+                                          uris:
+                                            items:
+                                              type: string
+                                            nullable: true
+                                            type: array
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      type: array
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                nullable: true
+                                type: array
+                              type:
+                                nullable: true
+                                type: string
+                            type: object
+                          type: array
+                        policyEnforcementMode:
+                          description: "PolicyEnforcementMode\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"ENFORCING\", \"PERMISSIVE\", \"DISABLED\" ] } ``` </details>"
                           enum:
-                          - openid-connect
-                          - saml
+                            - ENFORCING
+                            - PERMISSIVE
+                            - DISABLED
                           nullable: true
                           type: string
-                        protocolMapper:
-                          nullable: true
-                          type: string
+                        resources:
+                          items:
+                            description: "ResourceRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"_id\": { \"type\": \"string\" }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"displayName\": { \"type\": \"string\" }, \"icon_uri\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"object\", \"allOf\": [ { \"$ref\": \"#/$defs/ResourceOwnerRepresentation\" } ] }, \"ownerManagedAccess\": { \"type\": \"boolean\" }, \"scopes\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"scopesUma\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" }, \"uri\": { \"type\": \"string\" }, \"uris\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true } } } ``` </details>"
+                            properties:
+                              _id:
+                                nullable: true
+                                type: string
+                              attributes:
+                                additionalProperties:
+                                  items:
+                                    type: string
+                                  type: array
+                                type: object
+                              displayName:
+                                nullable: true
+                                type: string
+                              icon_uri:
+                                nullable: true
+                                type: string
+                              name:
+                                nullable: true
+                                type: string
+                              owner:
+                                description: "ResourceOwnerRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" } } } ``` </details>"
+                                nullable: true
+                                properties:
+                                  id:
+                                    nullable: true
+                                    type: string
+                                  name:
+                                    nullable: true
+                                    type: string
+                                type: object
+                              ownerManagedAccess:
+                                nullable: true
+                                type: boolean
+                              scopes:
+                                items:
+                                  description: "ScopeRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"displayName\": { \"type\": \"string\" }, \"iconUri\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/PolicyRepresentation\" } }, \"resources\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" } } } } ``` </details>"
+                                  properties:
+                                    displayName:
+                                      nullable: true
+                                      type: string
+                                    iconUri:
+                                      nullable: true
+                                      type: string
+                                    id:
+                                      nullable: true
+                                      type: string
+                                    name:
+                                      nullable: true
+                                      type: string
+                                    policies:
+                                      items:
+                                        description: "PolicyRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"config\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"string\" } }, \"decisionStrategy\": { \"$ref\": \"#/$defs/DecisionStrategy\" }, \"description\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"logic\": { \"$ref\": \"#/$defs/Logic\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"resourceType\": { \"type\": \"string\" }, \"resources\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"resourcesData\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" }, \"uniqueItems\": true }, \"scopes\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"scopesData\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" } } } ``` </details>"
+                                        properties:
+                                          config:
+                                            additionalProperties:
+                                              type: string
+                                            type: object
+                                          decisionStrategy:
+                                            description: "DecisionStrategy\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"AFFIRMATIVE\", \"UNANIMOUS\", \"CONSENSUS\" ] } ``` </details>"
+                                            enum:
+                                              - AFFIRMATIVE
+                                              - UNANIMOUS
+                                              - CONSENSUS
+                                            nullable: true
+                                            type: string
+                                          description:
+                                            nullable: true
+                                            type: string
+                                          id:
+                                            nullable: true
+                                            type: string
+                                          logic:
+                                            description: "Logic\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"POSITIVE\", \"NEGATIVE\" ] } ``` </details>"
+                                            enum:
+                                              - POSITIVE
+                                              - NEGATIVE
+                                            nullable: true
+                                            type: string
+                                          name:
+                                            nullable: true
+                                            type: string
+                                          owner:
+                                            nullable: true
+                                            type: string
+                                          policies:
+                                            items:
+                                              type: string
+                                            nullable: true
+                                            type: array
+                                          resourceType:
+                                            nullable: true
+                                            type: string
+                                          resources:
+                                            items:
+                                              type: string
+                                            nullable: true
+                                            type: array
+                                          scopes:
+                                            items:
+                                              type: string
+                                            nullable: true
+                                            type: array
+                                          type:
+                                            nullable: true
+                                            type: string
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      type: array
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                nullable: true
+                                type: array
+                              scopesUma:
+                                items:
+                                  description: "ScopeRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"displayName\": { \"type\": \"string\" }, \"iconUri\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/PolicyRepresentation\" } }, \"resources\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" } } } } ``` </details>"
+                                  properties:
+                                    displayName:
+                                      nullable: true
+                                      type: string
+                                    iconUri:
+                                      nullable: true
+                                      type: string
+                                    id:
+                                      nullable: true
+                                      type: string
+                                    name:
+                                      nullable: true
+                                      type: string
+                                    policies:
+                                      items:
+                                        description: "PolicyRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"config\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"string\" } }, \"decisionStrategy\": { \"$ref\": \"#/$defs/DecisionStrategy\" }, \"description\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"logic\": { \"$ref\": \"#/$defs/Logic\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"resourceType\": { \"type\": \"string\" }, \"resources\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"resourcesData\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" }, \"uniqueItems\": true }, \"scopes\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"scopesData\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" } } } ``` </details>"
+                                        properties:
+                                          config:
+                                            additionalProperties:
+                                              type: string
+                                            type: object
+                                          decisionStrategy:
+                                            description: "DecisionStrategy\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"AFFIRMATIVE\", \"UNANIMOUS\", \"CONSENSUS\" ] } ``` </details>"
+                                            enum:
+                                              - AFFIRMATIVE
+                                              - UNANIMOUS
+                                              - CONSENSUS
+                                            nullable: true
+                                            type: string
+                                          description:
+                                            nullable: true
+                                            type: string
+                                          id:
+                                            nullable: true
+                                            type: string
+                                          logic:
+                                            description: "Logic\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"POSITIVE\", \"NEGATIVE\" ] } ``` </details>"
+                                            enum:
+                                              - POSITIVE
+                                              - NEGATIVE
+                                            nullable: true
+                                            type: string
+                                          name:
+                                            nullable: true
+                                            type: string
+                                          owner:
+                                            nullable: true
+                                            type: string
+                                          policies:
+                                            items:
+                                              type: string
+                                            nullable: true
+                                            type: array
+                                          resourceType:
+                                            nullable: true
+                                            type: string
+                                          resources:
+                                            items:
+                                              type: string
+                                            nullable: true
+                                            type: array
+                                          scopes:
+                                            items:
+                                              type: string
+                                            nullable: true
+                                            type: array
+                                          type:
+                                            nullable: true
+                                            type: string
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      type: array
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                nullable: true
+                                type: array
+                              type:
+                                nullable: true
+                                type: string
+                              uri:
+                                nullable: true
+                                type: string
+                              uris:
+                                items:
+                                  type: string
+                                nullable: true
+                                type: array
+                            type: object
+                          type: array
+                        scopes:
+                          items:
+                            description: "ScopeRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"displayName\": { \"type\": \"string\" }, \"iconUri\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/PolicyRepresentation\" } }, \"resources\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" } } } } ``` </details>"
+                            properties:
+                              displayName:
+                                nullable: true
+                                type: string
+                              iconUri:
+                                nullable: true
+                                type: string
+                              id:
+                                nullable: true
+                                type: string
+                              name:
+                                nullable: true
+                                type: string
+                              policies:
+                                items:
+                                  description: "PolicyRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"config\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"string\" } }, \"decisionStrategy\": { \"$ref\": \"#/$defs/DecisionStrategy\" }, \"description\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"logic\": { \"$ref\": \"#/$defs/Logic\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"string\" }, \"policies\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"resourceType\": { \"type\": \"string\" }, \"resources\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"resourcesData\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ResourceRepresentation\" }, \"uniqueItems\": true }, \"scopes\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true }, \"scopesData\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" } } } ``` </details>"
+                                  properties:
+                                    config:
+                                      additionalProperties:
+                                        type: string
+                                      type: object
+                                    decisionStrategy:
+                                      description: "DecisionStrategy\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"AFFIRMATIVE\", \"UNANIMOUS\", \"CONSENSUS\" ] } ``` </details>"
+                                      enum:
+                                        - AFFIRMATIVE
+                                        - UNANIMOUS
+                                        - CONSENSUS
+                                      nullable: true
+                                      type: string
+                                    description:
+                                      nullable: true
+                                      type: string
+                                    id:
+                                      nullable: true
+                                      type: string
+                                    logic:
+                                      description: "Logic\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"POSITIVE\", \"NEGATIVE\" ] } ``` </details>"
+                                      enum:
+                                        - POSITIVE
+                                        - NEGATIVE
+                                      nullable: true
+                                      type: string
+                                    name:
+                                      nullable: true
+                                      type: string
+                                    owner:
+                                      nullable: true
+                                      type: string
+                                    policies:
+                                      items:
+                                        type: string
+                                      nullable: true
+                                      type: array
+                                    resourceType:
+                                      nullable: true
+                                      type: string
+                                    resources:
+                                      items:
+                                        type: string
+                                      nullable: true
+                                      type: array
+                                    resourcesData:
+                                      items:
+                                        description: "ResourceRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"_id\": { \"type\": \"string\" }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"displayName\": { \"type\": \"string\" }, \"icon_uri\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"object\", \"allOf\": [ { \"$ref\": \"#/$defs/ResourceOwnerRepresentation\" } ] }, \"ownerManagedAccess\": { \"type\": \"boolean\" }, \"scopes\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"scopesUma\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" }, \"uri\": { \"type\": \"string\" }, \"uris\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true } } } ``` </details>"
+                                        properties:
+                                          _id:
+                                            nullable: true
+                                            type: string
+                                          attributes:
+                                            additionalProperties:
+                                              items:
+                                                type: string
+                                              type: array
+                                            type: object
+                                          displayName:
+                                            nullable: true
+                                            type: string
+                                          icon_uri:
+                                            nullable: true
+                                            type: string
+                                          name:
+                                            nullable: true
+                                            type: string
+                                          owner:
+                                            description: "ResourceOwnerRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" } } } ``` </details>"
+                                            nullable: true
+                                            properties:
+                                              id:
+                                                nullable: true
+                                                type: string
+                                              name:
+                                                nullable: true
+                                                type: string
+                                            type: object
+                                          ownerManagedAccess:
+                                            nullable: true
+                                            type: boolean
+                                          type:
+                                            nullable: true
+                                            type: string
+                                          uri:
+                                            nullable: true
+                                            type: string
+                                          uris:
+                                            items:
+                                              type: string
+                                            nullable: true
+                                            type: array
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      nullable: true
+                                      type: array
+                                    scopes:
+                                      items:
+                                        type: string
+                                      nullable: true
+                                      type: array
+                                    type:
+                                      nullable: true
+                                      type: string
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                type: array
+                              resources:
+                                items:
+                                  description: "ResourceRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"_id\": { \"type\": \"string\" }, \"attributes\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"array\", \"items\": { \"type\": \"string\" } } }, \"displayName\": { \"type\": \"string\" }, \"icon_uri\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"owner\": { \"type\": \"object\", \"allOf\": [ { \"$ref\": \"#/$defs/ResourceOwnerRepresentation\" } ] }, \"ownerManagedAccess\": { \"type\": \"boolean\" }, \"scopes\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"scopesUma\": { \"type\": \"array\", \"items\": { \"$ref\": \"#/$defs/ScopeRepresentation\" }, \"uniqueItems\": true }, \"type\": { \"type\": \"string\" }, \"uri\": { \"type\": \"string\" }, \"uris\": { \"type\": \"array\", \"items\": { \"type\": \"string\" }, \"uniqueItems\": true } } } ``` </details>"
+                                  properties:
+                                    _id:
+                                      nullable: true
+                                      type: string
+                                    attributes:
+                                      additionalProperties:
+                                        items:
+                                          type: string
+                                        type: array
+                                      type: object
+                                    displayName:
+                                      nullable: true
+                                      type: string
+                                    icon_uri:
+                                      nullable: true
+                                      type: string
+                                    name:
+                                      nullable: true
+                                      type: string
+                                    owner:
+                                      description: "ResourceOwnerRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" } } } ``` </details>"
+                                      nullable: true
+                                      properties:
+                                        id:
+                                          nullable: true
+                                          type: string
+                                        name:
+                                          nullable: true
+                                          type: string
+                                      type: object
+                                    ownerManagedAccess:
+                                      nullable: true
+                                      type: boolean
+                                    type:
+                                      nullable: true
+                                      type: string
+                                    uri:
+                                      nullable: true
+                                      type: string
+                                    uris:
+                                      items:
+                                        type: string
+                                      nullable: true
+                                      type: array
+                                  type: object
+                                  x-kubernetes-preserve-unknown-fields: true
+                                type: array
+                            type: object
+                          type: array
                       type: object
-                    type: array
-                  publicClient:
-                    description: This defines the type of the OIDC client. When it's ON, the OIDC type is set to confidential access type. When it's OFF, it is set to public access type.
-                    nullable: true
-                    type: boolean
-                  redirectUris:
-                    description: Valid URI pattern a browser can redirect to after a successful login. Simple wildcards are allowed such as 'http://example.com/*'. Relative path can be specified too such as /my/relative/path/*. Relative paths are relative to the client root URL, or if none is specified the auth server root URL is used. For SAML, you must set valid URI patterns if you are relying on the consumer service URL embedded with the login request.
-                    items:
+                    baseUrl:
+                      description: >-
+                        Default URL to use when the auth server needs to redirect or link back to the
+                        client.
+                      nullable: true
                       type: string
-                    type: array
-                  registeredNodes:
-                    additionalProperties:
-                      format: int32
-                      type: integer
-                    type: object
-                  registrationAccessToken:
-                    description: The registration access token provides access for clients to the client registration service.
-                    nullable: true
-                    type: string
-                  rootUrl:
-                    description: Root URL appended to relative URLs
-                    nullable: true
-                    type: string
-                  secret:
-                    nullable: true
-                    type: string
-                  serviceAccountsEnabled:
-                    description: Allows you to authenticate this client to Keycloak and retrieve access token dedicated to this client. In terms of OAuth2 specification, this enables support of 'Client Credentials Grant' for this client.
-                    nullable: true
-                    type: boolean
-                  standardFlowEnabled:
-                    description: This enables standard OpenID Connect redirect based authentication with authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Authorization Code Flow' for this client.
-                    nullable: true
-                    type: boolean
-                  surrogateAuthRequired:
-                    nullable: true
-                    type: boolean
-                  type:
-                    nullable: true
-                    type: string
-                  useTemplateConfig:
-                    nullable: true
-                    type: boolean
-                  useTemplateMappers:
-                    nullable: true
-                    type: boolean
-                  useTemplateScope:
-                    nullable: true
-                    type: boolean
-                  webOrigins:
-                    description: Allowed CORS origins. To permit all origins of Valid Redirect URIs, add '+'. This does not include the '*' wildcard though. To permit all origins, explicitly add '*'.
-                    items:
-                      type: string
-                    type: array
-                type: object
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: has(self.id) == has(oldSelf.id)
-              patchFrom:
-                items:
-                  oneOf:
-                  - required:
-                    - secretKeyRef
-                  - required:
-                    - configMapKeyRef
-                  - required:
-                    - value
-                  properties:
-                    configMapKeyRef:
-                      description: Selects a key from a ConfigMap.
-                      properties:
-                        key:
-                          description: The key to select.
-                          type: string
-                        name:
-                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        optional:
-                          description: Specify whether the ConfigMap or its key must be defined
-                          type: boolean
-                      required:
-                      - key
-                      - name
-                      type: object
-                    path:
-                      type: string
-                    secretKeyRef:
-                      description: SecretKeySelector selects a key of a Secret.
-                      properties:
-                        key:
-                          description: The key of the secret to select from.  Must be a valid secret key.
-                          type: string
-                        name:
-                          description: 'Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
-                          type: string
-                        optional:
-                          description: Specify whether the Secret or its key must be defined
-                          type: boolean
-                      required:
-                      - key
-                      - name
-                      type: object
-                    value:
-                      type: string
-                    value_as:
-                      default: string
+                    bearerOnly:
+                      description: >-
+                        This is a special OIDC type. This client only allows bearer token requests and
+                        cannot participate in browser logins.
+                      nullable: true
+                      type: boolean
+                    clientAuthenticatorType:
+                      description: >-
+                        Client Authenticator used for authentication of this client against Keycloak
+                        server
                       enum:
-                      - string
-                      - number
-                      - bool
-                      - yaml
-                      - json
-                      type: string
-                  required:
-                  - path
-                  type: object
-                type: array
-              realmRef:
-                description: The name of the realm to which this object belongs to
-                type: string
-                x-kubernetes-validations:
-                - message: Value is immutable
-                  rule: self == oldSelf
-            required:
-            - definition
-            type: object
-          status:
-            nullable: true
-            properties:
-              conditions:
-                items:
-                  properties:
-                    lastTransitionTime:
-                      description: Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.
-                      format: date-time
+                        - client-jwt
+                        - client-secret
+                        - client-secret-jwt
+                        - client-x509
                       nullable: true
                       type: string
-                    message:
+                    clientId:
+                      description: The client identifier registered with the identity provider.
                       nullable: true
                       type: string
-                    reason:
+                    clientTemplate:
                       nullable: true
                       type: string
-                    status:
+                    consentRequired:
+                      description: "If enabled, users have to consent to client access."
+                      nullable: true
+                      type: boolean
+                    defaultClientScopes:
+                      items:
+                        type: string
+                      type: array
+                    defaultRoles:
+                      items:
+                        type: string
+                      type: array
+                    description:
+                      description: Help text for the description of the new flow
+                      nullable: true
                       type: string
+                    directAccessGrantsEnabled:
+                      description: "This enables support for Direct Access Grants, which means that client has access to username/password of user and exchange it directly with Keycloak server for access token. In terms of OAuth2 specification, this enables support of 'Resource Owner Password Credentials Grant' for this client."
+                      nullable: true
+                      type: boolean
+                    directGrantsOnly:
+                      nullable: true
+                      type: boolean
+                    enabled:
+                      description: Disabled clients cannot initiate a login or have obtained access tokens.
+                      nullable: true
+                      type: boolean
+                    frontchannelLogout:
+                      description: "When true, logout requires a browser redirect to client. When false, server performs a background invocation for logout."
+                      nullable: true
+                      type: boolean
+                    fullScopeAllowed:
+                      description: Allows you to disable all restrictions.
+                      nullable: true
+                      type: boolean
+                    id:
+                      nullable: true
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    implicitFlowEnabled:
+                      description: "This enables support for OpenID Connect redirect based authentication without authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Implicit Flow' for this client."
+                      nullable: true
+                      type: boolean
+                    name:
+                      description: "Specifies display name of the client. For example 'My Client'. Supports keys for localized values as well. For example: ${my_client}."
+                      nullable: true
+                      type: string
+                    nodeReRegistrationTimeout:
+                      description: "Interval to specify max time for registered clients cluster nodes to re-register. If cluster node will not send re-registration request to Keycloak within this time, it will be unregistered from Keycloak."
+                      nullable: true
+                      type: integer
+                    notBefore:
+                      nullable: true
+                      type: integer
+                    optionalClientScopes:
+                      items:
+                        type: string
+                      type: array
+                    origin:
+                      nullable: true
+                      type: string
+                    protocol:
+                      nullable: true
+                      type: string
+                    protocolMappers:
+                      items:
+                        description: "ProtocolMapperRepresentation\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"object\", \"properties\": { \"config\": { \"type\": \"object\", \"additionalProperties\": { \"type\": \"string\" } }, \"consentRequired\": { \"type\": \"boolean\" }, \"consentText\": { \"type\": \"string\" }, \"id\": { \"type\": \"string\" }, \"name\": { \"type\": \"string\" }, \"protocol\": { \"type\": \"string\", \"enum\": [ \"openid-connect\", \"saml\" ] }, \"protocolMapper\": { \"type\": \"string\" } } } ``` </details>"
+                        properties:
+                          config:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          consentRequired:
+                            nullable: true
+                            type: boolean
+                          consentText:
+                            nullable: true
+                            type: string
+                          id:
+                            nullable: true
+                            type: string
+                          name:
+                            nullable: true
+                            type: string
+                          protocol:
+                            description: "ProtocolMapperRepresentationProtocol\n\n<details><summary>JSON schema</summary>\n\n```json { \"type\": \"string\", \"enum\": [ \"openid-connect\", \"saml\" ] } ``` </details>"
+                            enum:
+                              - openid-connect
+                              - saml
+                            nullable: true
+                            type: string
+                          protocolMapper:
+                            nullable: true
+                            type: string
+                        type: object
+                      type: array
+                    publicClient:
+                      description: "This defines the type of the OIDC client. When it's ON, the OIDC type is set to confidential access type. When it's OFF, it is set to public access type."
+                      nullable: true
+                      type: boolean
+                    redirectUris:
+                      description: "Valid URI pattern a browser can redirect to after a successful login. Simple wildcards are allowed such as 'http://example.com/*'. Relative path can be specified too such as /my/relative/path/*. Relative paths are relative to the client root URL, or if none is specified the auth server root URL is used. For SAML, you must set valid URI patterns if you are relying on the consumer service URL embedded with the login request."
+                      items:
+                        type: string
+                      type: array
+                    registeredNodes:
+                      additionalProperties:
+                        type: integer
+                      type: object
+                    registrationAccessToken:
+                      description: >-
+                        The registration access token provides access for clients to the client
+                        registration service.
+                      nullable: true
+                      type: string
+                    rootUrl:
+                      description: Root URL appended to relative URLs
+                      nullable: true
+                      type: string
+                    secret:
+                      nullable: true
+                      type: string
+                    serviceAccountsEnabled:
+                      description: "Allows you to authenticate this client to Keycloak and retrieve access token dedicated to this client. In terms of OAuth2 specification, this enables support of 'Client Credentials Grant' for this client."
+                      nullable: true
+                      type: boolean
+                    standardFlowEnabled:
+                      description: "This enables standard OpenID Connect redirect based authentication with authorization code. In terms of OpenID Connect or OAuth2 specifications, this enables support of 'Authorization Code Flow' for this client."
+                      nullable: true
+                      type: boolean
+                    surrogateAuthRequired:
+                      nullable: true
+                      type: boolean
                     type:
+                      nullable: true
                       type: string
-                  required:
-                  - status
-                  - type
+                    useTemplateConfig:
+                      nullable: true
+                      type: boolean
+                    useTemplateMappers:
+                      nullable: true
+                      type: boolean
+                    useTemplateScope:
+                      nullable: true
+                      type: boolean
+                    webOrigins:
+                      description: "Allowed CORS origins. To permit all origins of Valid Redirect URIs, add '+'. This does not include the '*' wildcard though. To permit all origins, explicitly add '*'."
+                      items:
+                        type: string
+                      type: array
                   type: object
-                type: array
-              instance:
-                anyOf:
-                - required:
-                  - instanceRef
-                - required:
-                  - clusterInstanceRef
-                properties:
-                  clusterInstanceRef:
-                    description: The name of the cluster instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: has(self.id) == has(oldSelf.id)
+                patchFrom:
+                  items:
+                    oneOf:
+                      - required:
+                          - secretKeyRef
+                      - required:
+                          - configMapKeyRef
+                      - required:
+                          - value
+                    properties:
+                      configMapKeyRef:
+                        description: Selects a key from a ConfigMap.
+                        properties:
+                          key:
+                            description: The key to select.
+                            type: string
+                          name:
+                            description: "Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                            type: string
+                          optional:
+                            description: Specify whether the ConfigMap or its key must be defined
+                            type: boolean
+                        required:
+                          - key
+                          - name
+                        type: object
+                      path:
+                        type: string
+                      secretKeyRef:
+                        description: SecretKeySelector selects a key of a Secret.
+                        properties:
+                          key:
+                            description: The key of the secret to select from.  Must be a valid secret key.
+                            type: string
+                          name:
+                            description: "Name of the referent. This field is effectively required, but due to backwards compatibility is allowed to be empty. Instances of this type with an empty value here are almost certainly wrong. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                            type: string
+                          optional:
+                            description: Specify whether the Secret or its key must be defined
+                            type: boolean
+                        required:
+                          - key
+                          - name
+                        type: object
+                      value:
+                        type: string
+                      value_as:
+                        default: string
+                        enum:
+                          - string
+                          - number
+                          - bool
+                          - yaml
+                          - json
+                        type: string
+                    required:
+                      - path
+                    type: object
+                  type: array
+                realmRef:
+                  description: The name of the realm to which this object belongs to
+                  type: string
+                  x-kubernetes-validations:
                     - message: Value is immutable
                       rule: self == oldSelf
-                  instanceRef:
-                    description: The name of the namespaced instance to which this object belongs to.
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              message:
-                type: string
-              ready:
-                type: boolean
-              realm:
-                anyOf:
-                - required:
-                  - realmRef
-                - required:
-                  - clusterRealmRef
-                description: Optional for backwards compatibility
-                nullable: true
-                properties:
-                  clusterRealmRef:
-                    description: The name of the cluster realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                  realmRef:
-                    description: The name of the realm to which this object belongs to
-                    type: string
-                    x-kubernetes-validations:
-                    - message: Value is immutable
-                      rule: self == oldSelf
-                type: object
-              resourcePath:
-                type: string
-              status:
-                type: string
-            required:
-            - ready
-            type: object
-        required:
-        - spec
-        title: KeycloakClient
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+              required:
+                - definition
+              type: object
+            status:
+              nullable: true
+              properties:
+                apiObjectRef:
+                  description: Reference to the API object name (KeycloakApiObject or ClusterKeycloakApiObject)
+                  nullable: true
+                  type: string
+                conditions:
+                  items:
+                    properties:
+                      lastTransitionTime:
+                        description: >-
+                          Time is a wrapper around time.Time which supports correct marshaling to YAML and
+                          JSON.  Wrappers are provided for many of the factory methods that the time
+                          package offers.
+                        format: date-time
+                        nullable: true
+                        type: string
+                      message:
+                        nullable: true
+                        type: string
+                      reason:
+                        nullable: true
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string
+                    required:
+                      - status
+                      - type
+                    type: object
+                  type: array
+                instance:
+                  anyOf:
+                    - required:
+                        - instanceRef
+                    - required:
+                        - clusterInstanceRef
+                  properties:
+                    clusterInstanceRef:
+                      description: The name of the cluster instance to which this object belongs to.
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    instanceRef:
+                      description: The name of the namespaced instance to which this object belongs to.
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                  type: object
+                message:
+                  type: string
+                ready:
+                  type: boolean
+                realm:
+                  anyOf:
+                    - required:
+                        - realmRef
+                    - required:
+                        - clusterRealmRef
+                  description: Optional for backwards compatibility
+                  nullable: true
+                  properties:
+                    clusterRealmRef:
+                      description: The name of the cluster realm to which this object belongs to
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                    realmRef:
+                      description: The name of the realm to which this object belongs to
+                      type: string
+                      x-kubernetes-validations:
+                        - message: Value is immutable
+                          rule: self == oldSelf
+                  type: object
+                resourcePath:
+                  type: string
+                status:
+                  type: string
+              required:
+                - ready
+              type: object
+          required:
+            - spec
+          title: KeycloakClient
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
