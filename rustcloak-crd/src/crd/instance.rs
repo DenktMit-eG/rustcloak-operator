@@ -94,6 +94,9 @@ impl KeycloakInstanceSpec {
 macro_rules! instance_endpoint {
     ($name:ident, $either:ident) => {
         impl Endpoint for $name {
+            fn is_ready(&self) -> bool {
+                self.status.as_ref().map_or(false, |s| s.ready)
+            }
             fn instance_ref(&self) -> Option<&InstanceRef> {
                 None
             }

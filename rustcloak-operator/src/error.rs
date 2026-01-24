@@ -92,6 +92,8 @@ pub enum Error {
     NoRealm,
     #[error("Missing Name")]
     MissingName,
+    #[error("Parent Not Ready")]
+    ParentNotReady,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

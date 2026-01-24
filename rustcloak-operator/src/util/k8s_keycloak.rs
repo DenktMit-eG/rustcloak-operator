@@ -181,7 +181,7 @@ impl<R: Instance> K8sKeycloakRefreshJob<R> {
         self.stopper.clone()
     }
 
-    pub fn keycloak_builder(&self) -> K8sKeycloakBuilder {
+    pub fn keycloak_builder(&self) -> K8sKeycloakBuilder<'_> {
         K8sKeycloakBuilder::new(self.instance.deref(), &self.client)
     }
 

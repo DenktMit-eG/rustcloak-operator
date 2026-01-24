@@ -36,6 +36,9 @@ impl_object!("realm" <InstanceRef> / |_d| {"admin/realms"} / "realm" for Keycloa
 macro_rules! realm_endpoint {
     ($name:ident, $either:ident) => {
         impl Endpoint for $name {
+            fn is_ready(&self) -> bool {
+                self.status.as_ref().map_or(false, |s| s.ready)
+            }
             fn instance_ref(&self) -> Option<&InstanceRef> {
                 Some(&self.inner_spec().parent_ref)
             }
