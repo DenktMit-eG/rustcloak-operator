@@ -61,6 +61,36 @@ spec:
 Note that this client will yield a secret that stores the client id and the client 
 id in a Kubernetes secret.
 
+## Building
+
+This project uses [Cargo](https://doc.rust-lang.org/cargo/) for builds.
+
+### Using Make
+
+A `Makefile` is provided for convenience:
+
+```bash
+make build        # Build in release mode
+make check        # Run lint and test
+make lint         # Run clippy
+make test         # Run all tests
+make fmt          # Check formatting
+make fix-fmt      # Apply formatting
+make build-docker # Build Docker image
+```
+
+### Using Cargo directly
+
+```bash
+cargo build --release
+```
+
+### Using Docker
+
+```bash
+docker build -t rustcloak-operator .
+```
+
 ## Status
 
 Rustcloak supports all simple CRUD endpoints of the Keycloak API as of Keycloak-26.
