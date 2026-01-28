@@ -71,7 +71,6 @@ define_crd_maps! {
     ],
 }
 
-
 pub use map_all_crds;
 pub use map_plumbing_crds;
 pub use map_rest_crds;
