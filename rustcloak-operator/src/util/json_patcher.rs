@@ -20,11 +20,11 @@ async fn test_json_patcher() {
       "realm": "blarg",
       "enabled": true,
       "defaultRole": {
-        "name": "default-roles-50hz-1",
+        "name": "default-roles-test-1",
         "description": "${role_default-roles}",
         "composite": true,
         "clientRole": false,
-        "containerId": "50hz"
+        "containerId": "test"
       },
       "identityProviderMappers": [
         {
@@ -47,7 +47,7 @@ async fn test_json_patcher() {
         path: "$.defaultRole".to_string(),
         value_from: ValueFrom::Value(
             r#"
-            name: "default-roles-50hz-1"
+            name: "default-roles-test-1"
         "#
             .to_string(),
         ),
@@ -55,7 +55,7 @@ async fn test_json_patcher() {
     };
 
     patcher.patch(&mut obj, &patch).await.unwrap();
-    assert_eq!(obj["defaultRole"]["name"], "default-roles-50hz-1");
+    assert_eq!(obj["defaultRole"]["name"], "default-roles-test-1");
 }
 
 pub struct JsonPatcher {
