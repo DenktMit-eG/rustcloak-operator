@@ -1,0 +1,8 @@
+apiVersion: rustcloak.k8s.eboland.de/v1beta1
+kind: KeycloakScope
+metadata:
+  name: my-scope
+spec:
+  clientRef: my-client
+  definition:
+    name: my-scope

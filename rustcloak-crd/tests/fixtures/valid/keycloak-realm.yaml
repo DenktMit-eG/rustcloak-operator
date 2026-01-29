@@ -1,0 +1,8 @@
+apiVersion: rustcloak.k8s.eboland.de/v1beta1
+kind: KeycloakRealm
+metadata:
+  name: my-realm
+spec:
+  instanceRef: my-keycloak
+  definition:
+    realm: my-realm

@@ -8,16 +8,38 @@ use either::{Either, for_both};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize, de::DeserializeOwned};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct UntaggedEither<L, R>
 where
     L: Serialize + DeserializeOwned + JsonSchema,
     R: Serialize + DeserializeOwned + JsonSchema,
 {
-    #[schemars(with = "Either<L, R>")]
     #[serde(with = "either::serde_untagged")]
     pub inner: Either<L, R>,
+}
+
+impl<L: JsonSchema, R: JsonSchema> JsonSchema for UntaggedEither<L, R>
+where
+    L: Serialize + DeserializeOwned + JsonSchema,
+    R: Serialize + DeserializeOwned + JsonSchema,
+{
+    fn schema_name() -> std::borrow::Cow<'static, str> {
+        format!("UntaggedEither{}_{}", L::schema_name(), R::schema_name())
+            .into()
+    }
+
+    fn json_schema(
+        generator: &mut schemars::SchemaGenerator,
+    ) -> schemars::Schema {
+        serde_json::from_value(serde_json::json!({
+            "oneOf": [
+                L::json_schema(generator),
+                R::json_schema(generator)
+            ]
+        }))
+        .unwrap()
+    }
 }
 
 impl<L, R> From<UntaggedEither<L, R>> for Either<L, R>

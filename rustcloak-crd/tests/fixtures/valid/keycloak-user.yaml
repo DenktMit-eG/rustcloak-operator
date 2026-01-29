@@ -1,0 +1,8 @@
+apiVersion: rustcloak.k8s.eboland.de/v1beta1
+kind: KeycloakUser
+metadata:
+  name: my-user
+spec:
+  realmRef: my-realm
+  definition:
+    username: my-user

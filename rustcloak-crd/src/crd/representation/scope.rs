@@ -32,18 +32,18 @@ impl_endpoint!(KeycloakScope);
 schema_patch!(KeycloakScopeSpec: |s| {
     s.prop("resources")
         .array_item()
-        .remove("scopesUma")
-        .remove("scopes")
+        .remove_prop("scopesUma")
+        .remove_prop("scopes")
         .additional_properties();
     s.prop("policies")
         .array_item()
-        .remove("scopesData")
+        .remove_prop("scopesData")
         .additional_properties();
     s.prop("policies")
         .array_item()
         .prop("resourcesData")
         .array_item()
-        .remove("scopesUma")
-        .remove("scopes")
+        .remove_prop("scopesUma")
+        .remove_prop("scopes")
         .additional_properties();
 });

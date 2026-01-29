@@ -68,19 +68,19 @@ impl crate::marker::HasMarker for ClusterKeycloakRealm {
 }
 
 schema_patch!(KeycloakRealmSpec: |s| {
-    s.remove("groups")
-        .remove("users")
-        .remove("federatedUsers")
-        .remove("clients")
-        .remove("clientScopes")
-        .remove("protocolMappers")
-        .remove("authenticationFlows")
-        .remove("authenticatorConfig")
-        .remove("requiredActions")
-        .remove("organizations")
-        .remove("applications")
-        .remove("components")
-        .remove("oauthClients");
+    s.remove_prop("groups")
+        .remove_prop("users")
+        .remove_prop("federatedUsers")
+        .remove_prop("clients")
+        .remove_prop("clientScopes")
+        .remove_prop("protocolMappers")
+        .remove_prop("authenticationFlows")
+        .remove_prop("authenticatorConfig")
+        .remove_prop("requiredActions")
+        .remove_prop("organizations")
+        .remove_prop("applications")
+        .remove_prop("components")
+        .remove_prop("oauthClients");
     client_schema(s.prop("adminPermissionsClient"));
 });
 ref_type!(

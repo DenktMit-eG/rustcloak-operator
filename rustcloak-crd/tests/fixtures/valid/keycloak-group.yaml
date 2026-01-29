@@ -1,0 +1,8 @@
+apiVersion: rustcloak.k8s.eboland.de/v1beta1
+kind: KeycloakGroup
+metadata:
+  name: my-group
+spec:
+  realmRef: my-realm
+  definition:
+    name: my-group

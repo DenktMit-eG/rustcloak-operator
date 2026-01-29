@@ -1,0 +1,9 @@
+apiVersion: rustcloak.k8s.eboland.de/v1beta1
+kind: KeycloakClient
+metadata:
+  name: my-client
+spec:
+  realmRef: my-realm
+  definition:
+    clientId: my-client
+    enabled: "not-a-boolean"  # Should be boolean
