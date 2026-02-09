@@ -78,6 +78,14 @@ impl<R> InstanceController<R>
 where
     R: Instance,
 {
+    fn secret_namespace(resource: &R) -> Option<String> {
+        let spec = resource.inner_spec();
+        if let Some(ns) = resource.namespace() {
+            Some(ns)
+        } else {
+            spec.credentials.namespace.clone()
+        }
+    }
     async fn create_secret(
         &self,
         client: &kube::Client,
@@ -85,7 +93,7 @@ where
     ) -> Result<()> {
         let spec = resource.inner_spec();
         let secret_name = &spec.credentials.secret_name;
-        let ns = resource.namespace();
+        let ns = Self::secret_namespace(&resource);
         let secret_api = ApiExt::<Secret>::api(client.clone(), &ns);
         let [username_key, password_key] = spec.credentials.secret_key_names();
 
