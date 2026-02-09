@@ -26,7 +26,8 @@ use rustcloak_operator::{
 fn init_logger() {
     use structured_logger::{Builder, async_json::new_writer};
 
-    Builder::with_level("info")
+    let level = structured_logger::get_env_level();
+    Builder::with_level(level.as_str())
         .with_target_writer("*", new_writer(tokio::io::stdout()))
         .init();
 }

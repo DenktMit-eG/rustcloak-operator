@@ -16,6 +16,7 @@ use kube::{
     core::object::HasStatus,
     runtime::{Controller, controller::Action, watcher},
 };
+use log::debug;
 use randstr::randstr;
 use rustcloak_crd::{
     KeycloakApiStatus,
@@ -117,7 +118,6 @@ where
             data: Some(data),
             metadata: ObjectMeta {
                 name: Some(secret_name.to_string()),
-                namespace: ns,
                 owner_references: Some(vec![owner_ref]),
                 ..Default::default()
             },
@@ -181,6 +181,7 @@ where
         resource: Arc<Self::Resource>,
     ) -> Result<bool> {
         let spec = resource.inner_spec();
+        debug!("Scheduling refresh for resource {}", resource.name_any());
         match self
             .manager
             .schedule_refresh(&resource, client.clone())

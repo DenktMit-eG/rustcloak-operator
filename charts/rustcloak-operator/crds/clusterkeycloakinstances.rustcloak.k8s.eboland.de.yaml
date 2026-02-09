@@ -57,6 +57,10 @@ spec:
                   create:
                     nullable: true
                     type: boolean
+                  namespace:
+                    description: The namespace where the secret is located. Will only be used for ClusterKeycloakInstance.
+                    nullable: true
+                    type: string
                   passwordKey:
                     nullable: true
                     type: string
