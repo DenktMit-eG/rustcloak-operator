@@ -16,6 +16,7 @@ use kube::{
     core::object::HasStatus,
     runtime::{Controller, controller::Action, watcher},
 };
+use log::debug;
 use randstr::randstr;
 use rustcloak_crd::{
     KeycloakApiStatus,
@@ -78,6 +79,14 @@ impl<R> InstanceController<R>
 where
     R: Instance,
 {
+    fn secret_namespace(resource: &R) -> Option<String> {
+        let spec = resource.inner_spec();
+        if let Some(ns) = resource.namespace() {
+            Some(ns)
+        } else {
+            spec.credentials.namespace.clone()
+        }
+    }
     async fn create_secret(
         &self,
         client: &kube::Client,
@@ -85,7 +94,7 @@ where
     ) -> Result<()> {
         let spec = resource.inner_spec();
         let secret_name = &spec.credentials.secret_name;
-        let ns = resource.namespace();
+        let ns = Self::secret_namespace(&resource);
         let secret_api = ApiExt::<Secret>::api(client.clone(), &ns);
         let [username_key, password_key] = spec.credentials.secret_key_names();
 
@@ -109,7 +118,6 @@ where
             data: Some(data),
             metadata: ObjectMeta {
                 name: Some(secret_name.to_string()),
-                namespace: ns,
                 owner_references: Some(vec![owner_ref]),
                 ..Default::default()
             },
@@ -173,6 +181,7 @@ where
         resource: Arc<Self::Resource>,
     ) -> Result<bool> {
         let spec = resource.inner_spec();
+        debug!("Scheduling refresh for resource {}", resource.name_any());
         match self
             .manager
             .schedule_refresh(&resource, client.clone())

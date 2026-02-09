@@ -15,6 +15,8 @@ use serde::{Deserialize, Serialize};
 pub struct KeycloakInstanceCredentialReference {
     pub create: Option<bool>,
     pub secret_name: String,
+    /// The namespace where the secret is located. Will only be used for ClusterKeycloakInstance.
+    pub namespace: Option<String>,
     pub username_key: Option<String>,
     pub password_key: Option<String>,
 }

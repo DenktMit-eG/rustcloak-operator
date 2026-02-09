@@ -3,13 +3,13 @@ resolver = "2"
 members = ["rustcloak-operator", "rustcloak-crd", "utils"]
 
 [workspace.package]
-version = "0.3.2"
+version = "0.4.0"
 authors = [
   "Enno Boland <mail@eboland.de>",
 ]
 repository = "https://github.com/DenktMit-eG/rustcloak-operator"
 readme = "README.md"
-license = "AGPL-3.0"
+license = "BSD-2-Clause"
 edition = "2024"
 
 [workspace.dependencies]

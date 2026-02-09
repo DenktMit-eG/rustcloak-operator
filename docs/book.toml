@@ -1,7 +1,6 @@
 [book]
 authors = ["Enno Boland"]
 language = "en"
-multilingual = false
 src = "src"
 title = "Rustcloak Operator"
 

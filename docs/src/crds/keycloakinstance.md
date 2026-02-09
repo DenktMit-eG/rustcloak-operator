@@ -13,6 +13,7 @@ This resource makes a Keycloak instance known to the operator
 |[spec.client.secret](#specclientsecret)|string||
 |[spec.credentials](#speccredentials)|object|✅|
 |[spec.credentials.create](#speccredentialscreate)|boolean||
+|[spec.credentials.namespace](#speccredentialsnamespace)|string||
 |[spec.credentials.passwordKey](#speccredentialspasswordkey)|string||
 |[spec.credentials.secretName](#speccredentialssecretname)|string|✅|
 |[spec.credentials.usernameKey](#speccredentialsusernamekey)|string||
@@ -101,6 +102,7 @@ Type: object
 |Property|Type|Required|
 |:-------|:---|:------:|
 |[create](#speccredentialscreate)|boolean||
+|[namespace](#speccredentialsnamespace)|string||
 |[passwordKey](#speccredentialspasswordkey)|string||
 |[secretName](#speccredentialssecretname)|string|✅|
 |[usernameKey](#speccredentialsusernamekey)|string||
@@ -114,6 +116,14 @@ Type: object
 Type: boolean
 
 *missing*
+
+---
+
+### spec.credentials.namespace
+
+Type: string
+
+The namespace where the secret is located. Will only be used for ClusterKeycloakInstance.
 
 ---
 

@@ -84,6 +84,7 @@ impl LifecycleController for LegacyInstanceController {
                     secret_name: format!("credential-{}", &name),
                     username_key: Some("ADMIN_USERNAME".to_string()),
                     password_key: Some("ADMIN_PASSWORD".to_string()),
+                    namespace: None,
                 },
                 token: None,
                 client: None,
