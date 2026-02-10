@@ -28,7 +28,7 @@ randstr = { git = "https://github.com/Gottox/randstr", branch = "main" }
 structured-logger = "1.0.4"
 heck = "0.5"
 rustcloak-crd = { path = "../rustcloak-crd" }
-keycloak-client = { git = "https://github.com/Gottox/keycloak-client.rs" }
+keycloak-client = { git = "https://github.com/Gottox/keycloak-client.rs", rev = "5314c46" }
 #keycloak-client = { path = "../../keycloak-client.rs/keycloak-client" }
 shorter-bounds = "0.1.1"
 metrics = "0.24"
