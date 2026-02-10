@@ -410,7 +410,7 @@ dependencies = [
 [[package]]
 name = "crd2md"
 version = "0.1.0"
-source = "git+https://github.com/withlazers/crd2md.git#7a9e3380b23e3844c5b232010c0a0c680fe131a8"
+source = "git+https://github.com/withlazers/crd2md.git?rev=67776e4#67776e4df6372f41f622cf2d6201f65865b769c7"
 dependencies = [
  "clap",
  "k8s-openapi",
@@ -1334,7 +1334,7 @@ dependencies = [
 [[package]]
 name = "keycloak-client"
 version = "0.1.0"
-source = "git+https://github.com/Gottox/keycloak-client.rs#57c06c24fd340a347e0777bb9eac7fe8dbbc1f08"
+source = "git+https://github.com/Gottox/keycloak-client.rs?rev=5314c46#5314c46f76a175804a11bf9ea55802bc0bbf57a7"
 dependencies = [
  "chrono",
  "derive_builder",
@@ -1362,7 +1362,7 @@ dependencies = [
 [[package]]
 name = "keycloak-types"
 version = "0.1.0"
-source = "git+https://github.com/Gottox/keycloak-client.rs#57c06c24fd340a347e0777bb9eac7fe8dbbc1f08"
+source = "git+https://github.com/Gottox/keycloak-client.rs?rev=5314c46#5314c46f76a175804a11bf9ea55802bc0bbf57a7"
 dependencies = [
  "regress",
  "schemars 0.8.22",
@@ -1483,7 +1483,7 @@ dependencies = [
 [[package]]
 name = "kube_crd_iter"
 version = "0.1.0"
-source = "git+https://github.com/withlazers/crd2md.git#7a9e3380b23e3844c5b232010c0a0c680fe131a8"
+source = "git+https://github.com/withlazers/crd2md.git?rev=67776e4#67776e4df6372f41f622cf2d6201f65865b769c7"
 dependencies = [
  "k8s-openapi",
 ]
