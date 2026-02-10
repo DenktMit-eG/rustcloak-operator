@@ -9,7 +9,7 @@ authors = [
 ]
 repository = "https://github.com/DenktMit-eG/rustcloak-operator"
 readme = "README.md"
-license = "BSD-2-Clause"
+license = "MIT"
 edition = "2024"
 
 [workspace.dependencies]
