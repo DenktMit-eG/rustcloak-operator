@@ -4,7 +4,7 @@ use crate::app_id;
 use crate::error::Error;
 use crate::util::ApiExt;
 use crate::util::ApiFactory;
-use case_style::CaseStyle;
+use heck::ToLowerCamelCase;
 use either::Either;
 use k8s_openapi::NamespaceResourceScope;
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::LabelSelector;
@@ -30,9 +30,9 @@ fn find_variants(
     annotations: &BTreeMap<String, String>,
     snake_case: &str,
 ) -> Option<String> {
-    let style = CaseStyle::from_snakecase(snake_case);
+    let camel_case = snake_case.to_lower_camel_case();
     let variants =
-        [snake_case, &style.to_camelcase()].map(|x| format!(app_id!("{}"), x));
+        [snake_case, &camel_case].map(|x| format!(app_id!("{}"), x));
 
     annotations
         .iter()
