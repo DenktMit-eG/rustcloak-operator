@@ -2223,7 +2223,7 @@ checksum = "357703d41365b4b27c590e3ed91eabb1b663f07c4c084095e60cbed4362dff0d"
 
 [[package]]
 name = "rustcloak-crd"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "either",
  "http",
@@ -2238,7 +2238,7 @@ dependencies = [
 
 [[package]]
 name = "rustcloak-operator"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "async-trait",
  "axum",
@@ -3137,7 +3137,7 @@ checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
 
 [[package]]
 name = "utils"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "clap",
  "crd2md",
