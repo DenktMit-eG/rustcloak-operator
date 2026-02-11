@@ -129,7 +129,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3613f07d.js";
+            window.path_to_searchindex_js = "searchindex-db993e52.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9afecc31.js"></script>
@@ -17962,6 +17962,7 @@ spec:
 <tr><td style="text-align: left"><a href="#specoptionspatchfromvalue">spec.options.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specoptionspatchfromvalueas">spec.options.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specpayload">spec.payload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specprimarykey">spec.primaryKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#status-17">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditions-17">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionslasttransitiontime-17">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -17995,6 +17996,7 @@ spec:
 <tr><td style="text-align: left"><a href="#specimmutablepayload">immutablePayload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specoptions">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specpayload">payload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specprimarykey">primaryKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody>
 </table>
 </div>
@@ -18283,6 +18285,10 @@ spec:
 <h3 id="specpayload"><a class="header" href="#specpayload">spec.payload</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
+<hr>
+<h3 id="specprimarykey"><a class="header" href="#specprimarykey">spec.primaryKey</a></h3>
+<p>Type: string</p>
+<p>The name of the primary key field in the payload (e.g. “id”, “name”, “alias”). Used to inject the resource ID extracted from the stored resource path into PUT requests, working around Keycloak versions that don’t populate the model ID from the URL path parameter.</p>
 <hr>
 <h3 id="status-17"><a class="header" href="#status-17">status</a></h3>
 <p>Type: object</p>
@@ -18802,6 +18808,7 @@ spec:
 <tr><td style="text-align: left"><a href="#specoptionspatchfromvalue-1">spec.options.patchFrom[].value</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specoptionspatchfromvalueas">spec.options.patchFrom[].value_as</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specpayload-1">spec.payload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specprimarykey-1">spec.primaryKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#status-19">status</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditions-19">status.conditions[]</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#statusconditionslasttransitiontime-19">status.conditions[].lastTransitionTime</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
@@ -18835,6 +18842,7 @@ spec:
 <tr><td style="text-align: left"><a href="#specimmutablepayload-1">immutablePayload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
 <tr><td style="text-align: left"><a href="#specoptions-1">options</a></td><td style="text-align: left">object</td><td style="text-align: center"></td></tr>
 <tr><td style="text-align: left"><a href="#specpayload-1">payload</a></td><td style="text-align: left">string</td><td style="text-align: center">✅</td></tr>
+<tr><td style="text-align: left"><a href="#specprimarykey-1">primaryKey</a></td><td style="text-align: left">string</td><td style="text-align: center"></td></tr>
 </tbody>
 </table>
 </div>
@@ -19123,6 +19131,10 @@ spec:
 <h3 id="specpayload-1"><a class="header" href="#specpayload-1">spec.payload</a></h3>
 <p>Type: string</p>
 <p><em>missing</em></p>
+<hr>
+<h3 id="specprimarykey-1"><a class="header" href="#specprimarykey-1">spec.primaryKey</a></h3>
+<p>Type: string</p>
+<p>The name of the primary key field in the payload (e.g. “id”, “name”, “alias”). Used to inject the resource ID extracted from the stored resource path into PUT requests, working around Keycloak versions that don’t populate the model ID from the URL path parameter.</p>
 <hr>
 <h3 id="status-19"><a class="header" href="#status-19">status</a></h3>
 <p>Type: object</p>
