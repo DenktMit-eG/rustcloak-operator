@@ -34,6 +34,7 @@ Custom Resource for Keycloak API requests. The user should not use this resource
 |[spec.options.patchFrom[].value](#specoptionspatchfromvalue)|string||
 |[spec.options.patchFrom[].value_as](#specoptionspatchfromvalueas)|string||
 |[spec.payload](#specpayload)|string|✅|
+|[spec.primaryKey](#specprimarykey)|string||
 |[status](#status)|object||
 |[status.conditions[]](#statusconditions)|object||
 |[status.conditions[].lastTransitionTime](#statusconditionslasttransitiontime)|string||
@@ -64,6 +65,7 @@ Type: object
 |[immutablePayload](#specimmutablepayload)|string|✅|
 |[options](#specoptions)|object||
 |[payload](#specpayload)|string|✅|
+|[primaryKey](#specprimarykey)|string||
 
 defines an API request to the Keycloak Admin API.
 
@@ -362,6 +364,14 @@ Type: string
 Type: string
 
 *missing*
+
+---
+
+### spec.primaryKey
+
+Type: string
+
+The name of the primary key field in the payload (e.g. "id", "name", "alias"). Used to inject the resource ID extracted from the stored resource path into PUT requests, working around Keycloak versions that don't populate the model ID from the URL path parameter.
 
 ---
 
