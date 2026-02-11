@@ -26,9 +26,9 @@ either = { version = "1.15.0", features = ["serde"] }
 keycloak-crd = { git = "https://github.com/withlazers/keycloak-crd.git", branch = "rustcloak" }
 randstr = { git = "https://github.com/Gottox/randstr", branch = "main" }
 structured-logger = "1.0.4"
-case_style = "0.2.1"
+heck = "0.5"
 rustcloak-crd = { path = "../rustcloak-crd" }
-keycloak-client = { git = "https://github.com/Gottox/keycloak-client.rs" }
+keycloak-client = { git = "https://github.com/Gottox/keycloak-client.rs", rev = "5314c46" }
 #keycloak-client = { path = "../../keycloak-client.rs/keycloak-client" }
 shorter-bounds = "0.1.1"
 metrics = "0.24"
