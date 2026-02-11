@@ -194,6 +194,10 @@ spec:
                 type: object
               payload:
                 type: string
+              primaryKey:
+                description: The name of the primary key field in the payload (e.g. "id", "name", "alias"). Used to inject the resource ID extracted from the stored resource path into PUT requests, working around Keycloak versions that don't populate the model ID from the URL path parameter.
+                nullable: true
+                type: string
             required:
             - endpoint
             - immutablePayload

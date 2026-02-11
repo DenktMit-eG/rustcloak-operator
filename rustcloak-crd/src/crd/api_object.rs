@@ -30,6 +30,13 @@ both_scopes! {
             pub endpoint: KeycloakApiEndpoint,
             pub immutable_payload: ImmutableString,
             pub payload: String,
+            /// The name of the primary key field in the payload (e.g. "id",
+            /// "name", "alias"). Used to inject the resource ID extracted
+            /// from the stored resource path into PUT requests, working
+            /// around Keycloak versions that don't populate the model ID
+            /// from the URL path parameter.
+            #[serde(default, skip_serializing_if = "Option::is_none")]
+            pub primary_key: Option<String>,
         }
     }
 }

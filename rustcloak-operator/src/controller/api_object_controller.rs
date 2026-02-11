@@ -253,6 +253,15 @@ where
         if let Some(endpoint) =
             resource.status().as_ref().and_then(|s| s.endpoint.as_ref())
         {
+            // Inject the resource ID into the payload before PUT. Some
+            // Keycloak versions do not populate the model ID from the URL
+            // path parameter during updates, causing a NullPointerException.
+            if let Some(primary_key) = &spec.primary_key
+                && let Some(id) = endpoint.resource_path.rsplit('/').next()
+                    && let Some(obj) = payload.as_object_mut() {
+                        obj.entry(primary_key.clone())
+                            .or_insert_with(|| Value::String(id.to_string()));
+                    }
             match keycloak.put(&endpoint.resource_path, &payload).await {
                 Ok(_) => {
                     success = true;
