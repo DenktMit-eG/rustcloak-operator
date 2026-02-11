@@ -222,6 +222,7 @@ where
                 options: resource.inner_spec().options().cloned(),
                 immutable_payload,
                 payload,
+                primary_key: Some(primary_key.to_string()),
             },
         );
 
